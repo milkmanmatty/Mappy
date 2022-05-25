@@ -351,7 +351,37 @@
 
         public void FillMap()
         {
-            this.model.Map.IfSome(map => map.FillWithSelectedTile());
+            this.model.Map.IfSome(
+                map =>
+                {
+                    if (this.TryCopyForFill(map, out IMapTile fillTile))
+                    {
+                        if (fillTile == null)
+                        {
+                            return;
+                        }
+
+                        // Do some quick maffs, figure out how many iterations are needs for the current tile to fill the entire map.
+                        int xIterations = (int)Math.Ceiling((double)map.MapWidth / (double)fillTile.TileGrid.Width);
+                        int yIterations = (int)Math.Ceiling((double)map.MapHeight / (double)fillTile.TileGrid.Height);
+
+                        this.DeduplicateTiles(fillTile.TileGrid); // Is this needed within the loops? TODO: investigate
+
+                        for (int x = 0; x < xIterations; x++)
+                        {
+                            for (int y = 0; y < yIterations; y++)
+                            {
+                                int testLocX = (x * fillTile.TileGrid.Width * 32) + (fillTile.TileGrid.Width * 16);
+                                int testLocY = (y * fillTile.TileGrid.Height * 32) + (fillTile.TileGrid.Height * 16);
+                                map.PasteMapTile(fillTile, testLocX, testLocY);
+                            }
+                        }
+
+                        this.DeduplicateTiles(fillTile.TileGrid); // For good measure
+                    }
+                });
+
+            this.ClearSelection();
         }
 
         public void RefreshMinimap()
