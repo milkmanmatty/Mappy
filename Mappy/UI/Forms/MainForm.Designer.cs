@@ -100,10 +100,6 @@
             this.mousePositionLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.hoveredFeatureLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.mapViewPanel = new Mappy.UI.Controls.MapViewPanel();
-            this.sectionsView = new Mappy.UI.Controls.SectionView();
-            this.featureView = new Mappy.UI.Controls.SectionView();
-            this.startPositionsView1 = new Mappy.UI.Controls.StartPositionsView();
-            this.hoveredFeatureLabel = new System.Windows.Forms.ToolStripStatusLabel();
             toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
@@ -191,7 +187,7 @@
             this.helpMenuItem});
             this.topMenu.Location = new System.Drawing.Point(0, 0);
             this.topMenu.Name = "topMenu";
-            this.topMenu.Size = new System.Drawing.Size(1176, 33);
+            this.topMenu.Size = new System.Drawing.Size(1176, 35);
             this.topMenu.TabIndex = 1;
             this.topMenu.Text = "menuStrip1";
             // 
@@ -578,7 +574,7 @@
             // aboutMenuItem
             // 
             this.aboutMenuItem.Name = "aboutMenuItem";
-            this.aboutMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.aboutMenuItem.Size = new System.Drawing.Size(176, 34);
             this.aboutMenuItem.Text = "&About...";
             this.aboutMenuItem.Click += new System.EventHandler(this.AboutMenuItemClick);
             // 
@@ -589,12 +585,13 @@
             this.sidebarTabs.Controls.Add(this.startPositionsTab);
             this.sidebarTabs.Controls.Add(this.attributesTab);
             this.sidebarTabs.Dock = System.Windows.Forms.DockStyle.Left;
-            this.sidebarTabs.Location = new System.Drawing.Point(0, 33);
+            this.sidebarTabs.Location = new System.Drawing.Point(0, 35);
             this.sidebarTabs.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.sidebarTabs.Name = "sidebarTabs";
             this.sidebarTabs.SelectedIndex = 0;
-            this.sidebarTabs.Size = new System.Drawing.Size(322, 832);
+            this.sidebarTabs.Size = new System.Drawing.Size(322, 830);
             this.sidebarTabs.TabIndex = 4;
+            this.sidebarTabs.SelectedIndexChanged += new System.EventHandler(this.GUITabs_SelectedIndexChanged);
             // 
             // sectionsTab
             // 
@@ -603,7 +600,7 @@
             this.sectionsTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.sectionsTab.Name = "sectionsTab";
             this.sectionsTab.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.sectionsTab.Size = new System.Drawing.Size(314, 799);
+            this.sectionsTab.Size = new System.Drawing.Size(314, 797);
             this.sectionsTab.TabIndex = 0;
             this.sectionsTab.Text = "Sections";
             this.sectionsTab.UseVisualStyleBackColor = true;
@@ -613,9 +610,9 @@
             this.sectionsView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sectionsView.ImageSize = new System.Drawing.Size(128, 128);
             this.sectionsView.Location = new System.Drawing.Point(4, 5);
-            this.sectionsView.Margin = new System.Windows.Forms.Padding(6);
+            this.sectionsView.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.sectionsView.Name = "sectionsView";
-            this.sectionsView.Size = new System.Drawing.Size(306, 789);
+            this.sectionsView.Size = new System.Drawing.Size(306, 787);
             this.sectionsView.TabIndex = 3;
             // 
             // featuresTab
@@ -625,7 +622,7 @@
             this.featuresTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.featuresTab.Name = "featuresTab";
             this.featuresTab.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.featuresTab.Size = new System.Drawing.Size(314, 799);
+            this.featuresTab.Size = new System.Drawing.Size(314, 797);
             this.featuresTab.TabIndex = 1;
             this.featuresTab.Text = "Features";
             this.featuresTab.UseVisualStyleBackColor = true;
@@ -635,9 +632,9 @@
             this.featureView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.featureView.ImageSize = new System.Drawing.Size(64, 64);
             this.featureView.Location = new System.Drawing.Point(4, 5);
-            this.featureView.Margin = new System.Windows.Forms.Padding(6);
+            this.featureView.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.featureView.Name = "featureView";
-            this.featureView.Size = new System.Drawing.Size(306, 789);
+            this.featureView.Size = new System.Drawing.Size(306, 787);
             this.featureView.TabIndex = 0;
             // 
             // startPositionsTab
@@ -647,7 +644,7 @@
             this.startPositionsTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.startPositionsTab.Name = "startPositionsTab";
             this.startPositionsTab.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.startPositionsTab.Size = new System.Drawing.Size(314, 799);
+            this.startPositionsTab.Size = new System.Drawing.Size(314, 797);
             this.startPositionsTab.TabIndex = 2;
             this.startPositionsTab.Text = "Starts";
             this.startPositionsTab.UseVisualStyleBackColor = true;
@@ -656,9 +653,9 @@
             // 
             this.startPositionsView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.startPositionsView1.Location = new System.Drawing.Point(4, 5);
-            this.startPositionsView1.Margin = new System.Windows.Forms.Padding(6);
+            this.startPositionsView1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.startPositionsView1.Name = "startPositionsView1";
-            this.startPositionsView1.Size = new System.Drawing.Size(306, 789);
+            this.startPositionsView1.Size = new System.Drawing.Size(306, 787);
             this.startPositionsView1.TabIndex = 0;
             // 
             // attributesTab
@@ -668,8 +665,8 @@
             this.attributesTab.Controls.Add(this.seaLevelTrackbar);
             this.attributesTab.Location = new System.Drawing.Point(4, 29);
             this.attributesTab.Name = "attributesTab";
-            this.attributesTab.Padding = new System.Windows.Forms.Padding(3);
-            this.attributesTab.Size = new System.Drawing.Size(314, 799);
+            this.attributesTab.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.attributesTab.Size = new System.Drawing.Size(314, 795);
             this.attributesTab.TabIndex = 3;
             this.attributesTab.Text = "Attributes";
             this.attributesTab.UseVisualStyleBackColor = true;
@@ -737,10 +734,10 @@
             // mapViewPanel
             // 
             this.mapViewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mapViewPanel.Location = new System.Drawing.Point(322, 33);
+            this.mapViewPanel.Location = new System.Drawing.Point(322, 35);
             this.mapViewPanel.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.mapViewPanel.Name = "mapViewPanel";
-            this.mapViewPanel.Size = new System.Drawing.Size(854, 800);
+            this.mapViewPanel.Size = new System.Drawing.Size(854, 798);
             this.mapViewPanel.TabIndex = 5;
             // 
             // MainForm

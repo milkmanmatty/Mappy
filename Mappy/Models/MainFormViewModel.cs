@@ -349,5 +349,10 @@
         {
             this.dispatcher.Initialize();
         }
+
+        public void ChangeSelectedTab()
+        {
+            this.dispatcher.ChangeSelectedTab();
+        }
     }
 }
