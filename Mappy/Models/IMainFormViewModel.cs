@@ -2,6 +2,7 @@
 {
     using System;
     using System.Drawing;
+    using Mappy.Models.Enums;
 
     public interface IMainFormViewModel
     {
@@ -137,6 +138,6 @@
 
         void Load();
 
-        void ChangeSelectedTab();
+        void ChangeSelectedTabType(GUITab tabType);
     }
 }
