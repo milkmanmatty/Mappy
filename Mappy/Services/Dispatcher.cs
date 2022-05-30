@@ -13,6 +13,7 @@
     using Mappy.Data;
     using Mappy.IO;
     using Mappy.Models;
+    using Mappy.Models.Enums;
     using Mappy.Util;
     using Mappy.Util.ImageSampling;
 
@@ -585,6 +586,11 @@
             {
                 this.featureService.SelectedFeature = featureFromTag.UnsafeValue;
             }
+        }
+
+        public void ChangeSelectedTab(GUITab tab)
+        {
+            this.model.SelectedGUITab = tab;
         }
 
         private static IEnumerable<string> GetMapNames(HpiArchive hpi)

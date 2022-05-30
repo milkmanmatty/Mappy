@@ -591,6 +591,7 @@
             this.sidebarTabs.SelectedIndex = 0;
             this.sidebarTabs.Size = new System.Drawing.Size(322, 832);
             this.sidebarTabs.TabIndex = 4;
+            this.sidebarTabs.SelectedIndexChanged += new System.EventHandler(this.GUITabs_SelectedIndexChanged);
             // 
             // sectionsTab
             // 
