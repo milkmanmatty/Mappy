@@ -584,6 +584,7 @@
         public void ChangeSelectedTab(GUITab tab)
         {
             this.model.SelectedGUITab = tab;
+            this.model.Map.IfSome(x => x.UpdateSelectedGUITab(tab));
         }
 
         public void SetSelectedFeature(string featureName)
