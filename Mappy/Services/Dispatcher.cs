@@ -584,7 +584,7 @@
         public void ChangeSelectedTab(GUITab tab)
         {
             this.model.SelectedGUITab = tab;
-            this.model.Map.IfSome(x => x.UpdateSelectedGUITab(tab));
+            this.SetSelectedGUITabForMap();
         }
 
         public void SetSelectedFeature(string featureName)
@@ -654,6 +654,11 @@
             }
 
             return false;
+        }
+
+        private void SetSelectedGUITabForMap()
+        {
+            this.model.Map.IfSome(x => x.UpdateSelectedGUITab(this.model.SelectedGUITab));
         }
 
         private void SaveHpi(UndoableMapModel map, string filename)
@@ -797,11 +802,13 @@
 
             var tntPath = HpiPath.Combine("maps", mapName + ".tnt");
             this.model.Map = Maybe.Some(this.mapLoadingService.CreateFromHpi(filename, tntPath, readOnly));
+            this.SetSelectedGUITabForMap();
         }
 
         private void OpenTnt(string filename)
         {
             this.model.Map = Maybe.Some(this.mapLoadingService.CreateFromTnt(filename));
+            this.SetSelectedGUITabForMap();
         }
 
         private bool CheckOkayDiscard()
@@ -833,7 +840,7 @@
         private void New(int width, int height)
         {
             this.model.Map = Maybe.Some(MapLoadingService.CreateMap(width, height));
-            this.model.Map.IfSome(x => x.UpdateSelectedGUITab(this.model.SelectedGUITab));
+            this.SetSelectedGUITabForMap();
         }
 
         private void OpenSct(string filename)
