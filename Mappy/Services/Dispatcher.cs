@@ -833,6 +833,7 @@
         private void New(int width, int height)
         {
             this.model.Map = Maybe.Some(MapLoadingService.CreateMap(width, height));
+            this.model.Map.IfSome(x => x.UpdateSelectedGUITab(this.model.SelectedGUITab));
         }
 
         private void OpenSct(string filename)
