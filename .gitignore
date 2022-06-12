@@ -152,3 +152,4 @@ $RECYCLE.BIN/
 
 # More visual studio files
 /.vs/
+/dist
