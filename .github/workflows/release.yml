@@ -5,6 +5,9 @@ on:
     tags:
       - "*"
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
@@ -72,3 +75,14 @@ jobs:
         with:
           name: mappy-${{ github.ref_name }}-win-x86
           path: mappy-${{ github.ref_name }}-win-x86.zip
+
+      - name: Attach zip to GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: mappy-${{ github.ref_name }}-win-x86.zip
+          generate_release_notes: true
+          make_latest: true
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
