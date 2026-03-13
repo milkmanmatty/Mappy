@@ -19,7 +19,7 @@ namespace Mappy.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -69,9 +69,7 @@ namespace Mappy.Properties {
         ///
         ///Thanks to JoeD for HPIUtil, which Mappy uses to read HPI files.
         ///
-        ///Thanks to Kinboat for Annihilator, the original fan-made editor that is still the tool of choice for many modders, whose source code was valuable in the development of this program.
-        ///
-        ///Thanks [rest of string was truncated]&quot;;.
+        ///Thanks to Kinboat for Annihilator, the original fan-made editor that is still the tool of choice for many modders, whose source code was valuable in the development of this program. [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string AboutText {
             get {
