@@ -1,4 +1,4 @@
-﻿namespace Mappy
+namespace Mappy
 {
     using System.Collections.Specialized;
     using System.Drawing;
@@ -6,6 +6,8 @@
 
     public class Configuration
     {
+        private const int DefaultDragAutoScrollSpeed = 16;
+
         [XmlIgnore]
         public Color GridColor
         {
@@ -17,5 +19,19 @@
         public int GridColorArgb { get; set; }
 
         public StringCollection SearchPaths { get; set; }
+
+        public int DragAutoScrollSpeedX { get; set; } = DefaultDragAutoScrollSpeed;
+
+        public int DragAutoScrollSpeedY { get; set; } = DefaultDragAutoScrollSpeed;
+
+        public int GetDragAutoScrollSpeedXOrDefault()
+        {
+            return this.DragAutoScrollSpeedX > 0 ? this.DragAutoScrollSpeedX : DefaultDragAutoScrollSpeed;
+        }
+
+        public int GetDragAutoScrollSpeedYOrDefault()
+        {
+            return this.DragAutoScrollSpeedY > 0 ? this.DragAutoScrollSpeedY : DefaultDragAutoScrollSpeed;
+        }
     }
 }

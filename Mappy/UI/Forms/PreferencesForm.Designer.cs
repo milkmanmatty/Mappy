@@ -1,4 +1,4 @@
-﻿namespace Mappy.UI.Forms
+namespace Mappy.UI.Forms
 {
     partial class PreferencesForm
     {
@@ -39,10 +39,18 @@
             this.bottomPanel = new System.Windows.Forms.Panel();
             this.searchPathsPanel = new System.Windows.Forms.Panel();
             this.mainGroupBox = new System.Windows.Forms.GroupBox();
+            this.scrollSpeedGroupBox = new System.Windows.Forms.GroupBox();
+            this.dragScrollSpeedYNumeric = new System.Windows.Forms.NumericUpDown();
+            this.dragScrollSpeedXNumeric = new System.Windows.Forms.NumericUpDown();
+            this.dragScrollSpeedYLabel = new System.Windows.Forms.Label();
+            this.dragScrollSpeedXLabel = new System.Windows.Forms.Label();
             this.sidePanel.SuspendLayout();
             this.bottomPanel.SuspendLayout();
             this.searchPathsPanel.SuspendLayout();
             this.mainGroupBox.SuspendLayout();
+            this.scrollSpeedGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedYNumeric)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).BeginInit();
             this.SuspendLayout();
             // 
             // searchPathsListView
@@ -136,7 +144,7 @@
             this.bottomPanel.Controls.Add(this.cancelButton);
             this.bottomPanel.Controls.Add(this.okButton);
             this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.bottomPanel.Location = new System.Drawing.Point(0, 285);
+            this.bottomPanel.Location = new System.Drawing.Point(0, 351);
             this.bottomPanel.Name = "bottomPanel";
             this.bottomPanel.Size = new System.Drawing.Size(450, 30);
             this.bottomPanel.TabIndex = 8;
@@ -150,7 +158,7 @@
             this.searchPathsPanel.Controls.Add(this.sidePanel);
             this.searchPathsPanel.Location = new System.Drawing.Point(6, 19);
             this.searchPathsPanel.Name = "searchPathsPanel";
-            this.searchPathsPanel.Size = new System.Drawing.Size(414, 242);
+            this.searchPathsPanel.Size = new System.Drawing.Size(414, 188);
             this.searchPathsPanel.TabIndex = 9;
             // 
             // mainGroupBox
@@ -161,16 +169,94 @@
             this.mainGroupBox.Controls.Add(this.searchPathsPanel);
             this.mainGroupBox.Location = new System.Drawing.Point(12, 12);
             this.mainGroupBox.Name = "mainGroupBox";
-            this.mainGroupBox.Size = new System.Drawing.Size(426, 267);
+            this.mainGroupBox.Size = new System.Drawing.Size(426, 213);
             this.mainGroupBox.TabIndex = 10;
             this.mainGroupBox.TabStop = false;
             this.mainGroupBox.Text = "Search Paths";
+            // 
+            // scrollSpeedGroupBox
+            // 
+            this.scrollSpeedGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedYNumeric);
+            this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedXNumeric);
+            this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedYLabel);
+            this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedXLabel);
+            this.scrollSpeedGroupBox.Location = new System.Drawing.Point(12, 231);
+            this.scrollSpeedGroupBox.Name = "scrollSpeedGroupBox";
+            this.scrollSpeedGroupBox.Size = new System.Drawing.Size(426, 114);
+            this.scrollSpeedGroupBox.TabIndex = 11;
+            this.scrollSpeedGroupBox.TabStop = false;
+            this.scrollSpeedGroupBox.Text = "Viewport Drag Auto-Scroll";
+            // 
+            // dragScrollSpeedYNumeric
+            // 
+            this.dragScrollSpeedYNumeric.Location = new System.Drawing.Point(233, 71);
+            this.dragScrollSpeedYNumeric.Maximum = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            this.dragScrollSpeedYNumeric.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.dragScrollSpeedYNumeric.Name = "dragScrollSpeedYNumeric";
+            this.dragScrollSpeedYNumeric.Size = new System.Drawing.Size(82, 20);
+            this.dragScrollSpeedYNumeric.TabIndex = 3;
+            this.dragScrollSpeedYNumeric.Value = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
+            // 
+            // dragScrollSpeedXNumeric
+            // 
+            this.dragScrollSpeedXNumeric.Location = new System.Drawing.Point(233, 34);
+            this.dragScrollSpeedXNumeric.Maximum = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            this.dragScrollSpeedXNumeric.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.dragScrollSpeedXNumeric.Name = "dragScrollSpeedXNumeric";
+            this.dragScrollSpeedXNumeric.Size = new System.Drawing.Size(82, 20);
+            this.dragScrollSpeedXNumeric.TabIndex = 1;
+            this.dragScrollSpeedXNumeric.Value = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
+            // 
+            // dragScrollSpeedYLabel
+            // 
+            this.dragScrollSpeedYLabel.AutoSize = true;
+            this.dragScrollSpeedYLabel.Location = new System.Drawing.Point(14, 73);
+            this.dragScrollSpeedYLabel.Name = "dragScrollSpeedYLabel";
+            this.dragScrollSpeedYLabel.Size = new System.Drawing.Size(194, 13);
+            this.dragScrollSpeedYLabel.TabIndex = 2;
+            this.dragScrollSpeedYLabel.Text = "Vertical speed:";
+            // 
+            // dragScrollSpeedXLabel
+            // 
+            this.dragScrollSpeedXLabel.AutoSize = true;
+            this.dragScrollSpeedXLabel.Location = new System.Drawing.Point(14, 36);
+            this.dragScrollSpeedXLabel.Name = "dragScrollSpeedXLabel";
+            this.dragScrollSpeedXLabel.Size = new System.Drawing.Size(206, 13);
+            this.dragScrollSpeedXLabel.TabIndex = 0;
+            this.dragScrollSpeedXLabel.Text = "Horizontal speed:";
             // 
             // PreferencesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(450, 315);
+            this.ClientSize = new System.Drawing.Size(450, 381);
+            this.Controls.Add(this.scrollSpeedGroupBox);
             this.Controls.Add(this.mainGroupBox);
             this.Controls.Add(this.bottomPanel);
             this.Name = "PreferencesForm";
@@ -182,6 +268,10 @@
             this.bottomPanel.ResumeLayout(false);
             this.searchPathsPanel.ResumeLayout(false);
             this.mainGroupBox.ResumeLayout(false);
+            this.scrollSpeedGroupBox.ResumeLayout(false);
+            this.scrollSpeedGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedYNumeric)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -199,5 +289,10 @@
         private System.Windows.Forms.Panel bottomPanel;
         private System.Windows.Forms.Panel searchPathsPanel;
         private System.Windows.Forms.GroupBox mainGroupBox;
+        private System.Windows.Forms.GroupBox scrollSpeedGroupBox;
+        private System.Windows.Forms.Label dragScrollSpeedYLabel;
+        private System.Windows.Forms.Label dragScrollSpeedXLabel;
+        private System.Windows.Forms.NumericUpDown dragScrollSpeedYNumeric;
+        private System.Windows.Forms.NumericUpDown dragScrollSpeedXNumeric;
     }
 }

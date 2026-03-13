@@ -1,4 +1,4 @@
-﻿namespace Mappy.UI.Controls
+namespace Mappy.UI.Controls
 {
     using System;
     using System.Drawing;
@@ -8,9 +8,15 @@
 
     public partial class MapViewPanel : UserControl
     {
+        private const int AutoScrollEdgeThreshold = 24;
+
         private IMapViewViewModel model;
 
         private Point oldAutoScrollPos;
+
+        private readonly Timer dragScrollTimer = new Timer { Interval = 16 };
+
+        private bool dragInProgress;
 
         public MapViewPanel()
         {
@@ -20,6 +26,9 @@
             this.mapView.Layers.Add(new DummyLayer());
             this.mapView.Layers.Add(new DummyLayer());
             this.mapView.Layers.Add(new DummyLayer());
+
+            this.dragScrollTimer.Tick += this.DragScrollTimerTick;
+            this.Disposed += this.MapViewPanelDisposed;
         }
 
         public void SetModel(IMapViewViewModel model)
@@ -46,22 +55,31 @@
             var loc = this.mapView.ToVirtualPoint(e.Location);
             if (e.Button == MouseButtons.Left)
             {
+                this.StartDrag();
                 this.model.MouseLeftDown(loc);
             }
             else if (e.Button == MouseButtons.Right)
             {
+                this.StartDrag();
                 this.model.MouseRightDown(loc);
             }
         }
 
         private void MapViewMouseMove(object sender, MouseEventArgs e)
         {
+            if (this.dragInProgress)
+            {
+                this.TryAutoScroll(e.Location);
+                this.UpdateDragScrollTimer(e.Location);
+            }
+
             var loc = this.mapView.ToVirtualPoint(e.Location);
             this.model.MouseMove(loc);
         }
 
         private void MapViewMouseUp(object sender, MouseEventArgs e)
         {
+            this.StopDrag();
             this.model.MouseUp();
         }
 
@@ -72,6 +90,11 @@
 
         private void MapViewLeave(object sender, EventArgs e)
         {
+            if (this.dragInProgress)
+            {
+                return;
+            }
+
             this.model.LeaveFocus();
         }
 
@@ -101,6 +124,125 @@
                 this.model.ScrollPositionChanged(loc);
                 this.oldAutoScrollPos = pos;
             }
+        }
+
+        private void MapViewPanelDisposed(object sender, EventArgs e)
+        {
+            this.dragScrollTimer.Stop();
+            this.dragScrollTimer.Tick -= this.DragScrollTimerTick;
+            this.dragScrollTimer.Dispose();
+            this.Disposed -= this.MapViewPanelDisposed;
+        }
+
+        private void StartDrag()
+        {
+            this.dragInProgress = true;
+            this.mapView.Capture = true;
+        }
+
+        private void StopDrag()
+        {
+            this.dragInProgress = false;
+            this.dragScrollTimer.Stop();
+            this.mapView.Capture = false;
+        }
+
+        private void DragScrollTimerTick(object sender, EventArgs e)
+        {
+            if (!this.dragInProgress || !this.IsDragButtonDown())
+            {
+                this.StopDrag();
+                return;
+            }
+
+            var clientPoint = this.mapView.PointToClient(Cursor.Position);
+            this.TryAutoScroll(clientPoint);
+
+            var virtualPoint = this.mapView.ToVirtualPoint(clientPoint);
+            this.model.MouseMove(virtualPoint);
+        }
+
+        private void UpdateDragScrollTimer(Point clientPoint)
+        {
+            if (this.IsNearAutoScrollEdge(clientPoint) && this.IsDragButtonDown())
+            {
+                this.dragScrollTimer.Start();
+            }
+            else
+            {
+                this.dragScrollTimer.Stop();
+            }
+        }
+
+        private bool IsDragButtonDown()
+        {
+            var buttons = Control.MouseButtons;
+            return (buttons & MouseButtons.Left) == MouseButtons.Left ||
+                   (buttons & MouseButtons.Right) == MouseButtons.Right;
+        }
+
+        private bool IsNearAutoScrollEdge(Point clientPoint)
+        {
+            return clientPoint.X <= AutoScrollEdgeThreshold ||
+                   clientPoint.Y <= AutoScrollEdgeThreshold ||
+                   clientPoint.X >= this.mapView.ClientSize.Width - AutoScrollEdgeThreshold ||
+                   clientPoint.Y >= this.mapView.ClientSize.Height - AutoScrollEdgeThreshold;
+        }
+
+        private void TryAutoScroll(Point clientPoint)
+        {
+            var viewport = this.GetViewportLocation();
+
+            var deltaX = this.GetAutoScrollDelta(clientPoint.X, this.mapView.ClientSize.Width, true);
+            var deltaY = this.GetAutoScrollDelta(clientPoint.Y, this.mapView.ClientSize.Height, false);
+
+            if (deltaX == 0 && deltaY == 0)
+            {
+                return;
+            }
+
+            var maxX = Math.Max(this.mapView.CanvasSize.Width - this.mapView.ClientSize.Width, 0);
+            var maxY = Math.Max(this.mapView.CanvasSize.Height - this.mapView.ClientSize.Height, 0);
+
+            var next = new Point(
+                this.Clamp(viewport.X + deltaX, 0, maxX),
+                this.Clamp(viewport.Y + deltaY, 0, maxY));
+
+            if (next != viewport)
+            {
+                this.mapView.AutoScrollPosition = next;
+            }
+        }
+
+        private Point GetViewportLocation()
+        {
+            var pos = this.mapView.AutoScrollPosition;
+            return new Point(-pos.X, -pos.Y);
+        }
+
+        private int GetAutoScrollDelta(int cursorPosition, int clientSize, bool horizontal)
+        {
+            var settings = MappySettings.Settings;
+            var speed = horizontal
+                ? settings.GetDragAutoScrollSpeedXOrDefault()
+                : settings.GetDragAutoScrollSpeedYOrDefault();
+
+            if (cursorPosition < AutoScrollEdgeThreshold)
+            {
+                return -speed;
+            }
+
+            if (cursorPosition > clientSize - AutoScrollEdgeThreshold)
+            {
+                return speed;
+            }
+
+            return 0;
+        }
+
+        private int Clamp(int value, int min, int max)
+        {
+            return Math.Max(min, Math.Min(max, value));
         }
     }
 }

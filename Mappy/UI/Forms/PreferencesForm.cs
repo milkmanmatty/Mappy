@@ -1,4 +1,4 @@
-﻿namespace Mappy.UI.Forms
+namespace Mappy.UI.Forms
 {
     using System;
     using System.Windows.Forms;
@@ -22,6 +22,9 @@
                     this.searchPathsListView.Items.Add(i);
                 }
             }
+
+            this.dragScrollSpeedXNumeric.Value = MappySettings.Settings.GetDragAutoScrollSpeedXOrDefault();
+            this.dragScrollSpeedYNumeric.Value = MappySettings.Settings.GetDragAutoScrollSpeedYOrDefault();
         }
 
         private void AddButtonClick(object sender, EventArgs e)
@@ -103,6 +106,8 @@
             }
 
             MappySettings.Settings.SearchPaths = s;
+            MappySettings.Settings.DragAutoScrollSpeedX = (int)this.dragScrollSpeedXNumeric.Value;
+            MappySettings.Settings.DragAutoScrollSpeedY = (int)this.dragScrollSpeedYNumeric.Value;
             MappySettings.SaveSettings();
         }
     }
