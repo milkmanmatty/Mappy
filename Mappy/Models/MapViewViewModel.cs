@@ -1,4 +1,4 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System;
     using System.Collections.Generic;
@@ -439,7 +439,71 @@
 
         private void SelectedFeaturesCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            this.RefreshSelection();
+            // Amend the feature selection list rather than rebuild it on every selection
+            switch (e.Action)
+            {
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
+                    if (e.NewItems != null)
+                    {
+                        foreach (var idObj in e.NewItems)
+                        {
+                            this.TryAddFeatureSelection((Guid)idObj);
+                        }
+                    }
+
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
+                    if (e.OldItems != null)
+                    {
+                        foreach (var idObj in e.OldItems)
+                        {
+                            this.TryRemoveFeatureSelection((Guid)idObj);
+                        }
+                    }
+
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
+                    if (e.OldItems != null)
+                    {
+                        foreach (var idObj in e.OldItems)
+                        {
+                            this.TryRemoveFeatureSelection((Guid)idObj);
+                        }
+                    }
+
+                    if (e.NewItems != null)
+                    {
+                        foreach (var idObj in e.NewItems)
+                        {
+                            this.TryAddFeatureSelection((Guid)idObj);
+                        }
+                    }
+
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
+                    // same item set, nothing to do
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+                default:
+                    this.RefreshSelection();
+                    break;
+            }
+        }
+
+        private void TryAddFeatureSelection(Guid id)
+        {
+            if (this.featureMapping.ContainsKey(id))
+            {
+                this.itemsLayer.Value.AddToSelection(this.featureMapping[id]);
+            }
+        }
+
+        private void TryRemoveFeatureSelection(Guid id)
+        {
+            if (this.featureMapping.ContainsKey(id))
+            {
+                this.itemsLayer.Value.RemoveFromSelection(this.featureMapping[id]);
+            }
         }
 
         private void MapModelPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
