@@ -97,6 +97,11 @@ namespace Mappy.UI.Drawables
             }
         }
 
+        public string MapFilePath
+        {
+            set => this.heightGridPainter.MapFilePath = value;
+        }
+
         public override void Draw(Graphics graphics, Rectangle clipRectangle)
         {
             this.painter.Paint(graphics, clipRectangle);

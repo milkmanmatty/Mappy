@@ -311,6 +311,7 @@
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Painters\HeightGridPainter.cs" />
+    <Compile Include="UI\Painters\HeightGridColorScheme.cs" />
     <Compile Include="UI\Painters\GridPainter.cs" />
     <Compile Include="UI\Painters\VoidPainter.cs" />
     <Compile Include="UI\Tags\FeatureTag.cs" />
@@ -399,6 +400,9 @@
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Assets\PALETTE.PAL" />
+    <None Include="default.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Mappy.ruleset">
       <SubType>Designer</SubType>
     </None>

@@ -1,4 +1,4 @@
-﻿
+
 namespace Mappy.UI.Painters
 {
     using System;
@@ -55,8 +55,11 @@ namespace Mappy.UI.Painters
 
         public int SeaLevel { get; set; }
 
+        public string MapFilePath { get; set; }
+
         public void Paint(Graphics graphics, Rectangle clipRectangle)
         {
+            var colorScheme = HeightGridColorScheme.LoadForMap(this.MapFilePath);
             var startX = Util.Clamp(clipRectangle.Left / this.tileSize, 0, this.heightGrid.Width - 2);
             var startY = Util.Clamp(clipRectangle.Top / this.tileSize, 0, this.heightGrid.Height - 2);
 
@@ -78,17 +81,20 @@ namespace Mappy.UI.Painters
 
                     var h = this.heightGrid.Get(x, y);
 
-                    var landHue = 30.0f / 360.0f;
-                    var seaHue = 210.0f / 360.0f;
+                    Color lineColor;
+                    if (!colorScheme.TryGetColor(h, this.SeaLevel, out lineColor))
+                    {
+                        var landHue = 30.0f / 360.0f;
+                        var seaHue = 210.0f / 360.0f;
+                        var lightness = ((float)h) / 255.0f;
+                        var (r, g, b) = HslToRgb(h < this.SeaLevel ? seaHue : landHue, 1.0f, lightness);
+                        lineColor = Color.FromArgb(
+                            Util.Clamp((int)(r * 255.0f), 0, 255),
+                            Util.Clamp((int)(g * 255.0f), 0, 255),
+                            Util.Clamp((int)(b * 255.0f), 0, 255));
+                    }
 
-                    var lightness = ((float)h) / 255.0f;
-
-                    var (r, g, b) = HslToRgb(h < this.SeaLevel ? seaHue : landHue, 1.0f, lightness);
-
-                    using (var pen = new Pen(Color.FromArgb(
-                        Util.Clamp((int)(r * 255.0f), 0, 255),
-                        Util.Clamp((int)(g * 255.0f), 0, 255),
-                        Util.Clamp((int)(b * 255.0f), 0, 255))))
+                    using (var pen = new Pen(lineColor))
                     {
                         graphics.DrawLine(pen, posX, posY, posX2, posY2);
                         graphics.DrawLine(pen, posX, posY, posX3, posY3);

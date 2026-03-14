@@ -1,0 +1,32 @@
+{
+	"ranges": [
+		{
+			"min": 0,
+			"max": 100,
+			"color": "#ffaa33"
+		},
+		{
+			"min": 101,
+			"max": 200,
+			"color": "#EFA71B"
+		},
+		{
+			"min": 201,
+			"max": 225,
+			"color": "#DF4F07"
+		},
+		{
+			"min": 226,
+			"max": 250,
+			"color": "#DF4F07"
+		},
+		{
+			"min": 251,
+			"max": 255,
+			"color": "#173300"
+		}
+	],
+	"ocean": "#0044ff",
+	"min": "#000000",
+	"max": "#ffffff"
+}

@@ -83,6 +83,8 @@ namespace Mappy.Models
 
         private bool featuresVisible;
 
+        private string mapFilePath;
+
         private readonly BehaviorSubject<bool> heightEditModeObservable = new BehaviorSubject<bool>(false);
 
         private bool heightEditMode;
@@ -116,6 +118,7 @@ namespace Mappy.Models
             var heightEditInterval = model.PropertyAsObservable(x => x.HeightEditInterval, nameof(model.HeightEditInterval));
             var heightEditCursorSize = model.PropertyAsObservable(x => x.HeightEditCursorSize, nameof(model.HeightEditCursorSize));
             var map = model.PropertyAsObservable(x => x.Map, nameof(model.Map));
+            var mapFilePath = map.ObservePropertyOrDefault(x => x.FilePath, "FilePath", null);
 
             var mapWidth = map.ObservePropertyOrDefault(x => x.MapWidth, "MapWidth", 0);
             var mapHeight = map.ObservePropertyOrDefault(x => x.MapHeight, "MapHeight", 0);
@@ -138,6 +141,7 @@ namespace Mappy.Models
             selectedTab.Subscribe(this.OnSelectedTabChanged);
             heightEditInterval.Subscribe(x => this.heightEditInterval = Math.Max(1, x));
             heightEditCursorSize.Subscribe(this.OnHeightEditCursorSizeChanged);
+            mapFilePath.Subscribe(this.OnMapFilePathChanged);
 
             this.CanvasSize = mapWidth.CombineLatest(mapHeight, (w, h) => new Size(w * 32, h * 32));
             this.CanvasSize.Subscribe(
@@ -459,6 +463,7 @@ namespace Mappy.Models
             this.baseTile.DrawHeightMap = this.model.HeightmapVisible;
             this.baseTile.DrawHeightGrid = this.model.HeightGridVisible;
             this.baseTile.SeaLevel = this.mapModel.SeaLevel;
+            this.baseTile.MapFilePath = this.mapFilePath;
             this.baseItem = new DrawableItem(
                 0,
                 0,
@@ -493,6 +498,16 @@ namespace Mappy.Models
         private void RefreshSeaLevel()
         {
             this.baseTile.SeaLevel = this.mapModel.SeaLevel;
+        }
+
+        private void OnMapFilePathChanged(string path)
+        {
+            this.mapFilePath = path;
+            if (this.baseTile != null)
+            {
+                this.baseTile.MapFilePath = path;
+                this.baseTile.Invalidate();
+            }
         }
 
         private void WireMapModel()
