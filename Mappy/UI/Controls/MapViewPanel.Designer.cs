@@ -1,4 +1,4 @@
-﻿namespace Mappy.UI.Controls
+namespace Mappy.UI.Controls
 {
     partial class MapViewPanel
     {
@@ -46,6 +46,8 @@
             this.mapView.DragEnter += new System.Windows.Forms.DragEventHandler(this.MapViewDragEnter);
             this.mapView.Paint += new System.Windows.Forms.PaintEventHandler(this.MapViewPaint);
             this.mapView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MapViewKeyDown);
+            this.mapView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MapViewKeyUp);
+            this.mapView.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.MapViewPreviewKeyDown);
             this.mapView.Leave += new System.EventHandler(this.MapViewLeave);
             this.mapView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MapViewMouseDown);
             this.mapView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MapViewMouseMove);
