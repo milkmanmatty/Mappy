@@ -95,6 +95,14 @@ namespace Mappy.Models
 
         private Point? lastHeightBrushPoint;
 
+        private Point? pinnedSingleHeightPoint;
+
+        private Point pinnedSingleHeightPointAnchor;
+
+        private Point? pinnedAreaHeightPoint;
+
+        private Point pinnedAreaHeightPointAnchor;
+
         public MapViewViewModel(IReadOnlyApplicationModel model, Dispatcher dispatcher, FeatureService featureService)
         {
             var heightmapVisible = model.PropertyAsObservable(x => x.HeightmapVisible, nameof(model.HeightmapVisible));
@@ -642,6 +650,8 @@ namespace Mappy.Models
                 this.bandboxMode = false;
                 this.activeHeightBrushDelta = 0;
                 this.lastHeightBrushPoint = null;
+                this.pinnedSingleHeightPoint = null;
+                this.pinnedAreaHeightPoint = null;
                 this.ClearHeightCursor();
                 this.dispatcher.FlushHeightBrush();
             }
@@ -660,23 +670,55 @@ namespace Mappy.Models
                 return;
             }
 
-            var center = Util.ScreenToHeightIndex(this.mapModel.BaseTile.HeightGrid, location);
-            if (!center.HasValue)
+            Point? anchor;
+            if (this.heightEditCursorSize == 1)
+            {
+                anchor = this.ResolveSingleHeightAnchor(this.mapModel.BaseTile.HeightGrid, location);
+            }
+            else
+            {
+                this.pinnedSingleHeightPoint = null;
+                anchor = this.ResolveAreaHeightAnchor(this.mapModel.BaseTile.HeightGrid, location);
+            }
+
+            if (!anchor.HasValue)
             {
                 return;
             }
 
-            if (this.lastHeightBrushPoint.HasValue && this.lastHeightBrushPoint.Value == center.Value)
+            if (this.heightEditCursorSize > 1 &&
+                this.lastHeightBrushPoint.HasValue &&
+                this.lastHeightBrushPoint.Value == anchor.Value)
             {
                 return;
             }
 
-            this.lastHeightBrushPoint = center;
-            this.dispatcher.AdjustHeightBrush(
-                location.X,
-                location.Y,
-                this.activeHeightBrushDelta,
-                this.heightEditCursorSize);
+            this.lastHeightBrushPoint = anchor;
+            if (this.heightEditCursorSize == 1)
+            {
+                this.pinnedSingleHeightPoint = anchor;
+                this.dispatcher.AdjustHeightPoint(anchor.Value.X, anchor.Value.Y, this.activeHeightBrushDelta);
+            }
+            else
+            {
+                this.pinnedAreaHeightPoint = anchor;
+                this.pinnedAreaHeightPointAnchor = location;
+                this.dispatcher.AdjustHeightBrushAtAnchor(
+                    anchor.Value.X,
+                    anchor.Value.Y,
+                    this.activeHeightBrushDelta,
+                    this.heightEditCursorSize);
+            }
+
+            // Ensure contour and height-grid overlays redraw immediately after edits.
+            this.baseTile?.Invalidate();
+
+            // Keep the indicator locked to the edited point as projection changes.
+            this.UpdateHeightCursor(location);
+
+            // Force status-bar observables to recompute height at current cursor location.
+            this.dispatcher.UpdateMousePosition(Maybe.None<Point>());
+            this.dispatcher.UpdateMousePosition(Maybe.Return(location));
         }
 
         private void UpdateHeightCursor(Point location)
@@ -690,7 +732,6 @@ namespace Mappy.Models
             var center = Util.ScreenToHeightIndex(this.mapModel.BaseTile.HeightGrid, location);
             if (!center.HasValue)
             {
-                this.ClearHeightCursor();
                 return;
             }
 
@@ -706,29 +747,70 @@ namespace Mappy.Models
             endX = Math.Min(width, endX);
             endY = Math.Min(height, endY);
 
-            var rect = new Rectangle(
-                startX * 16,
-                startY * 16,
-                (endX - startX) * 16,
-                (endY - startY) * 16);
+            if (size == 1)
+            {
+                var cornerIndex = this.ResolveSingleHeightAnchor(heightGrid, location);
+                if (!cornerIndex.HasValue)
+                {
+                    return;
+                }
 
-            this.ClearHeightCursor();
+                var corner = ProjectHeightPoint(heightGrid, cornerIndex.Value.X, cornerIndex.Value.Y);
+                var marker = new Rectangle(corner.X - 2, corner.Y - 2, 4, 4);
+                var cursor = DrawableBandbox.CreateSimple(
+                    marker.Size,
+                    HeightCursorFillColor,
+                    HeightCursorBorderColor);
+                var item = new DrawableItem(
+                    marker.X,
+                    marker.Y,
+                    HeightCursorDepth,
+                    cursor);
+                item.Locked = true;
+                this.ReplaceHeightCursor(item);
+                return;
+            }
 
-            if (rect.Width <= 0 || rect.Height <= 0)
+            var points = BuildProjectedBoundaryPoints(heightGrid, startX, startY, endX, endY);
+            if (points.Length < 3)
             {
                 return;
             }
 
-            var cursor = DrawableBandbox.CreateSimple(
-                rect.Size,
-                HeightCursorFillColor,
-                HeightCursorBorderColor);
-            this.heightCursorMapping = new DrawableItem(
-                rect.X,
-                rect.Y,
+            var minX = points[0].X;
+            var minY = points[0].Y;
+            var maxX = points[0].X;
+            var maxY = points[0].Y;
+            for (var i = 1; i < points.Length; i++)
+            {
+                minX = Math.Min(minX, points[i].X);
+                minY = Math.Min(minY, points[i].Y);
+                maxX = Math.Max(maxX, points[i].X);
+                maxY = Math.Max(maxY, points[i].Y);
+            }
+
+            var localPoints = new Point[points.Length];
+            for (var i = 0; i < points.Length; i++)
+            {
+                localPoints[i] = new Point(points[i].X - minX, points[i].Y - minY);
+            }
+
+            var polySize = new Size(Math.Max(1, (maxX - minX) + 1), Math.Max(1, (maxY - minY) + 1));
+            var poly = new DrawablePolyline(localPoints, polySize, new Pen(HeightCursorBorderColor, 1));
+
+            var polyItem = new DrawableItem(
+                minX,
+                minY,
                 HeightCursorDepth,
-                cursor);
-            this.heightCursorMapping.Locked = true;
+                poly);
+            polyItem.Locked = true;
+            this.ReplaceHeightCursor(polyItem);
+        }
+
+        private void ReplaceHeightCursor(DrawableItem item)
+        {
+            this.ClearHeightCursor();
+            this.heightCursorMapping = item;
             this.itemsLayer.Value.Items.Add(this.heightCursorMapping);
         }
 
@@ -739,6 +821,120 @@ namespace Mappy.Models
                 this.itemsLayer.Value.Items.Remove(this.heightCursorMapping);
                 this.heightCursorMapping = null;
             }
+        }
+
+        private static Point ProjectHeightPoint(IGrid<int> heightGrid, int x, int y)
+        {
+            var sampleX = Util.Clamp(x, 0, heightGrid.Width - 1);
+            var sampleY = Util.Clamp(y, 0, heightGrid.Height - 1);
+            var h = heightGrid.Get(sampleX, sampleY);
+            return new Point(x * 16, (y * 16) - (h / 2));
+        }
+
+        private static Point[] BuildProjectedBoundaryPoints(IGrid<int> heightGrid, int startX, int startY, int endX, int endY)
+        {
+            var points = new List<Point>();
+            for (var x = startX; x <= endX; x++)
+            {
+                points.Add(ProjectHeightPoint(heightGrid, x, startY));
+            }
+
+            for (var y = startY + 1; y <= endY; y++)
+            {
+                points.Add(ProjectHeightPoint(heightGrid, endX, y));
+            }
+
+            for (var x = endX - 1; x >= startX; x--)
+            {
+                points.Add(ProjectHeightPoint(heightGrid, x, endY));
+            }
+
+            for (var y = endY - 1; y > startY; y--)
+            {
+                points.Add(ProjectHeightPoint(heightGrid, startX, y));
+            }
+
+            return points.ToArray();
+        }
+
+        private Point? ResolveSingleHeightAnchor(IGrid<int> heightGrid, Point location)
+        {
+            if (this.pinnedSingleHeightPoint.HasValue && IsNear(location, this.pinnedSingleHeightPointAnchor, 12))
+            {
+                var p = this.pinnedSingleHeightPoint.Value;
+                if (p.X >= 0 && p.Y >= 0 && p.X < heightGrid.Width && p.Y < heightGrid.Height)
+                {
+                    return p;
+                }
+            }
+
+            var next = Util.ScreenToNearestHeightPointIndex(heightGrid, location);
+            if (next.HasValue)
+            {
+                this.pinnedSingleHeightPoint = next;
+                this.pinnedSingleHeightPointAnchor = location;
+            }
+
+            return next;
+        }
+
+        private Point? ResolveAreaHeightAnchor(IGrid<int> heightGrid, Point location)
+        {
+            if (this.pinnedAreaHeightPoint.HasValue && IsNear(location, this.pinnedAreaHeightPointAnchor, 12))
+            {
+                var p = this.pinnedAreaHeightPoint.Value;
+                if (p.X >= 0 && p.Y >= 0 && p.X < heightGrid.Width && p.Y < heightGrid.Height)
+                {
+                    return p;
+                }
+            }
+
+            var next = Util.ScreenToHeightIndex(heightGrid, location);
+            if (next.HasValue)
+            {
+                this.pinnedAreaHeightPoint = next;
+                this.pinnedAreaHeightPointAnchor = location;
+                return next;
+            }
+
+            // Fallback around the cursor so repeated clicks can continue after projection shifts.
+            Point? best = null;
+            var bestDist = int.MaxValue;
+            const int SearchRadius = 14;
+            for (var dy = -SearchRadius; dy <= SearchRadius; dy += 2)
+            {
+                for (var dx = -SearchRadius; dx <= SearchRadius; dx += 2)
+                {
+                    var probe = new Point(location.X + dx, location.Y + dy);
+                    var hit = Util.ScreenToHeightIndex(heightGrid, probe);
+                    if (!hit.HasValue)
+                    {
+                        continue;
+                    }
+
+                    var dist = (dx * dx) + (dy * dy);
+                    if (dist < bestDist)
+                    {
+                        bestDist = dist;
+                        best = hit;
+                    }
+                }
+            }
+
+            if (best.HasValue)
+            {
+                this.pinnedAreaHeightPoint = best;
+                this.pinnedAreaHeightPointAnchor = location;
+            }
+
+            return best;
+        }
+
+        private static bool IsNear(Point a, Point b, int threshold)
+        {
+            var dx = a.X - b.X;
+            var dy = a.Y - b.Y;
+            return (dx * dx) + (dy * dy) <= threshold * threshold;
         }
 
         private void RefreshSelection()
