@@ -1,11 +1,13 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System;
     using System.Drawing;
     using System.Linq;
     using System.Reactive.Linq;
+    using Mappy.Collections;
     using Mappy.Models.Enums;
     using Mappy.Services;
+    using Mappy.Util;
 
     public class MainFormViewModel : IMainFormViewModel
     {
@@ -82,8 +84,19 @@
 
             this.TitleText = titleText;
 
-            this.MousePositionText = map.ObservePropertyOrDefault(m => m.MousePosition, "MousePosition", Maybe.None<Point>())
+            var mousePosition = map.ObservePropertyOrDefault(m => m.MousePosition, "MousePosition", Maybe.None<Point>());
+            this.MousePositionText = mousePosition
                 .Select(p => p.Match(pos => $"X: {pos.X}, Y: {pos.Y}", () => "X: -, Y: -"));
+            this.HeightText = map.CombineLatest(
+                mousePosition,
+                (currentMap, mousePos) => currentMap.Match(
+                    m => mousePos.Match(pos => GetHeightText(m, pos), () => "H: -"),
+                    () => "H: -"));
+            this.VoidText = map.CombineLatest(
+                mousePosition,
+                (currentMap, mousePos) => currentMap.Match(
+                    m => mousePos.Match(pos => GetVoidText(m, pos), () => "Void: -"),
+                    () => "Void: -"));
 
             this.HoveredFeatureText = map.ObservePropertyOrDefault(m => m.HoveredFeature, "HoveredFeature", Maybe.None<Guid>())
                 .Select(id => id.Select(idd =>
@@ -167,6 +180,10 @@
         public IObservable<int> SeaLevel { get; }
 
         public IObservable<string> MousePositionText { get; }
+
+        public IObservable<string> HeightText { get; }
+
+        public IObservable<string> VoidText { get; }
 
         public IObservable<string> HoveredFeatureText { get; }
 
@@ -353,6 +370,97 @@
         public void ChangeSelectedTabType(GUITab tabType)
         {
             this.dispatcher.ChangeSelectedTab(tabType);
+        }
+
+        private static string GetHeightText(IReadOnlyMapModel map, Point mousePosition)
+        {
+            var gridPos = Util.ScreenToHeightIndex(map.Tile.HeightGrid, mousePosition);
+            if (!gridPos.HasValue)
+            {
+                return "H: -";
+            }
+
+            var heightIndex = (gridPos.Value.Y * map.Tile.HeightGrid.Width) + gridPos.Value.X;
+            var h = map.Tile.HeightGrid[heightIndex];
+            return $"H: {h}";
+        }
+
+        private static string GetVoidText(IReadOnlyMapModel map, Point mousePosition)
+        {
+            var gridWidth = map.Voids.Width;
+            var gridHeight = map.Voids.Height;
+            if (gridWidth < 2 || gridHeight < 2)
+            {
+                return "Void: -";
+            }
+
+            var approxX = Clamp(mousePosition.X / 16, 0, gridWidth - 2);
+            var approxY = Clamp(mousePosition.Y / 16, 0, gridHeight - 2);
+
+            var startX = Math.Max(0, approxX - 1);
+            var endX = Math.Min(gridWidth - 2, approxX + 1);
+
+            var startY = Math.Max(0, approxY - 8);
+            var endY = Math.Min(gridHeight - 2, approxY + 8);
+
+            for (var y = startY; y <= endY; y++)
+            {
+                for (var x = startX; x <= endX; x++)
+                {
+                    if (!GetVoidAt(map.Voids, x, y))
+                    {
+                        continue;
+                    }
+
+                    if (IsPointInProjectedCell(mousePosition, map.Tile.HeightGrid, x, y))
+                    {
+                        return "Void: yes";
+                    }
+                }
+            }
+
+            return "Void: no";
+        }
+
+        private static bool IsPointInProjectedCell(Point point, IGrid<int> heights, int x, int y)
+        {
+            var p00 = GetProjectedPoint(heights, x, y);
+            var p10 = GetProjectedPoint(heights, x + 1, y);
+            var p11 = GetProjectedPoint(heights, x + 1, y + 1);
+            var p01 = GetProjectedPoint(heights, x, y + 1);
+
+            return IsPointInTriangle(point, p00, p10, p11) || IsPointInTriangle(point, p00, p11, p01);
+        }
+
+        private static Point GetProjectedPoint(IGrid<int> heights, int x, int y)
+        {
+            var heightIndex = (y * heights.Width) + x;
+            var extraY = heights[heightIndex] / 2;
+            return new Point(x * 16, (y * 16) - extraY);
+        }
+
+        private static bool GetVoidAt(ISparseGrid<bool> voids, int x, int y)
+        {
+            var voidIndex = (y * voids.Width) + x;
+            return voids[voidIndex];
+        }
+
+        private static bool IsPointInTriangle(Point p, Point a, Point b, Point c)
+        {
+            var b1 = Sign(p, a, b) < 0;
+            var b2 = Sign(p, b, c) < 0;
+            var b3 = Sign(p, c, a) < 0;
+            return b1 == b2 && b2 == b3;
+        }
+
+        private static int Sign(Point p1, Point p2, Point p3)
+        {
+            return ((p1.X - p3.X) * (p2.Y - p3.Y)) - ((p2.X - p3.X) * (p1.Y - p3.Y));
+        }
+
+        private static int Clamp(int value, int min, int max)
+        {
+            return Math.Max(min, Math.Min(max, value));
         }
     }
 }

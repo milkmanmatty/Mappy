@@ -1,4 +1,4 @@
-﻿namespace Mappy.UI.Forms
+namespace Mappy.UI.Forms
 {
     using Controls;
 
@@ -98,6 +98,8 @@
             this.seaLevelTrackbar = new System.Windows.Forms.TrackBar();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.mousePositionLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.heightLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.voidLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.hoveredFeatureLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.mapViewPanel = new Mappy.UI.Controls.MapViewPanel();
             toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -711,6 +713,8 @@
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mousePositionLabel,
+            this.heightLabel,
+            this.voidLabel,
             this.hoveredFeatureLabel});
             this.statusStrip.Location = new System.Drawing.Point(322, 833);
             this.statusStrip.Name = "statusStrip";
@@ -724,6 +728,18 @@
             this.mousePositionLabel.Name = "mousePositionLabel";
             this.mousePositionLabel.Size = new System.Drawing.Size(74, 25);
             this.mousePositionLabel.Text = "X: -, Y: -";
+            // 
+            // heightLabel
+            // 
+            this.heightLabel.Name = "heightLabel";
+            this.heightLabel.Size = new System.Drawing.Size(35, 25);
+            this.heightLabel.Text = "H: -";
+            // 
+            // voidLabel
+            // 
+            this.voidLabel.Name = "voidLabel";
+            this.voidLabel.Size = new System.Drawing.Size(52, 25);
+            this.voidLabel.Text = "Void: -";
             // 
             // hoveredFeatureLabel
             // 
@@ -833,6 +849,8 @@
         private System.Windows.Forms.ToolStripMenuItem toggleHeightGridMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel mousePositionLabel;
+        private System.Windows.Forms.ToolStripStatusLabel heightLabel;
+        private System.Windows.Forms.ToolStripStatusLabel voidLabel;
         private System.Windows.Forms.ToolStripStatusLabel hoveredFeatureLabel;
         private System.Windows.Forms.ToolStripMenuItem fillMenuItem;
     }

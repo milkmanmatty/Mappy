@@ -1,4 +1,4 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System;
     using System.Drawing;
@@ -63,6 +63,10 @@
         IObservable<string> TitleText { get; }
 
         IObservable<string> MousePositionText { get; }
+
+        IObservable<string> HeightText { get; }
+
+        IObservable<string> VoidText { get; }
 
         IObservable<string> HoveredFeatureText { get; }
 
