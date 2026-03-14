@@ -1,4 +1,4 @@
-﻿namespace Mappy.UI.Forms
+namespace Mappy.UI.Forms
 {
     partial class MapSelectionForm
     {
@@ -44,6 +44,7 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(251, 160);
             this.listBox1.TabIndex = 0;
+            this.listBox1.DoubleClick += new System.EventHandler(this.ListBox1DoubleClick);
             // 
             // label1
             // 
