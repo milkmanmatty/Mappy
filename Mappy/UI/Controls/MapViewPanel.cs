@@ -24,6 +24,8 @@ namespace Mappy.UI.Controls
 
         private Point panLastMousePos;
 
+        private bool heightEditMode;
+
         public MapViewPanel()
         {
             this.InitializeComponent();
@@ -41,6 +43,7 @@ namespace Mappy.UI.Controls
         {
             model.CanvasSize.Subscribe(x => this.mapView.CanvasSize = x);
             model.ViewportLocation.Subscribe(x => this.mapView.AutoScrollPosition = x);
+            model.HeightEditMode.Subscribe(this.OnHeightEditModeChanged);
 
             model.ItemsLayer.Subscribe(x => this.mapView.Layers[0] = x);
             model.VoidLayer.Subscribe(x => this.mapView.Layers[1] = x);
@@ -150,6 +153,7 @@ namespace Mappy.UI.Controls
                 return;
             }
 
+            this.ApplyMapCursor();
             this.model.LeaveFocus();
         }
 
@@ -178,6 +182,13 @@ namespace Mappy.UI.Controls
                 var loc = new Point(pos.X * -1, pos.Y * -1);
                 this.model.ScrollPositionChanged(loc);
                 this.oldAutoScrollPos = pos;
+
+                // Keep hover/height-cursor preview aligned when viewport moves without mouse move.
+                var clientPoint = this.mapView.PointToClient(Cursor.Position);
+                if (this.mapView.ClientRectangle.Contains(clientPoint))
+                {
+                    this.model.MouseMove(this.mapView.ToVirtualPoint(clientPoint));
+                }
             }
         }
 
@@ -201,7 +212,7 @@ namespace Mappy.UI.Controls
         {
             this.panning = false;
             this.mapView.Capture = false;
-            this.mapView.Cursor = Cursors.Default;
+            this.ApplyMapCursor();
         }
 
         private void PanViewport(Point location)
@@ -343,6 +354,20 @@ namespace Mappy.UI.Controls
         private int Clamp(int value, int min, int max)
         {
             return Math.Max(min, Math.Min(max, value));
+        }
+
+        private void OnHeightEditModeChanged(bool enabled)
+        {
+            this.heightEditMode = enabled;
+            this.ApplyMapCursor();
+        }
+
+        private void ApplyMapCursor()
+        {
+            if (!this.panning)
+            {
+                this.mapView.Cursor = this.heightEditMode ? Cursors.UpArrow : Cursors.Default;
+            }
         }
     }
 }

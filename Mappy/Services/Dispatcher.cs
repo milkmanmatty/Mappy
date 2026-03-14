@@ -1,4 +1,4 @@
-﻿namespace Mappy.Services
+namespace Mappy.Services
 {
     using System;
     using System.Collections.Generic;
@@ -605,6 +605,26 @@
             {
                 this.featureService.SelectedFeature = featureFromTag.UnsafeValue;
             }
+        }
+
+        public void AdjustHeightBrush(int x, int y, int delta, int cursorSize)
+        {
+            this.model.Map.IfSome(map => map.AdjustHeightBrush(x, y, delta, cursorSize));
+        }
+
+        public void FlushHeightBrush()
+        {
+            this.model.Map.IfSome(x => x.FlushHeightBrush());
+        }
+
+        public void SetHeightEditInterval(int interval)
+        {
+            this.model.HeightEditInterval = interval;
+        }
+
+        public void SetHeightEditCursorSize(int cursorSize)
+        {
+            this.model.HeightEditCursorSize = cursorSize;
         }
 
         public void ChangeSelectedTab(GUITab tab)

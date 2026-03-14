@@ -83,6 +83,8 @@ namespace Mappy.UI.Forms
             model.SeaLevel
                 .Select(x => x.ToString(CultureInfo.CurrentCulture))
                 .Subscribe(x => this.seaLevelValueLabel.Text = x);
+            model.HeightEditInterval.Subscribe(x => this.intervalNumericUpDown.Value = x);
+            model.HeightEditCursorSize.Subscribe(x => this.cursorSizeNumericUpDown.Value = x);
 
             // title text bindings
             model.TitleText.Subscribe(x => this.Text = x);
@@ -211,6 +213,16 @@ namespace Mappy.UI.Forms
         private void SeaLevelTrackBarMouseUp(object sender, MouseEventArgs e)
         {
             this.model.SeaLevelTrackBarMouseUp();
+        }
+
+        private void HeightIntervalNumericUpDownValueChanged(object sender, EventArgs e)
+        {
+            this.model.HeightEditIntervalChanged((int)this.intervalNumericUpDown.Value);
+        }
+
+        private void CursorSizeNumericUpDownValueChanged(object sender, EventArgs e)
+        {
+            this.model.HeightEditCursorSizeChanged((int)this.cursorSizeNumericUpDown.Value);
         }
 
         private void CopyMenuItemClick(object sender, EventArgs e)

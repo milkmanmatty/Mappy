@@ -1,5 +1,6 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
+    using System;
     using System.Drawing;
     using Mappy.Models.Enums;
     using Mappy.Util;
@@ -23,6 +24,10 @@
 
         private int viewportWidth;
         private int viewportHeight;
+
+        private int heightEditInterval = 4;
+
+        private int heightEditCursorSize = 1;
 
         public Maybe<UndoableMapModel> Map
         {
@@ -102,6 +107,18 @@
             {
                 this.SetField(ref this.guiTab, value, nameof(this.SelectedGUITab));
             }
+        }
+
+        public int HeightEditInterval
+        {
+            get => this.heightEditInterval;
+            set => this.SetField(ref this.heightEditInterval, Math.Max(1, value), nameof(this.HeightEditInterval));
+        }
+
+        public int HeightEditCursorSize
+        {
+            get => this.heightEditCursorSize;
+            set => this.SetField(ref this.heightEditCursorSize, Math.Max(1, value), nameof(this.HeightEditCursorSize));
         }
 
         public void SetViewportLocation(Point location)
