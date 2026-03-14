@@ -584,6 +584,16 @@ namespace Mappy.Services
             this.model.Map.IfSome(map => map.AdjustHeightBrush(x, y, delta, cursorSize));
         }
 
+        public void AdjustHeightBrushAtAnchor(int anchorX, int anchorY, int delta, int cursorSize)
+        {
+            this.model.Map.IfSome(map => map.AdjustHeightBrushAtAnchor(anchorX, anchorY, delta, cursorSize));
+        }
+
+        public void AdjustHeightPoint(int pointX, int pointY, int delta)
+        {
+            this.model.Map.IfSome(map => map.AdjustHeightPoint(pointX, pointY, delta));
+        }
+
         public void FlushHeightBrush()
         {
             this.model.Map.IfSome(x => x.FlushHeightBrush());

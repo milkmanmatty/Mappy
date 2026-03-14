@@ -187,11 +187,13 @@ namespace Mappy.Models
         public void Undo()
         {
             this.undoManager.Undo();
+            this.BaseTileHeightChanged?.Invoke(this, new GridEventArgs(0, 0));
         }
 
         public void Redo()
         {
             this.undoManager.Redo();
+            this.BaseTileHeightChanged?.Invoke(this, new GridEventArgs(0, 0));
         }
 
         public void AddFeatureInstance(FeatureInstance instance)
@@ -309,19 +311,55 @@ namespace Mappy.Models
                 return;
             }
 
+            var size = Math.Max(1, cursorSize);
+            var grid = this.model.Tile.HeightGrid;
+            var width = grid.Width;
+            var height = grid.Height;
+
+            if (size == 1)
+            {
+                var point = Util.ScreenToNearestHeightPointIndex(grid, new Point(x, y));
+                if (point.HasValue)
+                {
+                    this.AdjustHeightPoint(point.Value.X, point.Value.Y, delta);
+                }
+                return;
+            }
+
             var center = this.ScreenToHeightIndex(x, y);
             if (!center.HasValue)
             {
                 return;
             }
 
+            this.AdjustHeightBrushAtAnchor(center.Value.X, center.Value.Y, delta, size);
+        }
+
+        public void AdjustHeightBrushAtAnchor(int anchorX, int anchorY, int delta, int cursorSize)
+        {
+            if (delta == 0)
+            {
+                return;
+            }
+
+            var size = Math.Max(1, cursorSize);
             var grid = this.model.Tile.HeightGrid;
             var width = grid.Width;
             var height = grid.Height;
-            var size = Math.Max(1, cursorSize);
 
-            var endX = center.Value.X + 1;
-            var endY = center.Value.Y + 1;
+            if (anchorX < 0 || anchorY < 0 || anchorX >= width || anchorY >= height)
+            {
+                return;
+            }
+
+            if (size == 1)
+            {
+                this.AdjustHeightPoint(anchorX, anchorY, delta);
+                return;
+            }
+
+            var endX = anchorX + 1;
+            var endY = anchorY + 1;
             var startX = Math.Max(0, endX - size);
             var startY = Math.Max(0, endY - size);
             endX = Math.Min(width, endX);
@@ -347,7 +385,44 @@ namespace Mappy.Models
                 return;
             }
 
-            var op = new HeightBrushOperation(grid, changes);
+            this.ApplyHeightBrushOperation(new HeightBrushOperation(grid, changes));
+        }
+
+        public void AdjustHeightPoint(int pointX, int pointY, int delta)
+        {
+            if (delta == 0)
+            {
+                return;
+            }
+
+            var grid = this.model.Tile.HeightGrid;
+            if (pointX < 0 || pointY < 0 || pointX >= grid.Width || pointY >= grid.Height)
+            {
+                return;
+            }
+
+            var idx = (pointY * grid.Width) + pointX;
+            var oldValue = grid[idx];
+            var newValue = Util.Clamp(oldValue + delta, 0, 255);
+            if (newValue == oldValue)
+            {
+                return;
+            }
+
+            var singleChange = new List<HeightBrushOperation.HeightChange>
+            {
+                new HeightBrushOperation.HeightChange(idx, oldValue, newValue)
+            };
+            this.ApplyHeightBrushOperation(new HeightBrushOperation(grid, singleChange));
+        }
+
+        public void FlushHeightBrush()
+        {
+            this.previousHeightBrushOpen = false;
+        }
+
+        private void ApplyHeightBrushOperation(HeightBrushOperation op)
+        {
             var previousOp = this.undoManager.CanUndo && this.previousHeightBrushOpen
                 ? this.undoManager.PeekUndo() as HeightBrushOperation
                 : null;
@@ -363,11 +438,6 @@ namespace Mappy.Models
             }
 
             this.previousHeightBrushOpen = true;
-        }
-
-        public void FlushHeightBrush()
-        {
-            this.previousHeightBrushOpen = false;
         }
 
         public IEnumerable<FeatureInstance> EnumerateFeatureInstances()

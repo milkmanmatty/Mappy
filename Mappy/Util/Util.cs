@@ -85,6 +85,44 @@ namespace Mappy.Util
             return null;
         }
 
+        public static Point? ScreenToNearestHeightPointIndex(IGrid<int> heightmap, Point p)
+        {
+            var cell = ScreenToHeightIndex(heightmap, p);
+            if (!cell.HasValue)
+            {
+                return null;
+            }
+
+            Point? best = null;
+            var bestDist = int.MaxValue;
+            const int SearchRadius = 2;
+            for (var y = cell.Value.Y - SearchRadius; y <= cell.Value.Y + SearchRadius + 1; y++)
+            {
+                for (var x = cell.Value.X - SearchRadius; x <= cell.Value.X + SearchRadius + 1; x++)
+                {
+                    if (x < 0 || y < 0 || x >= heightmap.Width || y >= heightmap.Height)
+                    {
+                        continue;
+                    }
+
+                    var projected = new Point(
+                        x * 16,
+                        (y * 16) - (heightmap.Get(x, y) / 2));
+
+                    var dx = projected.X - p.X;
+                    var dy = projected.Y - p.Y;
+                    var dist = (dx * dx) + (dy * dy);
+                    if (dist < bestDist)
+                    {
+                        bestDist = dist;
+                        best = new Point(x, y);
+                    }
+                }
+            }
+
+            return best;
+        }
+
         public static double Mod(double a, double p)
         {
             return ((a % p) + p) % p;
