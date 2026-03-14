@@ -1,4 +1,4 @@
-﻿namespace Mappy.UI.Forms
+namespace Mappy.UI.Forms
 {
     using System;
     using System.Drawing;
@@ -88,6 +88,8 @@
             model.TitleText.Subscribe(x => this.Text = x);
 
             model.MousePositionText.Subscribe(x => this.mousePositionLabel.Text = x);
+            model.HeightText.Subscribe(x => this.heightLabel.Text = x);
+            model.VoidText.Subscribe(x => this.voidLabel.Text = x);
             model.HoveredFeatureText.Subscribe(x => this.hoveredFeatureLabel.Text = x);
 
             this.model = model;
