@@ -18,6 +18,12 @@ namespace Mappy.UI.Controls
 
         private bool dragInProgress;
 
+        private bool panning;
+
+        private bool spaceKeyDown;
+
+        private Point panLastMousePos;
+
         public MapViewPanel()
         {
             this.InitializeComponent();
@@ -52,6 +58,12 @@ namespace Mappy.UI.Controls
 
         private void MapViewMouseDown(object sender, MouseEventArgs e)
         {
+            if (e.Button == MouseButtons.Left && this.spaceKeyDown)
+            {
+                this.StartPanning(e.Location);
+                return;
+            }
+
             var loc = this.mapView.ToVirtualPoint(e.Location);
             if (e.Button == MouseButtons.Left)
             {
@@ -67,6 +79,13 @@ namespace Mappy.UI.Controls
 
         private void MapViewMouseMove(object sender, MouseEventArgs e)
         {
+            if (this.panning)
+            {
+                this.PanViewport(e.Location);
+                this.model.MouseMove(this.mapView.ToVirtualPoint(e.Location));
+                return;
+            }
+
             if (this.dragInProgress)
             {
                 this.TryAutoScroll(e.Location);
@@ -79,17 +98,53 @@ namespace Mappy.UI.Controls
 
         private void MapViewMouseUp(object sender, MouseEventArgs e)
         {
+            if (this.panning)
+            {
+                this.StopPanning();
+                return;
+            }
+
             this.StopDrag();
             this.model.MouseUp();
         }
 
         private void MapViewKeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Space)
+            {
+                this.spaceKeyDown = true;
+            }
+
             this.model.KeyDown(e.KeyCode);
+        }
+
+        private void MapViewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Space)
+            {
+                this.spaceKeyDown = false;
+            }
+        }
+
+        private void MapViewPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            // If the user presses space while the app doesn't have focus we won't pick up the event :(
+            if (e.KeyCode == Keys.Space)
+            {
+                e.IsInputKey = true;
+            }
         }
 
         private void MapViewLeave(object sender, EventArgs e)
         {
+            this.spaceKeyDown = false;
+
+            if (this.panning)
+            {
+                this.StopPanning();
+                return;
+            }
+
             if (this.dragInProgress)
             {
                 return;
@@ -132,6 +187,45 @@ namespace Mappy.UI.Controls
             this.dragScrollTimer.Tick -= this.DragScrollTimerTick;
             this.dragScrollTimer.Dispose();
             this.Disposed -= this.MapViewPanelDisposed;
+        }
+
+        private void StartPanning(Point location)
+        {
+            this.panning = true;
+            this.panLastMousePos = location;
+            this.mapView.Capture = true;
+            this.mapView.Cursor = Cursors.Hand;
+        }
+
+        private void StopPanning()
+        {
+            this.panning = false;
+            this.mapView.Capture = false;
+            this.mapView.Cursor = Cursors.Default;
+        }
+
+        private void PanViewport(Point location)
+        {
+            var deltaX = location.X - this.panLastMousePos.X;
+            var deltaY = location.Y - this.panLastMousePos.Y;
+            this.panLastMousePos = location;
+
+            if (deltaX == 0 && deltaY == 0)
+            {
+                return;
+            }
+
+            var scrollPos = this.GetScrollPosition();
+            var maxX = Math.Max(this.mapView.CanvasSize.Width - this.mapView.ClientSize.Width, 0);
+            var maxY = Math.Max(this.mapView.CanvasSize.Height - this.mapView.ClientSize.Height, 0);
+            var next = new Point(
+                this.Clamp(scrollPos.X - deltaX, 0, maxX),
+                this.Clamp(scrollPos.Y - deltaY, 0, maxY));
+
+            if (next != scrollPos)
+            {
+                this.mapView.AutoScrollPosition = next;
+            }
         }
 
         private void StartDrag()
@@ -215,6 +309,12 @@ namespace Mappy.UI.Controls
         }
 
         private Point GetViewportLocation()
+        {
+            var pos = this.mapView.AutoScrollPosition;
+            return new Point(-pos.X, -pos.Y);
+        }
+
+        private Point GetScrollPosition()
         {
             var pos = this.mapView.AutoScrollPosition;
             return new Point(-pos.X, -pos.Y);
