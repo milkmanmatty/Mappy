@@ -1,4 +1,4 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System;
     using System.Collections.Generic;
@@ -37,6 +37,8 @@
         private bool previousTranslationOpen;
 
         private bool previousSeaLevelOpen;
+
+        private bool previousHeightBrushOpen;
 
         private string openFilePath;
 
@@ -300,6 +302,74 @@
             this.previousSeaLevelOpen = false;
         }
 
+        public void AdjustHeightBrush(int x, int y, int delta, int cursorSize)
+        {
+            if (delta == 0)
+            {
+                return;
+            }
+
+            var center = this.ScreenToHeightIndex(x, y);
+            if (!center.HasValue)
+            {
+                return;
+            }
+
+            var grid = this.model.Tile.HeightGrid;
+            var width = grid.Width;
+            var height = grid.Height;
+            var size = Math.Max(1, cursorSize);
+
+            var endX = center.Value.X + 1;
+            var endY = center.Value.Y + 1;
+            var startX = Math.Max(0, endX - size);
+            var startY = Math.Max(0, endY - size);
+            endX = Math.Min(width, endX);
+            endY = Math.Min(height, endY);
+
+            var changes = new List<HeightBrushOperation.HeightChange>();
+            for (var yy = startY; yy < endY; yy++)
+            {
+                for (var xx = startX; xx < endX; xx++)
+                {
+                    var idx = (yy * width) + xx;
+                    var oldValue = grid[idx];
+                    var newValue = Util.Clamp(oldValue + delta, 0, 255);
+                    if (newValue != oldValue)
+                    {
+                        changes.Add(new HeightBrushOperation.HeightChange(idx, oldValue, newValue));
+                    }
+                }
+            }
+
+            if (changes.Count == 0)
+            {
+                return;
+            }
+
+            var op = new HeightBrushOperation(grid, changes);
+            var previousOp = this.undoManager.CanUndo && this.previousHeightBrushOpen
+                ? this.undoManager.PeekUndo() as HeightBrushOperation
+                : null;
+
+            if (previousOp == null)
+            {
+                this.undoManager.Execute(op);
+            }
+            else
+            {
+                op.Execute();
+                this.undoManager.Replace(previousOp.Combine(op));
+            }
+
+            this.previousHeightBrushOpen = true;
+        }
+
+        public void FlushHeightBrush()
+        {
+            this.previousHeightBrushOpen = false;
+        }
+
         public IEnumerable<FeatureInstance> EnumerateFeatureInstances()
         {
             return this.model.EnumerateFeatureInstances();
@@ -456,6 +526,7 @@
                     break;
                 case GUITab.Sections:
                 case GUITab.Starts:
+                case GUITab.Height:
                 case GUITab.Attributes:
                 case GUITab.Other:
                 default:

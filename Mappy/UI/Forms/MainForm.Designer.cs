@@ -92,6 +92,11 @@ namespace Mappy.UI.Forms
             this.featureView = new Mappy.UI.Controls.SectionView();
             this.startPositionsTab = new System.Windows.Forms.TabPage();
             this.startPositionsView1 = new Mappy.UI.Controls.StartPositionsView();
+            this.heightTab = new System.Windows.Forms.TabPage();
+            this.cursorSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.cursorSizeLabel = new System.Windows.Forms.Label();
+            this.intervalNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.intervalLabel = new System.Windows.Forms.Label();
             this.attributesTab = new System.Windows.Forms.TabPage();
             this.seaLevelValueLabel = new System.Windows.Forms.Label();
             this.seaLevelLabel = new System.Windows.Forms.Label();
@@ -118,6 +123,9 @@ namespace Mappy.UI.Forms
             this.sectionsTab.SuspendLayout();
             this.featuresTab.SuspendLayout();
             this.startPositionsTab.SuspendLayout();
+            this.heightTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cursorSizeNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.intervalNumericUpDown)).BeginInit();
             this.attributesTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.seaLevelTrackbar)).BeginInit();
             this.statusStrip.SuspendLayout();
@@ -189,7 +197,7 @@ namespace Mappy.UI.Forms
             this.helpMenuItem});
             this.topMenu.Location = new System.Drawing.Point(0, 0);
             this.topMenu.Name = "topMenu";
-            this.topMenu.Size = new System.Drawing.Size(1176, 35);
+            this.topMenu.Size = new System.Drawing.Size(1176, 33);
             this.topMenu.TabIndex = 1;
             this.topMenu.Text = "menuStrip1";
             // 
@@ -576,7 +584,7 @@ namespace Mappy.UI.Forms
             // aboutMenuItem
             // 
             this.aboutMenuItem.Name = "aboutMenuItem";
-            this.aboutMenuItem.Size = new System.Drawing.Size(176, 34);
+            this.aboutMenuItem.Size = new System.Drawing.Size(270, 34);
             this.aboutMenuItem.Text = "&About...";
             this.aboutMenuItem.Click += new System.EventHandler(this.AboutMenuItemClick);
             // 
@@ -585,13 +593,14 @@ namespace Mappy.UI.Forms
             this.sidebarTabs.Controls.Add(this.sectionsTab);
             this.sidebarTabs.Controls.Add(this.featuresTab);
             this.sidebarTabs.Controls.Add(this.startPositionsTab);
+            this.sidebarTabs.Controls.Add(this.heightTab);
             this.sidebarTabs.Controls.Add(this.attributesTab);
             this.sidebarTabs.Dock = System.Windows.Forms.DockStyle.Left;
-            this.sidebarTabs.Location = new System.Drawing.Point(0, 35);
+            this.sidebarTabs.Location = new System.Drawing.Point(0, 33);
             this.sidebarTabs.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.sidebarTabs.Name = "sidebarTabs";
             this.sidebarTabs.SelectedIndex = 0;
-            this.sidebarTabs.Size = new System.Drawing.Size(322, 830);
+            this.sidebarTabs.Size = new System.Drawing.Size(322, 832);
             this.sidebarTabs.TabIndex = 4;
             this.sidebarTabs.SelectedIndexChanged += new System.EventHandler(this.GUITabs_SelectedIndexChanged);
             // 
@@ -602,7 +611,7 @@ namespace Mappy.UI.Forms
             this.sectionsTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.sectionsTab.Name = "sectionsTab";
             this.sectionsTab.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.sectionsTab.Size = new System.Drawing.Size(314, 797);
+            this.sectionsTab.Size = new System.Drawing.Size(314, 799);
             this.sectionsTab.TabIndex = 0;
             this.sectionsTab.Text = "Sections";
             this.sectionsTab.UseVisualStyleBackColor = true;
@@ -612,9 +621,9 @@ namespace Mappy.UI.Forms
             this.sectionsView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sectionsView.ImageSize = new System.Drawing.Size(128, 128);
             this.sectionsView.Location = new System.Drawing.Point(4, 5);
-            this.sectionsView.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.sectionsView.Margin = new System.Windows.Forms.Padding(6);
             this.sectionsView.Name = "sectionsView";
-            this.sectionsView.Size = new System.Drawing.Size(306, 787);
+            this.sectionsView.Size = new System.Drawing.Size(306, 789);
             this.sectionsView.TabIndex = 3;
             // 
             // featuresTab
@@ -624,7 +633,7 @@ namespace Mappy.UI.Forms
             this.featuresTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.featuresTab.Name = "featuresTab";
             this.featuresTab.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.featuresTab.Size = new System.Drawing.Size(314, 797);
+            this.featuresTab.Size = new System.Drawing.Size(314, 799);
             this.featuresTab.TabIndex = 1;
             this.featuresTab.Text = "Features";
             this.featuresTab.UseVisualStyleBackColor = true;
@@ -634,9 +643,9 @@ namespace Mappy.UI.Forms
             this.featureView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.featureView.ImageSize = new System.Drawing.Size(64, 64);
             this.featureView.Location = new System.Drawing.Point(4, 5);
-            this.featureView.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.featureView.Margin = new System.Windows.Forms.Padding(6);
             this.featureView.Name = "featureView";
-            this.featureView.Size = new System.Drawing.Size(306, 787);
+            this.featureView.Size = new System.Drawing.Size(306, 789);
             this.featureView.TabIndex = 0;
             // 
             // startPositionsTab
@@ -646,7 +655,7 @@ namespace Mappy.UI.Forms
             this.startPositionsTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.startPositionsTab.Name = "startPositionsTab";
             this.startPositionsTab.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.startPositionsTab.Size = new System.Drawing.Size(314, 797);
+            this.startPositionsTab.Size = new System.Drawing.Size(314, 799);
             this.startPositionsTab.TabIndex = 2;
             this.startPositionsTab.Text = "Starts";
             this.startPositionsTab.UseVisualStyleBackColor = true;
@@ -655,10 +664,78 @@ namespace Mappy.UI.Forms
             // 
             this.startPositionsView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.startPositionsView1.Location = new System.Drawing.Point(4, 5);
-            this.startPositionsView1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.startPositionsView1.Margin = new System.Windows.Forms.Padding(6);
             this.startPositionsView1.Name = "startPositionsView1";
-            this.startPositionsView1.Size = new System.Drawing.Size(306, 787);
+            this.startPositionsView1.Size = new System.Drawing.Size(306, 789);
             this.startPositionsView1.TabIndex = 0;
+            // 
+            // heightTab
+            // 
+            this.heightTab.Controls.Add(this.cursorSizeNumericUpDown);
+            this.heightTab.Controls.Add(this.cursorSizeLabel);
+            this.heightTab.Controls.Add(this.intervalNumericUpDown);
+            this.heightTab.Controls.Add(this.intervalLabel);
+            this.heightTab.Location = new System.Drawing.Point(4, 29);
+            this.heightTab.Name = "heightTab";
+            this.heightTab.Padding = new System.Windows.Forms.Padding(3);
+            this.heightTab.Size = new System.Drawing.Size(314, 799);
+            this.heightTab.TabIndex = 3;
+            this.heightTab.Text = "Height";
+            this.heightTab.UseVisualStyleBackColor = true;
+            // 
+            // cursorSizeNumericUpDown
+            // 
+            this.cursorSizeNumericUpDown.Location = new System.Drawing.Point(98, 42);
+            this.cursorSizeNumericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.cursorSizeNumericUpDown.Name = "cursorSizeNumericUpDown";
+            this.cursorSizeNumericUpDown.Size = new System.Drawing.Size(62, 26);
+            this.cursorSizeNumericUpDown.TabIndex = 3;
+            this.cursorSizeNumericUpDown.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.cursorSizeNumericUpDown.ValueChanged += new System.EventHandler(this.CursorSizeNumericUpDownValueChanged);
+            // 
+            // cursorSizeLabel
+            // 
+            this.cursorSizeLabel.AutoSize = true;
+            this.cursorSizeLabel.Location = new System.Drawing.Point(6, 44);
+            this.cursorSizeLabel.Name = "cursorSizeLabel";
+            this.cursorSizeLabel.Size = new System.Drawing.Size(86, 20);
+            this.cursorSizeLabel.TabIndex = 2;
+            this.cursorSizeLabel.Text = "Cursor size";
+            // 
+            // intervalNumericUpDown
+            // 
+            this.intervalNumericUpDown.Location = new System.Drawing.Point(98, 10);
+            this.intervalNumericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.intervalNumericUpDown.Name = "intervalNumericUpDown";
+            this.intervalNumericUpDown.Size = new System.Drawing.Size(62, 26);
+            this.intervalNumericUpDown.TabIndex = 1;
+            this.intervalNumericUpDown.Value = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.intervalNumericUpDown.ValueChanged += new System.EventHandler(this.HeightIntervalNumericUpDownValueChanged);
+            // 
+            // intervalLabel
+            // 
+            this.intervalLabel.AutoSize = true;
+            this.intervalLabel.Location = new System.Drawing.Point(6, 12);
+            this.intervalLabel.Name = "intervalLabel";
+            this.intervalLabel.Size = new System.Drawing.Size(62, 20);
+            this.intervalLabel.TabIndex = 0;
+            this.intervalLabel.Text = "Interval";
             // 
             // attributesTab
             // 
@@ -667,9 +744,9 @@ namespace Mappy.UI.Forms
             this.attributesTab.Controls.Add(this.seaLevelTrackbar);
             this.attributesTab.Location = new System.Drawing.Point(4, 29);
             this.attributesTab.Name = "attributesTab";
-            this.attributesTab.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.attributesTab.Size = new System.Drawing.Size(314, 795);
-            this.attributesTab.TabIndex = 3;
+            this.attributesTab.Padding = new System.Windows.Forms.Padding(3);
+            this.attributesTab.Size = new System.Drawing.Size(314, 799);
+            this.attributesTab.TabIndex = 4;
             this.attributesTab.Text = "Attributes";
             this.attributesTab.UseVisualStyleBackColor = true;
             // 
@@ -750,10 +827,10 @@ namespace Mappy.UI.Forms
             // mapViewPanel
             // 
             this.mapViewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mapViewPanel.Location = new System.Drawing.Point(322, 35);
+            this.mapViewPanel.Location = new System.Drawing.Point(322, 33);
             this.mapViewPanel.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.mapViewPanel.Name = "mapViewPanel";
-            this.mapViewPanel.Size = new System.Drawing.Size(854, 798);
+            this.mapViewPanel.Size = new System.Drawing.Size(854, 800);
             this.mapViewPanel.TabIndex = 5;
             // 
             // MainForm
@@ -781,6 +858,10 @@ namespace Mappy.UI.Forms
             this.sectionsTab.ResumeLayout(false);
             this.featuresTab.ResumeLayout(false);
             this.startPositionsTab.ResumeLayout(false);
+            this.heightTab.ResumeLayout(false);
+            this.heightTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cursorSizeNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.intervalNumericUpDown)).EndInit();
             this.attributesTab.ResumeLayout(false);
             this.attributesTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.seaLevelTrackbar)).EndInit();
@@ -829,6 +910,11 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripMenuItem mapAttributesMenuItem;
         private System.Windows.Forms.TabPage startPositionsTab;
         private StartPositionsView startPositionsView1;
+        private System.Windows.Forms.TabPage heightTab;
+        private System.Windows.Forms.NumericUpDown cursorSizeNumericUpDown;
+        private System.Windows.Forms.Label cursorSizeLabel;
+        private System.Windows.Forms.NumericUpDown intervalNumericUpDown;
+        private System.Windows.Forms.Label intervalLabel;
         private System.Windows.Forms.TabPage attributesTab;
         private System.Windows.Forms.Label seaLevelValueLabel;
         private System.Windows.Forms.Label seaLevelLabel;

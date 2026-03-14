@@ -503,6 +503,8 @@ namespace Mappy.Util
                     return GUITab.Attributes;
                 case "startPositionsTab":
                     return GUITab.Starts;
+                case "heightTab":
+                    return GUITab.Height;
                 default:
                     return GUITab.Other;
             }

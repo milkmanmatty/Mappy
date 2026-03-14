@@ -1,4 +1,4 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System.ComponentModel;
     using System.Drawing;
@@ -29,5 +29,9 @@
         Color GridColor { get; }
 
         GUITab SelectedGUITab { get; }
+
+        int HeightEditInterval { get; }
+
+        int HeightEditCursorSize { get; }
     }
 }

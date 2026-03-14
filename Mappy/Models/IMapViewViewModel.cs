@@ -1,4 +1,4 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System;
     using System.Drawing;
@@ -19,6 +19,8 @@
         ILayer GridLayer { get; }
 
         IObservable<Point> ViewportLocation { get; }
+
+        IObservable<bool> HeightEditMode { get; }
 
         void MouseLeftDown(Point location);
 
