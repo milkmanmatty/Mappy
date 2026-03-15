@@ -1,4 +1,4 @@
-﻿namespace Mappy
+namespace Mappy
 {
     using System;
     using System.IO;
@@ -19,13 +19,19 @@
             "Mappy",
             "Crashes");
 
+        private static readonly string[] SupportedMapExtensions =
+        {
+            ".hpi", ".ufo", ".ccx", ".gpf", ".gp3", ".tnt", ".sct"
+        };
+
         private static Bugsnag.Client bugsnagClient;
 
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        /// <param name="args">Optional: path to a map file (.tnt, .sct) or archive (.hpi, .ufo, .ccx, .gpf, .gp3) to open on startup.</param>
         [STAThread]
-        public static void Main()
+        public static void Main(string[] args)
         {
             bugsnagClient = new Bugsnag.Client(new Bugsnag.Configuration
             {
@@ -78,7 +84,49 @@
             minimapForm.Owner = mainForm;
             minimapForm.SetModel(new MinimapFormViewModel(model, dispatcher));
 
+            var pathToOpen = GetCommandLinePathToOpen(args);
+            if (pathToOpen != null)
+            {
+                EventHandler openPathHandler = null;
+                openPathHandler = (s, e) =>
+                {
+                    mainForm.Shown -= openPathHandler;
+                    dispatcher.OpenFromDragDrop(pathToOpen);
+                };
+                mainForm.Shown += openPathHandler;
+            }
+
             Application.Run(mainForm);
+        }
+
+        private static string GetCommandLinePathToOpen(string[] args)
+        {
+            if (args == null || args.Length == 0)
+            {
+                return null;
+            }
+
+            var path = args[0].Trim();
+            if (string.IsNullOrEmpty(path))
+            {
+                return null;
+            }
+
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            var ext = (Path.GetExtension(path) ?? string.Empty).ToLowerInvariant();
+            foreach (var supported in SupportedMapExtensions)
+            {
+                if (ext == supported)
+                {
+                    return path;
+                }
+            }
+
+            return null;
         }
 
         public static void HandleUnexpectedException(Exception ex)
