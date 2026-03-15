@@ -935,6 +935,7 @@ namespace Mappy.Models
             var anchor = Util.ScreenToHeightIndex(this.mapModel.BaseTile.HeightGrid, location);
             if (!anchor.HasValue)
             {
+                this.ClearVoidCursor();
                 return;
             }
 

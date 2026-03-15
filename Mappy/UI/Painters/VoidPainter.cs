@@ -1,4 +1,4 @@
-﻿namespace Mappy.UI.Painters
+namespace Mappy.UI.Painters
 {
     using System;
     using System.Collections.Generic;
@@ -61,7 +61,7 @@
             if (startCell.X < 0
                 || startCell.Y < 0
                 || startCell.X >= this.grid.Width - 1
-                || startCell.Y >= this.grid.Width - 1)
+                || startCell.Y >= this.grid.Height - 1)
             {
                 yield break;
             }
