@@ -64,6 +64,8 @@ namespace Mappy.Models
 
         IObservable<int> HeightEditCursorSize { get; }
 
+        IObservable<int> VoidEditCursorSize { get; }
+
         IObservable<string> TitleText { get; }
 
         IObservable<string> MousePositionText { get; }
@@ -127,6 +129,8 @@ namespace Mappy.Models
         void HeightEditIntervalChanged(int value);
 
         void HeightEditCursorSizeChanged(int value);
+
+        void VoidEditCursorSizeChanged(int value);
 
         void CopyMenuItemClick();
 

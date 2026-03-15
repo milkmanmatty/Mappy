@@ -85,6 +85,7 @@ namespace Mappy.UI.Forms
                 .Subscribe(x => this.seaLevelValueLabel.Text = x);
             model.HeightEditInterval.Subscribe(x => this.intervalNumericUpDown.Value = x);
             model.HeightEditCursorSize.Subscribe(x => this.cursorSizeNumericUpDown.Value = x);
+            model.VoidEditCursorSize.Subscribe(x => this.voidCursorSizeNumericUpDown.Value = x);
 
             // title text bindings
             model.TitleText.Subscribe(x => this.Text = x);
@@ -225,6 +226,11 @@ namespace Mappy.UI.Forms
             this.model.HeightEditCursorSizeChanged((int)this.cursorSizeNumericUpDown.Value);
         }
 
+        private void VoidCursorSizeNumericUpDownValueChanged(object sender, EventArgs e)
+        {
+            this.model.VoidEditCursorSizeChanged((int)this.voidCursorSizeNumericUpDown.Value);
+        }
+
         private void CopyMenuItemClick(object sender, EventArgs e)
         {
             this.model.CopyMenuItemClick();
@@ -353,6 +359,12 @@ namespace Mappy.UI.Forms
             }
 
             if (e.Control && e.KeyCode == Keys.D5)
+            {
+                this.sidebarTabs.SelectedTab = this.voidTab;
+                e.Handled = true;
+            }
+
+            if (e.Control && e.KeyCode == Keys.D6)
             {
                 this.sidebarTabs.SelectedTab = this.attributesTab;
                 e.Handled = true;

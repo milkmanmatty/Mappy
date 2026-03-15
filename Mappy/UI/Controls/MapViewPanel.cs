@@ -26,6 +26,8 @@ namespace Mappy.UI.Controls
 
         private bool heightEditMode;
 
+        private bool voidEditMode;
+
         public MapViewPanel()
         {
             this.InitializeComponent();
@@ -44,6 +46,7 @@ namespace Mappy.UI.Controls
             model.CanvasSize.Subscribe(x => this.mapView.CanvasSize = x);
             model.ViewportLocation.Subscribe(x => this.mapView.AutoScrollPosition = x);
             model.HeightEditMode.Subscribe(this.OnHeightEditModeChanged);
+            model.VoidEditMode.Subscribe(this.OnVoidEditModeChanged);
 
             model.ItemsLayer.Subscribe(x => this.mapView.Layers[0] = x);
             model.VoidLayer.Subscribe(x => this.mapView.Layers[1] = x);
@@ -362,11 +365,28 @@ namespace Mappy.UI.Controls
             this.ApplyMapCursor();
         }
 
+        private void OnVoidEditModeChanged(bool enabled)
+        {
+            this.voidEditMode = enabled;
+            this.ApplyMapCursor();
+        }
+
         private void ApplyMapCursor()
         {
             if (!this.panning)
             {
-                this.mapView.Cursor = this.heightEditMode ? Cursors.UpArrow : Cursors.Default;
+                if (this.heightEditMode)
+                {
+                    this.mapView.Cursor = Cursors.UpArrow;
+                }
+                else if (this.voidEditMode)
+                {
+                    this.mapView.Cursor = Cursors.Cross;
+                }
+                else
+                {
+                    this.mapView.Cursor = Cursors.Default;
+                }
             }
         }
     }

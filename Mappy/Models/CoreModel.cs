@@ -29,6 +29,8 @@ namespace Mappy.Models
 
         private int heightEditCursorSize = 1;
 
+        private int voidEditCursorSize = 1;
+
         public Maybe<UndoableMapModel> Map
         {
             get => this.map;
@@ -119,6 +121,12 @@ namespace Mappy.Models
         {
             get => this.heightEditCursorSize;
             set => this.SetField(ref this.heightEditCursorSize, Math.Max(1, value), nameof(this.HeightEditCursorSize));
+        }
+
+        public int VoidEditCursorSize
+        {
+            get => this.voidEditCursorSize;
+            set => this.SetField(ref this.voidEditCursorSize, Math.Max(1, value), nameof(this.VoidEditCursorSize));
         }
 
         public void SetViewportLocation(Point location)

@@ -637,6 +637,21 @@ namespace Mappy.Services
             this.model.HeightEditCursorSize = cursorSize;
         }
 
+        public void SetVoidEditCursorSize(int cursorSize)
+        {
+            this.model.VoidEditCursorSize = cursorSize;
+        }
+
+        public void SetVoidBrushAtAnchor(int anchorX, int anchorY, int cursorSize, bool value)
+        {
+            this.model.Map.IfSome(map => map.SetVoidBrushAtAnchor(anchorX, anchorY, cursorSize, value));
+        }
+
+        public void FlushVoidBrush()
+        {
+            this.model.Map.IfSome(map => map.FlushVoidBrush());
+        }
+
         public void ChangeSelectedTab(GUITab tab)
         {
             this.model.SelectedGUITab = tab;

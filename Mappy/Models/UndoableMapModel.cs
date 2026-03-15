@@ -40,6 +40,8 @@ namespace Mappy.Models
 
         private bool previousHeightBrushOpen;
 
+        private bool previousVoidBrushOpen;
+
         private string openFilePath;
 
         private bool isFileReadOnly;
@@ -421,6 +423,48 @@ namespace Mappy.Models
             this.previousHeightBrushOpen = false;
         }
 
+        public void SetVoidBrushAtAnchor(int anchorX, int anchorY, int cursorSize, bool value)
+        {
+            var size = Math.Max(1, cursorSize);
+            var grid = this.model.Voids;
+            var width = grid.Width;
+            var height = grid.Height;
+
+            if (anchorX < 0 || anchorY < 0 || anchorX >= width || anchorY >= height)
+            {
+                return;
+            }
+
+            var endX = Math.Min(width, anchorX + size);
+            var endY = Math.Min(height, anchorY + size);
+
+            var changes = new List<VoidBrushOperation.VoidChange>();
+            for (var yy = anchorY; yy < endY; yy++)
+            {
+                for (var xx = anchorX; xx < endX; xx++)
+                {
+                    var idx = (yy * width) + xx;
+                    var oldValue = grid[idx];
+                    if (oldValue != value)
+                    {
+                        changes.Add(new VoidBrushOperation.VoidChange(idx, oldValue, value));
+                    }
+                }
+            }
+
+            if (changes.Count == 0)
+            {
+                return;
+            }
+
+            this.ApplyVoidBrushOperation(new VoidBrushOperation(grid, changes));
+        }
+
+        public void FlushVoidBrush()
+        {
+            this.previousVoidBrushOpen = false;
+        }
+
         private void ApplyHeightBrushOperation(HeightBrushOperation op)
         {
             var previousOp = this.undoManager.CanUndo && this.previousHeightBrushOpen
@@ -438,6 +482,25 @@ namespace Mappy.Models
             }
 
             this.previousHeightBrushOpen = true;
+        }
+
+        private void ApplyVoidBrushOperation(VoidBrushOperation op)
+        {
+            var previousOp = this.undoManager.CanUndo && this.previousVoidBrushOpen
+                ? this.undoManager.PeekUndo() as VoidBrushOperation
+                : null;
+
+            if (previousOp == null)
+            {
+                this.undoManager.Execute(op);
+            }
+            else
+            {
+                op.Execute();
+                this.undoManager.Replace(previousOp.Combine(op));
+            }
+
+            this.previousVoidBrushOpen = true;
         }
 
         public IEnumerable<FeatureInstance> EnumerateFeatureInstances()
@@ -583,6 +646,7 @@ namespace Mappy.Models
                 case GUITab.Sections:
                 case GUITab.Starts:
                 case GUITab.Height:
+                case GUITab.Void:
                 case GUITab.Attributes:
                 case GUITab.Other:
                 default:
