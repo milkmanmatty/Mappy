@@ -8,6 +8,8 @@ projectdir = sys.argv[1]
 inpath = os.path.join(projectdir, "Properties\\AssemblyInfo.cs.tmpl")
 outpath = os.path.join(projectdir, "Properties\\AssemblyInfo.cs")
 
+print(projectdir)
+
 # get the tag
 tag = check_output(["git", "describe", "--tags", "--dirty=-d"], cwd=projectdir, universal_newlines=True)
 
