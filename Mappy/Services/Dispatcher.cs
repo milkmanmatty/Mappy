@@ -523,6 +523,23 @@ namespace Mappy.Services
             this.model.SetViewportLocation(location);
         }
 
+        public void CenterViewOnStartPosition(int index)
+        {
+            this.model.Map.IfSome(
+                map =>
+                    {
+                        var pos = map.GetStartPosition(index);
+                        if (!pos.HasValue)
+                        {
+                            return;
+                        }
+
+                        var viewportX = pos.Value.X - (this.model.ViewportWidth / 2);
+                        var viewportY = pos.Value.Y - (this.model.ViewportHeight / 2);
+                        this.model.SetViewportLocation(new Point(viewportX, viewportY));
+                    });
+        }
+
         public void SetViewportSize(Size size)
         {
             this.model.SetViewportSize(size);

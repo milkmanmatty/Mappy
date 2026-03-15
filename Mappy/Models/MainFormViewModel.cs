@@ -396,6 +396,11 @@ namespace Mappy.Models
             this.dispatcher.ChangeSelectedTab(tabType);
         }
 
+        public void CenterViewOnStartPosition(int index)
+        {
+            this.dispatcher.CenterViewOnStartPosition(index);
+        }
+
         private static string GetHeightText(IReadOnlyMapModel map, Point mousePosition)
         {
             var gridPos = Util.ScreenToHeightIndex(map.Tile.HeightGrid, mousePosition);

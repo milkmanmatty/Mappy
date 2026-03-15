@@ -155,5 +155,7 @@ namespace Mappy.Models
         void Load();
 
         void ChangeSelectedTabType(GUITab tabType);
+
+        void CenterViewOnStartPosition(int index);
     }
 }
