@@ -33,5 +33,7 @@ namespace Mappy.Models
         int HeightEditInterval { get; }
 
         int HeightEditCursorSize { get; }
+
+        int VoidEditCursorSize { get; }
     }
 }

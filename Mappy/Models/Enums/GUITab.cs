@@ -6,6 +6,7 @@ namespace Mappy.Models.Enums
         Features,
         Starts,
         Height,
+        Void,
         Attributes,
         Other
     }

@@ -22,6 +22,8 @@ namespace Mappy.Models
 
         IObservable<bool> HeightEditMode { get; }
 
+        IObservable<bool> VoidEditMode { get; }
+
         void MouseLeftDown(Point location);
 
         void MouseRightDown(Point location);

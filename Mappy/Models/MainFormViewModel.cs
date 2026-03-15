@@ -39,6 +39,7 @@ namespace Mappy.Models
             this.SeaLevel = map.ObservePropertyOrDefault(x => x.SeaLevel, "SeaLevel", 0);
             this.HeightEditInterval = model.PropertyAsObservable(x => x.HeightEditInterval, nameof(model.HeightEditInterval));
             this.HeightEditCursorSize = model.PropertyAsObservable(x => x.HeightEditCursorSize, nameof(model.HeightEditCursorSize));
+            this.VoidEditCursorSize = model.PropertyAsObservable(x => x.VoidEditCursorSize, nameof(model.VoidEditCursorSize));
 
             this.CanSaveAs = mapOpen;
             this.CanCloseMap = mapOpen;
@@ -185,6 +186,8 @@ namespace Mappy.Models
 
         public IObservable<int> HeightEditCursorSize { get; }
 
+        public IObservable<int> VoidEditCursorSize { get; }
+
         public IObservable<string> MousePositionText { get; }
 
         public IObservable<string> HeightText { get; }
@@ -326,6 +329,11 @@ namespace Mappy.Models
         public void HeightEditCursorSizeChanged(int value)
         {
             this.dispatcher.SetHeightEditCursorSize(value);
+        }
+
+        public void VoidEditCursorSizeChanged(int value)
+        {
+            this.dispatcher.SetVoidEditCursorSize(value);
         }
 
         public void CopyMenuItemClick()
