@@ -10,7 +10,6 @@ namespace Mappy.Util
 
     using Geometry;
 
-    using Hjg.Pngcs;
     using Mappy.Collections;
     using Mappy.Data;
     using Mappy.Models;
@@ -479,54 +478,72 @@ namespace Mappy.Util
 
         public static bool WriteMapImage(Stream s, IGrid<Bitmap> map, Action<int> reportProgress, Func<bool> shouldCancel)
         {
-            using (var adapter = new NonTrimmedMapPixelImageAdapter(map))
+            var width = map.Width * 32;
+            var height = map.Height * 32;
+            var totalTiles = map.Width * map.Height;
+
+            using (var full = new Bitmap(width, height, PixelFormat.Format32bppArgb))
             {
-                return WritePixelImageAsPng(s, adapter, reportProgress, shouldCancel);
-            }
-        }
+                var targetData = full.LockBits(
+                    new Rectangle(0, 0, width, height),
+                    ImageLockMode.WriteOnly,
+                    PixelFormat.Format32bppArgb);
 
-        public static bool WritePixelImageAsPng(Stream s, IPixelImage img, Action<int> reportProgress, Func<bool> shouldCancel)
-        {
-            var imgInfo = new ImageInfo(img.Width, img.Height, 8, true);
-
-            var writer = new PngWriter(s, imgInfo);
-
-            for (var y = 0; y < img.Height; y++)
-            {
-                if (shouldCancel())
+                try
                 {
-                    return false;
+                    var tilesProcessed = 0;
+                    for (var tileY = 0; tileY < map.Height; tileY++)
+                    {
+                        for (var tileX = 0; tileX < map.Width; tileX++)
+                        {
+                            if (shouldCancel())
+                            {
+                                return false;
+                            }
+
+                            var tile = map.Get(tileX, tileY);
+                            var tileData = tile.LockBits(
+                                new Rectangle(0, 0, 32, 32),
+                                ImageLockMode.ReadOnly,
+                                PixelFormat.Format32bppArgb);
+
+                            try
+                            {
+                                unsafe
+                                {
+                                    var src = (byte*)tileData.Scan0;
+                                    var dst = (byte*)targetData.Scan0
+                                        + (targetData.Stride * (tileY * 32))
+                                        + (tileX * 32 * 4);
+                                    for (var row = 0; row < 32; row++)
+                                    {
+                                        Buffer.MemoryCopy(
+                                            src + (row * tileData.Stride),
+                                            dst + (row * targetData.Stride),
+                                            32 * 4,
+                                            32 * 4);
+                                    }
+                                }
+                            }
+                            finally
+                            {
+                                tile.UnlockBits(tileData);
+                            }
+
+                            tilesProcessed++;
+                            reportProgress((tilesProcessed * 100) / totalTiles);
+                        }
+                    }
+                }
+                finally
+                {
+                    full.UnlockBits(targetData);
                 }
 
-                var line = new ImageLine(imgInfo);
-                for (var x = 0; x < img.Width; x++)
-                {
-                    var c = img.GetPixel(x, y);
-                    var offset = x * 4;
-                    line.Scanline[offset] = c.R;
-                    line.Scanline[offset + 1] = c.G;
-                    line.Scanline[offset + 2] = c.B;
-                    line.Scanline[offset + 3] = c.A;
-                }
-
-                writer.WriteRow(line, y);
-
-                reportProgress((y * 100) / img.Height);
+                full.Save(s, ImageFormat.Png);
             }
-
-            writer.End();
 
             return true;
-        }
-
-        public static Point ToPoint(GridCoordinates g)
-        {
-            return new Point(g.X, g.Y);
-        }
-
-        public static GridCoordinates ToGridCoordinates(Point p)
-        {
-            return new GridCoordinates(p.X, p.Y);
         }
 
         public static GUITab MapTabNameToGUIType(string tabName)
