@@ -369,6 +369,13 @@ namespace Mappy.UI.Forms
                 this.sidebarTabs.SelectedTab = this.attributesTab;
                 e.Handled = true;
             }
+
+            if (e.Shift && e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
+            {
+                var playerIndex = e.KeyCode == Keys.D0 ? 9 : (e.KeyCode - Keys.D1);
+                this.model.CenterViewOnStartPosition(playerIndex);
+                e.Handled = true;
+            }
         }
     }
 }
