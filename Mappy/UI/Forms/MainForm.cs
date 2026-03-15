@@ -325,5 +325,38 @@ namespace Mappy.UI.Forms
 
             this.model.ChangeSelectedTabType(Util.MapTabNameToGUIType(this.sidebarTabs.SelectedTab.Name));
         }
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.D1)
+            {
+                this.sidebarTabs.SelectedTab = this.sectionsTab;
+                e.Handled = true;
+            }
+
+            if (e.Control && e.KeyCode == Keys.D2)
+            {
+                this.sidebarTabs.SelectedTab = this.featuresTab;
+                e.Handled = true;
+            }
+
+            if (e.Control && e.KeyCode == Keys.D3)
+            {
+                this.sidebarTabs.SelectedTab = this.startPositionsTab;
+                e.Handled = true;
+            }
+
+            if (e.Control && e.KeyCode == Keys.D4)
+            {
+                this.sidebarTabs.SelectedTab = this.heightTab;
+                e.Handled = true;
+            }
+
+            if (e.Control && e.KeyCode == Keys.D5)
+            {
+                this.sidebarTabs.SelectedTab = this.attributesTab;
+                e.Handled = true;
+            }
+        }
     }
 }
