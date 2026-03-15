@@ -1,20 +1,32 @@
 namespace Mappy.Operations
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using Mappy.Collections;
+    using Mappy.Models;
 
     public sealed class VoidBrushOperation : IReplayableOperation
     {
         private readonly IGrid<bool> grid;
 
+        private readonly IMapModel map;
+
         private readonly IReadOnlyList<VoidChange> changes;
 
-        public VoidBrushOperation(IGrid<bool> grid, IEnumerable<VoidChange> changes)
+        private readonly IReadOnlyList<FeatureInstance> removedFeatures;
+
+        public VoidBrushOperation(
+            IGrid<bool> grid,
+            IEnumerable<VoidChange> changes,
+            IMapModel map,
+            IEnumerable<FeatureInstance> removedFeatures)
         {
             this.grid = grid;
             this.changes = changes.ToList();
+            this.map = map;
+            this.removedFeatures = removedFeatures.ToList();
         }
 
         public void Execute()
@@ -22,6 +34,14 @@ namespace Mappy.Operations
             foreach (var change in this.changes)
             {
                 this.grid[change.Index] = change.NewValue;
+            }
+
+            foreach (var feature in this.removedFeatures)
+            {
+                if (this.map.HasFeatureInstanceAt(feature.X, feature.Y))
+                {
+                    this.map.RemoveFeatureInstance(feature.Id);
+                }
             }
         }
 
@@ -31,10 +51,23 @@ namespace Mappy.Operations
             {
                 this.grid[change.Index] = change.OldValue;
             }
+
+            foreach (var feature in this.removedFeatures)
+            {
+                if (!this.map.HasFeatureInstanceAt(feature.X, feature.Y))
+                {
+                    this.map.AddFeatureInstance(feature);
+                }
+            }
         }
 
         public VoidBrushOperation Combine(VoidBrushOperation other)
         {
+            if (!ReferenceEquals(this.map, other.map))
+            {
+                throw new InvalidOperationException("Cannot combine void operations from different maps.");
+            }
+
             var map = this.changes.ToDictionary(x => x.Index, x => x);
 
             foreach (var change in other.changes)
@@ -50,7 +83,12 @@ namespace Mappy.Operations
                 }
             }
 
-            return new VoidBrushOperation(this.grid, map.Values);
+            var removed = this.removedFeatures
+                .Concat(other.removedFeatures)
+                .GroupBy(x => x.Id)
+                .Select(x => x.First());
+
+            return new VoidBrushOperation(this.grid, map.Values, this.map, removed);
         }
 
         public readonly struct VoidChange
