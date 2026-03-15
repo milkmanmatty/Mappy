@@ -80,6 +80,7 @@ namespace Mappy.Services
             var d = new SaveFileDialog();
             d.Filter = "HPI files|*.hpi;*.ufo;*.ccx;*.gpf;*.gp3|TNT files|*.tnt|All files|*.*";
             d.AddExtension = true;
+            d.DefaultExt = "ufo";
             var result = d.ShowDialog(this.owner);
             if (result == DialogResult.OK)
             {
