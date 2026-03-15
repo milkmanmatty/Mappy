@@ -439,6 +439,7 @@ namespace Mappy.Models
             var endY = Math.Min(height, anchorY + size);
 
             var changes = new List<VoidBrushOperation.VoidChange>();
+            var featuresToRemove = new Dictionary<Guid, FeatureInstance>();
             for (var yy = anchorY; yy < endY; yy++)
             {
                 for (var xx = anchorX; xx < endX; xx++)
@@ -449,15 +450,30 @@ namespace Mappy.Models
                     {
                         changes.Add(new VoidBrushOperation.VoidChange(idx, oldValue, value));
                     }
+
+                    // Marking cells as void removes features occupying those cells.
+                    if (value)
+                    {
+                        var feature = this.model.GetFeatureInstanceAt(xx, yy);
+                        if (feature != null && !featuresToRemove.ContainsKey(feature.Id))
+                        {
+                            featuresToRemove[feature.Id] = feature;
+                        }
+                    }
                 }
             }
 
-            if (changes.Count == 0)
+            if (changes.Count == 0 && featuresToRemove.Count == 0)
             {
                 return;
             }
 
-            this.ApplyVoidBrushOperation(new VoidBrushOperation(grid, changes));
+            this.ApplyVoidBrushOperation(
+                new VoidBrushOperation(
+                    grid,
+                    changes,
+                    this.model,
+                    featuresToRemove.Values));
         }
 
         public void FlushVoidBrush()
