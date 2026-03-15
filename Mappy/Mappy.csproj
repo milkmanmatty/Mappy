@@ -322,7 +322,6 @@
     <Compile Include="Util\ImageSampling\BilinearWrapper.cs" />
     <Compile Include="Util\ImageSampling\IPixelImage.cs" />
     <Compile Include="Util\ImageSampling\NearestNeighbourPaletteWrapper.cs" />
-    <Compile Include="Util\ImageSampling\NonTrimmedMapPixelImageAdapter.cs" />
     <Compile Include="Util\ImageSampling\MapPixelImageAdapter.cs" />
     <Compile Include="Util\ImageSampling\NearestNeighbourWrapper.cs" />
     <Compile Include="Util\Notifier.cs" />
