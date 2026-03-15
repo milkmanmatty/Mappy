@@ -6,6 +6,7 @@ namespace Mappy.UI.Forms
     using System.Reactive.Linq;
     using System.Windows.Forms;
 
+    using Mappy;
     using Mappy.Models;
     using Mappy.UI.Controls;
     using Mappy.Util;
@@ -253,7 +254,69 @@ namespace Mappy.UI.Forms
 
         private void MainFormLoad(object sender, EventArgs e)
         {
+            this.RestoreWindowState();
+            this.FormClosed += this.MainFormFormClosed;
             this.model.Load();
+        }
+
+        private void RestoreWindowState()
+        {
+            var settings = MappySettings.Settings;
+            if (settings.WindowSizeWidth <= 0 || settings.WindowSizeHeight <= 0)
+            {
+                return;
+            }
+
+            var savedBounds = new Rectangle(
+                settings.WindowLocationX,
+                settings.WindowLocationY,
+                settings.WindowSizeWidth,
+                settings.WindowSizeHeight);
+
+            if (!this.IsBoundsOnAnyScreen(savedBounds))
+            {
+                return;
+            }
+
+            this.StartPosition = FormStartPosition.Manual;
+            this.Bounds = savedBounds;
+            var state = (FormWindowState)Math.Max(0, Math.Min(2, settings.WindowState));
+            if (state != FormWindowState.Minimized)
+            {
+                this.WindowState = state;
+            }
+        }
+
+        private bool IsBoundsOnAnyScreen(Rectangle bounds)
+        {
+            foreach (Screen screen in Screen.AllScreens)
+            {
+                if (screen.WorkingArea.IntersectsWith(bounds))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void MainFormFormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.SaveWindowState();
+        }
+
+        private void SaveWindowState()
+        {
+            var bounds = (this.WindowState == FormWindowState.Maximized || this.WindowState == FormWindowState.Minimized)
+                ? this.RestoreBounds
+                : this.Bounds;
+            var settings = MappySettings.Settings;
+            settings.WindowState = (int)this.WindowState;
+            settings.WindowLocationX = bounds.X;
+            settings.WindowLocationY = bounds.Y;
+            settings.WindowSizeWidth = bounds.Width;
+            settings.WindowSizeHeight = bounds.Height;
+            MappySettings.SaveSettings();
         }
 
         private void ExportMinimapMenuItemClick(object sender, EventArgs e)
