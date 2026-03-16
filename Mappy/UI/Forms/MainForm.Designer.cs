@@ -87,6 +87,7 @@ namespace Mappy.UI.Forms
 			this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.sidebarTabs = new System.Windows.Forms.TabControl();
+			this.sidebarSplitter = new System.Windows.Forms.Splitter();
 			this.sectionsTab = new System.Windows.Forms.TabPage();
 			this.featuresTab = new System.Windows.Forms.TabPage();
 			this.startPositionsTab = new System.Windows.Forms.TabPage();
@@ -619,6 +620,17 @@ namespace Mappy.UI.Forms
 			this.sidebarTabs.TabIndex = 4;
 			this.sidebarTabs.SelectedIndexChanged += new System.EventHandler(this.GUITabs_SelectedIndexChanged);
 			// 
+			// sidebarSplitter
+			// 
+			this.sidebarSplitter.Dock = System.Windows.Forms.DockStyle.Left;
+			this.sidebarSplitter.Location = new System.Drawing.Point(215, 24);
+			this.sidebarSplitter.MinExtra = 200;
+			this.sidebarSplitter.MinSize = 160;
+			this.sidebarSplitter.Name = "sidebarSplitter";
+			this.sidebarSplitter.Size = new System.Drawing.Size(4, 538);
+			this.sidebarSplitter.TabIndex = 7;
+			this.sidebarSplitter.TabStop = false;
+			// 
 			// sectionsTab
 			// 
 			this.sectionsTab.Controls.Add(this.sectionsView);
@@ -827,9 +839,9 @@ namespace Mappy.UI.Forms
             this.heightLabel,
             this.voidLabel,
             this.hoveredFeatureLabel});
-			this.statusStrip.Location = new System.Drawing.Point(215, 540);
+			this.statusStrip.Location = new System.Drawing.Point(219, 540);
 			this.statusStrip.Name = "statusStrip";
-			this.statusStrip.Size = new System.Drawing.Size(569, 22);
+			this.statusStrip.Size = new System.Drawing.Size(565, 22);
 			this.statusStrip.TabIndex = 6;
 			this.statusStrip.Text = "statusStrip1";
 			// 
@@ -860,10 +872,10 @@ namespace Mappy.UI.Forms
 			// mapViewPanel
 			// 
 			this.mapViewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.mapViewPanel.Location = new System.Drawing.Point(215, 24);
+			this.mapViewPanel.Location = new System.Drawing.Point(219, 24);
 			this.mapViewPanel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.mapViewPanel.Name = "mapViewPanel";
-			this.mapViewPanel.Size = new System.Drawing.Size(569, 516);
+			this.mapViewPanel.Size = new System.Drawing.Size(565, 516);
 			this.mapViewPanel.TabIndex = 5;
 			// 
 			// sectionsView
@@ -903,6 +915,7 @@ namespace Mappy.UI.Forms
 			this.ClientSize = new System.Drawing.Size(784, 562);
 			this.Controls.Add(this.mapViewPanel);
 			this.Controls.Add(this.statusStrip);
+			this.Controls.Add(this.sidebarSplitter);
 			this.Controls.Add(this.sidebarTabs);
 			this.Controls.Add(this.topMenu);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -959,6 +972,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripMenuItem newMenuItem;
         private System.Windows.Forms.ToolStripMenuItem generateMinimapMenuItem;
         private System.Windows.Forms.TabControl sidebarTabs;
+        private System.Windows.Forms.Splitter sidebarSplitter;
         private System.Windows.Forms.TabPage sectionsTab;
         private System.Windows.Forms.TabPage featuresTab;
         private SectionView featureView;
