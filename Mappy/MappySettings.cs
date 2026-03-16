@@ -1,4 +1,4 @@
-﻿namespace Mappy
+namespace Mappy
 {
     using System;
     using System.IO;
@@ -27,16 +27,27 @@
 
         public static void SaveSettings()
         {
-            var dir = Path.GetDirectoryName(ConfigFileLocation);
-            if (!Directory.Exists(dir))
+            try
             {
-                Directory.CreateDirectory(dir);
-            }
+                var dir = Path.GetDirectoryName(ConfigFileLocation);
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
 
-            using (Stream st = File.Create(ConfigFileLocation))
+                using (Stream st = File.Create(ConfigFileLocation))
+                {
+                    var s = new XmlSerializer(typeof(Configuration));
+                    s.Serialize(st, Settings);
+                }
+            }
+            catch (UnauthorizedAccessException)
             {
-                var s = new XmlSerializer(typeof(Configuration));
-                s.Serialize(st, Settings);
+                // Ignore settings save failures so app shutdown never crashes.
+            }
+            catch (IOException)
+            {
+                // Ignore transient filesystem failures when saving settings.
             }
         }
 
