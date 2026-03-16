@@ -63,6 +63,7 @@ namespace Mappy.UI.Forms
 			this.copyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.pasteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.fillMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.resizeMapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mapAttributesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.generateMinimapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.generateMinimapHighQualityMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -337,6 +338,7 @@ namespace Mappy.UI.Forms
             this.copyMenuItem,
             this.pasteMenuItem,
             this.fillMenuItem,
+            this.resizeMapMenuItem,
             toolStripSeparator9,
             this.mapAttributesMenuItem,
             toolStripSeparator3,
@@ -401,6 +403,14 @@ namespace Mappy.UI.Forms
 			this.fillMenuItem.Size = new System.Drawing.Size(250, 22);
 			this.fillMenuItem.Text = "Fill Map";
 			this.fillMenuItem.Click += new System.EventHandler(this.FillMenuItemClick);
+			// 
+			// resizeMapMenuItem
+			// 
+			this.resizeMapMenuItem.Enabled = false;
+			this.resizeMapMenuItem.Name = "resizeMapMenuItem";
+			this.resizeMapMenuItem.Size = new System.Drawing.Size(250, 22);
+			this.resizeMapMenuItem.Text = "Resize Map...";
+			this.resizeMapMenuItem.Click += new System.EventHandler(this.ResizeMapMenuItemClick);
 			// 
 			// mapAttributesMenuItem
 			// 
@@ -998,6 +1008,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripStatusLabel voidLabel;
         private System.Windows.Forms.ToolStripStatusLabel hoveredFeatureLabel;
         private System.Windows.Forms.ToolStripMenuItem fillMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resizeMapMenuItem;
     }
 }
 

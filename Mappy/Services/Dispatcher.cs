@@ -402,6 +402,29 @@ namespace Mappy.Services
             this.ClearSelection();
         }
 
+        public void ResizeMap()
+        {
+            this.model.Map.IfSome(
+                map =>
+                {
+                    var newSize = this.dialogService.AskUserResizeMapSize(map.MapWidth, map.MapHeight);
+                    if (newSize.Width <= 0 || newSize.Height <= 0)
+                    {
+                        return;
+                    }
+
+                    if (newSize.Width == map.MapWidth && newSize.Height == map.MapHeight)
+                    {
+                        return;
+                    }
+
+                    map.ClearSelection();
+                    var oldViewportLocation = map.ViewportLocation;
+                    map.ResizeMap(newSize.Width, newSize.Height);
+                    this.model.SetViewportLocation(oldViewportLocation);
+                });
+        }
+
         public void RefreshMinimap()
         {
             this.model.Map.IfSome(

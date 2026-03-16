@@ -42,6 +42,8 @@ namespace Mappy.Models
 
         IObservable<bool> CanOpenAttributes { get; }
 
+        IObservable<bool> CanResizeMap { get; }
+
         IObservable<bool> GridVisible { get; }
 
         IObservable<Size> GridSize { get; }
@@ -137,6 +139,8 @@ namespace Mappy.Models
         void CutMenuItemClick();
 
         void FillMenuItemClick();
+
+        void ResizeMapMenuItemClick();
 
         void PasteMenuItemClick();
 

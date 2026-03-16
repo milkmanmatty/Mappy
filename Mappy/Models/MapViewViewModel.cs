@@ -165,6 +165,9 @@ namespace Mappy.Models
                         this.guides.AddHorizontalGuide(x.Height - 128);
                         this.guides.AddVerticalGuide(x.Width - 32);
                     });
+            mapWidth.CombineLatest(mapHeight, (w, h) => new Size(w, h))
+                .Skip(1)
+                .Subscribe(_ => this.ResetView());
 
             map.ObservePropertyOrDefault(x => x.SelectedTile, "SelectedTile", null)
                 .Subscribe(_ => this.RefreshSelection());
@@ -1334,6 +1337,11 @@ namespace Mappy.Models
             var featureRecord = this.featureService.TryGetFeature(f.FeatureName).Or(DefaultFeatureRecord);
 
             var r = featureRecord.GetDrawBounds(this.mapModel.BaseTile.HeightGrid, coords.X, coords.Y);
+            var mapBounds = new Rectangle(0, 0, this.mapModel.MapWidth * 32, this.mapModel.MapHeight * 32);
+            if (!r.IntersectsWith(mapBounds))
+            {
+                return;
+            }
             var i = new DrawableItem(
                     r.X,
                     r.Y,

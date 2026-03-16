@@ -1,4 +1,4 @@
-﻿namespace Mappy.Services
+namespace Mappy.Services
 {
     using System.Collections.Generic;
     using System.Drawing;
@@ -30,6 +30,8 @@
         void CapturePreferences();
 
         Size AskUserNewMapSize();
+
+        Size AskUserResizeMapSize(int currentWidth, int currentHeight);
 
         Color? AskUserGridColor(Color previousColor);
 
