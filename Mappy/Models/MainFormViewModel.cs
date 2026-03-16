@@ -52,6 +52,7 @@ namespace Mappy.Models
             this.CanGenerateMinimap = mapOpen;
             this.CanGenerateMinimapHighQuality = mapOpen;
             this.CanOpenAttributes = mapOpen;
+            this.CanResizeMap = mapOpen;
             this.CanChangeSeaLevel = mapOpen;
 
             // set up CanSave observable
@@ -149,6 +150,8 @@ namespace Mappy.Models
         public IObservable<bool> CanGenerateMinimapHighQuality { get; }
 
         public IObservable<bool> CanOpenAttributes { get; }
+
+        public IObservable<bool> CanResizeMap { get; }
 
         public IObservable<bool> CanChangeSeaLevel { get; }
 
@@ -354,6 +357,11 @@ namespace Mappy.Models
         public void FillMenuItemClick()
         {
             this.dispatcher.FillMap();
+        }
+
+        public void ResizeMapMenuItemClick()
+        {
+            this.dispatcher.ResizeMap();
         }
 
         public void ImportMinimapMenuItemClick()

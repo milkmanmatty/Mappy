@@ -24,7 +24,7 @@ namespace Mappy.Models
 
         private readonly IBandboxBehaviour freeBandboxBehaviour;
 
-        private readonly ISelectionModel model;
+        private ISelectionModel model;
 
         private IBandboxBehaviour currentBandboxBehaviour;
 
@@ -62,15 +62,7 @@ namespace Mappy.Models
             this.IsFileReadOnly = readOnly;
 
             this.model = model;
-
-            model.PropertyChanged += this.ModelOnPropertyChanged;
-
-            model.FloatingTilesChanged += this.FloatingTilesOnListChanged;
-
-            model.TileGridChanged += this.TileOnTileGridChanged;
-
-            model.HeightGridChanged += this.TileOnHeightGridChanged;
-            model.Attributes.StartPositionChanged += this.AttributesOnStartPositionChanged;
+            this.AttachModelHandlers(this.model);
 
             this.tileBandboxBehaviour = new TileBandboxBehaviour(this);
             this.tileBandboxBehaviour.PropertyChanged += this.BandboxBehaviourPropertyChanged;
@@ -84,7 +76,6 @@ namespace Mappy.Models
             this.undoManager.CanRedoChanged += this.UndoManagerOnCanRedoChanged;
             this.undoManager.IsMarkedChanged += this.UndoManagerOnIsMarkedChanged;
 
-            this.model.SelectedFeatures.CollectionChanged += this.SelectedFeaturesCollectionChanged;
         }
 
         public event EventHandler<ListChangedEventArgs> TilesChanged;
@@ -95,12 +86,7 @@ namespace Mappy.Models
 
         public event EventHandler<StartPositionChangedEventArgs> StartPositionChanged;
 
-        public event EventHandler<FeatureInstanceEventArgs> FeatureInstanceChanged
-        {
-            add => this.model.FeatureInstanceChanged += value;
-
-            remove => this.model.FeatureInstanceChanged -= value;
-        }
+        public event EventHandler<FeatureInstanceEventArgs> FeatureInstanceChanged;
 
         public bool CanCopy
         {
@@ -481,6 +467,26 @@ namespace Mappy.Models
             this.previousVoidBrushOpen = false;
         }
 
+        public void ResizeMap(int newWidth, int newHeight)
+        {
+            if (newWidth < 1 || newHeight < 1)
+            {
+                throw new ArgumentOutOfRangeException("Map dimensions must be positive.");
+            }
+
+            if (newWidth == this.MapWidth && newHeight == this.MapHeight)
+            {
+                return;
+            }
+
+            var resizedModel = CreateResizedModel(this.model, newWidth, newHeight);
+            this.undoManager.Execute(new ResizeMapOperation(this, this.model, resizedModel));
+            this.previousTranslationOpen = false;
+            this.previousSeaLevelOpen = false;
+            this.previousHeightBrushOpen = false;
+            this.previousVoidBrushOpen = false;
+        }
+
         private void ApplyHeightBrushOperation(HeightBrushOperation op)
         {
             var previousOp = this.undoManager.CanUndo && this.previousHeightBrushOpen
@@ -517,6 +523,98 @@ namespace Mappy.Models
             }
 
             this.previousVoidBrushOpen = true;
+        }
+
+        private static ISelectionModel CreateResizedModel(ISelectionModel source, int newWidth, int newHeight)
+        {
+            var resizedModel = new MapModel(newWidth, newHeight);
+
+            var fillTile = source.Tile.TileGrid.Get(0, 0);
+            GridMethods.Fill(resizedModel.Tile.TileGrid, fillTile);
+
+            var copyTileWidth = Math.Min(source.Tile.TileGrid.Width, resizedModel.Tile.TileGrid.Width);
+            var copyTileHeight = Math.Min(source.Tile.TileGrid.Height, resizedModel.Tile.TileGrid.Height);
+            GridMethods.Copy(source.Tile.TileGrid, resizedModel.Tile.TileGrid, 0, 0, 0, 0, copyTileWidth, copyTileHeight);
+
+            var copyHeightWidth = Math.Min(source.Tile.HeightGrid.Width, resizedModel.Tile.HeightGrid.Width);
+            var copyHeightHeight = Math.Min(source.Tile.HeightGrid.Height, resizedModel.Tile.HeightGrid.Height);
+            GridMethods.Copy(source.Tile.HeightGrid, resizedModel.Tile.HeightGrid, 0, 0, 0, 0, copyHeightWidth, copyHeightHeight);
+
+            var copyVoidWidth = Math.Min(source.Voids.Width, resizedModel.Voids.Width);
+            var copyVoidHeight = Math.Min(source.Voids.Height, resizedModel.Voids.Height);
+            GridMethods.Merge(source.Voids, resizedModel.Voids, 0, 0, 0, 0, copyVoidWidth, copyVoidHeight);
+
+            var mapBounds = new Rectangle(0, 0, newWidth * 32, newHeight * 32);
+            foreach (var feature in source.EnumerateFeatureInstances())
+            {
+                if (feature.X >= 0
+                    && feature.Y >= 0
+                    && feature.X < resizedModel.FeatureGridWidth
+                    && feature.Y < resizedModel.FeatureGridHeight)
+                {
+                    var drawBounds = feature.BaseFeature.GetDrawBounds(
+                        resizedModel.Tile.HeightGrid,
+                        feature.X,
+                        feature.Y);
+                    if (mapBounds.Contains(drawBounds))
+                    {
+                        resizedModel.AddFeatureInstance(feature);
+                    }
+                }
+            }
+
+            MapAttributesResult.FromModel(source).MergeInto(resizedModel);
+
+            var maxX = (newWidth * 32) - 1;
+            var maxY = (newHeight * 32) - 1;
+            for (var i = 0; i < 10; i++)
+            {
+                var startPosition = source.Attributes.GetStartPosition(i);
+                if (!startPosition.HasValue)
+                {
+                    continue;
+                }
+
+                var p = startPosition.Value;
+                if (p.X >= 0 && p.Y >= 0 && p.X <= maxX && p.Y <= maxY)
+                {
+                    resizedModel.Attributes.SetStartPosition(i, p);
+                }
+            }
+
+            resizedModel.Minimap = source.Minimap == null ? null : (Bitmap)source.Minimap.Clone();
+            return resizedModel;
+        }
+
+        private void ReplaceModel(ISelectionModel newModel)
+        {
+            if (ReferenceEquals(this.model, newModel))
+            {
+                return;
+            }
+
+            this.DetachModelHandlers(this.model);
+            this.model = newModel;
+            this.AttachModelHandlers(this.model);
+
+            this.deltaX = 0;
+            this.deltaY = 0;
+            this.previousTranslationOpen = false;
+            this.previousSeaLevelOpen = false;
+            this.previousHeightBrushOpen = false;
+            this.previousVoidBrushOpen = false;
+
+            this.OnPropertyChanged(nameof(this.MapWidth));
+            this.OnPropertyChanged(nameof(this.MapHeight));
+            this.OnPropertyChanged(nameof(this.FeatureGridWidth));
+            this.OnPropertyChanged(nameof(this.FeatureGridHeight));
+            this.OnPropertyChanged(nameof(this.SeaLevel));
+            this.OnPropertyChanged(nameof(this.Minimap));
+            this.OnPropertyChanged(nameof(this.CanCut));
+            this.OnPropertyChanged(nameof(this.CanCopy));
+            this.OnPropertyChanged(nameof(this.CanFill));
+            this.OnPropertyChanged(nameof(this.SelectedTile));
+            this.OnPropertyChanged(nameof(this.SelectedStartPosition));
         }
 
         public IEnumerable<FeatureInstance> EnumerateFeatureInstances()
@@ -1070,6 +1168,57 @@ namespace Mappy.Models
                     this.UpdateCanCopy();
                     this.UpdateCanFill();
                     break;
+            }
+        }
+
+        private void AttachModelHandlers(ISelectionModel selectionModel)
+        {
+            selectionModel.PropertyChanged += this.ModelOnPropertyChanged;
+            selectionModel.FloatingTilesChanged += this.FloatingTilesOnListChanged;
+            selectionModel.TileGridChanged += this.TileOnTileGridChanged;
+            selectionModel.HeightGridChanged += this.TileOnHeightGridChanged;
+            selectionModel.Attributes.StartPositionChanged += this.AttributesOnStartPositionChanged;
+            selectionModel.FeatureInstanceChanged += this.ModelOnFeatureInstanceChanged;
+            selectionModel.SelectedFeatures.CollectionChanged += this.SelectedFeaturesCollectionChanged;
+        }
+
+        private void DetachModelHandlers(ISelectionModel selectionModel)
+        {
+            selectionModel.PropertyChanged -= this.ModelOnPropertyChanged;
+            selectionModel.FloatingTilesChanged -= this.FloatingTilesOnListChanged;
+            selectionModel.TileGridChanged -= this.TileOnTileGridChanged;
+            selectionModel.HeightGridChanged -= this.TileOnHeightGridChanged;
+            selectionModel.Attributes.StartPositionChanged -= this.AttributesOnStartPositionChanged;
+            selectionModel.FeatureInstanceChanged -= this.ModelOnFeatureInstanceChanged;
+            selectionModel.SelectedFeatures.CollectionChanged -= this.SelectedFeaturesCollectionChanged;
+        }
+
+        private void ModelOnFeatureInstanceChanged(object sender, FeatureInstanceEventArgs e)
+        {
+            this.FeatureInstanceChanged?.Invoke(this, e);
+        }
+
+        private sealed class ResizeMapOperation : IReplayableOperation
+        {
+            private readonly UndoableMapModel owner;
+            private readonly ISelectionModel oldModel;
+            private readonly ISelectionModel newModel;
+
+            public ResizeMapOperation(UndoableMapModel owner, ISelectionModel oldModel, ISelectionModel newModel)
+            {
+                this.owner = owner;
+                this.oldModel = oldModel;
+                this.newModel = newModel;
+            }
+
+            public void Execute()
+            {
+                this.owner.ReplaceModel(this.newModel);
+            }
+
+            public void Undo()
+            {
+                this.owner.ReplaceModel(this.oldModel);
             }
         }
     }

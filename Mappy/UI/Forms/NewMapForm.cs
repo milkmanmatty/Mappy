@@ -1,4 +1,4 @@
-﻿namespace Mappy.UI.Forms
+namespace Mappy.UI.Forms
 {
     using System;
     using System.ComponentModel;
@@ -7,8 +7,19 @@
     public partial class NewMapForm : Form
     {
         public NewMapForm()
+            : this(64, 64, "New Map", "Create")
+        {
+        }
+
+        public NewMapForm(int width, int height, string title, string actionText)
         {
             this.InitializeComponent();
+            this.Text = title;
+            this.button1.Text = actionText;
+            this.widthTextBox.Text = width.ToString();
+            this.heightTextBox.Text = height.ToString();
+            this.WidthTextChanged(this, EventArgs.Empty);
+            this.HeightTextChanged(this, EventArgs.Empty);
         }
 
         public int MapWidth

@@ -169,6 +169,22 @@ namespace Mappy.Services
             }
         }
 
+        public Size AskUserResizeMapSize(int currentWidth, int currentHeight)
+        {
+            var dialog = new NewMapForm(currentWidth, currentHeight, "Resize Map", "OK");
+            var result = dialog.ShowDialog(this.owner);
+
+            switch (result)
+            {
+                case DialogResult.OK:
+                    return new Size(dialog.MapWidth, dialog.MapHeight);
+                case DialogResult.Cancel:
+                    return Size.Empty;
+                default:
+                    throw new ArgumentException("bad dialogresult");
+            }
+        }
+
         public Color? AskUserGridColor(Color previousColor)
         {
             var colorDialog = new ColorDialog();
