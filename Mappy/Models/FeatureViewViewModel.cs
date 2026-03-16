@@ -1,4 +1,4 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System;
     using System.Collections.Generic;
@@ -148,7 +148,22 @@
 
         private ListViewItem ToItem(Feature s)
         {
-            return new ListViewItem(s.Name, this.GetRescaledImage(s.Name, s.Image), s.Name);
+            return new ListViewItem(this.BuildLabel(s), this.GetRescaledImage(s.Name, s.Image), s.Name);
+        }
+
+        private string BuildLabel(Feature feature)
+        {
+            if (!MappySettings.Settings.FullResourceNames)
+            {
+                return feature.Name;
+            }
+
+            if (string.IsNullOrWhiteSpace(feature.ResourceFileName))
+            {
+                return feature.Name;
+            }
+
+            return $"{feature.ResourceFileName}: {feature.Name}";
         }
 
         private void UpdateWorlds()

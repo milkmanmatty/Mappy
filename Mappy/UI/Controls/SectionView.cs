@@ -1,4 +1,4 @@
-﻿namespace Mappy.UI.Controls
+namespace Mappy.UI.Controls
 {
     using System;
     using System.Collections.Generic;
@@ -155,7 +155,7 @@
             {
                 this.previousSelection = selItem;
                 view.Items[selItem.Index].Selected = true;
-                this.model.SetSelectedItem(selItem.Text);
+                this.model.SetSelectedItem(GetSelectedItemName(selItem));
             }
 
             if (selItem != this.previousSelection)
@@ -163,10 +163,20 @@
                 view.Items[this.previousSelection.Index].Selected = false;
                 view.Items[selItem.Index].Selected = true;
                 this.previousSelection = selItem;
-                this.model.SetSelectedItem(selItem.Text);
+                this.model.SetSelectedItem(GetSelectedItemName(selItem));
             }
 
             view.ItemSelectionChanged += this.ListViewItemSelectionChanged;
+        }
+
+        private static string GetSelectedItemName(ListViewItem item)
+        {
+            if (item.Tag is string selectedItemName)
+            {
+                return selectedItemName;
+            }
+
+            return item.Text;
         }
     }
 }

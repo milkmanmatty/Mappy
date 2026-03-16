@@ -272,7 +272,13 @@ namespace Mappy.Services
 
         public void OpenPreferences()
         {
-            this.dialogService.CapturePreferences();
+            if (!this.dialogService.CapturePreferences())
+            {
+                return;
+            }
+
+            this.sectionService.NotifySectionsChanged();
+            this.featureService.NotifyFeaturesChanged();
         }
 
         public void Close()

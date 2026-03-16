@@ -1,4 +1,4 @@
-﻿namespace Mappy.Services
+namespace Mappy.Services
 {
     using System;
     using System.Collections.Generic;
@@ -39,6 +39,11 @@
                 this.AddFeature(f);
             }
 
+            this.FeaturesChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void NotifyFeaturesChanged()
+        {
             this.FeaturesChanged?.Invoke(this, EventArgs.Empty);
         }
 
@@ -201,6 +206,7 @@
                             Category = item.Value.Category,
                             Footprint = item.Value.Footprint,
                             Image = bitmap.Bitmap,
+                            ResourceFileName = GetResourceFileName(item.Value),
                             Offset = new Point(-bitmap.OffsetX, -bitmap.OffsetY),
                             ReclaimInfo = item.Value.ReclaimInfo,
                             Permanent = item.Value.Permanent,
@@ -228,6 +234,7 @@
                         Category = entry.Value.Category,
                         Footprint = entry.Value.Footprint,
                         Image = bitmap.Bitmap,
+                        ResourceFileName = GetResourceFileName(entry.Value),
                         Offset = new Point(-bitmap.OffsetX, -bitmap.OffsetY),
                         ReclaimInfo = entry.Value.ReclaimInfo,
                         Permanent = entry.Value.Permanent,
@@ -243,6 +250,19 @@
         private void AddFeature(FeatureInfo f)
         {
             this.records[f.Name] = f;
+        }
+
+        private static string GetResourceFileName(FeatureInfo info)
+        {
+            var candidate = !string.IsNullOrWhiteSpace(info.AnimFileName)
+                ? info.AnimFileName
+                : info.ObjectName;
+            if (string.IsNullOrWhiteSpace(candidate))
+            {
+                return string.Empty;
+            }
+
+            return Path.GetFileNameWithoutExtension(candidate);
         }
     }
 }

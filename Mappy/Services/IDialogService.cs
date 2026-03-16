@@ -27,7 +27,7 @@ namespace Mappy.Services
 
         SectionImportPaths AskUserToChooseSectionImportPaths();
 
-        void CapturePreferences();
+        bool CapturePreferences();
 
         Size AskUserNewMapSize();
 

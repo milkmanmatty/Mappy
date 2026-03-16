@@ -1,4 +1,4 @@
-﻿namespace Mappy.Services
+namespace Mappy.Services
 {
     using System;
     using System.Collections.Generic;
@@ -31,6 +31,11 @@
                 this.AddSection(s);
             }
 
+            this.SectionsChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void NotifySectionsChanged()
+        {
             this.SectionsChanged?.Invoke(this, EventArgs.Empty);
         }
 

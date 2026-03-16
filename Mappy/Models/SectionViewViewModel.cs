@@ -1,7 +1,8 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Reactive.Subjects;
 
@@ -79,9 +80,26 @@
             this.selectCategoryEvent.Dispose();
         }
 
+        private static string BuildLabel(Section section)
+        {
+            var resourceLabel = $"{section.Name} ({section.PixelWidth}x{section.PixelHeight})";
+            if (!MappySettings.Settings.FullResourceNames)
+            {
+                return resourceLabel;
+            }
+
+            var fileName = Path.GetFileNameWithoutExtension(section.SctFileName);
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                return resourceLabel;
+            }
+
+            return $"{fileName}: {resourceLabel}";
+        }
+
         private static ListViewItem ToItem(int id, Section s)
         {
-            var label = $"{s.Name} ({s.PixelWidth}x{s.PixelHeight})";
+            var label = BuildLabel(s);
             return new ListViewItem(label, s.Minimap, id.ToString());
         }
 
