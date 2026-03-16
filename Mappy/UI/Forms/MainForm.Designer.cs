@@ -701,6 +701,11 @@ namespace Mappy.UI.Forms
             0,
             0,
             0});
+			this.voidCursorSizeNumericUpDown.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
 			this.voidCursorSizeNumericUpDown.Name = "voidCursorSizeNumericUpDown";
 			this.voidCursorSizeNumericUpDown.Size = new System.Drawing.Size(41, 20);
 			this.voidCursorSizeNumericUpDown.TabIndex = 1;
@@ -727,6 +732,11 @@ namespace Mappy.UI.Forms
 			this.cursorSizeNumericUpDown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
 			this.cursorSizeNumericUpDown.Minimum = new decimal(new int[] {
             1,
+            0,
+            0,
+            0});
+			this.cursorSizeNumericUpDown.Maximum = new decimal(new int[] {
+            100,
             0,
             0,
             0});

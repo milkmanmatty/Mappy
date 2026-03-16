@@ -7,6 +7,8 @@ namespace Mappy.Models
 
     public class CoreModel : Notifier, IReadOnlyApplicationModel
     {
+        private const int MaxBrushCursorSize = 100;
+
         private Maybe<UndoableMapModel> map;
 
         private bool heightmapVisible;
@@ -120,13 +122,19 @@ namespace Mappy.Models
         public int HeightEditCursorSize
         {
             get => this.heightEditCursorSize;
-            set => this.SetField(ref this.heightEditCursorSize, Math.Max(1, value), nameof(this.HeightEditCursorSize));
+            set => this.SetField(
+                ref this.heightEditCursorSize,
+                Math.Min(MaxBrushCursorSize, Math.Max(1, value)),
+                nameof(this.HeightEditCursorSize));
         }
 
         public int VoidEditCursorSize
         {
             get => this.voidEditCursorSize;
-            set => this.SetField(ref this.voidEditCursorSize, Math.Max(1, value), nameof(this.VoidEditCursorSize));
+            set => this.SetField(
+                ref this.voidEditCursorSize,
+                Math.Min(MaxBrushCursorSize, Math.Max(1, value)),
+                nameof(this.VoidEditCursorSize));
         }
 
         public void SetViewportLocation(Point location)
