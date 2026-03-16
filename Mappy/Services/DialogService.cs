@@ -226,10 +226,10 @@ namespace Mappy.Services
             return dlg;
         }
 
-        public void CapturePreferences()
+        public bool CapturePreferences()
         {
             var f = new PreferencesForm();
-            f.ShowDialog();
+            return f.ShowDialog(this.owner) == DialogResult.OK;
         }
 
         public void ShowAbout()

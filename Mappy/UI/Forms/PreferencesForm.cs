@@ -25,6 +25,7 @@ namespace Mappy.UI.Forms
 
             this.dragScrollSpeedXNumeric.Value = MappySettings.Settings.GetDragAutoScrollSpeedXOrDefault();
             this.dragScrollSpeedYNumeric.Value = MappySettings.Settings.GetDragAutoScrollSpeedYOrDefault();
+            this.fullResourceNamesCheckBox.Checked = MappySettings.Settings.FullResourceNames;
         }
 
         private void AddButtonClick(object sender, EventArgs e)
@@ -108,6 +109,7 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.SearchPaths = s;
             MappySettings.Settings.DragAutoScrollSpeedX = (int)this.dragScrollSpeedXNumeric.Value;
             MappySettings.Settings.DragAutoScrollSpeedY = (int)this.dragScrollSpeedYNumeric.Value;
+            MappySettings.Settings.FullResourceNames = this.fullResourceNamesCheckBox.Checked;
             MappySettings.SaveSettings();
         }
     }

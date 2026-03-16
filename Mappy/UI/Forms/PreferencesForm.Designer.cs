@@ -44,11 +44,14 @@ namespace Mappy.UI.Forms
             this.dragScrollSpeedXNumeric = new System.Windows.Forms.NumericUpDown();
             this.dragScrollSpeedYLabel = new System.Windows.Forms.Label();
             this.dragScrollSpeedXLabel = new System.Windows.Forms.Label();
+            this.resourceNamesGroupBox = new System.Windows.Forms.GroupBox();
+            this.fullResourceNamesCheckBox = new System.Windows.Forms.CheckBox();
             this.sidePanel.SuspendLayout();
             this.bottomPanel.SuspendLayout();
             this.searchPathsPanel.SuspendLayout();
             this.mainGroupBox.SuspendLayout();
             this.scrollSpeedGroupBox.SuspendLayout();
+            this.resourceNamesGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedYNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).BeginInit();
             this.SuspendLayout();
@@ -144,7 +147,7 @@ namespace Mappy.UI.Forms
             this.bottomPanel.Controls.Add(this.cancelButton);
             this.bottomPanel.Controls.Add(this.okButton);
             this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.bottomPanel.Location = new System.Drawing.Point(0, 351);
+            this.bottomPanel.Location = new System.Drawing.Point(0, 410);
             this.bottomPanel.Name = "bottomPanel";
             this.bottomPanel.Size = new System.Drawing.Size(450, 30);
             this.bottomPanel.TabIndex = 8;
@@ -251,11 +254,34 @@ namespace Mappy.UI.Forms
             this.dragScrollSpeedXLabel.TabIndex = 0;
             this.dragScrollSpeedXLabel.Text = "Horizontal speed:";
             // 
+            // resourceNamesGroupBox
+            // 
+            this.resourceNamesGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.resourceNamesGroupBox.Controls.Add(this.fullResourceNamesCheckBox);
+            this.resourceNamesGroupBox.Location = new System.Drawing.Point(12, 351);
+            this.resourceNamesGroupBox.Name = "resourceNamesGroupBox";
+            this.resourceNamesGroupBox.Size = new System.Drawing.Size(426, 53);
+            this.resourceNamesGroupBox.TabIndex = 12;
+            this.resourceNamesGroupBox.TabStop = false;
+            this.resourceNamesGroupBox.Text = "Resource Labels";
+            // 
+            // fullResourceNamesCheckBox
+            // 
+            this.fullResourceNamesCheckBox.AutoSize = true;
+            this.fullResourceNamesCheckBox.Location = new System.Drawing.Point(17, 22);
+            this.fullResourceNamesCheckBox.Name = "fullResourceNamesCheckBox";
+            this.fullResourceNamesCheckBox.Size = new System.Drawing.Size(121, 17);
+            this.fullResourceNamesCheckBox.TabIndex = 0;
+            this.fullResourceNamesCheckBox.Text = "Full resource names";
+            this.fullResourceNamesCheckBox.UseVisualStyleBackColor = true;
+            // 
             // PreferencesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(450, 381);
+            this.ClientSize = new System.Drawing.Size(450, 440);
+            this.Controls.Add(this.resourceNamesGroupBox);
             this.Controls.Add(this.scrollSpeedGroupBox);
             this.Controls.Add(this.mainGroupBox);
             this.Controls.Add(this.bottomPanel);
@@ -270,6 +296,8 @@ namespace Mappy.UI.Forms
             this.mainGroupBox.ResumeLayout(false);
             this.scrollSpeedGroupBox.ResumeLayout(false);
             this.scrollSpeedGroupBox.PerformLayout();
+            this.resourceNamesGroupBox.ResumeLayout(false);
+            this.resourceNamesGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedYNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).EndInit();
             this.ResumeLayout(false);
@@ -294,5 +322,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.Label dragScrollSpeedXLabel;
         private System.Windows.Forms.NumericUpDown dragScrollSpeedYNumeric;
         private System.Windows.Forms.NumericUpDown dragScrollSpeedXNumeric;
+        private System.Windows.Forms.GroupBox resourceNamesGroupBox;
+        private System.Windows.Forms.CheckBox fullResourceNamesCheckBox;
     }
 }

@@ -31,6 +31,8 @@ namespace Mappy.Data
 
         public Bitmap Image { get; set; }
 
+        public string ResourceFileName { get; set; }
+
         public Maybe<ReclaimInfoStruct> ReclaimInfo { get; set; }
 
         public bool Permanent { get; set; }
