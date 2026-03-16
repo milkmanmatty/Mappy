@@ -34,6 +34,8 @@ namespace Mappy.Models
 
         void KeyDown(Keys key);
 
+        bool ShiftMouseWheel(int delta, bool ctrlPressed);
+
         void LeaveFocus();
 
         void DragDrop(IDataObject item, Point location);
