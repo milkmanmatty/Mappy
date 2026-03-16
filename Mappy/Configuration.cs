@@ -46,5 +46,7 @@ namespace Mappy
         public int WindowSizeWidth { get; set; }
 
         public int WindowSizeHeight { get; set; }
+
+        public int SidebarTabsWidth { get; set; }
     }
 }

@@ -291,6 +291,25 @@ namespace Mappy.UI.Forms
             {
                 this.WindowState = state;
             }
+
+            this.RestoreSidebarTabsWidth(settings);
+        }
+
+        private void RestoreSidebarTabsWidth(Configuration settings)
+        {
+            if (settings.SidebarTabsWidth <= 0)
+            {
+                return;
+            }
+
+            var minWidth = this.sidebarSplitter.MinSize;
+            var maxWidth = this.ClientSize.Width - this.sidebarSplitter.MinExtra;
+            if (maxWidth < minWidth)
+            {
+                maxWidth = minWidth;
+            }
+
+            this.sidebarTabs.Width = Math.Max(minWidth, Math.Min(maxWidth, settings.SidebarTabsWidth));
         }
 
         private bool IsBoundsOnAnyScreen(Rectangle bounds)
@@ -322,6 +341,7 @@ namespace Mappy.UI.Forms
             settings.WindowLocationY = bounds.Y;
             settings.WindowSizeWidth = bounds.Width;
             settings.WindowSizeHeight = bounds.Height;
+            settings.SidebarTabsWidth = this.sidebarTabs.Width;
             MappySettings.SaveSettings();
         }
 
