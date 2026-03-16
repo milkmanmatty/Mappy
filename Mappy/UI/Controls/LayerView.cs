@@ -19,6 +19,8 @@ namespace Mappy.UI.Controls
 
         public event EventHandler CanvasSizeChanged;
 
+        public Func<int, bool, bool> ShiftMouseWheelHandler { get; set; }
+
         public LayerCollection Layers => this.layers;
 
         public Size CanvasSize
@@ -91,8 +93,14 @@ namespace Mappy.UI.Controls
                 return;
             }
 
-			// horizontal scroll
-			var maxX = Math.Max(this.CanvasSize.Width - this.ClientSize.Width, 0);
+            var ctrlPressed = (ModifierKeys & Keys.Control) == Keys.Control;
+            if (this.ShiftMouseWheelHandler?.Invoke(e.Delta, ctrlPressed) == true)
+            {
+                return;
+            }
+
+            // horizontal scroll
+            var maxX = Math.Max(this.CanvasSize.Width - this.ClientSize.Width, 0);
             if (maxX == 0)
             {
                 return;

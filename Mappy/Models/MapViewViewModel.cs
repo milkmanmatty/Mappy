@@ -405,6 +405,38 @@ namespace Mappy.Models
             }
         }
 
+        public bool ShiftMouseWheel(int delta, bool ctrlPressed)
+        {
+            var notchDelta = delta / SystemInformation.MouseWheelScrollDelta;
+            if (notchDelta == 0)
+            {
+                return false;
+            }
+
+            if (this.heightEditMode)
+            {
+                if (ctrlPressed)
+                {
+                    var nextInterval = this.heightEditInterval + notchDelta;
+                    this.dispatcher.SetHeightEditInterval(Math.Max(1, nextInterval));
+                    return true;
+                }
+
+                var nextSize = this.heightEditCursorSize + notchDelta;
+                this.dispatcher.SetHeightEditCursorSize(Math.Max(1, nextSize));
+                return true;
+            }
+
+            if (this.voidEditMode)
+            {
+                var nextSize = this.voidEditCursorSize + notchDelta;
+                this.dispatcher.SetVoidEditCursorSize(Math.Max(1, nextSize));
+                return true;
+            }
+
+            return false;
+        }
+
         public void LeaveFocus()
         {
             if (this.activeHeightBrushDelta != 0)

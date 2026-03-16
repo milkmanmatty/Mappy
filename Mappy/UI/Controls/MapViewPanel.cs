@@ -36,9 +36,15 @@ namespace Mappy.UI.Controls
             this.mapView.Layers.Add(new DummyLayer());
             this.mapView.Layers.Add(new DummyLayer());
             this.mapView.Layers.Add(new DummyLayer());
+            this.mapView.ShiftMouseWheelHandler = this.ShiftMouseWheel;
 
             this.dragScrollTimer.Tick += this.DragScrollTimerTick;
             this.Disposed += this.MapViewPanelDisposed;
+        }
+
+        private bool ShiftMouseWheel(int delta, bool ctrlPressed)
+        {
+            return this.model?.ShiftMouseWheel(delta, ctrlPressed) == true;
         }
 
         public void SetModel(IMapViewViewModel model)
