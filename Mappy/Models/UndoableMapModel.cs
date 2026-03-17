@@ -614,6 +614,7 @@ namespace Mappy.Models
             this.OnPropertyChanged(nameof(this.CanCopy));
             this.OnPropertyChanged(nameof(this.CanFill));
             this.OnPropertyChanged(nameof(this.SelectedTile));
+            this.OnPropertyChanged(nameof(this.SelectedFeatures));
             this.OnPropertyChanged(nameof(this.SelectedStartPosition));
         }
 
