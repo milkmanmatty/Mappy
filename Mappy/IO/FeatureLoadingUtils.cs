@@ -1,4 +1,4 @@
-﻿namespace Mappy.IO
+namespace Mappy.IO
 {
     using System;
     using System.Collections.Generic;
@@ -54,6 +54,7 @@
                         Category = record.Category,
 
                         ReclaimInfo = reclaimInfo,
+                        MetalSpotValue = record.MetalSpotValue,
                         Permanent = record.Permanent,
 
                         AnimFileName = record.AnimFileName,
