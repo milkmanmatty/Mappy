@@ -2,6 +2,7 @@ namespace Mappy.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Drawing;
     using System.Reactive.Linq;
@@ -117,6 +118,8 @@ namespace Mappy.Models
 
         private Point pinnedAreaHeightPointAnchor;
 
+        private ObservableCollection<Guid> selectedFeaturesCollection;
+
         public MapViewViewModel(IReadOnlyApplicationModel model, Dispatcher dispatcher, FeatureService featureService)
         {
             var heightmapVisible = model.PropertyAsObservable(x => x.HeightmapVisible, nameof(model.HeightmapVisible));
@@ -173,12 +176,6 @@ namespace Mappy.Models
                 .Subscribe(_ => this.RefreshSelection());
             map.ObservePropertyOrDefault(x => x.SelectedStartPosition, "SelectedStartPosition", null)
                 .Subscribe(_ => this.RefreshSelection());
-
-            map
-                .Where(x => x.IsSome)
-                .Select(x => x.UnsafeValue) // will never be null due to where clause
-                .Select(x => x.SelectedFeatures)
-                .Subscribe(x => x.CollectionChanged += this.SelectedFeaturesCollectionChanged);
 
             map.Select(
                 x => x.Match<AbstractLayer>(
@@ -605,6 +602,7 @@ namespace Mappy.Models
         {
             if (this.mapModel == null)
             {
+                this.AttachSelectedFeaturesCollection(null);
                 return;
             }
 
@@ -622,6 +620,7 @@ namespace Mappy.Models
             this.mapModel.StartPositionChanged += this.StartPositionChanged;
 
             this.mapModel.PropertyChanged += this.MapModelPropertyChanged;
+            this.AttachSelectedFeaturesCollection(this.mapModel.SelectedFeatures);
         }
 
         private void SelectedFeaturesCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -703,6 +702,30 @@ namespace Mappy.Models
                 case "BandboxRectangle":
                     this.UpdateBandbox();
                     break;
+                case "SelectedFeatures":
+                    this.AttachSelectedFeaturesCollection(this.mapModel?.SelectedFeatures);
+                    this.RefreshSelection();
+                    break;
+            }
+        }
+
+        private void AttachSelectedFeaturesCollection(ObservableCollection<Guid> selectedFeatures)
+        {
+            if (ReferenceEquals(this.selectedFeaturesCollection, selectedFeatures))
+            {
+                return;
+            }
+
+            if (this.selectedFeaturesCollection != null)
+            {
+                this.selectedFeaturesCollection.CollectionChanged -= this.SelectedFeaturesCollectionChanged;
+            }
+
+            this.selectedFeaturesCollection = selectedFeatures;
+
+            if (this.selectedFeaturesCollection != null)
+            {
+                this.selectedFeaturesCollection.CollectionChanged += this.SelectedFeaturesCollectionChanged;
             }
         }
 
