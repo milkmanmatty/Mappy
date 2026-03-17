@@ -209,6 +209,7 @@ namespace Mappy.Services
                             ResourceFileName = GetResourceFileName(item.Value),
                             Offset = new Point(-bitmap.OffsetX, -bitmap.OffsetY),
                             ReclaimInfo = item.Value.ReclaimInfo,
+                            MetalSpotValue = item.Value.MetalSpotValue,
                             Permanent = item.Value.Permanent,
                         };
                         this.featureCache.Add(item.Key, f);
@@ -237,6 +238,7 @@ namespace Mappy.Services
                         ResourceFileName = GetResourceFileName(entry.Value),
                         Offset = new Point(-bitmap.OffsetX, -bitmap.OffsetY),
                         ReclaimInfo = entry.Value.ReclaimInfo,
+                        MetalSpotValue = entry.Value.MetalSpotValue,
                         Permanent = entry.Value.Permanent,
                     };
                     this.featureCache.Add(entry.Key, f);

@@ -109,7 +109,8 @@ namespace Mappy.Models
                     return featureService.TryGetFeature(featureName).Select(feature =>
                     {
                         var reclaimInfo = feature.ReclaimInfo.Match(rec => $" E: {rec.EnergyValue}, M: {rec.MetalValue}", () => string.Empty);
-                        return $"{featureName}{reclaimInfo}";
+                        var metalSpotInfo = feature.MetalSpotValue > 0 ? $" Metal spot: {feature.MetalSpotValue}" : string.Empty;
+                        return $"{featureName}{reclaimInfo}{metalSpotInfo}";
                     }).Or(featureName);
                 }).Or("---"));
 
