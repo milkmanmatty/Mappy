@@ -1,4 +1,4 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System;
     using System.Collections.Generic;
@@ -55,6 +55,16 @@
                         y => y.PropertyChangedObservable(nameof(y.ViewportLocation)),
                         Observable.Empty<Unit>))
                 .Switch();
+            var mapWidthChanged = map.Select(
+                    x => x.Match(
+                        y => y.PropertyChangedObservable(nameof(y.MapWidth)),
+                        Observable.Empty<Unit>))
+                .Switch();
+            var mapHeightChanged = map.Select(
+                    x => x.Match(
+                        y => y.PropertyChangedObservable(nameof(y.MapHeight)),
+                        Observable.Empty<Unit>))
+                .Switch();
 
             var startPositionChanged = map.Select(
                 x => x.Match(
@@ -78,6 +88,10 @@
             viewportLocationChanged.Subscribe(_ => this.UpdateMinimapRectangle());
             viewportWidthChanged.Subscribe(_ => this.UpdateMinimapRectangle());
             viewportHeightChanged.Subscribe(_ => this.UpdateMinimapRectangle());
+            mapWidthChanged.Subscribe(_ => this.UpdateMinimapRectangle());
+            mapHeightChanged.Subscribe(_ => this.UpdateMinimapRectangle());
+            mapWidthChanged.Subscribe(_ => this.UpdateStartPositions());
+            mapHeightChanged.Subscribe(_ => this.UpdateStartPositions());
 
             startPositionChanged.Subscribe(this.UpdateStartPosition);
 
