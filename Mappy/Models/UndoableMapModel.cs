@@ -15,6 +15,7 @@ namespace Mappy.Models
     using Mappy.Operations;
     using Mappy.Operations.SelectionModel;
     using Mappy.Util;
+    using Mappy.Util.ImageSampling;
 
     public sealed class UndoableMapModel : Notifier, IMainModel, IBandboxModel, IReadOnlyMapModel
     {
@@ -582,7 +583,18 @@ namespace Mappy.Models
                 }
             }
 
-            resizedModel.Minimap = source.Minimap == null ? null : (Bitmap)source.Minimap.Clone();
+            if (source.Minimap == null)
+            {
+                resizedModel.Minimap = null;
+            }
+            else
+            {
+                using (var adapter = new MapPixelImageAdapter(resizedModel.Tile.TileGrid))
+                {
+                    resizedModel.Minimap = Util.GenerateMinimap(adapter);
+                }
+            }
+
             return resizedModel;
         }
 
