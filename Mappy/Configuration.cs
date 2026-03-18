@@ -50,5 +50,7 @@ namespace Mappy
         public int SidebarTabsWidth { get; set; }
 
         public bool FullResourceNames { get; set; }
+
+        public bool ShowFeatureReclaimAmounts { get; set; }
     }
 }

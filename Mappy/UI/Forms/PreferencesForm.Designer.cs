@@ -28,279 +28,292 @@ namespace Mappy.UI.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.searchPathsListView = new System.Windows.Forms.ListView();
-            this.addButton = new System.Windows.Forms.Button();
-            this.removeButton = new System.Windows.Forms.Button();
-            this.upButton = new System.Windows.Forms.Button();
-            this.downButton = new System.Windows.Forms.Button();
-            this.okButton = new System.Windows.Forms.Button();
-            this.cancelButton = new System.Windows.Forms.Button();
-            this.sidePanel = new System.Windows.Forms.Panel();
-            this.bottomPanel = new System.Windows.Forms.Panel();
-            this.searchPathsPanel = new System.Windows.Forms.Panel();
-            this.mainGroupBox = new System.Windows.Forms.GroupBox();
-            this.scrollSpeedGroupBox = new System.Windows.Forms.GroupBox();
-            this.dragScrollSpeedYNumeric = new System.Windows.Forms.NumericUpDown();
-            this.dragScrollSpeedXNumeric = new System.Windows.Forms.NumericUpDown();
-            this.dragScrollSpeedYLabel = new System.Windows.Forms.Label();
-            this.dragScrollSpeedXLabel = new System.Windows.Forms.Label();
-            this.resourceNamesGroupBox = new System.Windows.Forms.GroupBox();
-            this.fullResourceNamesCheckBox = new System.Windows.Forms.CheckBox();
-            this.sidePanel.SuspendLayout();
-            this.bottomPanel.SuspendLayout();
-            this.searchPathsPanel.SuspendLayout();
-            this.mainGroupBox.SuspendLayout();
-            this.scrollSpeedGroupBox.SuspendLayout();
-            this.resourceNamesGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedYNumeric)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).BeginInit();
-            this.SuspendLayout();
-            // 
-            // searchPathsListView
-            // 
-            this.searchPathsListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.searchPathsListView.Location = new System.Drawing.Point(0, 0);
-            this.searchPathsListView.MultiSelect = false;
-            this.searchPathsListView.Name = "searchPathsListView";
-            this.searchPathsListView.Size = new System.Drawing.Size(332, 242);
-            this.searchPathsListView.TabIndex = 0;
-            this.searchPathsListView.UseCompatibleStateImageBehavior = false;
-            this.searchPathsListView.View = System.Windows.Forms.View.List;
-            // 
-            // addButton
-            // 
-            this.addButton.Location = new System.Drawing.Point(3, 83);
-            this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(75, 21);
-            this.addButton.TabIndex = 1;
-            this.addButton.Text = "Add...";
-            this.addButton.UseVisualStyleBackColor = true;
-            this.addButton.Click += new System.EventHandler(this.AddButtonClick);
-            // 
-            // removeButton
-            // 
-            this.removeButton.Location = new System.Drawing.Point(3, 112);
-            this.removeButton.Name = "removeButton";
-            this.removeButton.Size = new System.Drawing.Size(75, 21);
-            this.removeButton.TabIndex = 2;
-            this.removeButton.Text = "Remove";
-            this.removeButton.UseVisualStyleBackColor = true;
-            this.removeButton.Click += new System.EventHandler(this.RemoveButtonClick);
-            // 
-            // upButton
-            // 
-            this.upButton.Location = new System.Drawing.Point(3, 3);
-            this.upButton.Name = "upButton";
-            this.upButton.Size = new System.Drawing.Size(75, 23);
-            this.upButton.TabIndex = 3;
-            this.upButton.Text = "Move Up";
-            this.upButton.UseVisualStyleBackColor = true;
-            this.upButton.Click += new System.EventHandler(this.UpButtonClick);
-            // 
-            // downButton
-            // 
-            this.downButton.Location = new System.Drawing.Point(3, 32);
-            this.downButton.Name = "downButton";
-            this.downButton.Size = new System.Drawing.Size(75, 23);
-            this.downButton.TabIndex = 4;
-            this.downButton.Text = "Move Down";
-            this.downButton.UseVisualStyleBackColor = true;
-            this.downButton.Click += new System.EventHandler(this.DownButtonClick);
-            // 
-            // okButton
-            // 
-            this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(291, 4);
-            this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 5;
-            this.okButton.Text = "OK";
-            this.okButton.UseVisualStyleBackColor = true;
-            this.okButton.Click += new System.EventHandler(this.OkButtonClick);
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(372, 4);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 6;
-            this.cancelButton.Text = "Cancel";
-            this.cancelButton.UseVisualStyleBackColor = true;
-            // 
-            // sidePanel
-            // 
-            this.sidePanel.Controls.Add(this.upButton);
-            this.sidePanel.Controls.Add(this.downButton);
-            this.sidePanel.Controls.Add(this.addButton);
-            this.sidePanel.Controls.Add(this.removeButton);
-            this.sidePanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.sidePanel.Location = new System.Drawing.Point(332, 0);
-            this.sidePanel.Name = "sidePanel";
-            this.sidePanel.Size = new System.Drawing.Size(82, 242);
-            this.sidePanel.TabIndex = 7;
-            // 
-            // bottomPanel
-            // 
-            this.bottomPanel.Controls.Add(this.cancelButton);
-            this.bottomPanel.Controls.Add(this.okButton);
-            this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.bottomPanel.Location = new System.Drawing.Point(0, 410);
-            this.bottomPanel.Name = "bottomPanel";
-            this.bottomPanel.Size = new System.Drawing.Size(450, 30);
-            this.bottomPanel.TabIndex = 8;
-            // 
-            // searchPathsPanel
-            // 
-            this.searchPathsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.searchPathsListView = new System.Windows.Forms.ListView();
+			this.addButton = new System.Windows.Forms.Button();
+			this.removeButton = new System.Windows.Forms.Button();
+			this.upButton = new System.Windows.Forms.Button();
+			this.downButton = new System.Windows.Forms.Button();
+			this.okButton = new System.Windows.Forms.Button();
+			this.cancelButton = new System.Windows.Forms.Button();
+			this.sidePanel = new System.Windows.Forms.Panel();
+			this.bottomPanel = new System.Windows.Forms.Panel();
+			this.searchPathsPanel = new System.Windows.Forms.Panel();
+			this.mainGroupBox = new System.Windows.Forms.GroupBox();
+			this.scrollSpeedGroupBox = new System.Windows.Forms.GroupBox();
+			this.dragScrollSpeedYNumeric = new System.Windows.Forms.NumericUpDown();
+			this.dragScrollSpeedXNumeric = new System.Windows.Forms.NumericUpDown();
+			this.dragScrollSpeedYLabel = new System.Windows.Forms.Label();
+			this.dragScrollSpeedXLabel = new System.Windows.Forms.Label();
+			this.resourceNamesGroupBox = new System.Windows.Forms.GroupBox();
+			this.featureReclaimAmountsCheckBox = new System.Windows.Forms.CheckBox();
+			this.fullResourceNamesCheckBox = new System.Windows.Forms.CheckBox();
+			this.sidePanel.SuspendLayout();
+			this.bottomPanel.SuspendLayout();
+			this.searchPathsPanel.SuspendLayout();
+			this.mainGroupBox.SuspendLayout();
+			this.scrollSpeedGroupBox.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedYNumeric)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).BeginInit();
+			this.resourceNamesGroupBox.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// searchPathsListView
+			// 
+			this.searchPathsListView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.searchPathsListView.HideSelection = false;
+			this.searchPathsListView.Location = new System.Drawing.Point(0, 0);
+			this.searchPathsListView.MultiSelect = false;
+			this.searchPathsListView.Name = "searchPathsListView";
+			this.searchPathsListView.Size = new System.Drawing.Size(332, 190);
+			this.searchPathsListView.TabIndex = 0;
+			this.searchPathsListView.UseCompatibleStateImageBehavior = false;
+			this.searchPathsListView.View = System.Windows.Forms.View.List;
+			// 
+			// addButton
+			// 
+			this.addButton.Location = new System.Drawing.Point(3, 83);
+			this.addButton.Name = "addButton";
+			this.addButton.Size = new System.Drawing.Size(75, 21);
+			this.addButton.TabIndex = 1;
+			this.addButton.Text = "Add...";
+			this.addButton.UseVisualStyleBackColor = true;
+			this.addButton.Click += new System.EventHandler(this.AddButtonClick);
+			// 
+			// removeButton
+			// 
+			this.removeButton.Location = new System.Drawing.Point(3, 112);
+			this.removeButton.Name = "removeButton";
+			this.removeButton.Size = new System.Drawing.Size(75, 21);
+			this.removeButton.TabIndex = 2;
+			this.removeButton.Text = "Remove";
+			this.removeButton.UseVisualStyleBackColor = true;
+			this.removeButton.Click += new System.EventHandler(this.RemoveButtonClick);
+			// 
+			// upButton
+			// 
+			this.upButton.Location = new System.Drawing.Point(3, 3);
+			this.upButton.Name = "upButton";
+			this.upButton.Size = new System.Drawing.Size(75, 23);
+			this.upButton.TabIndex = 3;
+			this.upButton.Text = "Move Up";
+			this.upButton.UseVisualStyleBackColor = true;
+			this.upButton.Click += new System.EventHandler(this.UpButtonClick);
+			// 
+			// downButton
+			// 
+			this.downButton.Location = new System.Drawing.Point(3, 32);
+			this.downButton.Name = "downButton";
+			this.downButton.Size = new System.Drawing.Size(75, 23);
+			this.downButton.TabIndex = 4;
+			this.downButton.Text = "Move Down";
+			this.downButton.UseVisualStyleBackColor = true;
+			this.downButton.Click += new System.EventHandler(this.DownButtonClick);
+			// 
+			// okButton
+			// 
+			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.okButton.Location = new System.Drawing.Point(291, 4);
+			this.okButton.Name = "okButton";
+			this.okButton.Size = new System.Drawing.Size(75, 23);
+			this.okButton.TabIndex = 5;
+			this.okButton.Text = "OK";
+			this.okButton.UseVisualStyleBackColor = true;
+			this.okButton.Click += new System.EventHandler(this.OkButtonClick);
+			// 
+			// cancelButton
+			// 
+			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.cancelButton.Location = new System.Drawing.Point(372, 4);
+			this.cancelButton.Name = "cancelButton";
+			this.cancelButton.Size = new System.Drawing.Size(75, 23);
+			this.cancelButton.TabIndex = 6;
+			this.cancelButton.Text = "Cancel";
+			this.cancelButton.UseVisualStyleBackColor = true;
+			// 
+			// sidePanel
+			// 
+			this.sidePanel.Controls.Add(this.upButton);
+			this.sidePanel.Controls.Add(this.downButton);
+			this.sidePanel.Controls.Add(this.addButton);
+			this.sidePanel.Controls.Add(this.removeButton);
+			this.sidePanel.Dock = System.Windows.Forms.DockStyle.Right;
+			this.sidePanel.Location = new System.Drawing.Point(332, 0);
+			this.sidePanel.Name = "sidePanel";
+			this.sidePanel.Size = new System.Drawing.Size(82, 190);
+			this.sidePanel.TabIndex = 7;
+			// 
+			// bottomPanel
+			// 
+			this.bottomPanel.Controls.Add(this.cancelButton);
+			this.bottomPanel.Controls.Add(this.okButton);
+			this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.bottomPanel.Location = new System.Drawing.Point(0, 436);
+			this.bottomPanel.Name = "bottomPanel";
+			this.bottomPanel.Size = new System.Drawing.Size(450, 30);
+			this.bottomPanel.TabIndex = 8;
+			// 
+			// searchPathsPanel
+			// 
+			this.searchPathsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchPathsPanel.Controls.Add(this.searchPathsListView);
-            this.searchPathsPanel.Controls.Add(this.sidePanel);
-            this.searchPathsPanel.Location = new System.Drawing.Point(6, 19);
-            this.searchPathsPanel.Name = "searchPathsPanel";
-            this.searchPathsPanel.Size = new System.Drawing.Size(414, 188);
-            this.searchPathsPanel.TabIndex = 9;
-            // 
-            // mainGroupBox
-            // 
-            this.mainGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.searchPathsPanel.Controls.Add(this.searchPathsListView);
+			this.searchPathsPanel.Controls.Add(this.sidePanel);
+			this.searchPathsPanel.Location = new System.Drawing.Point(6, 19);
+			this.searchPathsPanel.Name = "searchPathsPanel";
+			this.searchPathsPanel.Size = new System.Drawing.Size(414, 190);
+			this.searchPathsPanel.TabIndex = 9;
+			// 
+			// mainGroupBox
+			// 
+			this.mainGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.mainGroupBox.Controls.Add(this.searchPathsPanel);
-            this.mainGroupBox.Location = new System.Drawing.Point(12, 12);
-            this.mainGroupBox.Name = "mainGroupBox";
-            this.mainGroupBox.Size = new System.Drawing.Size(426, 213);
-            this.mainGroupBox.TabIndex = 10;
-            this.mainGroupBox.TabStop = false;
-            this.mainGroupBox.Text = "Search Paths";
-            // 
-            // scrollSpeedGroupBox
-            // 
-            this.scrollSpeedGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.mainGroupBox.Controls.Add(this.searchPathsPanel);
+			this.mainGroupBox.Location = new System.Drawing.Point(12, 12);
+			this.mainGroupBox.Name = "mainGroupBox";
+			this.mainGroupBox.Size = new System.Drawing.Size(426, 215);
+			this.mainGroupBox.TabIndex = 10;
+			this.mainGroupBox.TabStop = false;
+			this.mainGroupBox.Text = "Search Paths";
+			// 
+			// scrollSpeedGroupBox
+			// 
+			this.scrollSpeedGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedYNumeric);
-            this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedXNumeric);
-            this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedYLabel);
-            this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedXLabel);
-            this.scrollSpeedGroupBox.Location = new System.Drawing.Point(12, 231);
-            this.scrollSpeedGroupBox.Name = "scrollSpeedGroupBox";
-            this.scrollSpeedGroupBox.Size = new System.Drawing.Size(426, 114);
-            this.scrollSpeedGroupBox.TabIndex = 11;
-            this.scrollSpeedGroupBox.TabStop = false;
-            this.scrollSpeedGroupBox.Text = "Viewport Drag Auto-Scroll";
-            // 
-            // dragScrollSpeedYNumeric
-            // 
-            this.dragScrollSpeedYNumeric.Location = new System.Drawing.Point(233, 71);
-            this.dragScrollSpeedYNumeric.Maximum = new decimal(new int[] {
+			this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedYNumeric);
+			this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedXNumeric);
+			this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedYLabel);
+			this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedXLabel);
+			this.scrollSpeedGroupBox.Location = new System.Drawing.Point(12, 232);
+			this.scrollSpeedGroupBox.Name = "scrollSpeedGroupBox";
+			this.scrollSpeedGroupBox.Size = new System.Drawing.Size(426, 114);
+			this.scrollSpeedGroupBox.TabIndex = 11;
+			this.scrollSpeedGroupBox.TabStop = false;
+			this.scrollSpeedGroupBox.Text = "Viewport Drag Auto-Scroll";
+			// 
+			// dragScrollSpeedYNumeric
+			// 
+			this.dragScrollSpeedYNumeric.Location = new System.Drawing.Point(233, 71);
+			this.dragScrollSpeedYNumeric.Maximum = new decimal(new int[] {
             256,
             0,
             0,
             0});
-            this.dragScrollSpeedYNumeric.Minimum = new decimal(new int[] {
+			this.dragScrollSpeedYNumeric.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.dragScrollSpeedYNumeric.Name = "dragScrollSpeedYNumeric";
-            this.dragScrollSpeedYNumeric.Size = new System.Drawing.Size(82, 20);
-            this.dragScrollSpeedYNumeric.TabIndex = 3;
-            this.dragScrollSpeedYNumeric.Value = new decimal(new int[] {
+			this.dragScrollSpeedYNumeric.Name = "dragScrollSpeedYNumeric";
+			this.dragScrollSpeedYNumeric.Size = new System.Drawing.Size(82, 20);
+			this.dragScrollSpeedYNumeric.TabIndex = 3;
+			this.dragScrollSpeedYNumeric.Value = new decimal(new int[] {
             16,
             0,
             0,
             0});
-            // 
-            // dragScrollSpeedXNumeric
-            // 
-            this.dragScrollSpeedXNumeric.Location = new System.Drawing.Point(233, 34);
-            this.dragScrollSpeedXNumeric.Maximum = new decimal(new int[] {
+			// 
+			// dragScrollSpeedXNumeric
+			// 
+			this.dragScrollSpeedXNumeric.Location = new System.Drawing.Point(233, 34);
+			this.dragScrollSpeedXNumeric.Maximum = new decimal(new int[] {
             256,
             0,
             0,
             0});
-            this.dragScrollSpeedXNumeric.Minimum = new decimal(new int[] {
+			this.dragScrollSpeedXNumeric.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.dragScrollSpeedXNumeric.Name = "dragScrollSpeedXNumeric";
-            this.dragScrollSpeedXNumeric.Size = new System.Drawing.Size(82, 20);
-            this.dragScrollSpeedXNumeric.TabIndex = 1;
-            this.dragScrollSpeedXNumeric.Value = new decimal(new int[] {
+			this.dragScrollSpeedXNumeric.Name = "dragScrollSpeedXNumeric";
+			this.dragScrollSpeedXNumeric.Size = new System.Drawing.Size(82, 20);
+			this.dragScrollSpeedXNumeric.TabIndex = 1;
+			this.dragScrollSpeedXNumeric.Value = new decimal(new int[] {
             16,
             0,
             0,
             0});
-            // 
-            // dragScrollSpeedYLabel
-            // 
-            this.dragScrollSpeedYLabel.AutoSize = true;
-            this.dragScrollSpeedYLabel.Location = new System.Drawing.Point(14, 73);
-            this.dragScrollSpeedYLabel.Name = "dragScrollSpeedYLabel";
-            this.dragScrollSpeedYLabel.Size = new System.Drawing.Size(194, 13);
-            this.dragScrollSpeedYLabel.TabIndex = 2;
-            this.dragScrollSpeedYLabel.Text = "Vertical speed:";
-            // 
-            // dragScrollSpeedXLabel
-            // 
-            this.dragScrollSpeedXLabel.AutoSize = true;
-            this.dragScrollSpeedXLabel.Location = new System.Drawing.Point(14, 36);
-            this.dragScrollSpeedXLabel.Name = "dragScrollSpeedXLabel";
-            this.dragScrollSpeedXLabel.Size = new System.Drawing.Size(206, 13);
-            this.dragScrollSpeedXLabel.TabIndex = 0;
-            this.dragScrollSpeedXLabel.Text = "Horizontal speed:";
-            // 
-            // resourceNamesGroupBox
-            // 
-            this.resourceNamesGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			// 
+			// dragScrollSpeedYLabel
+			// 
+			this.dragScrollSpeedYLabel.AutoSize = true;
+			this.dragScrollSpeedYLabel.Location = new System.Drawing.Point(14, 73);
+			this.dragScrollSpeedYLabel.Name = "dragScrollSpeedYLabel";
+			this.dragScrollSpeedYLabel.Size = new System.Drawing.Size(77, 13);
+			this.dragScrollSpeedYLabel.TabIndex = 2;
+			this.dragScrollSpeedYLabel.Text = "Vertical speed:";
+			// 
+			// dragScrollSpeedXLabel
+			// 
+			this.dragScrollSpeedXLabel.AutoSize = true;
+			this.dragScrollSpeedXLabel.Location = new System.Drawing.Point(14, 36);
+			this.dragScrollSpeedXLabel.Name = "dragScrollSpeedXLabel";
+			this.dragScrollSpeedXLabel.Size = new System.Drawing.Size(89, 13);
+			this.dragScrollSpeedXLabel.TabIndex = 0;
+			this.dragScrollSpeedXLabel.Text = "Horizontal speed:";
+			// 
+			// resourceNamesGroupBox
+			// 
+			this.resourceNamesGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.resourceNamesGroupBox.Controls.Add(this.fullResourceNamesCheckBox);
-            this.resourceNamesGroupBox.Location = new System.Drawing.Point(12, 351);
-            this.resourceNamesGroupBox.Name = "resourceNamesGroupBox";
-            this.resourceNamesGroupBox.Size = new System.Drawing.Size(426, 53);
-            this.resourceNamesGroupBox.TabIndex = 12;
-            this.resourceNamesGroupBox.TabStop = false;
-            this.resourceNamesGroupBox.Text = "Resource Labels";
-            // 
-            // fullResourceNamesCheckBox
-            // 
-            this.fullResourceNamesCheckBox.AutoSize = true;
-            this.fullResourceNamesCheckBox.Location = new System.Drawing.Point(17, 22);
-            this.fullResourceNamesCheckBox.Name = "fullResourceNamesCheckBox";
-            this.fullResourceNamesCheckBox.Size = new System.Drawing.Size(121, 17);
-            this.fullResourceNamesCheckBox.TabIndex = 0;
-            this.fullResourceNamesCheckBox.Text = "Full resource names";
-            this.fullResourceNamesCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // PreferencesForm
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(450, 440);
-            this.Controls.Add(this.resourceNamesGroupBox);
-            this.Controls.Add(this.scrollSpeedGroupBox);
-            this.Controls.Add(this.mainGroupBox);
-            this.Controls.Add(this.bottomPanel);
-            this.Name = "PreferencesForm";
-            this.ShowIcon = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Preferences";
-            this.Load += new System.EventHandler(this.PreferencesFormLoad);
-            this.sidePanel.ResumeLayout(false);
-            this.bottomPanel.ResumeLayout(false);
-            this.searchPathsPanel.ResumeLayout(false);
-            this.mainGroupBox.ResumeLayout(false);
-            this.scrollSpeedGroupBox.ResumeLayout(false);
-            this.scrollSpeedGroupBox.PerformLayout();
-            this.resourceNamesGroupBox.ResumeLayout(false);
-            this.resourceNamesGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedYNumeric)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).EndInit();
-            this.ResumeLayout(false);
+			this.resourceNamesGroupBox.Controls.Add(this.featureReclaimAmountsCheckBox);
+			this.resourceNamesGroupBox.Controls.Add(this.fullResourceNamesCheckBox);
+			this.resourceNamesGroupBox.Location = new System.Drawing.Point(12, 352);
+			this.resourceNamesGroupBox.Name = "resourceNamesGroupBox";
+			this.resourceNamesGroupBox.Size = new System.Drawing.Size(426, 74);
+			this.resourceNamesGroupBox.TabIndex = 12;
+			this.resourceNamesGroupBox.TabStop = false;
+			this.resourceNamesGroupBox.Text = "Resource Labels";
+			// 
+			// featureReclaimAmountsCheckBox
+			// 
+			this.featureReclaimAmountsCheckBox.AutoSize = true;
+			this.featureReclaimAmountsCheckBox.Location = new System.Drawing.Point(17, 45);
+			this.featureReclaimAmountsCheckBox.Name = "featureReclaimAmountsCheckBox";
+			this.featureReclaimAmountsCheckBox.Size = new System.Drawing.Size(168, 17);
+			this.featureReclaimAmountsCheckBox.TabIndex = 1;
+			this.featureReclaimAmountsCheckBox.Text = "Show feature reclaim amounts";
+			this.featureReclaimAmountsCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// fullResourceNamesCheckBox
+			// 
+			this.fullResourceNamesCheckBox.AutoSize = true;
+			this.fullResourceNamesCheckBox.Location = new System.Drawing.Point(17, 22);
+			this.fullResourceNamesCheckBox.Name = "fullResourceNamesCheckBox";
+			this.fullResourceNamesCheckBox.Size = new System.Drawing.Size(120, 17);
+			this.fullResourceNamesCheckBox.TabIndex = 0;
+			this.fullResourceNamesCheckBox.Text = "Full resource names";
+			this.fullResourceNamesCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// PreferencesForm
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.ClientSize = new System.Drawing.Size(450, 466);
+			this.Controls.Add(this.resourceNamesGroupBox);
+			this.Controls.Add(this.scrollSpeedGroupBox);
+			this.Controls.Add(this.mainGroupBox);
+			this.Controls.Add(this.bottomPanel);
+			this.Name = "PreferencesForm";
+			this.ShowIcon = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.Text = "Preferences";
+			this.Load += new System.EventHandler(this.PreferencesFormLoad);
+			this.sidePanel.ResumeLayout(false);
+			this.bottomPanel.ResumeLayout(false);
+			this.searchPathsPanel.ResumeLayout(false);
+			this.mainGroupBox.ResumeLayout(false);
+			this.scrollSpeedGroupBox.ResumeLayout(false);
+			this.scrollSpeedGroupBox.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedYNumeric)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).EndInit();
+			this.resourceNamesGroupBox.ResumeLayout(false);
+			this.resourceNamesGroupBox.PerformLayout();
+			this.ResumeLayout(false);
 
         }
 
@@ -324,5 +337,6 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.NumericUpDown dragScrollSpeedXNumeric;
         private System.Windows.Forms.GroupBox resourceNamesGroupBox;
         private System.Windows.Forms.CheckBox fullResourceNamesCheckBox;
+        private System.Windows.Forms.CheckBox featureReclaimAmountsCheckBox;
     }
 }
