@@ -154,7 +154,7 @@ namespace Mappy.Models
         private string BuildLabel(Feature feature)
         {
             var baseLabel = this.BuildBaseLabel(feature);
-            return baseLabel + this.BuildReclaimLabel(feature);
+            return baseLabel + System.Environment.NewLine + this.BuildReclaimLabel(feature);
         }
 
         private string BuildBaseLabel(Feature feature)
