@@ -153,6 +153,12 @@ namespace Mappy.Models
 
         private string BuildLabel(Feature feature)
         {
+            var baseLabel = this.BuildBaseLabel(feature);
+            return baseLabel + this.BuildReclaimLabel(feature);
+        }
+
+        private string BuildBaseLabel(Feature feature)
+        {
             if (!MappySettings.Settings.FullResourceNames)
             {
                 return feature.Name;
@@ -164,6 +170,18 @@ namespace Mappy.Models
             }
 
             return $"{feature.ResourceFileName}: {feature.Name}";
+        }
+
+        private string BuildReclaimLabel(Feature feature)
+        {
+            if (!MappySettings.Settings.ShowFeatureReclaimAmounts)
+            {
+                return string.Empty;
+            }
+
+            return feature.ReclaimInfo.Match(
+                rec => $" E:{rec.EnergyValue}, M:{rec.MetalValue}",
+                () => string.Empty);
         }
 
         private void UpdateWorlds()
