@@ -1,4 +1,4 @@
-namespace Mappy.UI.Controls
+﻿namespace Mappy.UI.Controls
 {
     using System;
     using System.Collections.Generic;
@@ -60,6 +60,16 @@ namespace Mappy.UI.Controls
             c.SelectedIndex = newModel.SelectedIndex;
 
             c.EndUpdate();
+        }
+
+        private static string GetSelectedItemName(ListViewItem item)
+        {
+            if (item.Tag is string selectedItemName)
+            {
+                return selectedItemName;
+            }
+
+            return item.Text;
         }
 
         private void UpdateComboBox1(ComboBoxViewModel oldModel, ComboBoxViewModel newModel)
@@ -167,16 +177,6 @@ namespace Mappy.UI.Controls
             }
 
             view.ItemSelectionChanged += this.ListViewItemSelectionChanged;
-        }
-
-        private static string GetSelectedItemName(ListViewItem item)
-        {
-            if (item.Tag is string selectedItemName)
-            {
-                return selectedItemName;
-            }
-
-            return item.Text;
         }
     }
 }

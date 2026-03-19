@@ -8,6 +8,25 @@ namespace Mappy
     {
         private const int DefaultDragAutoScrollSpeed = 16;
 
+        /// <summary>
+        /// Gets or sets the main window state: 0 = Normal, 1 = Minimized, 2 = Maximized.
+        /// </summary>
+        public int WindowState { get; set; }
+
+        public int WindowLocationX { get; set; }
+
+        public int WindowLocationY { get; set; }
+
+        public int WindowSizeWidth { get; set; }
+
+        public int WindowSizeHeight { get; set; }
+
+        public int SidebarTabsWidth { get; set; }
+
+        public bool FullResourceNames { get; set; }
+
+        public bool ShowFeatureReclaimAmounts { get; set; }
+
         [XmlIgnore]
         public Color GridColor
         {
@@ -33,24 +52,5 @@ namespace Mappy
         {
             return this.DragAutoScrollSpeedY > 0 ? this.DragAutoScrollSpeedY : DefaultDragAutoScrollSpeed;
         }
-
-        /// <summary>
-        /// Gets or sets the main window state: 0 = Normal, 1 = Minimized, 2 = Maximized.
-        /// </summary>
-        public int WindowState { get; set; }
-
-        public int WindowLocationX { get; set; }
-
-        public int WindowLocationY { get; set; }
-
-        public int WindowSizeWidth { get; set; }
-
-        public int WindowSizeHeight { get; set; }
-
-        public int SidebarTabsWidth { get; set; }
-
-        public bool FullResourceNames { get; set; }
-
-        public bool ShowFeatureReclaimAmounts { get; set; }
     }
 }

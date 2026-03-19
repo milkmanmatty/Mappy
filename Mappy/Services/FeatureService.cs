@@ -135,6 +135,19 @@ namespace Mappy.Services
             return gaf;
         }
 
+        private static string GetResourceFileName(FeatureInfo info)
+        {
+            var candidate = !string.IsNullOrWhiteSpace(info.AnimFileName)
+                ? info.AnimFileName
+                : info.ObjectName;
+            if (string.IsNullOrWhiteSpace(candidate))
+            {
+                return string.Empty;
+            }
+
+            return Path.GetFileNameWithoutExtension(candidate);
+        }
+
         private IEnumerable<Feature> EnumerateFeaturesInternal(string world, string category)
         {
             var relevantFeatures = this.records
@@ -250,19 +263,6 @@ namespace Mappy.Services
         private void AddFeature(FeatureInfo f)
         {
             this.records[f.Name] = f;
-        }
-
-        private static string GetResourceFileName(FeatureInfo info)
-        {
-            var candidate = !string.IsNullOrWhiteSpace(info.AnimFileName)
-                ? info.AnimFileName
-                : info.ObjectName;
-            if (string.IsNullOrWhiteSpace(candidate))
-            {
-                return string.Empty;
-            }
-
-            return Path.GetFileNameWithoutExtension(candidate);
         }
     }
 }

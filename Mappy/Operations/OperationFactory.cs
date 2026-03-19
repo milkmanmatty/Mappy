@@ -2,10 +2,10 @@
 {
     using System;
     using System.Drawing;
-
     using Collections;
     using Data;
     using Models;
+    using Models.Enums;
     using SelectionModel;
 
     public static class OperationFactory
