@@ -668,6 +668,16 @@ namespace Mappy.Services
             this.model.Map.IfSome(map => map.AdjustHeightPoint(pointX, pointY, delta));
         }
 
+        public void SetHeightPoint(int pointX, int pointY, int value)
+        {
+            this.model.Map.IfSome(map => map.SetHeightPoint(pointX, pointY, value));
+        }
+
+        public void SetHeightBrushAtAnchor(int anchorX, int anchorY, int value, int cursorSize)
+        {
+            this.model.Map.IfSome(map => map.SetHeightBrushAtAnchor(anchorX, anchorY, value, cursorSize));
+        }
+
         public void FlushHeightBrush()
         {
             this.model.Map.IfSome(x => x.FlushHeightBrush());
@@ -676,6 +686,16 @@ namespace Mappy.Services
         public void SetHeightEditInterval(int interval)
         {
             this.model.HeightEditInterval = interval;
+        }
+
+        public void SetHeightEditMode(HeightEditMode mode)
+        {
+            this.model.HeightEditMode = mode;
+        }
+
+        public void SetHeightEditSetValue(int value)
+        {
+            this.model.HeightEditSetValue = value;
         }
 
         public void SetHeightEditCursorSize(int cursorSize)

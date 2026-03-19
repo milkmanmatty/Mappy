@@ -162,6 +162,7 @@
     <Compile Include="Models\ComboBoxViewModel.cs" />
     <Compile Include="Models\CoreModel.cs" />
     <Compile Include="Models\Enums\GUITab.cs" />
+    <Compile Include="Models\Enums\HeightEditMode.cs" />
     <Compile Include="Models\FeatureClipboardRecord.cs" />
     <Compile Include="Models\FeatureInstance.cs" />
     <Compile Include="Models\FeatureInstanceEventArgs.cs" />

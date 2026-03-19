@@ -38,6 +38,8 @@ namespace Mappy.Models
             this.MinimapVisible = model.PropertyAsObservable(x => x.MinimapVisible, nameof(model.MinimapVisible));
             this.SeaLevel = map.ObservePropertyOrDefault(x => x.SeaLevel, "SeaLevel", 0);
             this.HeightEditInterval = model.PropertyAsObservable(x => x.HeightEditInterval, nameof(model.HeightEditInterval));
+            this.HeightEditMode = model.PropertyAsObservable(x => x.HeightEditMode, nameof(model.HeightEditMode));
+            this.HeightEditSetValue = model.PropertyAsObservable(x => x.HeightEditSetValue, nameof(model.HeightEditSetValue));
             this.HeightEditCursorSize = model.PropertyAsObservable(x => x.HeightEditCursorSize, nameof(model.HeightEditCursorSize));
             this.VoidEditCursorSize = model.PropertyAsObservable(x => x.VoidEditCursorSize, nameof(model.VoidEditCursorSize));
 
@@ -188,6 +190,10 @@ namespace Mappy.Models
 
         public IObservable<int> HeightEditInterval { get; }
 
+        public IObservable<HeightEditMode> HeightEditMode { get; }
+
+        public IObservable<int> HeightEditSetValue { get; }
+
         public IObservable<int> HeightEditCursorSize { get; }
 
         public IObservable<int> VoidEditCursorSize { get; }
@@ -328,6 +334,16 @@ namespace Mappy.Models
         public void HeightEditIntervalChanged(int value)
         {
             this.dispatcher.SetHeightEditInterval(value);
+        }
+
+        public void HeightEditModeChanged(HeightEditMode mode)
+        {
+            this.dispatcher.SetHeightEditMode(mode);
+        }
+
+        public void HeightEditSetValueChanged(int value)
+        {
+            this.dispatcher.SetHeightEditSetValue(value);
         }
 
         public void HeightEditCursorSizeChanged(int value)

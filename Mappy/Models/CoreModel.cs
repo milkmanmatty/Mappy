@@ -29,6 +29,10 @@ namespace Mappy.Models
 
         private int heightEditInterval = 4;
 
+        private HeightEditMode heightEditMode = HeightEditMode.IncrementDecrement;
+
+        private int heightEditSetValue;
+
         private int heightEditCursorSize = 1;
 
         private int voidEditCursorSize = 1;
@@ -117,6 +121,18 @@ namespace Mappy.Models
         {
             get => this.heightEditInterval;
             set => this.SetField(ref this.heightEditInterval, Math.Max(1, value), nameof(this.HeightEditInterval));
+        }
+
+        public HeightEditMode HeightEditMode
+        {
+            get => this.heightEditMode;
+            set => this.SetField(ref this.heightEditMode, value, nameof(this.HeightEditMode));
+        }
+
+        public int HeightEditSetValue
+        {
+            get => this.heightEditSetValue;
+            set => this.SetField(ref this.heightEditSetValue, Util.Clamp(value, 0, 255), nameof(this.HeightEditSetValue));
         }
 
         public int HeightEditCursorSize

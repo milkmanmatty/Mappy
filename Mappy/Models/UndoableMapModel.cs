@@ -405,6 +405,77 @@ namespace Mappy.Models
             this.ApplyHeightBrushOperation(new HeightBrushOperation(grid, singleChange));
         }
 
+        public void SetHeightBrushAtAnchor(int anchorX, int anchorY, int value, int cursorSize)
+        {
+            var setValue = Util.Clamp(value, 0, 255);
+            var size = Math.Max(1, cursorSize);
+            var grid = this.model.Tile.HeightGrid;
+            var width = grid.Width;
+            var height = grid.Height;
+
+            if (anchorX < 0 || anchorY < 0 || anchorX >= width || anchorY >= height)
+            {
+                return;
+            }
+
+            if (size == 1)
+            {
+                this.SetHeightPoint(anchorX, anchorY, setValue);
+                return;
+            }
+
+            var endX = anchorX + 1;
+            var endY = anchorY + 1;
+            var startX = Math.Max(0, endX - size);
+            var startY = Math.Max(0, endY - size);
+            endX = Math.Min(width, endX);
+            endY = Math.Min(height, endY);
+
+            var changes = new List<HeightBrushOperation.HeightChange>();
+            for (var yy = startY; yy < endY; yy++)
+            {
+                for (var xx = startX; xx < endX; xx++)
+                {
+                    var idx = (yy * width) + xx;
+                    var oldValue = grid[idx];
+                    if (oldValue != setValue)
+                    {
+                        changes.Add(new HeightBrushOperation.HeightChange(idx, oldValue, setValue));
+                    }
+                }
+            }
+
+            if (changes.Count == 0)
+            {
+                return;
+            }
+
+            this.ApplyHeightBrushOperation(new HeightBrushOperation(grid, changes));
+        }
+
+        public void SetHeightPoint(int pointX, int pointY, int value)
+        {
+            var setValue = Util.Clamp(value, 0, 255);
+            var grid = this.model.Tile.HeightGrid;
+            if (pointX < 0 || pointY < 0 || pointX >= grid.Width || pointY >= grid.Height)
+            {
+                return;
+            }
+
+            var idx = (pointY * grid.Width) + pointX;
+            var oldValue = grid[idx];
+            if (oldValue == setValue)
+            {
+                return;
+            }
+
+            var singleChange = new List<HeightBrushOperation.HeightChange>
+            {
+                new HeightBrushOperation.HeightChange(idx, oldValue, setValue)
+            };
+            this.ApplyHeightBrushOperation(new HeightBrushOperation(grid, singleChange));
+        }
+
         public void FlushHeightBrush()
         {
             this.previousHeightBrushOpen = false;

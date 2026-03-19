@@ -8,6 +8,7 @@ namespace Mappy.UI.Forms
 
     using Mappy;
     using Mappy.Models;
+    using Mappy.Models.Enums;
     using Mappy.UI.Controls;
     using Mappy.Util;
 
@@ -86,6 +87,17 @@ namespace Mappy.UI.Forms
                 .Select(x => x.ToString(CultureInfo.CurrentCulture))
                 .Subscribe(x => this.seaLevelValueLabel.Text = x);
             model.HeightEditInterval.Subscribe(x => this.intervalNumericUpDown.Value = x);
+            model.HeightEditMode.Subscribe(
+                x =>
+                    {
+                        this.incrementDecrementHeightRadioButton.Checked = x == HeightEditMode.IncrementDecrement;
+                        this.setHeightRadioButton.Checked = x == HeightEditMode.Set;
+                        this.intervalLabel.Enabled = x == HeightEditMode.IncrementDecrement;
+                        this.intervalNumericUpDown.Enabled = x == HeightEditMode.IncrementDecrement;
+                        this.selectedHeightLabel.Enabled = x == HeightEditMode.Set;
+                        this.selectedHeightNumericUpDown.Enabled = x == HeightEditMode.Set;
+                    });
+            model.HeightEditSetValue.Subscribe(x => this.selectedHeightNumericUpDown.Value = x);
             model.HeightEditCursorSize.Subscribe(x => this.cursorSizeNumericUpDown.Value = x);
             model.VoidEditCursorSize.Subscribe(x => this.voidCursorSizeNumericUpDown.Value = x);
 
@@ -226,6 +238,36 @@ namespace Mappy.UI.Forms
         private void CursorSizeNumericUpDownValueChanged(object sender, EventArgs e)
         {
             this.model.HeightEditCursorSizeChanged((int)this.cursorSizeNumericUpDown.Value);
+        }
+
+        private void IncrementDecrementHeightRadioButtonCheckedChanged(object sender, EventArgs e)
+        {
+            if (this.model == null || !this.incrementDecrementHeightRadioButton.Checked)
+            {
+                return;
+            }
+
+            this.model.HeightEditModeChanged(HeightEditMode.IncrementDecrement);
+        }
+
+        private void SetHeightRadioButtonCheckedChanged(object sender, EventArgs e)
+        {
+            if (this.model == null || !this.setHeightRadioButton.Checked)
+            {
+                return;
+            }
+
+            this.model.HeightEditModeChanged(HeightEditMode.Set);
+        }
+
+        private void SelectedHeightNumericUpDownValueChanged(object sender, EventArgs e)
+        {
+            if (this.model == null)
+            {
+                return;
+            }
+
+            this.model.HeightEditSetValueChanged((int)this.selectedHeightNumericUpDown.Value);
         }
 
         private void VoidCursorSizeNumericUpDownValueChanged(object sender, EventArgs e)
