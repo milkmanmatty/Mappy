@@ -29,6 +29,7 @@ namespace Mappy.Models
             this.CanCopy = map.ObservePropertyOrDefault(x => x.CanCopy, nameof(UndoableMapModel.CanCopy), false);
             this.CanPaste = map.Select(x => x.IsSome);
             this.CanFill = map.ObservePropertyOrDefault(x => x.CanFill, nameof(UndoableMapModel.CanFill), false);
+            this.CanFlip = map.ObservePropertyOrDefault(x => x.CanFlip, nameof(UndoableMapModel.CanFlip), false);
             this.GridVisible = model.PropertyAsObservable(x => x.GridVisible, nameof(model.GridVisible));
             this.GridSize = model.PropertyAsObservable(x => x.GridSize, nameof(model.GridSize));
             this.HeightmapVisible = model.PropertyAsObservable(x => x.HeightmapVisible, nameof(model.HeightmapVisible));
@@ -169,6 +170,8 @@ namespace Mappy.Models
         public IObservable<bool> CanPaste { get; }
 
         public IObservable<bool> CanFill { get; }
+
+        public IObservable<bool> CanFlip { get; }
 
         public IObservable<bool> GridVisible { get; }
 
@@ -363,6 +366,16 @@ namespace Mappy.Models
         public void ResizeMapMenuItemClick()
         {
             this.dispatcher.ResizeMap();
+        }
+
+        public void FlipHorizontallyMenuItemClick()
+        {
+            this.dispatcher.FlipHorizontally();
+        }
+
+        public void FlipVerticallyMenuItemClick()
+        {
+            this.dispatcher.FlipVertically();
         }
 
         public void ImportMinimapMenuItemClick()

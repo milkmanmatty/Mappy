@@ -53,6 +53,8 @@ namespace Mappy.Models
 
         private bool canFill;
 
+        private bool canFlip;
+
         private Maybe<Point> mousePosition;
 
         private Maybe<Guid> hoveredFeature;
@@ -105,6 +107,12 @@ namespace Mappy.Models
         {
             get => this.canFill;
             private set => this.SetField(ref this.canFill, value, nameof(this.CanFill));
+        }
+
+        public bool CanFlip
+        {
+            get => this.canFlip;
+            private set => this.SetField(ref this.canFlip, value, nameof(this.CanFlip));
         }
 
         public string FilePath
@@ -706,6 +714,18 @@ namespace Mappy.Models
             }
         }
 
+        public void FlipSelectedTileHorizontally()
+        {
+            if (this.SelectedTile == null)
+            {
+                return;
+            }
+
+            var flipOp = OperationFactory.CreateFlipAreaOperation(this.FloatingTiles[this.SelectedTile.Value], FlipDirection.Horizontal);
+
+            this.undoManager.Execute(new CompositeOperation(flipOp));
+        }
+
         public void FillWithSelectedTile()
         {
             if (this.SelectedTile == null)
@@ -1155,6 +1175,11 @@ namespace Mappy.Models
             this.CanFill = this.SelectedTile.HasValue;
         }
 
+        private void UpdateCanFlip()
+        {
+            this.CanFlip = this.SelectedTile.HasValue && this.FloatingTiles[this.SelectedTile.Value] != null;
+        }
+
         private void UndoManagerOnIsMarkedChanged(object sender, EventArgs eventArgs)
         {
             this.OnPropertyChanged("IsMarked");
@@ -1180,6 +1205,7 @@ namespace Mappy.Models
                     this.UpdateCanCut();
                     this.UpdateCanCopy();
                     this.UpdateCanFill();
+                    this.UpdateCanFlip();
                     break;
             }
         }

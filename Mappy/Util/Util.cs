@@ -7,9 +7,8 @@ namespace Mappy.Util
     using System.Drawing.Imaging;
     using System.IO;
     using System.Linq;
-
+    using System.Reflection;
     using Geometry;
-
     using Mappy.Collections;
     using Mappy.Data;
     using Mappy.Models;
@@ -17,34 +16,10 @@ namespace Mappy.Util
     using Mappy.Properties;
     using Mappy.Services;
     using Mappy.Util.ImageSampling;
-
     using TAUtil.Gdi.Palette;
 
     public static class Util
     {
-        public static Bitmap ExportHeightmap(IGrid<int> heights)
-        {
-            var bmp = new Bitmap(heights.Width, heights.Height, PixelFormat.Format32bppArgb);
-            var data = bmp.LockBits(
-                new Rectangle(0, 0, bmp.Width, bmp.Height),
-                ImageLockMode.WriteOnly,
-                PixelFormat.Format32bppArgb);
-
-            unsafe
-            {
-                var pointer = (int*)data.Scan0;
-                var i = 0;
-                foreach (var h in heights)
-                {
-                    pointer[i++] = Color.FromArgb(h, h, h).ToArgb();
-                }
-            }
-
-            bmp.UnlockBits(data);
-
-            return bmp;
-        }
-
         public static HashSet<Bitmap> GetUsedTiles(IMapTile tile)
         {
             var set = new HashSet<Bitmap>();
@@ -608,31 +583,6 @@ namespace Mappy.Util
                 (int)Math.Round(offset.X),
                 (int)Math.Round(offset.Y),
                 b);
-        }
-
-        public static Grid<int> ReadHeightmap(Bitmap bmp)
-        {
-            var data = bmp.LockBits(
-                new Rectangle(0, 0, bmp.Width, bmp.Height),
-                ImageLockMode.ReadOnly,
-                PixelFormat.Format32bppArgb);
-
-            var grid = new Grid<int>(bmp.Width, bmp.Height);
-            var len = bmp.Width * bmp.Height;
-
-            unsafe
-            {
-                var ptr = (int*)data.Scan0;
-                for (var i = 0; i < len; i++)
-                {
-                    var c = Color.FromArgb(ptr[i]);
-                    grid[i] = c.R;
-                }
-            }
-
-            bmp.UnlockBits(data);
-
-            return grid;
         }
 
         public static int ComputeMidpointHeight(IGrid<int> grid, int x, int y)
