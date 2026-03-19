@@ -102,5 +102,21 @@ namespace Mappy.Operations
 
             return new CompositeOperation(addOp, clearBitmapOp, clearHeightOp);
         }
+
+        public static IReplayableOperation CreateFlipAreaOperation(Positioned<IMapTile> src, FlipDirection direction)
+        {
+            var height = src.Item.TileGrid.Height;
+            var width = src.Item.TileGrid.Width;
+
+            // copy the target area to a new tile
+            var refTile = new MapTile(width, height);
+            GridMethods.Copy(src.Item.TileGrid, refTile.TileGrid, 0, 0, 0, 0, width, height);
+            GridMethods.Copy(src.Item.HeightGrid, refTile.HeightGrid, 0, 0, 0, 0, width, height);
+
+            var flipBitmap = new FlipAreaOperation<Bitmap>(refTile.TileGrid, src.Item.TileGrid, 0, 0, 0, 0, width, height, direction);
+            var flipHeightmap = new FlipAreaOperation<int>(refTile.HeightGrid, src.Item.HeightGrid, 0, 0, 0, 0, width, height, direction);
+
+            return new CompositeOperation(flipBitmap, flipHeightmap);
+        }
     }
 }

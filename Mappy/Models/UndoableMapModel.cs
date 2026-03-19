@@ -714,6 +714,18 @@ namespace Mappy.Models
             }
         }
 
+        public void FlipSelectedTileHorizontally()
+        {
+            if (this.SelectedTile == null)
+            {
+                return;
+            }
+
+            var flipOp = OperationFactory.CreateFlipAreaOperation(this.FloatingTiles[this.SelectedTile.Value], FlipDirection.Horizontal);
+
+            this.undoManager.Execute(new CompositeOperation(flipOp));
+        }
+
         public void FillWithSelectedTile()
         {
             if (this.SelectedTile == null)
