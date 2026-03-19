@@ -7,44 +7,18 @@ namespace Mappy.Util
     using System.Drawing.Imaging;
     using System.IO;
     using System.Linq;
-
+    using Collections;
+    using Data;
     using Geometry;
-
-    using Hjg.Pngcs;
-    using Mappy.Collections;
-    using Mappy.Data;
-    using Mappy.Models;
-    using Mappy.Properties;
-    using Mappy.Services;
-    using Mappy.Util.ImageSampling;
-
+    using ImageSampling;
+    using Models;
+    using Models.Enums;
+    using Properties;
+    using Services;
     using TAUtil.Gdi.Palette;
 
     public static class Util
     {
-        public static Bitmap ExportHeightmap(IGrid<int> heights)
-        {
-            var bmp = new Bitmap(heights.Width, heights.Height, PixelFormat.Format32bppArgb);
-            var data = bmp.LockBits(
-                new Rectangle(0, 0, bmp.Width, bmp.Height),
-                ImageLockMode.WriteOnly,
-                PixelFormat.Format32bppArgb);
-
-            unsafe
-            {
-                var pointer = (int*)data.Scan0;
-                var i = 0;
-                foreach (var h in heights)
-                {
-                    pointer[i++] = Color.FromArgb(h, h, h).ToArgb();
-                }
-            }
-
-            bmp.UnlockBits(data);
-
-            return bmp;
-        }
-
         public static HashSet<Bitmap> GetUsedTiles(IMapTile tile)
         {
             var set = new HashSet<Bitmap>();
@@ -74,14 +48,51 @@ namespace Mappy.Util
                     new Vector3D((col * 16) + 0.5, (row * 16) + 0.5, height),
                     16.0,
                     16.0);
-                double distance;
-                if (rect.Intersect(ray, out distance))
+                if (rect.Intersect(ray, out _))
                 {
                     return new Point(col, row);
                 }
             }
 
             return null;
+        }
+
+        public static Point? ScreenToNearestHeightPointIndex(IGrid<int> heightmap, Point p)
+        {
+            var cell = ScreenToHeightIndex(heightmap, p);
+            if (!cell.HasValue)
+            {
+                return null;
+            }
+
+            Point? best = null;
+            var bestDist = int.MaxValue;
+            const int SearchRadius = 2;
+            for (var y = cell.Value.Y - SearchRadius; y <= cell.Value.Y + SearchRadius + 1; y++)
+            {
+                for (var x = cell.Value.X - SearchRadius; x <= cell.Value.X + SearchRadius + 1; x++)
+                {
+                    if (x < 0 || y < 0 || x >= heightmap.Width || y >= heightmap.Height)
+                    {
+                        continue;
+                    }
+
+                    var projected = new Point(
+                        x * 16,
+                        (y * 16) - (heightmap.Get(x, y) / 2));
+
+                    var dx = projected.X - p.X;
+                    var dy = projected.Y - p.Y;
+                    var dist = (dx * dx) + (dy * dy);
+                    if (dist < bestDist)
+                    {
+                        bestDist = dist;
+                        best = new Point(x, y);
+                    }
+                }
+            }
+
+            return best;
         }
 
         public static double Mod(double a, double p)
@@ -149,13 +160,6 @@ namespace Mappy.Util
             return mapping;
         }
 
-        public struct RenderMinimapArgs
-        {
-            public IReadOnlyMapModel MapModel { get; set; }
-
-            public FeatureService FeatureService { get; set; }
-        }
-
         public static BackgroundWorker RenderMinimapWorker()
         {
             var worker = new BackgroundWorker();
@@ -167,12 +171,6 @@ namespace Mappy.Util
                     RenderHighQualityMinimap(w, args);
                 };
             return worker;
-        }
-
-        public struct FeatureInfo
-        {
-            public Bitmap Image { get; set; }
-            public Point Location { get; set; }
         }
 
         public static IEnumerable<U> Choose<T, U>(this IEnumerable<T> coll, Func<T, Maybe<U>> f)
@@ -187,10 +185,10 @@ namespace Mappy.Util
                     args.FeatureService.TryGetFeature(f.FeatureName)
                         .Where(rec => rec.Permanent)
                         .Select(rec => new FeatureInfo
-                            {
-                                Image = rec.Image,
-                                Location = rec.GetDrawBounds(args.MapModel.Tile.HeightGrid, f.X, f.Y).Location
-                            }))
+                        {
+                            Image = rec.Image,
+                            Location = rec.GetDrawBounds(args.MapModel.Tile.HeightGrid, f.X, f.Y).Location
+                        }))
                 .ToList();
             featuresList.Sort((a, b) =>
             {
@@ -296,77 +294,6 @@ namespace Mappy.Util
             }
         }
 
-        private static Color3f Color3fFromColor(Color c)
-        {
-            return new Color3f
-            {
-                R = c.R / 255.0f,
-                G = c.G / 255.0f,
-                B = c.B / 255.0f,
-            };
-        }
-
-        private static Color ColorFromColor3f(Color3f c)
-        {
-            return Color.FromArgb((int)(c.R * 255.0f), (int)(c.G * 255.0f), (int)(c.B * 255.0f));
-        }
-
-        private static Maybe<Bitmap> BitmapFromColorEnumerable(IEnumerable<Color> input, int width, int height, Func<bool> shouldCancel, Action<int> reportProgress)
-        {
-            var bitmap = new Bitmap(width, height);
-            var data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-            try
-            {
-                unsafe
-                {
-                    var ptr = (int*)data.Scan0;
-                    var i = 0;
-                    foreach (var c in input)
-                    {
-                        if (shouldCancel())
-                        {
-                            return Maybe.None<Bitmap>();
-                        }
-
-                        ptr[i++] = c.ToArgb();
-                        reportProgress((i * 100) / (width * height));
-                    }
-                }
-            }
-            finally
-            {
-                bitmap.UnlockBits(data);
-            }
-
-            return Maybe.Some(bitmap);
-        }
-
-        private static void CopyColorRange(BitmapData data, int dataStartIndex, Color[] output, int outputStartIndex, int length)
-        {
-            for (var i = 0; i < length; ++i)
-            {
-                unsafe
-                {
-                    var ptr = (int*)data.Scan0;
-                    var color = Color.FromArgb(ptr[dataStartIndex + i]);
-                    if (color.A > 0)
-                    {
-                        output[outputStartIndex + i] = color;
-                    }
-                }
-            }
-        }
-
-        private static void CopyRow(BitmapData data, int rowNumber, int startX, int length, Color[] output, int startIndex)
-        {
-            CopyColorRange(data, (rowNumber * data.Width) + startX, output, startIndex, length);
-        }
-
-        private static void CopyRow(BitmapData data, int rowNumber, Color[] output, int startIndex)
-        {
-            CopyRow(data, rowNumber, 0, data.Width, output, startIndex);
-        }
-
         public static void RenderHighQualityMinimap(BackgroundWorker w, DoWorkEventArgs workArgs)
         {
             var args = (RenderMinimapArgs)workArgs.Argument;
@@ -439,54 +366,93 @@ namespace Mappy.Util
 
         public static bool WriteMapImage(Stream s, IGrid<Bitmap> map, Action<int> reportProgress, Func<bool> shouldCancel)
         {
-            using (var adapter = new NonTrimmedMapPixelImageAdapter(map))
+            var width = map.Width * 32;
+            var height = map.Height * 32;
+            var totalTiles = map.Width * map.Height;
+
+            using (var full = new Bitmap(width, height, PixelFormat.Format32bppArgb))
             {
-                return WritePixelImageAsPng(s, adapter, reportProgress, shouldCancel);
-            }
-        }
+                var targetData = full.LockBits(
+                    new Rectangle(0, 0, width, height),
+                    ImageLockMode.WriteOnly,
+                    PixelFormat.Format32bppArgb);
 
-        public static bool WritePixelImageAsPng(Stream s, IPixelImage img, Action<int> reportProgress, Func<bool> shouldCancel)
-        {
-            var imgInfo = new ImageInfo(img.Width, img.Height, 8, true);
-
-            var writer = new PngWriter(s, imgInfo);
-
-            for (var y = 0; y < img.Height; y++)
-            {
-                if (shouldCancel())
+                try
                 {
-                    return false;
+                    var tilesProcessed = 0;
+                    for (var tileY = 0; tileY < map.Height; tileY++)
+                    {
+                        for (var tileX = 0; tileX < map.Width; tileX++)
+                        {
+                            if (shouldCancel())
+                            {
+                                return false;
+                            }
+
+                            var tile = map.Get(tileX, tileY);
+                            var tileData = tile.LockBits(
+                                new Rectangle(0, 0, 32, 32),
+                                ImageLockMode.ReadOnly,
+                                PixelFormat.Format32bppArgb);
+
+                            try
+                            {
+                                unsafe
+                                {
+                                    var src = (byte*)tileData.Scan0;
+                                    var dst = (byte*)targetData.Scan0
+                                        + (targetData.Stride * (tileY * 32))
+                                        + (tileX * 32 * 4);
+                                    for (var row = 0; row < 32; row++)
+                                    {
+                                        Buffer.MemoryCopy(
+                                            src + (row * tileData.Stride),
+                                            dst + (row * targetData.Stride),
+                                            32 * 4,
+                                            32 * 4);
+                                    }
+                                }
+                            }
+                            finally
+                            {
+                                tile.UnlockBits(tileData);
+                            }
+
+                            tilesProcessed++;
+                            reportProgress((tilesProcessed * 100) / totalTiles);
+                        }
+                    }
+                }
+                finally
+                {
+                    full.UnlockBits(targetData);
                 }
 
-                var line = new ImageLine(imgInfo);
-                for (var x = 0; x < img.Width; x++)
-                {
-                    var c = img.GetPixel(x, y);
-                    var offset = x * 4;
-                    line.Scanline[offset] = c.R;
-                    line.Scanline[offset + 1] = c.G;
-                    line.Scanline[offset + 2] = c.B;
-                    line.Scanline[offset + 3] = c.A;
-                }
-
-                writer.WriteRow(line, y);
-
-                reportProgress((y * 100) / img.Height);
+                full.Save(s, ImageFormat.Png);
             }
-
-            writer.End();
 
             return true;
         }
 
-        public static Point ToPoint(GridCoordinates g)
+        public static GUITab MapTabNameToGUIType(string tabName)
         {
-            return new Point(g.X, g.Y);
-        }
-
-        public static GridCoordinates ToGridCoordinates(Point p)
-        {
-            return new GridCoordinates(p.X, p.Y);
+            switch (tabName)
+            {
+                case "sectionsTab":
+                    return GUITab.Sections;
+                case "featuresTab":
+                    return GUITab.Features;
+                case "attributesTab":
+                    return GUITab.Attributes;
+                case "startPositionsTab":
+                    return GUITab.Starts;
+                case "heightTab":
+                    return GUITab.Height;
+                case "voidTab":
+                    return GUITab.Void;
+                default:
+                    return GUITab.Other;
+            }
         }
 
         public static TValue GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue defaultValue)
@@ -532,31 +498,6 @@ namespace Mappy.Util
                 b);
         }
 
-        public static Grid<int> ReadHeightmap(Bitmap bmp)
-        {
-            var data = bmp.LockBits(
-                new Rectangle(0, 0, bmp.Width, bmp.Height),
-                ImageLockMode.ReadOnly,
-                PixelFormat.Format32bppArgb);
-
-            var grid = new Grid<int>(bmp.Width, bmp.Height);
-            var len = bmp.Width * bmp.Height;
-
-            unsafe
-            {
-                var ptr = (int*)data.Scan0;
-                for (var i = 0; i < len; i++)
-                {
-                    var c = Color.FromArgb(ptr[i]);
-                    grid[i] = c.R;
-                }
-            }
-
-            bmp.UnlockBits(data);
-
-            return grid;
-        }
-
         public static int ComputeMidpointHeight(IGrid<int> grid, int x, int y)
         {
             var topLeft = grid.Get(x, y);
@@ -565,6 +506,150 @@ namespace Mappy.Util
             var bottomRight = grid.Get(x + 1, y + 1);
 
             return (topLeft + topRight + bottomLeft + bottomRight) / 4;
+        }
+
+        public static Bitmap BitmapFromFile(string filename)
+        {
+            // It was discovered that when loading 8bpp PNG images
+            // via Image.FromStream, we crash with an OOM exception
+            // when trying to display them.
+            // Further to that, when we try to quantize Bitmap instances
+            // that use the 8bpp format internally, using say Quantization.ToTAPalette,
+            // these images can end up being made darker even if our code
+            // does not actually change the pixel values.
+            //
+            // These appear to be .NET Framework or GDI+ bugs.
+            //
+            // Passing the Bitmap straight into another Bitmap constructor
+            // causes it to get converted to the 32 bit ARGB format
+            // which does not have these issues.
+            using (var bmp = new Bitmap(filename))
+            {
+                return new Bitmap(bmp);
+            }
+        }
+
+        public static IEnumerable<Color3f> Resize(IEnumerable<Color3f> input, int width, int height, int newWidth, int newHeight)
+        {
+            using (var enumerator = input.GetEnumerator())
+            {
+                var nBuffer = new int[newWidth];
+                var rowBuffer = new Color3f[newWidth];
+                var currentResizedY = 0;
+
+                for (var y = 0; y < height; ++y)
+                {
+                    var resizedY = (int)(y * (newHeight / (float)height));
+                    if (resizedY != currentResizedY)
+                    {
+                        foreach (var c in rowBuffer)
+                        {
+                            yield return c;
+                        }
+
+                        Array.Clear(rowBuffer, 0, nBuffer.Length);
+                        Array.Clear(nBuffer, 0, nBuffer.Length);
+                        currentResizedY = resizedY;
+                    }
+
+                    for (var x = 0; x < width; ++x)
+                    {
+                        var resizedX = (int)(x * (newWidth / (float)width));
+                        if (!enumerator.MoveNext())
+                        {
+                            throw new Exception("Enumerator contained too few elements");
+                        }
+
+                        rowBuffer[resizedX] = CombineAverage(rowBuffer[resizedX], enumerator.Current, ++nBuffer[resizedX]);
+                    }
+                }
+
+                foreach (var c in rowBuffer)
+                {
+                    yield return c;
+                }
+            }
+        }
+
+        private static Color3f CombineAverage(Color3f acc, Color3f val, int n)
+        {
+            return new Color3f
+            {
+                R = acc.R + ((val.R - acc.R) / n),
+                G = acc.G + ((val.G - acc.G) / n),
+                B = acc.B + ((val.B - acc.B) / n),
+            };
+        }
+
+        private static Color3f Color3fFromColor(Color c)
+        {
+            return new Color3f
+            {
+                R = c.R / 255.0f,
+                G = c.G / 255.0f,
+                B = c.B / 255.0f,
+            };
+        }
+
+        private static Color ColorFromColor3f(Color3f c)
+        {
+            return Color.FromArgb((int)(c.R * 255.0f), (int)(c.G * 255.0f), (int)(c.B * 255.0f));
+        }
+
+        private static Maybe<Bitmap> BitmapFromColorEnumerable(IEnumerable<Color> input, int width, int height, Func<bool> shouldCancel, Action<int> reportProgress)
+        {
+            var bitmap = new Bitmap(width, height);
+            var data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+            try
+            {
+                unsafe
+                {
+                    var ptr = (int*)data.Scan0;
+                    var i = 0;
+                    foreach (var c in input)
+                    {
+                        if (shouldCancel())
+                        {
+                            return Maybe.None<Bitmap>();
+                        }
+
+                        ptr[i++] = c.ToArgb();
+                        reportProgress((i * 100) / (width * height));
+                    }
+                }
+            }
+            finally
+            {
+                bitmap.UnlockBits(data);
+            }
+
+            return Maybe.Some(bitmap);
+        }
+
+        private static void CopyColorRange(BitmapData data, int dataStartIndex, Color[] output, int outputStartIndex, int length)
+        {
+            for (var i = 0; i < length; ++i)
+            {
+                unsafe
+                {
+                    var ptr = (int*)data.Scan0;
+                    var color = Color.FromArgb(ptr[dataStartIndex + i]);
+                    if (color.A > 0)
+                    {
+                        output[outputStartIndex + i] = color;
+                    }
+                }
+            }
+        }
+
+        private static void CopyRow(BitmapData data, int rowNumber, int startX, int length, Color[] output, int startIndex)
+        {
+            CopyColorRange(data, (rowNumber * data.Width) + startX, output, startIndex, length);
+        }
+
+        private static void CopyRow(BitmapData data, int rowNumber, Color[] output, int startIndex)
+        {
+            CopyRow(data, rowNumber, 0, data.Width, output, startIndex);
         }
 
         private static Rectangle2D ComputeBoundingBox(IEnumerable<Line2D> lines)
@@ -632,25 +717,18 @@ namespace Mappy.Util
                 ProjectPoint(line.End));
         }
 
-        public static Bitmap BitmapFromFile(string filename)
+        public struct RenderMinimapArgs
         {
-            // It was discovered that when loading 8bpp PNG images
-            // via Image.FromStream, we crash with an OOM exception
-            // when trying to display them.
-            // Further to that, when we try to quantize Bitmap instances
-            // that use the 8bpp format internally, using say Quantization.ToTAPalette,
-            // these images can end up being made darker even if our code
-            // does not actually change the pixel values.
-            //
-            // These appear to be .NET Framework or GDI+ bugs.
-            //
-            // Passing the Bitmap straight into another Bitmap constructor
-            // causes it to get converted to the 32 bit ARGB format
-            // which does not have these issues.
-            using (var bmp = new Bitmap(filename))
-            {
-                return new Bitmap(bmp);
-            }
+            public IReadOnlyMapModel MapModel { get; set; }
+
+            public FeatureService FeatureService { get; set; }
+        }
+
+        public struct FeatureInfo
+        {
+            public Bitmap Image { get; set; }
+
+            public Point Location { get; set; }
         }
 
         public struct Color3f
@@ -662,58 +740,6 @@ namespace Mappy.Util
             public float G { get; set; }
 
             public float B { get; set; }
-        }
-
-        private static Color3f CombineAverage(Color3f acc, Color3f val, int n)
-        {
-            return new Color3f
-            {
-                R = acc.R + ((val.R - acc.R) / n),
-                G = acc.G + ((val.G - acc.G) / n),
-                B = acc.B + ((val.B - acc.B) / n),
-            };
-        }
-
-        public static IEnumerable<Color3f> Resize(IEnumerable<Color3f> input, int width, int height, int newWidth, int newHeight)
-        {
-            using (var enumerator = input.GetEnumerator())
-            {
-                var nBuffer = new int[newWidth];
-                var rowBuffer = new Color3f[newWidth];
-                var currentResizedY = 0;
-
-                for (var y = 0; y < height; ++y)
-                {
-                    var resizedY = (int)(y * (newHeight / (float)height));
-                    if (resizedY != currentResizedY)
-                    {
-                        foreach (var c in rowBuffer)
-                        {
-                            yield return c;
-                        }
-
-                        Array.Clear(rowBuffer, 0, nBuffer.Length);
-                        Array.Clear(nBuffer, 0, nBuffer.Length);
-                        currentResizedY = resizedY;
-                    }
-
-                    for (var x = 0; x < width; ++x)
-                    {
-                        var resizedX = (int)(x * (newWidth / (float)width));
-                        if (!enumerator.MoveNext())
-                        {
-                            throw new Exception("Enumerator contained too few elements");
-                        }
-
-                        rowBuffer[resizedX] = CombineAverage(rowBuffer[resizedX], enumerator.Current, ++nBuffer[resizedX]);
-                    }
-                }
-
-                foreach (var c in rowBuffer)
-                {
-                    yield return c;
-                }
-            }
         }
     }
 }

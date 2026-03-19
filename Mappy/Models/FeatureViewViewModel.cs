@@ -1,4 +1,4 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System;
     using System.Collections.Generic;
@@ -7,8 +7,8 @@
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
 
-    using Mappy.Data;
-    using Mappy.Services;
+    using Data;
+    using Services;
 
     public sealed class FeatureViewViewModel : ISectionViewViewModel, IDisposable
     {
@@ -27,7 +27,9 @@
 
         private readonly FeatureService featureService;
 
-        public FeatureViewViewModel(FeatureService featureService)
+        private readonly Dispatcher dispatcher;
+
+        public FeatureViewViewModel(FeatureService featureService, Dispatcher dispatcher)
         {
             featureService.FeaturesChanged += this.OnFeaturesChanged;
 
@@ -58,6 +60,7 @@
                 .Subscribe(_ => this.UpdateFeatures());
 
             this.featureService = featureService;
+            this.dispatcher = dispatcher;
         }
 
         public IObservable<ComboBoxViewModel> ComboBox1Model => this.worlds;
@@ -74,6 +77,11 @@
         public void SelectComboBox2Item(int index)
         {
             this.selectCategoryEvent.OnNext(index);
+        }
+
+        public void SetSelectedItem(string featureName)
+        {
+            this.dispatcher.SetSelectedFeature(featureName);
         }
 
         public void Dispose()
@@ -140,15 +148,48 @@
 
         private ListViewItem ToItem(Feature s)
         {
-            return new ListViewItem(s.Name, this.GetRescaledImage(s.Name, s.Image), s.Name);
+            return new ListViewItem(this.BuildLabel(s), this.GetRescaledImage(s.Name, s.Image), s.Name);
+        }
+
+        private string BuildLabel(Feature feature)
+        {
+            var baseLabel = this.BuildBaseLabel(feature);
+            return baseLabel + System.Environment.NewLine + this.BuildReclaimLabel(feature);
+        }
+
+        private string BuildBaseLabel(Feature feature)
+        {
+            if (!MappySettings.Settings.FullResourceNames)
+            {
+                return feature.Name;
+            }
+
+            if (string.IsNullOrWhiteSpace(feature.ResourceFileName))
+            {
+                return feature.Name;
+            }
+
+            return $"{feature.ResourceFileName}: {feature.Name}";
+        }
+
+        private string BuildReclaimLabel(Feature feature)
+        {
+            if (!MappySettings.Settings.ShowFeatureReclaimAmounts)
+            {
+                return string.Empty;
+            }
+
+            return feature.ReclaimInfo.Match(
+                rec => $" E:{rec.EnergyValue}, M:{rec.MetalValue}",
+                () => string.Empty);
         }
 
         private void UpdateWorlds()
         {
             this.worldsInvalidated.OnNext(false);
 
-            var worlds = this.featureService.EnumerateWorlds();
-            var worldsModel = new ComboBoxViewModel(worlds.ToList());
+            var worldsEnumer = this.featureService.EnumerateWorlds();
+            var worldsModel = new ComboBoxViewModel(worldsEnumer.ToList());
             this.worlds.OnNext(worldsModel);
         }
 
@@ -157,8 +198,8 @@
             this.categoriesInvalidated.OnNext(false);
 
             var world = this.worlds.Value.SelectedItem;
-            var categories = this.featureService.EnumerateCategories(world);
-            var categoriesModel = new ComboBoxViewModel(categories.ToList());
+            var cats = this.featureService.EnumerateCategories(world);
+            var categoriesModel = new ComboBoxViewModel(cats.ToList());
             this.categories.OnNext(categoriesModel);
         }
 
@@ -168,8 +209,8 @@
 
             var world = this.worlds.Value.SelectedItem;
             var category = this.categories.Value.SelectedItem;
-            var features = this.featureService.EnumerateFeatures(world, category);
-            this.features.OnNext(features.Select(this.ToItem).ToList());
+            var feats = this.featureService.EnumerateFeatures(world, category);
+            this.features.OnNext(feats.Select(this.ToItem).ToList());
         }
 
         private void OnFeaturesChanged(object sender, EventArgs e)

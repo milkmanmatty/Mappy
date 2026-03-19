@@ -1,4 +1,4 @@
-﻿namespace Mappy.Data
+namespace Mappy.Data
 {
     using System.Drawing;
 
@@ -19,6 +19,8 @@
         public string ObjectName { get; set; }
 
         public Maybe<Feature.ReclaimInfoStruct> ReclaimInfo { get; set; }
+
+        public int MetalSpotValue { get; set; }
 
         public bool Permanent { get; set; }
     }

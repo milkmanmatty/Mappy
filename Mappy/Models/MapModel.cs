@@ -6,9 +6,9 @@
     using System.ComponentModel;
     using System.Drawing;
 
-    using Mappy.Collections;
-    using Mappy.Data;
-    using Mappy.Util;
+    using Collections;
+    using Data;
+    using Util;
 
     public class MapModel : Notifier, ISelectionModel
     {
@@ -167,7 +167,7 @@
         /// <summary>
         /// <see cref="IMapModel.UpdateFeatureInstance"/>
         /// </summary>
-        public void UpdateFeatureInstance(FeatureInstance instance)
+        public void UpdateFeatureInstance(FeatureInstance instance, ISet<Guid> featureIgnoreList = null)
         {
             if (!this.featureInstances.ContainsKey(instance.Id))
             {
@@ -175,7 +175,7 @@
             }
 
             this.RemoveFeatureInstanceInternal(instance.Id);
-            this.AddFeatureInstanceInternal(instance);
+            this.AddFeatureInstanceInternal(instance, featureIgnoreList);
 
             var arg = new FeatureInstanceEventArgs(
                 FeatureInstanceEventArgs.ActionType.Move,
@@ -229,11 +229,11 @@
                 throw new InvalidOperationException("No tile selected.");
             }
 
-            var tile = this.FloatingTiles[this.SelectedTile.Value];
-            var loc = tile.Location;
+            var floatTile = this.FloatingTiles[this.SelectedTile.Value];
+            var loc = floatTile.Location;
             loc.X += x;
             loc.Y += y;
-            tile.Location = loc;
+            floatTile.Location = loc;
         }
 
         public void DeleteSelectedTile()
@@ -330,16 +330,19 @@
             this.DeselectTile();
         }
 
-        private void AddFeatureInstanceInternal(FeatureInstance instance)
+        private void AddFeatureInstanceInternal(FeatureInstance instance, ISet<Guid> featureIgnoreList = null)
         {
             if (this.featureInstances.ContainsKey(instance.Id))
             {
                 throw new ArgumentException("A FeatureInstance with the given ID already exists.");
             }
 
-            if (this.featureLocationIndex.HasValue(instance.X, instance.Y))
+            if (this.featureLocationIndex.TryGetValue(instance.X, instance.Y, out FeatureInstance val))
             {
-                throw new ArgumentException("A FeatureInstance is already present at the target location.");
+                if (featureIgnoreList != null && !featureIgnoreList.Contains(val.Id))
+                {
+                    throw new ArgumentException("A FeatureInstance is already present at the target location.");
+                }
             }
 
             this.featureInstances[instance.Id] = instance;
@@ -434,10 +437,10 @@
 
         private void MergeTile(int index)
         {
-            var tile = this.FloatingTiles[index];
-            var src = tile.Item;
-            var x = tile.Location.X;
-            var y = tile.Location.Y;
+            var floatTile = this.FloatingTiles[index];
+            var src = floatTile.Item;
+            var x = floatTile.Location.X;
+            var y = floatTile.Location.Y;
 
             var dst = this.Tile;
 

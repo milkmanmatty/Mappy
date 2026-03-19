@@ -1,7 +1,5 @@
 ﻿namespace Mappy.IO.Gaf
 {
-    using System;
-
     /// <summary>
     /// Data structure representing an individual frame
     /// in a GAF animation.

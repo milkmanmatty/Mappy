@@ -1,7 +1,8 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System;
     using System.Drawing;
+    using Enums;
 
     public interface IMainFormViewModel
     {
@@ -35,11 +36,15 @@
 
         IObservable<bool> CanFill { get; }
 
+        IObservable<bool> CanFlip { get; }
+
         IObservable<bool> CanGenerateMinimap { get; }
 
         IObservable<bool> CanGenerateMinimapHighQuality { get; }
 
         IObservable<bool> CanOpenAttributes { get; }
+
+        IObservable<bool> CanResizeMap { get; }
 
         IObservable<bool> GridVisible { get; }
 
@@ -59,9 +64,19 @@
 
         IObservable<int> SeaLevel { get; }
 
+        IObservable<int> HeightEditInterval { get; }
+
+        IObservable<int> HeightEditCursorSize { get; }
+
+        IObservable<int> VoidEditCursorSize { get; }
+
         IObservable<string> TitleText { get; }
 
         IObservable<string> MousePositionText { get; }
+
+        IObservable<string> HeightText { get; }
+
+        IObservable<string> VoidText { get; }
 
         IObservable<string> HoveredFeatureText { get; }
 
@@ -115,11 +130,23 @@
 
         void SeaLevelTrackBarMouseUp();
 
+        void HeightEditIntervalChanged(int value);
+
+        void HeightEditCursorSizeChanged(int value);
+
+        void VoidEditCursorSizeChanged(int value);
+
         void CopyMenuItemClick();
 
         void CutMenuItemClick();
 
         void FillMenuItemClick();
+
+        void ResizeMapMenuItemClick();
+
+        void FlipHorizontallyMenuItemClick();
+
+        void FlipVerticallyMenuItemClick();
 
         void PasteMenuItemClick();
 
@@ -136,5 +163,9 @@
         void ImportCustomSectionMenuItemClick();
 
         void Load();
+
+        void ChangeSelectedTabType(GUITab tabType);
+
+        void CenterViewOnStartPosition(int index);
     }
 }

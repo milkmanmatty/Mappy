@@ -1,14 +1,14 @@
-﻿namespace Mappy
+namespace Mappy
 {
     using System;
     using System.IO;
     using System.Windows.Forms;
 
-    using Mappy.IO;
-    using Mappy.Models;
-    using Mappy.Services;
-    using Mappy.UI.Forms;
-    using Mappy.Util;
+    using IO;
+    using Models;
+    using Services;
+    using UI.Forms;
+    using Util;
 
     public static class Program
     {
@@ -19,13 +19,19 @@
             "Mappy",
             "Crashes");
 
+        private static readonly string[] SupportedMapExtensions =
+        {
+            ".hpi", ".ufo", ".ccx", ".gpf", ".gp3", ".tnt", ".sct"
+        };
+
         private static Bugsnag.Client bugsnagClient;
 
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        /// <param name="args">Optional: path to a map file (.tnt, .sct) or archive (.hpi, .ufo, .ccx, .gpf, .gp3) to open on startup.</param>
         [STAThread]
-        public static void Main()
+        public static void Main(string[] args)
         {
             bugsnagClient = new Bugsnag.Client(new Bugsnag.Configuration
             {
@@ -49,12 +55,15 @@
             var tileCache = new BitmapCache();
             var dialogService = new DialogService(mainForm);
             var featureService = new FeatureService();
+            FeatureInstance.FeatureService = featureService;
+
             var sectionsService = new SectionService();
             var sectionFactory = new SectionFactory(tileCache);
             var sectionBitmapService = new SectionBitmapService(sectionFactory);
             var mapModelFactory = new MapModelFactory(tileCache);
             var mapLoadingService = new MapLoadingService(sectionFactory, mapModelFactory);
             var imageImportingService = new ImageImportService(tileCache);
+            var imageExportingService = new ImageExportService();
             var model = new CoreModel();
             var dispatcher = new Dispatcher(
                 model,
@@ -64,17 +73,30 @@
                 featureService,
                 mapLoadingService,
                 imageImportingService,
-                tileCache);
+                tileCache,
+                imageExportingService);
             mainForm.SetModel(new MainFormViewModel(model, dispatcher, featureService));
 
             mainForm.SectionView.SetModel(new SectionViewViewModel(sectionsService));
-            mainForm.FeatureView.SetModel(new FeatureViewViewModel(featureService));
+            mainForm.FeatureView.SetModel(new FeatureViewViewModel(featureService, dispatcher));
 
             mainForm.MapViewPanel.SetModel(new MapViewViewModel(model, dispatcher, featureService));
 
             var minimapForm = new MinimapForm();
             minimapForm.Owner = mainForm;
             minimapForm.SetModel(new MinimapFormViewModel(model, dispatcher));
+
+            var pathToOpen = GetCommandLinePathToOpen(args);
+            if (pathToOpen != null)
+            {
+                EventHandler openPathHandler = null;
+                openPathHandler = (s, e) =>
+                {
+                    mainForm.Shown -= openPathHandler;
+                    dispatcher.OpenFromDragDrop(pathToOpen);
+                };
+                mainForm.Shown += openPathHandler;
+            }
 
             Application.Run(mainForm);
         }
@@ -117,7 +139,7 @@
                 MessageBox.Show(
                     null,
                     msg,
-                    "Fatal Error",
+                    @"Fatal Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 
@@ -133,7 +155,7 @@
 
             var result = MessageBox.Show(
                 errString,
-                "Fatal Error",
+                @"Fatal Error",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Error);
             if (result == DialogResult.Yes)
@@ -143,11 +165,41 @@
                 // Unfortunately there's no way to know whether this succeeded.
                 bugsnagClient.Notify(ex);
                 MessageBox.Show(
-                    "Attempted to send the report. Thanks for your help to improve Mappy.",
-                    "Report Sent",
+                    @"Attempted to send the report. Thanks for your help to improve Mappy.",
+                    @"Report Sent",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
+        }
+
+        private static string GetCommandLinePathToOpen(string[] args)
+        {
+            if (args == null || args.Length == 0)
+            {
+                return null;
+            }
+
+            var path = args[0].Trim();
+            if (string.IsNullOrEmpty(path))
+            {
+                return null;
+            }
+
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            var ext = (Path.GetExtension(path) ?? string.Empty).ToLowerInvariant();
+            foreach (var supported in SupportedMapExtensions)
+            {
+                if (ext == supported)
+                {
+                    return path;
+                }
+            }
+
+            return null;
         }
 
         private static void UnhandledException(object sender, UnhandledExceptionEventArgs e)

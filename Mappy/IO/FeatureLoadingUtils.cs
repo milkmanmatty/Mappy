@@ -1,12 +1,11 @@
-﻿namespace Mappy.IO
+namespace Mappy.IO
 {
     using System;
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
 
-    using Mappy.Data;
-    using Mappy.Util;
+    using Data;
 
     public static class FeatureLoadingUtils
     {
@@ -54,6 +53,7 @@
                         Category = record.Category,
 
                         ReclaimInfo = reclaimInfo,
+                        MetalSpotValue = record.MetalSpotValue,
                         Permanent = record.Permanent,
 
                         AnimFileName = record.AnimFileName,

@@ -1,7 +1,7 @@
 ﻿namespace Mappy.Operations
 {
-    using Mappy.Data;
-    using Mappy.Models;
+    using Data;
+    using Models;
 
     public class AddFloatingTileOperation : IReplayableOperation
     {

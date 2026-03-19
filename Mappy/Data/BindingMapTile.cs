@@ -3,7 +3,7 @@ namespace Mappy.Data
     using System;
     using System.Drawing;
 
-    using Mappy.Collections;
+    using Collections;
 
     /// <summary>
     /// Wrapper for IMapTile instances that provides events

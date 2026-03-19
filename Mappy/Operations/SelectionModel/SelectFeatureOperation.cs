@@ -2,7 +2,7 @@
 {
     using System;
 
-    using Mappy.Models;
+    using Models;
 
     public class SelectFeatureOperation : IReplayableOperation
     {

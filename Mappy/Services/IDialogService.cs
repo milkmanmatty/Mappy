@@ -1,11 +1,11 @@
-﻿namespace Mappy.Services
+namespace Mappy.Services
 {
     using System.Collections.Generic;
     using System.Drawing;
     using System.Windows.Forms;
 
-    using Mappy.Models;
-    using Mappy.Views;
+    using Models;
+    using Views;
 
     public interface IDialogService
     {
@@ -27,9 +27,11 @@
 
         SectionImportPaths AskUserToChooseSectionImportPaths();
 
-        void CapturePreferences();
+        bool CapturePreferences();
 
         Size AskUserNewMapSize();
+
+        Size AskUserResizeMapSize(int currentWidth, int currentHeight);
 
         Color? AskUserGridColor(Color previousColor);
 

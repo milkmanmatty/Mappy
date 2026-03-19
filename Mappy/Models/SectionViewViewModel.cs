@@ -1,12 +1,13 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Reactive.Subjects;
 
-    using Mappy.Data;
-    using Mappy.Services;
+    using Data;
+    using Services;
 
     public sealed class SectionViewViewModel : ISectionViewViewModel, IDisposable
     {
@@ -62,6 +63,11 @@
             this.selectCategoryEvent.OnNext(index);
         }
 
+        public void SetSelectedItem(string sectionName)
+        {
+            // this.dispatcher.SetSelectedSection(sectionName);
+        }
+
         public void Dispose()
         {
             this.worlds.Dispose();
@@ -71,16 +77,33 @@
             this.selectCategoryEvent.Dispose();
         }
 
+        private static string BuildLabel(Section section)
+        {
+            var resourceLabel = $"{section.Name} ({section.PixelWidth}x{section.PixelHeight})";
+            if (!MappySettings.Settings.FullResourceNames)
+            {
+                return resourceLabel;
+            }
+
+            var fileName = Path.GetFileNameWithoutExtension(section.SctFileName);
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                return resourceLabel;
+            }
+
+            return $"{fileName}: {resourceLabel}";
+        }
+
         private static ListViewItem ToItem(int id, Section s)
         {
-            var label = $"{s.Name} ({s.PixelWidth}x{s.PixelHeight})";
+            var label = BuildLabel(s);
             return new ListViewItem(label, s.Minimap, id.ToString());
         }
 
         private void UpdateWorlds()
         {
-            var worlds = this.sectionService.EnumerateWorlds();
-            var worldsModel = new ComboBoxViewModel(worlds.ToList());
+            var worldsEnumer = this.sectionService.EnumerateWorlds();
+            var worldsModel = new ComboBoxViewModel(worldsEnumer.ToList());
             this.worlds.OnNext(worldsModel);
         }
 
@@ -88,8 +111,8 @@
         {
             var world = this.worlds.Value.SelectedItem;
 
-            var categories = this.sectionService.EnumerateCategories(world);
-            var categoriesModel = new ComboBoxViewModel(categories.ToList());
+            var cats = this.sectionService.EnumerateCategories(world);
+            var categoriesModel = new ComboBoxViewModel(cats.ToList());
             this.categories.OnNext(categoriesModel);
         }
 
@@ -97,8 +120,8 @@
         {
             var world = this.worlds.Value.SelectedItem;
             var category = this.categories.Value.SelectedItem;
-            var sections = this.sectionService.EnumerateSections(world, category);
-            this.sections.OnNext(sections.Select(x => ToItem(x.Key, x.Value)).ToList());
+            var sects = this.sectionService.EnumerateSections(world, category);
+            this.sections.OnNext(sects.Select(x => ToItem(x.Key, x.Value)).ToList());
         }
 
         private void OnSectionsChanged(object sender, EventArgs e)

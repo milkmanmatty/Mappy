@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mappy</RootNamespace>
     <AssemblyName>Mappy</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -154,12 +154,15 @@
     <Compile Include="IO\SectionLoadingUtils.cs" />
     <Compile Include="MappySettings.cs" />
     <Compile Include="Maybe.cs" />
+    <Compile Include="Models\BandboxBehaviours\FreeBandboxBehaviour.cs" />
     <Compile Include="Models\BandboxBehaviours\IBandboxBehaviour.cs" />
     <Compile Include="Models\BandboxBehaviours\IBandboxModel.cs" />
     <Compile Include="Models\BandboxBehaviours\TileBandboxBehaviour.cs" />
     <Compile Include="Models\BandboxMode.cs" />
     <Compile Include="Models\ComboBoxViewModel.cs" />
     <Compile Include="Models\CoreModel.cs" />
+    <Compile Include="Models\Enums\FlipDirection.cs" />
+    <Compile Include="Models\Enums\GUITab.cs" />
     <Compile Include="Models\FeatureClipboardRecord.cs" />
     <Compile Include="Models\FeatureInstance.cs" />
     <Compile Include="Models\FeatureInstanceEventArgs.cs" />
@@ -186,6 +189,9 @@
     <Compile Include="Operations\ChangeStartPositionOperation.cs" />
     <Compile Include="Operations\BatchMoveFeatureOperation.cs" />
     <Compile Include="Operations\FillAreaOperation.cs" />
+    <Compile Include="Operations\FlipAreaOperation.cs" />
+    <Compile Include="Operations\HeightBrushOperation.cs" />
+    <Compile Include="Operations\VoidBrushOperation.cs" />
     <Compile Include="Operations\MoveFeatureOperation.cs" />
     <Compile Include="Operations\RemoveFeatureOperation.cs" />
     <Compile Include="Operations\RemoveStartPositionOperation.cs" />
@@ -257,6 +263,7 @@
     <Compile Include="UI\Drawables\AbstractDrawable.cs" />
     <Compile Include="UI\Drawables\DrawableBandbox.cs" />
     <Compile Include="UI\Drawables\DrawableBitmap.cs" />
+    <Compile Include="UI\Drawables\DrawablePolyline.cs" />
     <Compile Include="UI\Drawables\DrawableTile.cs" />
     <Compile Include="UI\Drawables\IDrawable.cs" />
     <Compile Include="UI\Forms\AboutForm.cs">
@@ -307,19 +314,21 @@
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Painters\HeightGridPainter.cs" />
+    <Compile Include="UI\Painters\HeightGridColorScheme.cs" />
     <Compile Include="UI\Painters\GridPainter.cs" />
     <Compile Include="UI\Painters\VoidPainter.cs" />
     <Compile Include="UI\Tags\FeatureTag.cs" />
     <Compile Include="UI\Tags\IMapItemTag.cs" />
     <Compile Include="UI\Tags\SectionTag.cs" />
     <Compile Include="UI\Tags\StartPositionTag.cs" />
+    <Compile Include="Util\ImageExportService.cs" />
     <Compile Include="Util\ImageImportService.cs" />
     <Compile Include="Util\ImageSampling\BilinearWrapper.cs" />
     <Compile Include="Util\ImageSampling\IPixelImage.cs" />
     <Compile Include="Util\ImageSampling\NearestNeighbourPaletteWrapper.cs" />
-    <Compile Include="Util\ImageSampling\NonTrimmedMapPixelImageAdapter.cs" />
     <Compile Include="Util\ImageSampling\MapPixelImageAdapter.cs" />
     <Compile Include="Util\ImageSampling\NearestNeighbourWrapper.cs" />
+    <Compile Include="Util\ImgUtil.cs" />
     <Compile Include="Util\Notifier.cs" />
     <Compile Include="Util\OffsetBitmap.cs" />
     <Compile Include="Util\Util.cs" />
@@ -395,6 +404,9 @@
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Assets\PALETTE.PAL" />
+    <None Include="default.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Mappy.ruleset">
       <SubType>Designer</SubType>
     </None>
@@ -438,6 +450,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\mappy.ico" />
+    <Content Include="Assets\TA Palette.pal">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc2\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
@@ -447,7 +462,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>python "$(ProjectDir)..\GenerateAssemblyInfo.py" "$(ProjectDir)\"</PreBuildEvent>
+    <PreBuildEvent>python "$(ProjectDir)..\GenerateAssemblyInfo.py" "$(ProjectDir)</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -2,8 +2,8 @@ namespace Mappy.UI.Drawables
 {
     using System.Drawing;
 
-    using Mappy.Data;
-    using Mappy.UI.Painters;
+    using Data;
+    using Painters;
 
     public class DrawableTile : AbstractDrawable
     {
@@ -95,6 +95,11 @@ namespace Mappy.UI.Drawables
                     this.OnAreaChanged();
                 }
             }
+        }
+
+        public string MapFilePath
+        {
+            set => this.heightGridPainter.MapFilePath = value;
         }
 
         public override void Draw(Graphics graphics, Rectangle clipRectangle)

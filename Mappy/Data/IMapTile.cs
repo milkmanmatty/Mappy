@@ -2,7 +2,7 @@ namespace Mappy.Data
 {
     using System.Drawing;
 
-    using Mappy.Collections;
+    using Collections;
 
     /// <summary>
     /// Interface for a map tile.

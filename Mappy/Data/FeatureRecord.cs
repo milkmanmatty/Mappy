@@ -1,8 +1,7 @@
-﻿namespace Mappy.Data
+namespace Mappy.Data
 {
-    using Mappy.Util;
-
     using TAUtil.Tdf;
+    using Util;
 
     public class FeatureRecord
     {
@@ -27,6 +26,8 @@
         public int Energy { get; set; }
 
         public int Metal { get; set; }
+
+        public int MetalSpotValue { get; set; }
 
         public bool Permanent { get; set; }
 
@@ -61,6 +62,7 @@
                     Reclaimable = TdfConvert.ToBool(n.Entries.GetOrDefault("reclaimable", "0")),
                     Energy = energy,
                     Metal = metal,
+                    MetalSpotValue = TdfConvert.ToBool(n.Entries.GetOrDefault("reclaimable", "0")) ? 0 : metal,
                     Permanent = TdfConvert.ToBool(n.Entries.GetOrDefault("permanent", "0")),
                 };
         }

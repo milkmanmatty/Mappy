@@ -5,19 +5,21 @@ import sys
 import os.path
 
 projectdir = sys.argv[1]
-inpath = os.path.join(projectdir, "Properties/AssemblyInfo.cs.tmpl")
-outpath = os.path.join(projectdir, "Properties/AssemblyInfo.cs")
+inpath = os.path.join(projectdir, "Properties\\AssemblyInfo.cs.tmpl")
+outpath = os.path.join(projectdir, "Properties\\AssemblyInfo.cs")
+
+print(projectdir)
 
 # get the tag
-tag = check_output(["git", "describe", "--dirty=-d"], cwd=projectdir, universal_newlines=True)
+tag = check_output(["git", "describe", "--tags", "--dirty=-d"], cwd=projectdir, universal_newlines=True)
 
 # grab main version blob (x.y.z) and git extras (w-<hash>)
-main_match = re.match("v([^\-]+)(?:-([0-9a-z\-]+))?", tag)
+main_match = re.match(r"v([^-]+)(?:-([0-9a-z-]+))?", tag)
 main_version_text = main_match.group(1)
 extra_text = main_match.group(2)
 
 # parse version blob
-version_match = re.match("([0-9]+)\.([0-9]+)(?:\.([0-9]+))?", main_version_text)
+version_match = re.match(r"([0-9]+)\.([0-9]+)(?:\.([0-9]+))?", main_version_text)
 major = version_match.group(1)
 minor = version_match.group(2)
 hotfix = version_match.group(3) or "0"

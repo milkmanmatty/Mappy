@@ -1,6 +1,6 @@
 ﻿namespace Mappy.Operations
 {
-    using Mappy.Collections;
+    using Collections;
 
     public class TileAreaOperation<T> : IReplayableOperation
     {
@@ -33,7 +33,7 @@
             this.oldContents = new Grid<T>(this.width, this.height);
             GridMethods.Copy(this.target, this.oldContents, this.x, this.y, 0, 0, this.width, this.height);
 
-            GridMethods.FillRepeat(this.target, this.x, this.y, this.width, this.height, source);
+            GridMethods.FillRepeat(this.target, this.x, this.y, this.width, this.height, this.source);
         }
 
         public void Undo()

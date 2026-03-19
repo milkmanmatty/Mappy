@@ -4,12 +4,10 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-
-    using Mappy.Data;
-    using Mappy.Util;
-
+    using Data;
     using TAUtil._3do;
     using TAUtil.Hpi;
+    using Util;
 
     public class FeatureRenderLoader : AbstractHpiLoader<KeyValuePair<string, OffsetBitmap>>
     {

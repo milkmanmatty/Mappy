@@ -1,4 +1,4 @@
-﻿namespace Mappy.Services
+namespace Mappy.Services
 {
     using System;
     using System.Collections.Generic;
@@ -8,21 +8,25 @@
     using System.IO;
     using System.Linq;
     using System.Windows.Forms;
-
-    using Mappy.Collections;
-    using Mappy.Data;
-    using Mappy.IO;
-    using Mappy.Models;
-    using Mappy.Util;
-    using Mappy.Util.ImageSampling;
-
+    using Collections;
+    using Data;
+    using IO;
+    using Models;
+    using Models.Enums;
     using TAUtil;
     using TAUtil.Gdi.Palette;
     using TAUtil.Hpi;
     using TAUtil.Tnt;
+    using Util;
+    using Util.ImageSampling;
 
     public class Dispatcher
     {
+        private static readonly string TempDir = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            "Mappy",
+            "Temp");
+
         private readonly CoreModel model;
 
         private readonly IDialogService dialogService;
@@ -37,6 +41,8 @@
 
         private readonly ImageImportService imageImportingService;
 
+        private readonly ImageExportService imageExportingService;
+
         private readonly BitmapCache tileCache;
 
         private readonly Random rng = new Random();
@@ -49,7 +55,8 @@
             FeatureService featureService,
             MapLoadingService mapLoadingService,
             ImageImportService imageImportingService,
-            BitmapCache tileCache)
+            BitmapCache tileCache,
+            ImageExportService imageExportingService)
         {
             this.model = model;
             this.dialogService = dialogService;
@@ -59,6 +66,7 @@
             this.mapLoadingService = mapLoadingService;
             this.imageImportingService = imageImportingService;
             this.tileCache = tileCache;
+            this.imageExportingService = imageExportingService;
         }
 
         public void Initialize()
@@ -270,7 +278,13 @@
 
         public void OpenPreferences()
         {
-            this.dialogService.CapturePreferences();
+            if (!this.dialogService.CapturePreferences())
+            {
+                return;
+            }
+
+            this.sectionService.NotifySectionsChanged();
+            this.featureService.NotifyFeaturesChanged();
         }
 
         public void Close()
@@ -322,17 +336,17 @@
             this.model.Map.IfSome(
                 map =>
                     {
-                        var data = Clipboard.GetData(DataFormats.Serializable);
+                        object data = Clipboard.GetData(DataFormats.Serializable);
                         if (data == null)
                         {
                             return;
                         }
 
-                        var loc = map.ViewportLocation;
+                        Point loc = map.ViewportLocation;
                         loc.X += this.model.ViewportWidth / 2;
                         loc.Y += this.model.ViewportHeight / 2;
 
-                        var tile = data as IMapTile;
+                        IMapTile tile = data as IMapTile;
                         if (tile != null)
                         {
                             this.DeduplicateTiles(tile.TileGrid);
@@ -340,10 +354,29 @@
                         }
                         else
                         {
-                            var record = data as FeatureClipboardRecord;
-                            if (record != null)
+                            switch (data)
                             {
-                                map.DragDropFeature(record.FeatureName, loc.X, loc.Y);
+                                case FeatureClipboardRecord record:
+                                    map.DragDropFeature(record.FeatureName, loc.X, loc.Y);
+                                    return;
+                                case List<FeatureClipboardRecord> featureList:
+                                {
+                                    map.ClearSelection();
+                                    foreach (var feature in featureList)
+                                    {
+                                        // Split these up so they can be debugged better
+                                        // force locs between 0 and MapWidth/Height
+                                        int xLocUnsafe = map.ViewportLocation.X + feature.VPOffsetX;
+                                        int xLoc = Math.Min(map.MapWidth * 32, Math.Max(0, xLocUnsafe));
+
+                                        int yLocUnsafe = map.ViewportLocation.Y + feature.VPOffsetY;
+                                        int yLoc = Math.Min(map.MapHeight * 32, Math.Max(0, yLocUnsafe));
+
+                                        map.DragDropFeature(feature.FeatureName, xLoc, yLoc, false);
+                                    }
+
+                                    break;
+                                }
                             }
                         }
                     });
@@ -352,6 +385,75 @@
         public void FillMap()
         {
             this.model.Map.IfSome(map => map.FillWithSelectedTile());
+        }
+
+        public void ResizeMap()
+        {
+            this.model.Map.IfSome(
+                map =>
+                {
+                    var newSize = this.dialogService.AskUserResizeMapSize(map.MapWidth, map.MapHeight);
+                    if (newSize.Width <= 0 || newSize.Height <= 0)
+                    {
+                        return;
+                    }
+
+                    if (newSize.Width == map.MapWidth && newSize.Height == map.MapHeight)
+                    {
+                        return;
+                    }
+
+                    map.ClearSelection();
+                    var oldViewportLocation = map.ViewportLocation;
+                    map.ResizeMap(newSize.Width, newSize.Height);
+                    this.model.SetViewportLocation(oldViewportLocation);
+                });
+        }
+
+        public void Flip(FlipDirection direction)
+        {
+            this.model.Map.IfSome(
+                map =>
+                {
+                    if (!map.SelectedTile.HasValue || !map.FloatingTiles.Any() || map.FloatingTiles[map.SelectedTile.Value].Item == null)
+                    {
+                        return;
+                    }
+
+                    if (!Directory.Exists(TempDir))
+                    {
+                        Directory.CreateDirectory(TempDir);
+                    }
+
+                    IMapTile floatTile = map.FloatingTiles[map.SelectedTile.Value].Item;
+
+                    MapTile destTile = new MapTile(floatTile.TileGrid.Width, floatTile.TileGrid.Height);
+                    GridMethods.Copy(floatTile.TileGrid, destTile.TileGrid, 0, 0, 0, 0, floatTile.TileGrid.Width, floatTile.TileGrid.Height);
+                    GridMethods.Copy(floatTile.HeightGrid, destTile.HeightGrid, 0, 0, 0, 0, floatTile.HeightGrid.Width, floatTile.HeightGrid.Height);
+
+                    GridMethods.FlipArea(floatTile.TileGrid, destTile.TileGrid, floatTile.TileGrid.Width, floatTile.TileGrid.Height, direction);
+                    GridMethods.FlipArea(floatTile.HeightGrid, destTile.HeightGrid, floatTile.HeightGrid.Width, floatTile.HeightGrid.Height, direction);
+
+                    this.imageExportingService.ExportSection(
+                        destTile,
+                        Path.Combine(TempDir, "fhGraphic.png"),
+                        Path.Combine(TempDir, "fhHeightmap.png"));
+
+                    this.ImportCustomSectionHelper(
+                        map,
+                        Path.Combine(TempDir, "fhGraphic.png"),
+                        Path.Combine(TempDir, "fhHeightmap.png"));
+                });
+        }
+
+        public void FlipVertically()
+        {
+            this.model.Map.IfSome(map => { this.Flip(FlipDirection.Vertical); });
+        }
+
+        public void FlipHorizontally()
+        {
+            this.model.Map.IfSome(map => { this.Flip(FlipDirection.Horizontal); });
         }
 
         public void RefreshMinimap()
@@ -391,7 +493,7 @@
 
         public void ImportCustomSection()
         {
-            this.model.Map.IfSome(this.ImportCustomSectionHelper);
+            this.model.Map.IfSome(this.ImportCustomSectionInteractiveHelper);
         }
 
         public void ImportHeightmap()
@@ -475,6 +577,23 @@
             this.model.SetViewportLocation(location);
         }
 
+        public void CenterViewOnStartPosition(int index)
+        {
+            this.model.Map.IfSome(
+                map =>
+                    {
+                        var pos = map.GetStartPosition(index);
+                        if (!pos.HasValue)
+                        {
+                            return;
+                        }
+
+                        var viewportX = pos.Value.X - (this.model.ViewportWidth / 2);
+                        var viewportY = pos.Value.Y - (this.model.ViewportHeight / 2);
+                        this.model.SetViewportLocation(new Point(viewportX, viewportY));
+                    });
+        }
+
         public void SetViewportSize(Size size)
         {
             this.model.SetViewportSize(size);
@@ -550,6 +669,66 @@
             this.model.Map.IfSome(x => x.SelectStartPosition(index));
         }
 
+        public void SetSelectedFeature(string featureName)
+        {
+            var featureFromTag = this.featureService.TryGetFeature(featureName);
+            if (featureFromTag.HasValue)
+            {
+                this.featureService.SelectedFeature = featureFromTag.UnsafeValue;
+            }
+        }
+
+        public void AdjustHeightBrush(int x, int y, int delta, int cursorSize)
+        {
+            this.model.Map.IfSome(map => map.AdjustHeightBrush(x, y, delta, cursorSize));
+        }
+
+        public void AdjustHeightBrushAtAnchor(int anchorX, int anchorY, int delta, int cursorSize)
+        {
+            this.model.Map.IfSome(map => map.AdjustHeightBrushAtAnchor(anchorX, anchorY, delta, cursorSize));
+        }
+
+        public void AdjustHeightPoint(int pointX, int pointY, int delta)
+        {
+            this.model.Map.IfSome(map => map.AdjustHeightPoint(pointX, pointY, delta));
+        }
+
+        public void FlushHeightBrush()
+        {
+            this.model.Map.IfSome(x => x.FlushHeightBrush());
+        }
+
+        public void SetHeightEditInterval(int interval)
+        {
+            this.model.HeightEditInterval = interval;
+        }
+
+        public void SetHeightEditCursorSize(int cursorSize)
+        {
+            this.model.HeightEditCursorSize = cursorSize;
+        }
+
+        public void SetVoidEditCursorSize(int cursorSize)
+        {
+            this.model.VoidEditCursorSize = cursorSize;
+        }
+
+        public void SetVoidBrushAtAnchor(int anchorX, int anchorY, int cursorSize, bool value)
+        {
+            this.model.Map.IfSome(map => map.SetVoidBrushAtAnchor(anchorX, anchorY, cursorSize, value));
+        }
+
+        public void FlushVoidBrush()
+        {
+            this.model.Map.IfSome(map => map.FlushVoidBrush());
+        }
+
+        public void ChangeSelectedTab(GUITab tab)
+        {
+            this.model.SelectedGUITab = tab;
+            this.SetSelectedGUITabForMap();
+        }
+
         private static IEnumerable<string> GetMapNames(HpiArchive hpi)
         {
             return hpi.GetFiles("maps")
@@ -593,10 +772,26 @@
         {
             if (map.SelectedFeatures.Count > 0)
             {
-                var id = map.SelectedFeatures.First();
-                var inst = map.GetFeatureInstance(id);
-                var rec = new FeatureClipboardRecord(inst.FeatureName);
-                Clipboard.SetData(DataFormats.Serializable, rec);
+                if (map.SelectedFeatures.Count == 1)
+                {
+                    var id = map.SelectedFeatures.First();
+                    var inst = map.GetFeatureInstance(id);
+                    var rec = new FeatureClipboardRecord(inst.FeatureName);
+                    Clipboard.SetData(DataFormats.Serializable, rec);
+                    return true;
+                }
+
+                var loc = map.ViewportLocation;
+                var ids = map.SelectedFeatures.ToArray();
+                var features = new List<FeatureClipboardRecord>();
+
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    var ins = map.GetFeatureInstance(ids[i]);
+                    features.Add(new FeatureClipboardRecord(ins.FeatureName, (ins.X * 16) - loc.X, (ins.Y * 16) - loc.Y));
+                }
+
+                Clipboard.SetData(DataFormats.Serializable, features);
                 return true;
             }
 
@@ -608,6 +803,11 @@
             }
 
             return false;
+        }
+
+        private void SetSelectedGUITabForMap()
+        {
+            this.model.Map.IfSome(x => x.UpdateSelectedGUITab(this.model.SelectedGUITab));
         }
 
         private void SaveHpi(UndoableMapModel map, string filename)
@@ -751,11 +951,13 @@
 
             var tntPath = HpiPath.Combine("maps", mapName + ".tnt");
             this.model.Map = Maybe.Some(this.mapLoadingService.CreateFromHpi(filename, tntPath, readOnly));
+            this.SetSelectedGUITabForMap();
         }
 
         private void OpenTnt(string filename)
         {
             this.model.Map = Maybe.Some(this.mapLoadingService.CreateFromTnt(filename));
+            this.SetSelectedGUITabForMap();
         }
 
         private bool CheckOkayDiscard()
@@ -787,6 +989,7 @@
         private void New(int width, int height)
         {
             this.model.Map = Maybe.Some(MapLoadingService.CreateMap(width, height));
+            this.SetSelectedGUITabForMap();
         }
 
         private void OpenSct(string filename)
@@ -816,7 +1019,7 @@
                     return Maybe.None<Grid<int>>();
                 }
 
-                return Maybe.Some(Mappy.Util.Util.ReadHeightmap(bmp));
+                return Maybe.Some(ImgUtil.ReadHeightmap(bmp));
             }
             catch (Exception)
             {
@@ -861,7 +1064,7 @@
 
         private void RefreshMinimapHighQualityWithProgressHelper(UndoableMapModel map)
         {
-            var worker = Mappy.Util.Util.RenderMinimapWorker();
+            var worker = Util.RenderMinimapWorker();
 
             var dlg = this.dialogService.CreateProgressView();
             dlg.Title = "Generating Minimap";
@@ -901,7 +1104,7 @@
 
             try
             {
-                var b = Mappy.Util.Util.ExportHeightmap(map.BaseTile.HeightGrid);
+                var b = ImgUtil.ExportHeightmap(map.BaseTile.HeightGrid);
                 using (var s = File.Create(loc))
                 {
                     b.Save(s, ImageFormat.Png);
@@ -954,7 +1157,7 @@
                     var worker = (BackgroundWorker)sender;
                     using (var s = File.Create(tempLoc))
                     {
-                        var success = Mappy.Util.Util.WriteMapImage(
+                        var success = Util.WriteMapImage(
                             s,
                             map.BaseTile.TileGrid,
                             worker.ReportProgress,
@@ -1005,7 +1208,7 @@
             pv.Display();
         }
 
-        private void ImportCustomSectionHelper(UndoableMapModel map)
+        private void ImportCustomSectionInteractiveHelper(UndoableMapModel map)
         {
             var paths = this.dialogService.AskUserToChooseSectionImportPaths();
             if (paths == null)
@@ -1060,6 +1263,53 @@
             bg.RunWorkerAsync();
 
             dlg.Display();
+        }
+
+        private void ImportCustomSectionHelper(UndoableMapModel map, string graphicPath, string heightmapPath)
+        {
+            if (string.IsNullOrEmpty(graphicPath) && string.IsNullOrEmpty(heightmapPath))
+            {
+                return;
+            }
+
+            var bg = new BackgroundWorker();
+            bg.WorkerSupportsCancellation = true;
+            bg.WorkerReportsProgress = true;
+            bg.DoWork += (sender, args) =>
+            {
+                var w = (BackgroundWorker)sender;
+                var sect = this.imageImportingService.ImportSection(
+                    graphicPath,
+                    heightmapPath,
+                    w.ReportProgress,
+                    () => w.CancellationPending);
+                if (sect == null)
+                {
+                    args.Cancel = true;
+                    return;
+                }
+
+                args.Result = sect;
+            };
+
+            bg.RunWorkerCompleted += (sender, args) =>
+            {
+                if (args.Error != null)
+                {
+                    this.dialogService.ShowError(
+                        "There was a problem importing the section: " + args.Error.Message);
+                    return;
+                }
+
+                if (args.Cancelled)
+                {
+                    return;
+                }
+
+                map.PasteMapTileNoDeduplicateTopLeft((IMapTile)args.Result);
+            };
+
+            bg.RunWorkerAsync();
         }
     }
 }

@@ -1,7 +1,8 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System.ComponentModel;
     using System.Drawing;
+    using Enums;
 
     public interface IReadOnlyApplicationModel : INotifyPropertyChanged
     {
@@ -26,5 +27,13 @@
         Size GridSize { get; }
 
         Color GridColor { get; }
+
+        GUITab SelectedGUITab { get; }
+
+        int HeightEditInterval { get; }
+
+        int HeightEditCursorSize { get; }
+
+        int VoidEditCursorSize { get; }
     }
 }

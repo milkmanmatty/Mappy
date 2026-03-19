@@ -1,4 +1,4 @@
-﻿namespace Mappy.UI.Forms
+namespace Mappy.UI.Forms
 {
     using System;
     using System.Windows.Forms;
@@ -22,6 +22,11 @@
                     this.searchPathsListView.Items.Add(i);
                 }
             }
+
+            this.dragScrollSpeedXNumeric.Value = MappySettings.Settings.GetDragAutoScrollSpeedXOrDefault();
+            this.dragScrollSpeedYNumeric.Value = MappySettings.Settings.GetDragAutoScrollSpeedYOrDefault();
+            this.fullResourceNamesCheckBox.Checked = MappySettings.Settings.FullResourceNames;
+            this.featureReclaimAmountsCheckBox.Checked = MappySettings.Settings.ShowFeatureReclaimAmounts;
         }
 
         private void AddButtonClick(object sender, EventArgs e)
@@ -103,6 +108,10 @@
             }
 
             MappySettings.Settings.SearchPaths = s;
+            MappySettings.Settings.DragAutoScrollSpeedX = (int)this.dragScrollSpeedXNumeric.Value;
+            MappySettings.Settings.DragAutoScrollSpeedY = (int)this.dragScrollSpeedYNumeric.Value;
+            MappySettings.Settings.FullResourceNames = this.fullResourceNamesCheckBox.Checked;
+            MappySettings.Settings.ShowFeatureReclaimAmounts = this.featureReclaimAmountsCheckBox.Checked;
             MappySettings.SaveSettings();
         }
     }

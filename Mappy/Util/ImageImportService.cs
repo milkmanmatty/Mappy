@@ -5,16 +5,12 @@
     using System.Drawing;
     using System.Drawing.Imaging;
     using System.IO;
-
+    using Collections;
+    using Data;
     using Hjg.Pngcs;
     using Hjg.Pngcs.Chunks;
-
-    using Mappy.Collections;
-    using Mappy.Data;
-    using Mappy.Services;
-
+    using Services;
     using TAUtil.Gdi.Palette;
-
     using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
     public class ImageImportService
@@ -55,7 +51,7 @@
                 }
             }
 
-            var heightmap = Util.ReadHeightmap(heightBitmap);
+            var heightmap = ImgUtil.ReadHeightmap(heightBitmap);
 
             return new MapTile(grid, heightmap);
         }

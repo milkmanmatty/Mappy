@@ -1,12 +1,14 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
-    using System.ComponentModel;
+    using System;
     using System.Drawing;
-
-    using Mappy.Util;
+    using Enums;
+    using Util;
 
     public class CoreModel : Notifier, IReadOnlyApplicationModel
     {
+        private const int MaxBrushCursorSize = 100;
+
         private Maybe<UndoableMapModel> map;
 
         private bool heightmapVisible;
@@ -20,8 +22,16 @@
         private Size gridSize = new Size(16, 16);
         private Color gridColor = MappySettings.Settings.GridColor;
 
+        private GUITab guiTab = GUITab.Sections;
+
         private int viewportWidth;
         private int viewportHeight;
+
+        private int heightEditInterval = 4;
+
+        private int heightEditCursorSize = 1;
+
+        private int voidEditCursorSize = 1;
 
         public Maybe<UndoableMapModel> Map
         {
@@ -94,15 +104,48 @@
             }
         }
 
+        public GUITab SelectedGUITab
+        {
+            get => this.guiTab;
+            set
+            {
+                this.SetField(ref this.guiTab, value, nameof(this.SelectedGUITab));
+            }
+        }
+
+        public int HeightEditInterval
+        {
+            get => this.heightEditInterval;
+            set => this.SetField(ref this.heightEditInterval, Math.Max(1, value), nameof(this.HeightEditInterval));
+        }
+
+        public int HeightEditCursorSize
+        {
+            get => this.heightEditCursorSize;
+            set => this.SetField(
+                ref this.heightEditCursorSize,
+                Math.Min(MaxBrushCursorSize, Math.Max(1, value)),
+                nameof(this.HeightEditCursorSize));
+        }
+
+        public int VoidEditCursorSize
+        {
+            get => this.voidEditCursorSize;
+            set => this.SetField(
+                ref this.voidEditCursorSize,
+                Math.Min(MaxBrushCursorSize, Math.Max(1, value)),
+                nameof(this.VoidEditCursorSize));
+        }
+
         public void SetViewportLocation(Point location)
         {
             this.Map.IfSome(
-                map =>
+                mapModel =>
                     {
-                        location.X = Util.Clamp(location.X, 0, (map.MapWidth * 32) - this.ViewportWidth);
-                        location.Y = Util.Clamp(location.Y, 0, (map.MapHeight * 32) - this.ViewportHeight);
+                        location.X = Util.Clamp(location.X, 0, (mapModel.MapWidth * 32) - this.ViewportWidth);
+                        location.Y = Util.Clamp(location.Y, 0, (mapModel.MapHeight * 32) - this.ViewportHeight);
 
-                        map.ViewportLocation = location;
+                        mapModel.ViewportLocation = location;
                     });
         }
 

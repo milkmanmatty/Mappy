@@ -1,0 +1,88 @@
+name: Tag Build
+
+on:
+  push:
+    tags:
+      - "*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Clone TAUtil dependency
+        shell: pwsh
+        run: |
+          $taUtilDir = Join-Path $env:GITHUB_WORKSPACE "TAUtil"
+          if (Test-Path $taUtilDir) {
+            Remove-Item $taUtilDir -Recurse -Force
+          }
+
+          git clone "https://github.com/MHeasell/TAUtil.git" $taUtilDir
+          git -C $taUtilDir checkout 9c437a27aeb76afc1642d1f8028c4ec728063d2d
+
+      - name: Restore NuGet packages
+        run: nuget restore Mappy.sln
+
+      - name: Build Release
+        run: msbuild Mappy.sln /p:Configuration=Release /p:Platform=x86 /m
+
+      - name: Package build output
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $artifactName = "mappy-$tag-win-x86"
+          $artifactDir = Join-Path $env:GITHUB_WORKSPACE $artifactName
+          $binDir = Join-Path $env:GITHUB_WORKSPACE "Mappy\bin\Release"
+
+          if (Test-Path $artifactDir) {
+            Remove-Item $artifactDir -Recurse -Force
+          }
+
+          New-Item -ItemType Directory -Path $artifactDir | Out-Null
+          Copy-Item "$binDir\*" -Destination $artifactDir -Recurse -Force
+          Copy-Item "$env:GITHUB_WORKSPACE\README.md" -Destination (Join-Path $artifactDir "README.txt") -Force
+          Copy-Item "$env:GITHUB_WORKSPACE\LICENSE.txt" -Destination $artifactDir -Force
+
+          $zipPath = Join-Path $env:GITHUB_WORKSPACE "$artifactName.zip"
+          if (Test-Path $zipPath) {
+            Remove-Item $zipPath -Force
+          }
+
+          Compress-Archive -Path "$artifactDir\*" -DestinationPath $zipPath -Force
+
+      - name: Upload tag build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mappy-${{ github.ref_name }}-win-x86
+          path: mappy-${{ github.ref_name }}-win-x86.zip
+
+      - name: Attach zip to GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: mappy-${{ github.ref_name }}-win-x86.zip
+          generate_release_notes: true
+          make_latest: true
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

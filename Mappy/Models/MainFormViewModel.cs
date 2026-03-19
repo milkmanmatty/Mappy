@@ -1,11 +1,13 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System;
     using System.Drawing;
     using System.Linq;
     using System.Reactive.Linq;
-
-    using Mappy.Services;
+    using Collections;
+    using Enums;
+    using Services;
+    using Util;
 
     public class MainFormViewModel : IMainFormViewModel
     {
@@ -27,6 +29,7 @@
             this.CanCopy = map.ObservePropertyOrDefault(x => x.CanCopy, nameof(UndoableMapModel.CanCopy), false);
             this.CanPaste = map.Select(x => x.IsSome);
             this.CanFill = map.ObservePropertyOrDefault(x => x.CanFill, nameof(UndoableMapModel.CanFill), false);
+            this.CanFlip = map.ObservePropertyOrDefault(x => x.CanFlip, nameof(UndoableMapModel.CanFlip), false);
             this.GridVisible = model.PropertyAsObservable(x => x.GridVisible, nameof(model.GridVisible));
             this.GridSize = model.PropertyAsObservable(x => x.GridSize, nameof(model.GridSize));
             this.HeightmapVisible = model.PropertyAsObservable(x => x.HeightmapVisible, nameof(model.HeightmapVisible));
@@ -35,6 +38,9 @@
             this.FeaturesVisible = model.PropertyAsObservable(x => x.FeaturesVisible, nameof(model.FeaturesVisible));
             this.MinimapVisible = model.PropertyAsObservable(x => x.MinimapVisible, nameof(model.MinimapVisible));
             this.SeaLevel = map.ObservePropertyOrDefault(x => x.SeaLevel, "SeaLevel", 0);
+            this.HeightEditInterval = model.PropertyAsObservable(x => x.HeightEditInterval, nameof(model.HeightEditInterval));
+            this.HeightEditCursorSize = model.PropertyAsObservable(x => x.HeightEditCursorSize, nameof(model.HeightEditCursorSize));
+            this.VoidEditCursorSize = model.PropertyAsObservable(x => x.VoidEditCursorSize, nameof(model.VoidEditCursorSize));
 
             this.CanSaveAs = mapOpen;
             this.CanCloseMap = mapOpen;
@@ -47,6 +53,7 @@
             this.CanGenerateMinimap = mapOpen;
             this.CanGenerateMinimapHighQuality = mapOpen;
             this.CanOpenAttributes = mapOpen;
+            this.CanResizeMap = mapOpen;
             this.CanChangeSeaLevel = mapOpen;
 
             // set up CanSave observable
@@ -82,8 +89,19 @@
 
             this.TitleText = titleText;
 
-            this.MousePositionText = map.ObservePropertyOrDefault(m => m.MousePosition, "MousePosition", Maybe.None<Point>())
+            var mousePosition = map.ObservePropertyOrDefault(m => m.MousePosition, "MousePosition", Maybe.None<Point>());
+            this.MousePositionText = mousePosition
                 .Select(p => p.Match(pos => $"X: {pos.X}, Y: {pos.Y}", () => "X: -, Y: -"));
+            this.HeightText = map.CombineLatest(
+                mousePosition,
+                (currentMap, mousePos) => currentMap.Match(
+                    m => mousePos.Match(pos => GetHeightText(m, pos), () => "H: -"),
+                    () => "H: -"));
+            this.VoidText = map.CombineLatest(
+                mousePosition,
+                (currentMap, mousePos) => currentMap.Match(
+                    m => mousePos.Match(pos => GetVoidText(m, pos), () => "Void: -"),
+                    () => "Void: -"));
 
             this.HoveredFeatureText = map.ObservePropertyOrDefault(m => m.HoveredFeature, "HoveredFeature", Maybe.None<Guid>())
                 .Select(id => id.Select(idd =>
@@ -92,22 +110,12 @@
                     return featureService.TryGetFeature(featureName).Select(feature =>
                     {
                         var reclaimInfo = feature.ReclaimInfo.Match(rec => $" E: {rec.EnergyValue}, M: {rec.MetalValue}", () => string.Empty);
-                        return $"{featureName}{reclaimInfo}";
+                        var metalSpotInfo = feature.MetalSpotValue > 0 ? $" Metal spot: {feature.MetalSpotValue}" : string.Empty;
+                        return $"{featureName}{reclaimInfo}{metalSpotInfo}";
                     }).Or(featureName);
                 }).Or("---"));
 
             this.dispatcher = dispatcher;
-        }
-
-        private static Data.Feature MakeDefaultFeatureRecord(string name)
-        {
-            return new Data.Feature
-            {
-                Name = name,
-                Offset = new Point(0, 0),
-                Footprint = new Size(1, 1),
-                Image = Mappy.Properties.Resources.nofeature
-            };
         }
 
         public IObservable<bool> CanCloseMap { get; }
@@ -134,6 +142,8 @@
 
         public IObservable<bool> CanOpenAttributes { get; }
 
+        public IObservable<bool> CanResizeMap { get; }
+
         public IObservable<bool> CanChangeSeaLevel { get; }
 
         public IObservable<string> TitleText { get; }
@@ -149,6 +159,8 @@
         public IObservable<bool> CanPaste { get; }
 
         public IObservable<bool> CanFill { get; }
+
+        public IObservable<bool> CanFlip { get; }
 
         public IObservable<bool> GridVisible { get; }
 
@@ -166,7 +178,17 @@
 
         public IObservable<int> SeaLevel { get; }
 
+        public IObservable<int> HeightEditInterval { get; }
+
+        public IObservable<int> HeightEditCursorSize { get; }
+
+        public IObservable<int> VoidEditCursorSize { get; }
+
         public IObservable<string> MousePositionText { get; }
+
+        public IObservable<string> HeightText { get; }
+
+        public IObservable<string> VoidText { get; }
 
         public IObservable<string> HoveredFeatureText { get; }
 
@@ -295,6 +317,21 @@
             this.dispatcher.FlushSeaLevel();
         }
 
+        public void HeightEditIntervalChanged(int value)
+        {
+            this.dispatcher.SetHeightEditInterval(value);
+        }
+
+        public void HeightEditCursorSizeChanged(int value)
+        {
+            this.dispatcher.SetHeightEditCursorSize(value);
+        }
+
+        public void VoidEditCursorSizeChanged(int value)
+        {
+            this.dispatcher.SetVoidEditCursorSize(value);
+        }
+
         public void CopyMenuItemClick()
         {
             this.dispatcher.CopySelectionToClipboard();
@@ -313,6 +350,21 @@
         public void FillMenuItemClick()
         {
             this.dispatcher.FillMap();
+        }
+
+        public void ResizeMapMenuItemClick()
+        {
+            this.dispatcher.ResizeMap();
+        }
+
+        public void FlipHorizontallyMenuItemClick()
+        {
+            this.dispatcher.FlipHorizontally();
+        }
+
+        public void FlipVerticallyMenuItemClick()
+        {
+            this.dispatcher.FlipVertically();
         }
 
         public void ImportMinimapMenuItemClick()
@@ -348,6 +400,107 @@
         public void Load()
         {
             this.dispatcher.Initialize();
+        }
+
+        public void ChangeSelectedTabType(GUITab tabType)
+        {
+            this.dispatcher.ChangeSelectedTab(tabType);
+        }
+
+        public void CenterViewOnStartPosition(int index)
+        {
+            this.dispatcher.CenterViewOnStartPosition(index);
+        }
+
+        private static string GetHeightText(IReadOnlyMapModel map, Point mousePosition)
+        {
+            var gridPos = Util.ScreenToHeightIndex(map.Tile.HeightGrid, mousePosition);
+            if (!gridPos.HasValue)
+            {
+                return "H: -";
+            }
+
+            var heightIndex = (gridPos.Value.Y * map.Tile.HeightGrid.Width) + gridPos.Value.X;
+            var h = map.Tile.HeightGrid[heightIndex];
+            return $"H: {h}";
+        }
+
+        private static string GetVoidText(IReadOnlyMapModel map, Point mousePosition)
+        {
+            var gridWidth = map.Voids.Width;
+            var gridHeight = map.Voids.Height;
+            if (gridWidth < 2 || gridHeight < 2)
+            {
+                return "Void: -";
+            }
+
+            var approxX = Clamp(mousePosition.X / 16, 0, gridWidth - 2);
+            var approxY = Clamp(mousePosition.Y / 16, 0, gridHeight - 2);
+
+            var startX = Math.Max(0, approxX - 1);
+            var endX = Math.Min(gridWidth - 2, approxX + 1);
+
+            var startY = Math.Max(0, approxY - 8);
+            var endY = Math.Min(gridHeight - 2, approxY + 8);
+
+            for (var y = startY; y <= endY; y++)
+            {
+                for (var x = startX; x <= endX; x++)
+                {
+                    if (!GetVoidAt(map.Voids, x, y))
+                    {
+                        continue;
+                    }
+
+                    if (IsPointInProjectedCell(mousePosition, map.Tile.HeightGrid, x, y))
+                    {
+                        return "Void: yes";
+                    }
+                }
+            }
+
+            return "Void: no";
+        }
+
+        private static bool IsPointInProjectedCell(Point point, IGrid<int> heights, int x, int y)
+        {
+            var p00 = GetProjectedPoint(heights, x, y);
+            var p10 = GetProjectedPoint(heights, x + 1, y);
+            var p11 = GetProjectedPoint(heights, x + 1, y + 1);
+            var p01 = GetProjectedPoint(heights, x, y + 1);
+
+            return IsPointInTriangle(point, p00, p10, p11) || IsPointInTriangle(point, p00, p11, p01);
+        }
+
+        private static Point GetProjectedPoint(IGrid<int> heights, int x, int y)
+        {
+            var heightIndex = (y * heights.Width) + x;
+            var extraY = heights[heightIndex] / 2;
+            return new Point(x * 16, (y * 16) - extraY);
+        }
+
+        private static bool GetVoidAt(ISparseGrid<bool> voids, int x, int y)
+        {
+            var voidIndex = (y * voids.Width) + x;
+            return voids[voidIndex];
+        }
+
+        private static bool IsPointInTriangle(Point p, Point a, Point b, Point c)
+        {
+            var b1 = Sign(p, a, b) < 0;
+            var b2 = Sign(p, b, c) < 0;
+            var b3 = Sign(p, c, a) < 0;
+            return b1 == b2 && b2 == b3;
+        }
+
+        private static int Sign(Point p1, Point p2, Point p3)
+        {
+            return ((p1.X - p3.X) * (p2.Y - p3.Y)) - ((p2.X - p3.X) * (p1.Y - p3.Y));
+        }
+
+        private static int Clamp(int value, int min, int max)
+        {
+            return Math.Max(min, Math.Min(max, value));
         }
     }
 }

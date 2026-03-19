@@ -3,13 +3,11 @@
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
-
-    using Mappy.Collections;
-    using Mappy.Models;
-    using Mappy.Util;
-
+    using Collections;
+    using Models;
     using TAUtil.Gdi.Bitmap;
     using TAUtil.Tnt;
+    using Util;
 
     /// <summary>
     /// Adapter for the TNTWriter,

@@ -1,10 +1,9 @@
 namespace Mappy.Data
 {
-    using System;
     using System.Drawing;
 
-    using Mappy.Collections;
-    using Mappy.Util;
+    using Collections;
+    using Util;
 
     /// <summary>
     /// Represents the "blueprint" for a feature.
@@ -31,7 +30,11 @@ namespace Mappy.Data
 
         public Bitmap Image { get; set; }
 
+        public string ResourceFileName { get; set; }
+
         public Maybe<ReclaimInfoStruct> ReclaimInfo { get; set; }
+
+        public int MetalSpotValue { get; set; }
 
         public bool Permanent { get; set; }
 

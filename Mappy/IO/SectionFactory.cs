@@ -4,9 +4,9 @@
     using System.Drawing;
     using System.Linq;
 
-    using Mappy.Collections;
-    using Mappy.Data;
-    using Mappy.Services;
+    using Collections;
+    using Data;
+    using Services;
 
     using TAUtil;
     using TAUtil.Gdi.Bitmap;
@@ -55,6 +55,8 @@
                     tile.HeightGrid.Set(x, y, enumer.Current.Height);
                 }
             }
+
+            enumer.Dispose();
         }
 
         private static void ReadData(ISctSource sct, MapTile tile, List<Bitmap> tiles)
@@ -68,6 +70,8 @@
                     tile.TileGrid.Set(x, y, tiles[enumer.Current]);
                 }
             }
+
+            enumer.Dispose();
         }
 
         private static Bitmap MinimapToBitmap(byte[] minimap)

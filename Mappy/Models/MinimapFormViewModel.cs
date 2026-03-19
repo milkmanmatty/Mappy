@@ -1,4 +1,4 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System;
     using System.Collections.Generic;
@@ -7,9 +7,9 @@
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
 
-    using Mappy.Data;
-    using Mappy.Services;
-    using Mappy.Util;
+    using Data;
+    using Services;
+    using Util;
 
     public sealed class MinimapFormViewModel : Notifier, IMinimapFormViewModel
     {
@@ -34,7 +34,7 @@
             this.startPositions = CreateStartPositionsArray();
 
             // set up basic properties as observables
-            var minimapVisible = model.PropertyAsObservable(x => x.MinimapVisible, nameof(model.MinimapVisible));
+            var minimapVisibleObservable = model.PropertyAsObservable(x => x.MinimapVisible, nameof(model.MinimapVisible));
             var map = model.PropertyAsObservable(x => x.Map, nameof(model.Map));
             var minimap = map.Select(x => x.Match(
                     y => y.PropertyAsObservable(z => z.Minimap, nameof(y.Minimap)),
@@ -55,6 +55,16 @@
                         y => y.PropertyChangedObservable(nameof(y.ViewportLocation)),
                         Observable.Empty<Unit>))
                 .Switch();
+            var mapWidthChanged = map.Select(
+                    x => x.Match(
+                        y => y.PropertyChangedObservable(nameof(y.MapWidth)),
+                        Observable.Empty<Unit>))
+                .Switch();
+            var mapHeightChanged = map.Select(
+                    x => x.Match(
+                        y => y.PropertyChangedObservable(nameof(y.MapHeight)),
+                        Observable.Empty<Unit>))
+                .Switch();
 
             var startPositionChanged = map.Select(
                 x => x.Match(
@@ -67,7 +77,7 @@
                     .Switch();
 
             // wire up the simple properties
-            minimapVisible.Subscribe(x => this.MinimapVisible = x);
+            minimapVisibleObservable.Subscribe(x => this.MinimapVisible = x);
             minimap.Subscribe(x => this.MinimapImage = Maybe.From(x));
 
             // listen for changes that affect the minimap viewport rectangle
@@ -78,6 +88,10 @@
             viewportLocationChanged.Subscribe(_ => this.UpdateMinimapRectangle());
             viewportWidthChanged.Subscribe(_ => this.UpdateMinimapRectangle());
             viewportHeightChanged.Subscribe(_ => this.UpdateMinimapRectangle());
+            mapWidthChanged.Subscribe(_ => this.UpdateMinimapRectangle());
+            mapHeightChanged.Subscribe(_ => this.UpdateMinimapRectangle());
+            mapWidthChanged.Subscribe(_ => this.UpdateStartPositions());
+            mapHeightChanged.Subscribe(_ => this.UpdateStartPositions());
 
             startPositionChanged.Subscribe(this.UpdateStartPosition);
 

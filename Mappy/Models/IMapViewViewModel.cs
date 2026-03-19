@@ -1,10 +1,10 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System;
     using System.Drawing;
     using System.Windows.Forms;
 
-    using Mappy.UI.Controls;
+    using UI.Controls;
 
     public interface IMapViewViewModel
     {
@@ -20,13 +20,21 @@
 
         IObservable<Point> ViewportLocation { get; }
 
-        void MouseDown(Point location);
+        IObservable<bool> HeightEditMode { get; }
+
+        IObservable<bool> VoidEditMode { get; }
+
+        void MouseLeftDown(Point location);
+
+        void MouseRightDown(Point location);
 
         void MouseMove(Point locattion);
 
         void MouseUp();
 
         void KeyDown(Keys key);
+
+        bool ShiftMouseWheel(int delta, bool ctrlPressed);
 
         void LeaveFocus();
 

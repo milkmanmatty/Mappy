@@ -1,4 +1,4 @@
-﻿namespace Mappy.UI.Controls
+namespace Mappy.UI.Controls
 {
     using System;
     using System.Drawing;
@@ -18,6 +18,8 @@
         }
 
         public event EventHandler CanvasSizeChanged;
+
+        public Func<int, bool, bool> ShiftMouseWheelHandler { get; set; }
 
         public LayerCollection Layers => this.layers;
 
@@ -80,6 +82,52 @@
             this.Focus();
 
             base.OnMouseDown(e);
+        }
+
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            // vertical scroll
+            if ((ModifierKeys & Keys.Shift) != Keys.Shift)
+            {
+                base.OnMouseWheel(e);
+                return;
+            }
+
+            var ctrlPressed = (ModifierKeys & Keys.Control) == Keys.Control;
+            if (this.ShiftMouseWheelHandler?.Invoke(e.Delta, ctrlPressed) == true)
+            {
+                return;
+            }
+
+            // horizontal scroll
+            var maxX = Math.Max(this.CanvasSize.Width - this.ClientSize.Width, 0);
+            if (maxX == 0)
+            {
+                return;
+            }
+
+            var current = new Point(-this.AutoScrollPosition.X, -this.AutoScrollPosition.Y);
+
+            var notchDelta = e.Delta / SystemInformation.MouseWheelScrollDelta;
+            var wheelLines = SystemInformation.MouseWheelScrollLines;
+
+            int deltaX;
+            if (wheelLines == -1)
+            {
+                deltaX = notchDelta * this.ClientSize.Width * -1;
+            }
+            else
+            {
+                var step = this.VerticalScroll.SmallChange > 0 ? this.VerticalScroll.SmallChange : 16;
+                var lines = wheelLines > 0 ? wheelLines : 1;
+                deltaX = notchDelta * step * lines * -1;
+            }
+
+            var nextX = Math.Max(0, Math.Min(maxX, current.X + deltaX));
+            if (nextX != current.X)
+            {
+                this.AutoScrollPosition = new Point(nextX, current.Y);
+            }
         }
 
         private void OnCanvasSizeChanged()

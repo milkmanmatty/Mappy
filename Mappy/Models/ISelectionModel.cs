@@ -4,7 +4,7 @@
     using System.Collections.ObjectModel;
     using System.ComponentModel;
 
-    using Mappy.Collections;
+    using Collections;
 
     public interface ISelectionModel : IMapModel, INotifyPropertyChanged
     {

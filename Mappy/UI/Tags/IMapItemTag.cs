@@ -1,6 +1,6 @@
 namespace Mappy.UI.Tags
 {
-    using Mappy.Services;
+    using Services;
 
     public interface IMapItemTag
     {

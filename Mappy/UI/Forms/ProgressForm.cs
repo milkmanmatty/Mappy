@@ -3,7 +3,7 @@
     using System;
     using System.Windows.Forms;
 
-    using Mappy.Views;
+    using Views;
 
     public partial class ProgressForm : Form, IProgressView
     {

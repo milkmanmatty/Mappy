@@ -1,4 +1,4 @@
-﻿namespace Mappy.Services
+namespace Mappy.Services
 {
     using System;
     using System.Collections.Generic;
@@ -6,8 +6,8 @@
     using System.IO;
     using System.Linq;
 
-    using Mappy.Data;
-    using Mappy.IO;
+    using Data;
+    using IO;
 
     using TAUtil.Hpi;
     using TAUtil.Sct;
@@ -24,13 +24,18 @@
 
         public SectionInfo Get(int id) => this.sections[id];
 
-        public void AddSections(IEnumerable<SectionInfo> sections)
+        public void AddSections(IEnumerable<SectionInfo> sectionsEnumer)
         {
-            foreach (var s in sections)
+            foreach (var s in sectionsEnumer)
             {
                 this.AddSection(s);
             }
 
+            this.SectionsChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void NotifySectionsChanged()
+        {
             this.SectionsChanged?.Invoke(this, EventArgs.Empty);
         }
 

@@ -7,7 +7,7 @@
     using System.Reactive.Linq;
     using System.Windows.Forms;
 
-    using Mappy.Models;
+    using Models;
 
     using ListViewItem = System.Windows.Forms.ListViewItem;
 
@@ -18,6 +18,8 @@
         private bool suppressCombo1SelectedItemEvents;
         private bool suppressCombo2SelectedItemEvents;
 
+        private ListViewItem previousSelection;
+
         public SectionView()
         {
             this.InitializeComponent();
@@ -25,19 +27,20 @@
             this.control.ComboBox1.SelectedIndexChanged += this.ComboBox1SelectedIndexChanged;
             this.control.ComboBox2.SelectedIndexChanged += this.ComboBox2SelectedIndexChanged;
             this.control.ListView.ItemDrag += this.ListViewItemDrag;
+            this.control.ListView.SelectedIndexChanged += this.ListViewItemSelectionChanged;
         }
 
         public Size ImageSize { get; set; } = new Size(128, 128);
 
-        public void SetModel(ISectionViewViewModel model)
+        public void SetModel(ISectionViewViewModel newModel)
         {
-            model.ComboBox1Model.Buffer(2, 1).Subscribe(xs => this.UpdateComboBox1(xs[0], xs[1]));
+            newModel.ComboBox1Model.Buffer(2, 1).Subscribe(xs => this.UpdateComboBox1(xs[0], xs[1]));
 
-            model.ComboBox2Model.Buffer(2, 1).Subscribe(xs => this.UpdateComboBox2(xs[0], xs[1]));
+            newModel.ComboBox2Model.Buffer(2, 1).Subscribe(xs => this.UpdateComboBox2(xs[0], xs[1]));
 
-            model.ListViewItems.Subscribe(this.UpdateListView);
+            newModel.ListViewItems.Subscribe(this.UpdateListView);
 
-            this.model = model;
+            this.model = newModel;
         }
 
         private static void UpdateComboBox(ComboBox c, ComboBoxViewModel oldModel, ComboBoxViewModel newModel)
@@ -45,7 +48,7 @@
             c.BeginUpdate();
 
             // yes we really want reference equality here
-            if (oldModel.Items != newModel.Items)
+            if (!ReferenceEquals(oldModel.Items, newModel.Items))
             {
                 c.Items.Clear();
                 foreach (var x in newModel.Items)
@@ -57,6 +60,16 @@
             c.SelectedIndex = newModel.SelectedIndex;
 
             c.EndUpdate();
+        }
+
+        private static string GetSelectedItemName(ListViewItem item)
+        {
+            if (item.Tag is string selectedItemName)
+            {
+                return selectedItemName;
+            }
+
+            return item.Text;
         }
 
         private void UpdateComboBox1(ComboBoxViewModel oldModel, ComboBoxViewModel newModel)
@@ -133,6 +146,37 @@
 
             var data = view.SelectedItems[0].Tag;
             view.DoDragDrop(data, DragDropEffects.Copy);
+        }
+
+        private void ListViewItemSelectionChanged(object sender, EventArgs e)
+        {
+            var view = (ListView)sender;
+            if (view.SelectedItems.Count == 0)
+            {
+                return;
+            }
+
+            view.ItemSelectionChanged -= this.ListViewItemSelectionChanged;
+            var selItem = view.SelectedItems[0];
+
+            if (this.previousSelection == null ||
+                this.previousSelection.Index < 0 ||
+                view.Items[this.previousSelection.Index] == null)
+            {
+                this.previousSelection = selItem;
+                view.Items[selItem.Index].Selected = true;
+                this.model.SetSelectedItem(GetSelectedItemName(selItem));
+            }
+
+            if (selItem != this.previousSelection)
+            {
+                view.Items[this.previousSelection.Index].Selected = false;
+                view.Items[selItem.Index].Selected = true;
+                this.previousSelection = selItem;
+                this.model.SetSelectedItem(GetSelectedItemName(selItem));
+            }
+
+            view.ItemSelectionChanged += this.ListViewItemSelectionChanged;
         }
     }
 }
