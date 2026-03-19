@@ -498,14 +498,18 @@ namespace Mappy.Models
                 return;
             }
 
-            var endX = Math.Min(width, anchorX + size);
-            var endY = Math.Min(height, anchorY + size);
+            var endX = anchorX + 1;
+            var endY = anchorY + 1;
+            var startX = Math.Max(0, endX - size);
+            var startY = Math.Max(0, endY - size);
+            endX = Math.Min(width, endX);
+            endY = Math.Min(height, endY);
 
             var changes = new List<VoidBrushOperation.VoidChange>();
             var featuresToRemove = new Dictionary<Guid, FeatureInstance>();
-            for (var yy = anchorY; yy < endY; yy++)
+            for (var yy = startY; yy < endY; yy++)
             {
-                for (var xx = anchorX; xx < endX; xx++)
+                for (var xx = startX; xx < endX; xx++)
                 {
                     var idx = (yy * width) + xx;
                     var oldValue = grid[idx];
