@@ -37,8 +37,8 @@ jobs:
             Remove-Item $taUtilDir -Recurse -Force
           }
 
-          git clone "https://github.com/MHeasell/TAUtil.git" $taUtilDir
-          git -C $taUtilDir checkout 9c437a27aeb76afc1642d1f8028c4ec728063d2d
+          git clone "https://github.com/milkmanmatty/TAUtil.git" $taUtilDir
+          git -C $taUtilDir checkout b191efc0fcc1ee0b0ea53fe594a6671075e75a6e
 
       - name: Restore NuGet packages
         run: nuget restore Mappy.sln
