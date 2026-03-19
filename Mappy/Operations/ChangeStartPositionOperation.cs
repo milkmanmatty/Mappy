@@ -3,7 +3,7 @@
     using System;
     using System.Drawing;
 
-    using Mappy.Models;
+    using Models;
 
     public class ChangeStartPositionOperation : IReplayableOperation
     {

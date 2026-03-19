@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    using Mappy.Models;
+    using Models;
 
     public class BatchMoveFeatureOperation : IReplayableOperation
     {

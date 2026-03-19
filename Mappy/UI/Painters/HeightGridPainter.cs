@@ -1,49 +1,12 @@
-
 namespace Mappy.UI.Painters
 {
     using System;
     using System.Drawing;
-    using Mappy.Collections;
-    using Mappy.Util;
+    using Collections;
+    using Util;
 
     public class HeightGridPainter : IPainter
     {
-        private static (float, float, float) HslToRgb(float hue, float saturation, float lightness)
-        {
-            var c = (1.0f - Math.Abs((2.0f * lightness) - 1.0f)) * saturation;
-            var x = c * (1.0f - Math.Abs(((hue * 6.0f) % 2.0f) - 1.0f));
-            var m = lightness - (c / 2.0f);
-
-            float rPrime, gPrime, bPrime;
-
-            if (hue < 1.0f / 6.0f)
-            {
-                (rPrime, gPrime, bPrime) = (c, x, 0.0f);
-            }
-            else if (hue < 2.0f / 6.0f)
-            {
-                (rPrime, gPrime, bPrime) = (c, x, 0.0f);
-            }
-            else if (hue < 3.0f / 6.0f)
-            {
-                (rPrime, gPrime, bPrime) = (0.0f, c, x);
-            }
-            else if (hue < 4.0f / 6.0f)
-            {
-                (rPrime, gPrime, bPrime) = (0.0f, x, c);
-            }
-            else if (hue < 5.0f / 6.0f)
-            {
-                (rPrime, gPrime, bPrime) = (x, 0.0f, c);
-            }
-            else
-            {
-                (rPrime, gPrime, bPrime) = (c, 0.0f, x);
-            }
-
-            return (rPrime + m, gPrime + m, bPrime + m);
-        }
-
         private IGrid<int> heightGrid;
         private int tileSize;
 
@@ -101,6 +64,42 @@ namespace Mappy.UI.Painters
                     }
                 }
             }
+        }
+
+        private static (float, float, float) HslToRgb(float hue, float saturation, float lightness)
+        {
+            var c = (1.0f - Math.Abs((2.0f * lightness) - 1.0f)) * saturation;
+            var x = c * (1.0f - Math.Abs(((hue * 6.0f) % 2.0f) - 1.0f));
+            var m = lightness - (c / 2.0f);
+
+            float rPrime, gPrime, bPrime;
+
+            if (hue < 1.0f / 6.0f)
+            {
+                (rPrime, gPrime, bPrime) = (c, x, 0.0f);
+            }
+            else if (hue < 2.0f / 6.0f)
+            {
+                (rPrime, gPrime, bPrime) = (c, x, 0.0f);
+            }
+            else if (hue < 3.0f / 6.0f)
+            {
+                (rPrime, gPrime, bPrime) = (0.0f, c, x);
+            }
+            else if (hue < 4.0f / 6.0f)
+            {
+                (rPrime, gPrime, bPrime) = (0.0f, x, c);
+            }
+            else if (hue < 5.0f / 6.0f)
+            {
+                (rPrime, gPrime, bPrime) = (x, 0.0f, c);
+            }
+            else
+            {
+                (rPrime, gPrime, bPrime) = (c, 0.0f, x);
+            }
+
+            return (rPrime + m, gPrime + m, bPrime + m);
         }
     }
 }

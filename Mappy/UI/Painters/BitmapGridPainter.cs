@@ -1,9 +1,8 @@
 ﻿namespace Mappy.UI.Painters
 {
-    using System.Collections.Generic;
     using System.Drawing;
 
-    using Mappy.Collections;
+    using Collections;
 
     public class BitmapGridPainter : IPainter
     {

@@ -3,7 +3,7 @@
     using System;
     using System.Drawing;
 
-    using Mappy.Util;
+    using Util;
 
     /// <summary>
     /// Defines a free-form bandbox behaviour.

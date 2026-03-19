@@ -1,10 +1,9 @@
 namespace Mappy.Data
 {
-    using System;
     using System.Drawing;
 
-    using Mappy.Collections;
-    using Mappy.Util;
+    using Collections;
+    using Util;
 
     /// <summary>
     /// Represents the "blueprint" for a feature.

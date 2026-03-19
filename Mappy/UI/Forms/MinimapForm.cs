@@ -5,7 +5,7 @@
     using System.Reactive.Linq;
     using System.Windows.Forms;
 
-    using Mappy.Models;
+    using Models;
 
     public partial class MinimapForm : Form
     {
@@ -30,28 +30,28 @@
             this.InitializeComponent();
         }
 
-        public void SetModel(IMinimapFormViewModel model)
+        public void SetModel(IMinimapFormViewModel miniFormModel)
         {
-            model.PropertyAsObservable(x => x.MinimapVisible, nameof(model.MinimapVisible))
+            miniFormModel.PropertyAsObservable(x => x.MinimapVisible, nameof(miniFormModel.MinimapVisible))
                 .Subscribe(x => this.Visible = x);
 
-            model.PropertyAsObservable(x => x.MinimapImage, nameof(model.MinimapImage))
+            miniFormModel.PropertyAsObservable(x => x.MinimapImage, nameof(miniFormModel.MinimapImage))
                 .Select(x => x.Or(null))
                 .Subscribe(x => this.minimapControl.BackgroundImage = x);
 
-            model.PropertyAsObservable(x => x.MinimapRect, nameof(model.MinimapRect))
+            miniFormModel.PropertyAsObservable(x => x.MinimapRect, nameof(miniFormModel.MinimapRect))
                 .Subscribe(x => this.minimapControl.ViewportRect = x);
 
-            for (var i = 0; i < model.StartPositions.Count; i++)
+            for (var i = 0; i < miniFormModel.StartPositions.Count; i++)
             {
                 var i1 = i;
-                var pos = model.StartPositions[i];
+                var pos = miniFormModel.StartPositions[i];
                 pos.Subscribe(x => x.Do(
                             y => this.minimapControl.SetMarker(i1, y, StartPositionColors[i1]),
                             () => this.minimapControl.RemoveMarker(i1)));
             }
 
-            this.model = model;
+            this.model = miniFormModel;
         }
 
         private void MinimapFormFormClosing(object sender, FormClosingEventArgs e)

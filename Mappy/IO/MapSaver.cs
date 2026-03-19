@@ -1,9 +1,8 @@
 ﻿namespace Mappy.IO
 {
-    using System;
     using System.IO;
 
-    using Mappy.Models;
+    using Models;
 
     using TAUtil.HpiUtil;
     using TAUtil.Tnt;

@@ -2,8 +2,8 @@
 {
     using System.Collections.Generic;
 
-    using Mappy.Data;
-    using Mappy.IO;
+    using Data;
+    using IO;
 
     public class SectionFeatureLoadResult
     {

@@ -2,7 +2,7 @@ namespace Mappy.Models
 {
     using System;
     using System.Drawing;
-    using Mappy.Models.Enums;
+    using Enums;
 
     public interface IMainFormViewModel
     {

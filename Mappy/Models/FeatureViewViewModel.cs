@@ -7,8 +7,8 @@ namespace Mappy.Models
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
 
-    using Mappy.Data;
-    using Mappy.Services;
+    using Data;
+    using Services;
 
     public sealed class FeatureViewViewModel : ISectionViewViewModel, IDisposable
     {
@@ -188,8 +188,8 @@ namespace Mappy.Models
         {
             this.worldsInvalidated.OnNext(false);
 
-            var worlds = this.featureService.EnumerateWorlds();
-            var worldsModel = new ComboBoxViewModel(worlds.ToList());
+            var worldsEnumer = this.featureService.EnumerateWorlds();
+            var worldsModel = new ComboBoxViewModel(worldsEnumer.ToList());
             this.worlds.OnNext(worldsModel);
         }
 
@@ -198,8 +198,8 @@ namespace Mappy.Models
             this.categoriesInvalidated.OnNext(false);
 
             var world = this.worlds.Value.SelectedItem;
-            var categories = this.featureService.EnumerateCategories(world);
-            var categoriesModel = new ComboBoxViewModel(categories.ToList());
+            var cats = this.featureService.EnumerateCategories(world);
+            var categoriesModel = new ComboBoxViewModel(cats.ToList());
             this.categories.OnNext(categoriesModel);
         }
 
@@ -209,8 +209,8 @@ namespace Mappy.Models
 
             var world = this.worlds.Value.SelectedItem;
             var category = this.categories.Value.SelectedItem;
-            var features = this.featureService.EnumerateFeatures(world, category);
-            this.features.OnNext(features.Select(this.ToItem).ToList());
+            var feats = this.featureService.EnumerateFeatures(world, category);
+            this.features.OnNext(feats.Select(this.ToItem).ToList());
         }
 
         private void OnFeaturesChanged(object sender, EventArgs e)

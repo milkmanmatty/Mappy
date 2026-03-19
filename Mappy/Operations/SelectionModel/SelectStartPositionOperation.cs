@@ -1,6 +1,6 @@
 ﻿namespace Mappy.Operations.SelectionModel
 {
-    using Mappy.Models;
+    using Models;
 
     public class SelectStartPositionOperation : IReplayableOperation
     {

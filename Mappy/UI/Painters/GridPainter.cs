@@ -2,7 +2,7 @@
 {
     using System.Drawing;
 
-    using Mappy.Util;
+    using Util;
 
     public class GridPainter : IPainter
     {

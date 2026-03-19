@@ -2,7 +2,7 @@
 {
     using System;
 
-    using Mappy.Services;
+    using Services;
 
     public class FeatureTag : IMapItemTag
     {

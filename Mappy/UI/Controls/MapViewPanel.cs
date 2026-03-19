@@ -4,17 +4,17 @@ namespace Mappy.UI.Controls
     using System.Drawing;
     using System.Windows.Forms;
 
-    using Mappy.Models;
+    using Models;
 
     public partial class MapViewPanel : UserControl
     {
         private const int AutoScrollEdgeThreshold = 24;
 
+        private readonly Timer dragScrollTimer = new Timer { Interval = 16 };
+
         private IMapViewViewModel model;
 
         private Point oldAutoScrollPos;
-
-        private readonly Timer dragScrollTimer = new Timer { Interval = 16 };
 
         private bool dragInProgress;
 
@@ -47,19 +47,19 @@ namespace Mappy.UI.Controls
             return this.model?.ShiftMouseWheel(delta, ctrlPressed) == true;
         }
 
-        public void SetModel(IMapViewViewModel model)
+        public void SetModel(IMapViewViewModel newModel)
         {
-            model.CanvasSize.Subscribe(x => this.mapView.CanvasSize = x);
-            model.ViewportLocation.Subscribe(x => this.mapView.AutoScrollPosition = x);
-            model.HeightEditMode.Subscribe(this.OnHeightEditModeChanged);
-            model.VoidEditMode.Subscribe(this.OnVoidEditModeChanged);
+            newModel.CanvasSize.Subscribe(x => this.mapView.CanvasSize = x);
+            newModel.ViewportLocation.Subscribe(x => this.mapView.AutoScrollPosition = x);
+            newModel.HeightEditMode.Subscribe(this.OnHeightEditModeChanged);
+            newModel.VoidEditMode.Subscribe(this.OnVoidEditModeChanged);
 
-            model.ItemsLayer.Subscribe(x => this.mapView.Layers[0] = x);
-            model.VoidLayer.Subscribe(x => this.mapView.Layers[1] = x);
-            this.mapView.Layers[2] = model.GridLayer;
-            this.mapView.Layers[3] = model.GuidesLayer;
+            newModel.ItemsLayer.Subscribe(x => this.mapView.Layers[0] = x);
+            newModel.VoidLayer.Subscribe(x => this.mapView.Layers[1] = x);
+            this.mapView.Layers[2] = newModel.GridLayer;
+            this.mapView.Layers[3] = newModel.GuidesLayer;
 
-            this.model = model;
+            this.model = newModel;
         }
 
         private void MapViewDragDrop(object sender, DragEventArgs e)
@@ -290,7 +290,7 @@ namespace Mappy.UI.Controls
 
         private bool IsDragButtonDown()
         {
-            var buttons = Control.MouseButtons;
+            var buttons = MouseButtons;
             return (buttons & MouseButtons.Left) == MouseButtons.Left ||
                    (buttons & MouseButtons.Right) == MouseButtons.Right;
         }

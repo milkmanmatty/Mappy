@@ -2,8 +2,8 @@ namespace Mappy.Models
 {
     using System;
     using System.Drawing;
-    using Mappy.Models.Enums;
-    using Mappy.Util;
+    using Enums;
+    using Util;
 
     public class CoreModel : Notifier, IReadOnlyApplicationModel
     {
@@ -140,12 +140,12 @@ namespace Mappy.Models
         public void SetViewportLocation(Point location)
         {
             this.Map.IfSome(
-                map =>
+                mapModel =>
                     {
-                        location.X = Util.Clamp(location.X, 0, (map.MapWidth * 32) - this.ViewportWidth);
-                        location.Y = Util.Clamp(location.Y, 0, (map.MapHeight * 32) - this.ViewportHeight);
+                        location.X = Util.Clamp(location.X, 0, (mapModel.MapWidth * 32) - this.ViewportWidth);
+                        location.Y = Util.Clamp(location.Y, 0, (mapModel.MapHeight * 32) - this.ViewportHeight);
 
-                        map.ViewportLocation = location;
+                        mapModel.ViewportLocation = location;
                     });
         }
 

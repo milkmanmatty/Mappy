@@ -4,10 +4,10 @@ namespace Mappy.Models
     using System.Drawing;
     using System.Linq;
     using System.Reactive.Linq;
-    using Mappy.Collections;
-    using Mappy.Models.Enums;
-    using Mappy.Services;
-    using Mappy.Util;
+    using Collections;
+    using Enums;
+    using Services;
+    using Util;
 
     public class MainFormViewModel : IMainFormViewModel
     {
@@ -116,17 +116,6 @@ namespace Mappy.Models
                 }).Or("---"));
 
             this.dispatcher = dispatcher;
-        }
-
-        private static Data.Feature MakeDefaultFeatureRecord(string name)
-        {
-            return new Data.Feature
-            {
-                Name = name,
-                Offset = new Point(0, 0),
-                Footprint = new Size(1, 1),
-                Image = Mappy.Properties.Resources.nofeature
-            };
         }
 
         public IObservable<bool> CanCloseMap { get; }

@@ -2,10 +2,10 @@
 {
     using System.IO;
 
-    using Mappy.Collections;
-    using Mappy.Data;
-    using Mappy.IO;
-    using Mappy.Models;
+    using Collections;
+    using Data;
+    using IO;
+    using Models;
 
     using TAUtil.Hpi;
     using TAUtil.Sct;

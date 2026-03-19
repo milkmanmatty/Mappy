@@ -2,8 +2,8 @@
 {
     using System.Collections.Generic;
 
-    using Mappy.Data;
-    using Mappy.Models;
+    using Data;
+    using Models;
 
     public class ClearTilesOperation : IReplayableOperation
     {

@@ -6,8 +6,8 @@ namespace Mappy.Models
     using System.Linq;
     using System.Reactive.Subjects;
 
-    using Mappy.Data;
-    using Mappy.Services;
+    using Data;
+    using Services;
 
     public sealed class SectionViewViewModel : ISectionViewViewModel, IDisposable
     {
@@ -23,9 +23,7 @@ namespace Mappy.Models
 
         private readonly SectionService sectionService;
 
-        private readonly Dispatcher dispatcher;
-
-        public SectionViewViewModel(SectionService sectionService, Dispatcher dispatcher)
+        public SectionViewViewModel(SectionService sectionService)
         {
             sectionService.SectionsChanged += this.OnSectionsChanged;
 
@@ -47,7 +45,6 @@ namespace Mappy.Models
                     });
 
             this.sectionService = sectionService;
-            this.dispatcher = dispatcher;
         }
 
         public IObservable<ComboBoxViewModel> ComboBox1Model => this.worlds;
@@ -105,8 +102,8 @@ namespace Mappy.Models
 
         private void UpdateWorlds()
         {
-            var worlds = this.sectionService.EnumerateWorlds();
-            var worldsModel = new ComboBoxViewModel(worlds.ToList());
+            var worldsEnumer = this.sectionService.EnumerateWorlds();
+            var worldsModel = new ComboBoxViewModel(worldsEnumer.ToList());
             this.worlds.OnNext(worldsModel);
         }
 
@@ -114,8 +111,8 @@ namespace Mappy.Models
         {
             var world = this.worlds.Value.SelectedItem;
 
-            var categories = this.sectionService.EnumerateCategories(world);
-            var categoriesModel = new ComboBoxViewModel(categories.ToList());
+            var cats = this.sectionService.EnumerateCategories(world);
+            var categoriesModel = new ComboBoxViewModel(cats.ToList());
             this.categories.OnNext(categoriesModel);
         }
 
@@ -123,8 +120,8 @@ namespace Mappy.Models
         {
             var world = this.worlds.Value.SelectedItem;
             var category = this.categories.Value.SelectedItem;
-            var sections = this.sectionService.EnumerateSections(world, category);
-            this.sections.OnNext(sections.Select(x => ToItem(x.Key, x.Value)).ToList());
+            var sects = this.sectionService.EnumerateSections(world, category);
+            this.sections.OnNext(sects.Select(x => ToItem(x.Key, x.Value)).ToList());
         }
 
         private void OnSectionsChanged(object sender, EventArgs e)

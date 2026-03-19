@@ -9,18 +9,20 @@ namespace Mappy.Models
     using System.Reactive.Subjects;
     using System.Windows.Forms;
 
-    using Mappy.Collections;
-    using Mappy.Data;
-    using Mappy.Models.Enums;
-    using Mappy.Services;
-    using Mappy.UI.Controls;
-    using Mappy.UI.Drawables;
-    using Mappy.UI.Tags;
-    using Mappy.Util;
+    using Collections;
+    using Data;
+    using Enums;
+    using Services;
+    using UI.Controls;
+    using UI.Drawables;
+    using UI.Tags;
+    using Util;
 
     public class MapViewViewModel : IMapViewViewModel
     {
         private const int BandboxDepth = 100000000;
+
+        private const int HeightCursorDepth = BandboxDepth + 1;
 
         private static readonly Color BandboxFillColor = Color.FromArgb(127, Color.Blue);
 
@@ -30,8 +32,6 @@ namespace Mappy.Models
 
         private static readonly Color HeightCursorBorderColor = Color.Red;
 
-        private const int HeightCursorDepth = BandboxDepth + 1;
-
         private static readonly IDrawable[] StartPositionImages = LoadStartPositionImages();
 
         private static readonly Feature DefaultFeatureRecord = new Feature
@@ -39,7 +39,7 @@ namespace Mappy.Models
             Name = "default",
             Offset = new Point(0, 0),
             Footprint = new Size(1, 1),
-            Image = Mappy.Properties.Resources.nofeature
+            Image = Properties.Resources.nofeature
         };
 
         private readonly List<DrawableItem> tileMapping = new List<DrawableItem>();
@@ -64,6 +64,10 @@ namespace Mappy.Models
 
         private readonly FeatureService featureService;
 
+        private readonly BehaviorSubject<bool> heightEditModeObservable = new BehaviorSubject<bool>(false);
+
+        private readonly BehaviorSubject<bool> voidEditModeObservable = new BehaviorSubject<bool>(false);
+
         private IMainModel mapModel;
 
         private bool mouseDown;
@@ -87,10 +91,6 @@ namespace Mappy.Models
         private bool featuresVisible;
 
         private string mapFilePath;
-
-        private readonly BehaviorSubject<bool> heightEditModeObservable = new BehaviorSubject<bool>(false);
-
-        private readonly BehaviorSubject<bool> voidEditModeObservable = new BehaviorSubject<bool>(false);
 
         private bool heightEditMode;
 
@@ -128,13 +128,13 @@ namespace Mappy.Models
             var gridVisible = model.PropertyAsObservable(x => x.GridVisible, nameof(model.GridVisible));
             var gridColor = model.PropertyAsObservable(x => x.GridColor, nameof(model.GridColor));
             var gridSize = model.PropertyAsObservable(x => x.GridSize, nameof(model.GridSize));
-            var featuresVisible = model.PropertyAsObservable(x => x.FeaturesVisible, nameof(model.FeaturesVisible));
+            var featsVisible = model.PropertyAsObservable(x => x.FeaturesVisible, nameof(model.FeaturesVisible));
             var selectedTab = model.PropertyAsObservable(x => x.SelectedGUITab, nameof(model.SelectedGUITab));
-            var heightEditInterval = model.PropertyAsObservable(x => x.HeightEditInterval, nameof(model.HeightEditInterval));
-            var heightEditCursorSize = model.PropertyAsObservable(x => x.HeightEditCursorSize, nameof(model.HeightEditCursorSize));
-            var voidEditCursorSize = model.PropertyAsObservable(x => x.VoidEditCursorSize, nameof(model.VoidEditCursorSize));
+            var heightEditInt = model.PropertyAsObservable(x => x.HeightEditInterval, nameof(model.HeightEditInterval));
+            var heightEditCurSize = model.PropertyAsObservable(x => x.HeightEditCursorSize, nameof(model.HeightEditCursorSize));
+            var voidEditCurSize = model.PropertyAsObservable(x => x.VoidEditCursorSize, nameof(model.VoidEditCursorSize));
             var map = model.PropertyAsObservable(x => x.Map, nameof(model.Map));
-            var mapFilePath = map.ObservePropertyOrDefault(x => x.FilePath, "FilePath", null);
+            var mapFilepath = map.ObservePropertyOrDefault(x => x.FilePath, "FilePath", null);
 
             var mapWidth = map.ObservePropertyOrDefault(x => x.MapWidth, "MapWidth", 0);
             var mapHeight = map.ObservePropertyOrDefault(x => x.MapHeight, "MapHeight", 0);
@@ -153,12 +153,12 @@ namespace Mappy.Models
             heightmapVisible.Subscribe(this.RefreshHeightmapVisibility);
             heightGridVisible.Subscribe(this.RefreshHeightGridVisibility);
             voidsVisible.Subscribe(x => this.voidLayer.Value.Enabled = x);
-            featuresVisible.Subscribe(x => this.featuresVisible = x);
+            featsVisible.Subscribe(x => this.featuresVisible = x);
             selectedTab.Subscribe(this.OnSelectedTabChanged);
-            heightEditInterval.Subscribe(x => this.heightEditInterval = Math.Max(1, x));
-            heightEditCursorSize.Subscribe(this.OnHeightEditCursorSizeChanged);
-            voidEditCursorSize.Subscribe(this.OnVoidEditCursorSizeChanged);
-            mapFilePath.Subscribe(this.OnMapFilePathChanged);
+            heightEditInt.Subscribe(x => this.heightEditInterval = Math.Max(1, x));
+            heightEditCurSize.Subscribe(this.OnHeightEditCursorSizeChanged);
+            voidEditCurSize.Subscribe(this.OnVoidEditCursorSizeChanged);
+            mapFilepath.Subscribe(this.OnMapFilePathChanged);
 
             this.CanvasSize = mapWidth.CombineLatest(mapHeight, (w, h) => new Size(w * 32, h * 32));
             this.CanvasSize.Subscribe(
@@ -310,8 +310,7 @@ namespace Mappy.Models
                 this.dispatcher.DragDropFeature(
                     this.featureService.SelectedFeature.Name,
                     location.X,
-                    location.Y
-                );
+                    location.Y);
             }
         }
 
@@ -455,21 +454,62 @@ namespace Mappy.Models
             this.dispatcher.ClearSelection();
         }
 
+        private static Point ProjectHeightPoint(IGrid<int> heightGrid, int x, int y)
+        {
+            var sampleX = Util.Clamp(x, 0, heightGrid.Width - 1);
+            var sampleY = Util.Clamp(y, 0, heightGrid.Height - 1);
+            var h = heightGrid.Get(sampleX, sampleY);
+            return new Point(x * 16, (y * 16) - (h / 2));
+        }
+
+        private static Point[] BuildProjectedBoundaryPoints(IGrid<int> heightGrid, int startX, int startY, int endX, int endY)
+        {
+            var points = new List<Point>();
+            for (var x = startX; x <= endX; x++)
+            {
+                points.Add(ProjectHeightPoint(heightGrid, x, startY));
+            }
+
+            for (var y = startY + 1; y <= endY; y++)
+            {
+                points.Add(ProjectHeightPoint(heightGrid, endX, y));
+            }
+
+            for (var x = endX - 1; x >= startX; x--)
+            {
+                points.Add(ProjectHeightPoint(heightGrid, x, endY));
+            }
+
+            for (var y = endY - 1; y > startY; y--)
+            {
+                points.Add(ProjectHeightPoint(heightGrid, startX, y));
+            }
+
+            return points.ToArray();
+        }
+
         private static IDrawable[] LoadStartPositionImages()
         {
             var arr = new IDrawable[10];
             for (var i = 0; i < 10; i++)
             {
-                var image = new DrawableBitmap(Mappy.Util.Util.GetStartImage(i + 1));
+                var image = new DrawableBitmap(Util.GetStartImage(i + 1));
                 arr[i] = image;
             }
 
             return arr;
         }
 
-        private void SetMapModel(Maybe<UndoableMapModel> model)
+        private static bool IsNear(Point a, Point b, int threshold)
         {
-            this.mapModel = model.Or(null);
+            var dx = a.X - b.X;
+            var dy = a.Y - b.Y;
+            return (dx * dx) + (dy * dy) <= threshold * threshold;
+        }
+
+        private void SetMapModel(Maybe<UndoableMapModel> undoModel)
+        {
+            this.mapModel = undoModel.Or(null);
             this.WireMapModel();
             this.ResetView();
         }
@@ -997,18 +1037,18 @@ namespace Mappy.Models
                 return;
             }
 
-            var grid = this.mapModel.BaseTile.HeightGrid;
+            var heightGrid = this.mapModel.BaseTile.HeightGrid;
             var size = Math.Max(1, this.voidEditCursorSize);
             var startX = anchor.Value.X;
             var startY = anchor.Value.Y;
-            var endX = Math.Min(grid.Width, startX + size);
-            var endY = Math.Min(grid.Height, startY + size);
+            var endX = Math.Min(heightGrid.Width, startX + size);
+            var endY = Math.Min(heightGrid.Height, startY + size);
             if (endX <= startX || endY <= startY)
             {
                 return;
             }
 
-            var points = BuildProjectedBoundaryPoints(grid, startX, startY, endX, endY);
+            var points = BuildProjectedBoundaryPoints(heightGrid, startX, startY, endX, endY);
             if (points.Length < 3)
             {
                 return;
@@ -1071,40 +1111,6 @@ namespace Mappy.Models
                 this.itemsLayer.Value.Items.Remove(this.voidCursorMapping);
                 this.voidCursorMapping = null;
             }
-        }
-
-        private static Point ProjectHeightPoint(IGrid<int> heightGrid, int x, int y)
-        {
-            var sampleX = Util.Clamp(x, 0, heightGrid.Width - 1);
-            var sampleY = Util.Clamp(y, 0, heightGrid.Height - 1);
-            var h = heightGrid.Get(sampleX, sampleY);
-            return new Point(x * 16, (y * 16) - (h / 2));
-        }
-
-        private static Point[] BuildProjectedBoundaryPoints(IGrid<int> heightGrid, int startX, int startY, int endX, int endY)
-        {
-            var points = new List<Point>();
-            for (var x = startX; x <= endX; x++)
-            {
-                points.Add(ProjectHeightPoint(heightGrid, x, startY));
-            }
-
-            for (var y = startY + 1; y <= endY; y++)
-            {
-                points.Add(ProjectHeightPoint(heightGrid, endX, y));
-            }
-
-            for (var x = endX - 1; x >= startX; x--)
-            {
-                points.Add(ProjectHeightPoint(heightGrid, x, endY));
-            }
-
-            for (var y = endY - 1; y > startY; y--)
-            {
-                points.Add(ProjectHeightPoint(heightGrid, startX, y));
-            }
-
-            return points.ToArray();
         }
 
         private Point? ResolveSingleHeightAnchor(IGrid<int> heightGrid, Point location)
@@ -1178,13 +1184,6 @@ namespace Mappy.Models
             }
 
             return best;
-        }
-
-        private static bool IsNear(Point a, Point b, int threshold)
-        {
-            var dx = a.X - b.X;
-            var dy = a.Y - b.Y;
-            return (dx * dx) + (dy * dy) <= threshold * threshold;
         }
 
         private void RefreshSelection()
