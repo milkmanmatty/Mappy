@@ -400,7 +400,7 @@
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Assets\PALETTE.PAL" />
-    <None Include="default.json">
+    <None Include="default.json.sample">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Mappy.ruleset">
