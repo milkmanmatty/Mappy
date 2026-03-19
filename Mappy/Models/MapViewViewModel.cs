@@ -1396,6 +1396,7 @@ namespace Mappy.Models
             {
                 return;
             }
+
             var i = new DrawableItem(
                     r.X,
                     r.Y,

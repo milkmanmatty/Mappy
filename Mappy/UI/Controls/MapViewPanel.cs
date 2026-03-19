@@ -42,11 +42,6 @@ namespace Mappy.UI.Controls
             this.Disposed += this.MapViewPanelDisposed;
         }
 
-        private bool ShiftMouseWheel(int delta, bool ctrlPressed)
-        {
-            return this.model?.ShiftMouseWheel(delta, ctrlPressed) == true;
-        }
-
         public void SetModel(IMapViewViewModel newModel)
         {
             newModel.CanvasSize.Subscribe(x => this.mapView.CanvasSize = x);
@@ -60,6 +55,11 @@ namespace Mappy.UI.Controls
             this.mapView.Layers[3] = newModel.GuidesLayer;
 
             this.model = newModel;
+        }
+
+        private bool ShiftMouseWheel(int delta, bool ctrlPressed)
+        {
+            return this.model?.ShiftMouseWheel(delta, ctrlPressed) == true;
         }
 
         private void MapViewDragDrop(object sender, DragEventArgs e)
