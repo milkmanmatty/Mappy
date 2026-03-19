@@ -263,6 +263,16 @@ namespace Mappy.Models
 
             if (this.heightEditMode)
             {
+                if (this.heightEditModeType == Enums.HeightEditMode.Set && (Control.ModifierKeys & Keys.Control) == Keys.Control)
+                {
+                    this.activeHeightSetBrush = false;
+                    this.activeHeightBrushDelta = 0;
+                    this.lastHeightBrushPoint = null;
+                    this.TrySampleHeightIntoSetValue(location);
+                    this.mouseDown = false;
+                    return;
+                }
+
                 if (this.heightEditModeType == Enums.HeightEditMode.Set)
                 {
                     this.activeHeightSetBrush = true;
@@ -848,6 +858,35 @@ namespace Mappy.Models
         {
             this.voidEditCursorSize = Math.Max(1, size);
             this.UpdateVoidCursor(this.lastHoverPos);
+        }
+
+        private bool TrySampleHeightIntoSetValue(Point location)
+        {
+            if (this.mapModel == null)
+            {
+                return false;
+            }
+
+            Point? anchor;
+            if (this.heightEditCursorSize == 1)
+            {
+                anchor = this.ResolveSingleHeightAnchor(this.mapModel.BaseTile.HeightGrid, location);
+            }
+            else
+            {
+                this.pinnedSingleHeightPoint = null;
+                anchor = this.ResolveAreaHeightAnchor(this.mapModel.BaseTile.HeightGrid, location);
+            }
+
+            if (!anchor.HasValue)
+            {
+                return false;
+            }
+
+            var grid = this.mapModel.BaseTile.HeightGrid;
+            var sampledHeight = grid.Get(anchor.Value.X, anchor.Value.Y);
+            this.dispatcher.SetHeightEditSetValue(sampledHeight);
+            return true;
         }
 
         private void ApplyHeightBrushAt(Point location)
