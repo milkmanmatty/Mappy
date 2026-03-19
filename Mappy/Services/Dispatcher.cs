@@ -25,6 +25,11 @@ namespace Mappy.Services
 
     public class Dispatcher
     {
+        private static readonly string TempDir = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            "Mappy",
+            "Temp");
+
         private readonly CoreModel model;
 
         private readonly IDialogService dialogService;
@@ -39,6 +44,8 @@ namespace Mappy.Services
 
         private readonly ImageImportService imageImportingService;
 
+        private readonly ImageExportService imageExportingService;
+
         private readonly BitmapCache tileCache;
 
         private readonly Random rng = new Random();
@@ -51,7 +58,8 @@ namespace Mappy.Services
             FeatureService featureService,
             MapLoadingService mapLoadingService,
             ImageImportService imageImportingService,
-            BitmapCache tileCache)
+            BitmapCache tileCache,
+            ImageExportService imageExportingService)
         {
             this.model = model;
             this.dialogService = dialogService;
@@ -61,6 +69,7 @@ namespace Mappy.Services
             this.mapLoadingService = mapLoadingService;
             this.imageImportingService = imageImportingService;
             this.tileCache = tileCache;
+            this.imageExportingService = imageExportingService;
         }
 
         public void Initialize()
@@ -330,17 +339,17 @@ namespace Mappy.Services
             this.model.Map.IfSome(
                 map =>
                     {
-                        var data = Clipboard.GetData(DataFormats.Serializable);
+                        object data = Clipboard.GetData(DataFormats.Serializable);
                         if (data == null)
                         {
                             return;
                         }
 
-                        var loc = map.ViewportLocation;
+                        Point loc = map.ViewportLocation;
                         loc.X += this.model.ViewportWidth / 2;
                         loc.Y += this.model.ViewportHeight / 2;
 
-                        var tile = data as IMapTile;
+                        IMapTile tile = data as IMapTile;
                         if (tile != null)
                         {
                             this.DeduplicateTiles(tile.TileGrid);
@@ -348,27 +357,28 @@ namespace Mappy.Services
                         }
                         else
                         {
-                            if (data is FeatureClipboardRecord record)
+                            switch (data)
                             {
-                                map.DragDropFeature(record.FeatureName, loc.X, loc.Y);
-                                return;
-                            }
-
-                            if (data is List<FeatureClipboardRecord> featureList)
-                            {
-                                map.ClearSelection();
-                                var placedFeatures = new List<DrawableItem>();
-                                foreach (var feature in featureList)
+                                case FeatureClipboardRecord record:
+                                    map.DragDropFeature(record.FeatureName, loc.X, loc.Y);
+                                    return;
+                                case List<FeatureClipboardRecord> featureList:
                                 {
-                                    // Split these up so they can be debugged better
-                                    // force locs between 0 and MapWidth/Height
-                                    int xLocUnsafe = map.ViewportLocation.X + feature.VPOffsetX;
-                                    int xLoc = Math.Min(map.MapWidth * 32, Math.Max(0, xLocUnsafe));
+                                    map.ClearSelection();
+                                    foreach (var feature in featureList)
+                                    {
+                                        // Split these up so they can be debugged better
+                                        // force locs between 0 and MapWidth/Height
+                                        int xLocUnsafe = map.ViewportLocation.X + feature.VPOffsetX;
+                                        int xLoc = Math.Min(map.MapWidth * 32, Math.Max(0, xLocUnsafe));
 
-                                    int yLocUnsafe = map.ViewportLocation.Y + feature.VPOffsetY;
-                                    int yLoc = Math.Min(map.MapHeight * 32, Math.Max(0, yLocUnsafe));
+                                        int yLocUnsafe = map.ViewportLocation.Y + feature.VPOffsetY;
+                                        int yLoc = Math.Min(map.MapHeight * 32, Math.Max(0, yLocUnsafe));
 
-                                    map.DragDropFeature(feature.FeatureName, xLoc, yLoc, false);
+                                        map.DragDropFeature(feature.FeatureName, xLoc, yLoc, false);
+                                    }
+
+                                    break;
                                 }
                             }
                         }
@@ -401,6 +411,52 @@ namespace Mappy.Services
                     map.ResizeMap(newSize.Width, newSize.Height);
                     this.model.SetViewportLocation(oldViewportLocation);
                 });
+        }
+
+        public void Flip(FlipDirection direction)
+        {
+            this.model.Map.IfSome(
+                map =>
+                {
+                    if (!map.SelectedTile.HasValue || !map.FloatingTiles.Any() || map.FloatingTiles[map.SelectedTile.Value].Item == null)
+                    {
+                        return;
+                    }
+
+                    IMapTile floatTile = map.FloatingTiles[map.SelectedTile.Value].Item;
+
+                    MapTile destTile = new MapTile(floatTile.TileGrid.Width, floatTile.TileGrid.Height);
+                    GridMethods.Copy(floatTile.TileGrid, destTile.TileGrid, 0, 0, 0, 0, floatTile.TileGrid.Width, floatTile.TileGrid.Height);
+                    GridMethods.Copy(floatTile.HeightGrid, destTile.HeightGrid, 0, 0, 0, 0, floatTile.HeightGrid.Width, floatTile.HeightGrid.Height);
+
+                    GridMethods.FlipArea(floatTile.TileGrid, destTile.TileGrid, floatTile.TileGrid.Width, floatTile.TileGrid.Height, direction);
+                    GridMethods.FlipArea(floatTile.HeightGrid, destTile.HeightGrid, floatTile.HeightGrid.Width, floatTile.HeightGrid.Height, direction);
+
+                    if (!Directory.Exists(TempDir))
+                    {
+                        Directory.CreateDirectory(TempDir);
+                    }
+
+                    this.imageExportingService.ExportSection(
+                        destTile,
+                        Path.Combine(TempDir, "fhGraphic.png"),
+                        Path.Combine(TempDir, "fhHeightmap.png"));
+
+                    this.ImportCustomSectionHelper(
+                        map,
+                        Path.Combine(TempDir, "fhGraphic.png"),
+                        Path.Combine(TempDir, "fhHeightmap.png"));
+                });
+        }
+
+        public void FlipVertically()
+        {
+            this.model.Map.IfSome(map => { this.Flip(FlipDirection.Vertical); });
+        }
+
+        public void FlipHorizontally()
+        {
+            this.model.Map.IfSome(map => { this.Flip(FlipDirection.Horizontal); });
         }
 
         public void RefreshMinimap()
@@ -440,7 +496,7 @@ namespace Mappy.Services
 
         public void ImportCustomSection()
         {
-            this.model.Map.IfSome(this.ImportCustomSectionHelper);
+            this.model.Map.IfSome(this.ImportCustomSectionInteractiveHelper);
         }
 
         public void ImportHeightmap()
@@ -966,7 +1022,7 @@ namespace Mappy.Services
                     return Maybe.None<Grid<int>>();
                 }
 
-                return Maybe.Some(Mappy.Util.Util.ReadHeightmap(bmp));
+                return Maybe.Some(ImgUtil.ReadHeightmap(bmp));
             }
             catch (Exception)
             {
@@ -1051,7 +1107,7 @@ namespace Mappy.Services
 
             try
             {
-                var b = Mappy.Util.Util.ExportHeightmap(map.BaseTile.HeightGrid);
+                var b = ImgUtil.ExportHeightmap(map.BaseTile.HeightGrid);
                 using (var s = File.Create(loc))
                 {
                     b.Save(s, ImageFormat.Png);
@@ -1155,7 +1211,7 @@ namespace Mappy.Services
             pv.Display();
         }
 
-        private void ImportCustomSectionHelper(UndoableMapModel map)
+        private void ImportCustomSectionInteractiveHelper(UndoableMapModel map)
         {
             var paths = this.dialogService.AskUserToChooseSectionImportPaths();
             if (paths == null)
@@ -1210,6 +1266,53 @@ namespace Mappy.Services
             bg.RunWorkerAsync();
 
             dlg.Display();
+        }
+
+        private void ImportCustomSectionHelper(UndoableMapModel map, string graphicPath, string heightmapPath)
+        {
+            if (string.IsNullOrEmpty(graphicPath) && string.IsNullOrEmpty(heightmapPath))
+            {
+                return;
+            }
+
+            var bg = new BackgroundWorker();
+            bg.WorkerSupportsCancellation = true;
+            bg.WorkerReportsProgress = true;
+            bg.DoWork += (sender, args) =>
+            {
+                var w = (BackgroundWorker)sender;
+                var sect = this.imageImportingService.ImportSection(
+                    graphicPath,
+                    heightmapPath,
+                    w.ReportProgress,
+                    () => w.CancellationPending);
+                if (sect == null)
+                {
+                    args.Cancel = true;
+                    return;
+                }
+
+                args.Result = sect;
+            };
+
+            bg.RunWorkerCompleted += (sender, args) =>
+            {
+                if (args.Error != null)
+                {
+                    this.dialogService.ShowError(
+                        "There was a problem importing the section: " + args.Error.Message);
+                    return;
+                }
+
+                if (args.Cancelled)
+                {
+                    return;
+                }
+
+                map.PasteMapTileNoDeduplicateTopLeft((IMapTile)args.Result);
+            };
+
+            bg.RunWorkerAsync();
         }
     }
 }

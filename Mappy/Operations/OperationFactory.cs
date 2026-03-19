@@ -1,4 +1,6 @@
-﻿namespace Mappy.Operations
+﻿using Mappy.Models.Enums;
+
+namespace Mappy.Operations
 {
     using System;
     using System.Drawing;

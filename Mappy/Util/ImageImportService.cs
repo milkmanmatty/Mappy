@@ -55,7 +55,7 @@
                 }
             }
 
-            var heightmap = Util.ReadHeightmap(heightBitmap);
+            var heightmap = ImgUtil.ReadHeightmap(heightBitmap);
 
             return new MapTile(grid, heightmap);
         }

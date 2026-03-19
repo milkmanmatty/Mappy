@@ -63,6 +63,11 @@ namespace Mappy.UI.Forms
             model.CanPaste.Subscribe(x => this.pasteMenuItem.Enabled = x);
             model.CanFill.Subscribe(x => this.fillMenuItem.Enabled = x);
             model.CanResizeMap.Subscribe(x => this.resizeMapMenuItem.Enabled = x);
+            model.CanFlip.Subscribe(x =>
+            {
+                this.flipHorizontallyMenuItem.Enabled = x;
+                this.flipVerticallyMenuItem.Enabled = x;
+            });
 
             model.CanGenerateMinimap.Subscribe(x => this.generateMinimapMenuItem.Enabled = x);
             model.CanGenerateMinimapHighQuality.Subscribe(x => this.generateMinimapHighQualityMenuItem.Enabled = x);
@@ -256,6 +261,16 @@ namespace Mappy.UI.Forms
         private void ResizeMapMenuItemClick(object sender, EventArgs e)
         {
             this.model.ResizeMapMenuItemClick();
+        }
+
+        private void FlipHorizontallyMenuItemClick(object sender, EventArgs e)
+        {
+            this.model.FlipHorizontallyMenuItemClick();
+        }
+
+        private void FlipVerticallyMenuItemClick(object sender, EventArgs e)
+        {
+            this.model.FlipVerticallyMenuItemClick();
         }
 
         private void MainFormLoad(object sender, EventArgs e)

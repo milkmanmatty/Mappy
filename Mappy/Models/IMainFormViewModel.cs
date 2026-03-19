@@ -36,6 +36,8 @@ namespace Mappy.Models
 
         IObservable<bool> CanFill { get; }
 
+        IObservable<bool> CanFlip { get; }
+
         IObservable<bool> CanGenerateMinimap { get; }
 
         IObservable<bool> CanGenerateMinimapHighQuality { get; }
@@ -141,6 +143,10 @@ namespace Mappy.Models
         void FillMenuItemClick();
 
         void ResizeMapMenuItemClick();
+
+        void FlipHorizontallyMenuItemClick();
+
+        void FlipVerticallyMenuItemClick();
 
         void PasteMenuItemClick();
 

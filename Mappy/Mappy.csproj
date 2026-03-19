@@ -161,6 +161,7 @@
     <Compile Include="Models\BandboxMode.cs" />
     <Compile Include="Models\ComboBoxViewModel.cs" />
     <Compile Include="Models\CoreModel.cs" />
+    <Compile Include="Models\Enums\FlipDirection.cs" />
     <Compile Include="Models\Enums\GUITab.cs" />
     <Compile Include="Models\FeatureClipboardRecord.cs" />
     <Compile Include="Models\FeatureInstance.cs" />
@@ -319,12 +320,14 @@
     <Compile Include="UI\Tags\IMapItemTag.cs" />
     <Compile Include="UI\Tags\SectionTag.cs" />
     <Compile Include="UI\Tags\StartPositionTag.cs" />
+    <Compile Include="Util\ImageExportService.cs" />
     <Compile Include="Util\ImageImportService.cs" />
     <Compile Include="Util\ImageSampling\BilinearWrapper.cs" />
     <Compile Include="Util\ImageSampling\IPixelImage.cs" />
     <Compile Include="Util\ImageSampling\NearestNeighbourPaletteWrapper.cs" />
     <Compile Include="Util\ImageSampling\MapPixelImageAdapter.cs" />
     <Compile Include="Util\ImageSampling\NearestNeighbourWrapper.cs" />
+    <Compile Include="Util\ImgUtil.cs" />
     <Compile Include="Util\Notifier.cs" />
     <Compile Include="Util\OffsetBitmap.cs" />
     <Compile Include="Util\Util.cs" />
@@ -446,6 +449,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\mappy.ico" />
+    <Content Include="Assets\TA Palette.pal">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc2\analyzers\dotnet\cs\Newtonsoft.Json.dll" />

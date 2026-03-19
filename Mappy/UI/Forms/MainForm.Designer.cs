@@ -64,6 +64,8 @@ namespace Mappy.UI.Forms
 			this.pasteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.fillMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.resizeMapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.flipHorizontallyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.flipVerticallyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mapAttributesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.generateMinimapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.generateMinimapHighQualityMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -340,6 +342,8 @@ namespace Mappy.UI.Forms
             this.pasteMenuItem,
             this.fillMenuItem,
             this.resizeMapMenuItem,
+            this.flipHorizontallyMenuItem,
+            this.flipVerticallyMenuItem,
             toolStripSeparator9,
             this.mapAttributesMenuItem,
             toolStripSeparator3,
@@ -412,6 +416,22 @@ namespace Mappy.UI.Forms
 			this.resizeMapMenuItem.Size = new System.Drawing.Size(250, 22);
 			this.resizeMapMenuItem.Text = "Resize Map...";
 			this.resizeMapMenuItem.Click += new System.EventHandler(this.ResizeMapMenuItemClick);
+			// 
+			// flipHorizontallyMenuItem
+			// 
+			this.flipHorizontallyMenuItem.Enabled = false;
+			this.flipHorizontallyMenuItem.Name = "flipHorizontallyMenuItem";
+			this.flipHorizontallyMenuItem.Size = new System.Drawing.Size(343, 30);
+			this.flipHorizontallyMenuItem.Text = "Flip Horizontally";
+			this.flipHorizontallyMenuItem.Click += new System.EventHandler(this.FlipHorizontallyMenuItemClick);
+			// 
+			// flipVerticallyMenuItem
+			// 
+			this.flipVerticallyMenuItem.Enabled = false;
+			this.flipVerticallyMenuItem.Name = "flipVerticallyMenuItem";
+			this.flipVerticallyMenuItem.Size = new System.Drawing.Size(343, 30);
+			this.flipVerticallyMenuItem.Text = "Flip Vertically";
+			this.flipVerticallyMenuItem.Click += new System.EventHandler(this.FlipVerticallyMenuItemClick);
 			// 
 			// mapAttributesMenuItem
 			// 
@@ -1033,6 +1053,8 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripStatusLabel hoveredFeatureLabel;
         private System.Windows.Forms.ToolStripMenuItem fillMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resizeMapMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem flipVerticallyMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem flipHorizontallyMenuItem;
     }
 }
 
