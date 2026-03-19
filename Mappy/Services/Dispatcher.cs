@@ -413,7 +413,7 @@ namespace Mappy.Services
                 });
         }
 
-        public void FlipHorizontally()
+        public void Flip(FlipDirection direction)
         {
             this.model.Map.IfSome(
                 map =>
@@ -423,19 +423,19 @@ namespace Mappy.Services
                         return;
                     }
 
-                    if (!Directory.Exists(TempDir))
-                    {
-                        Directory.CreateDirectory(TempDir);
-                    }
-
                     IMapTile floatTile = map.FloatingTiles[map.SelectedTile.Value].Item;
 
                     MapTile destTile = new MapTile(floatTile.TileGrid.Width, floatTile.TileGrid.Height);
                     GridMethods.Copy(floatTile.TileGrid, destTile.TileGrid, 0, 0, 0, 0, floatTile.TileGrid.Width, floatTile.TileGrid.Height);
                     GridMethods.Copy(floatTile.HeightGrid, destTile.HeightGrid, 0, 0, 0, 0, floatTile.HeightGrid.Width, floatTile.HeightGrid.Height);
 
-                    GridMethods.FlipArea(floatTile.TileGrid, destTile.TileGrid, 0, 0, 0, 0, floatTile.TileGrid.Width, floatTile.TileGrid.Height, FlipDirection.Horizontal);
-                    GridMethods.FlipArea(floatTile.HeightGrid, destTile.HeightGrid, 0, 0, 0, 0, floatTile.HeightGrid.Width, floatTile.HeightGrid.Height, FlipDirection.Horizontal);
+                    GridMethods.FlipArea(floatTile.TileGrid, destTile.TileGrid, floatTile.TileGrid.Width, floatTile.TileGrid.Height, direction);
+                    GridMethods.FlipArea(floatTile.HeightGrid, destTile.HeightGrid, floatTile.HeightGrid.Width, floatTile.HeightGrid.Height, direction);
+
+                    if (!Directory.Exists(TempDir))
+                    {
+                        Directory.CreateDirectory(TempDir);
+                    }
 
                     this.imageExportingService.ExportSection(
                         destTile,
@@ -451,7 +451,12 @@ namespace Mappy.Services
 
         public void FlipVertically()
         {
-            this.model.Map.IfSome(map => map.FillWithSelectedTile());
+            this.model.Map.IfSome(map => { this.Flip(FlipDirection.Vertical); });
+        }
+
+        public void FlipHorizontally()
+        {
+            this.model.Map.IfSome(map => { this.Flip(FlipDirection.Horizontal); });
         }
 
         public void RefreshMinimap()

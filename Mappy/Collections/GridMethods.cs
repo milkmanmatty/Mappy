@@ -1,10 +1,8 @@
-﻿using System.Drawing.Imaging;
-using TAUtil.Gdi.Palette;
-
-namespace Mappy.Collections
+﻿namespace Mappy.Collections
 {
     using System;
     using System.Drawing;
+    using System.Drawing.Imaging;
     using Mappy.Models.Enums;
 
     /// <summary>
@@ -159,85 +157,86 @@ namespace Mappy.Collections
             }
         }
 
-        public static void FlipArea<T>(IGrid<T> src, IGrid<T> dest, int sourceX, int sourceY, int destX, int destY, int width, int height, FlipDirection direction)
+        public static void FlipArea(IGrid<Bitmap> src, IGrid<Bitmap> dest, int width, int height, FlipDirection direction)
         {
             if (width < 0 || height < 0)
             {
-                throw new ArgumentException("copy area has negative dimensions");
-            }
-
-            if (sourceX < 0 || sourceY < 0 || sourceX + width > src.Width || sourceY + height > src.Height)
-            {
-                throw new ArgumentException("source area overlaps source bounds");
-            }
-
-            if (destX < 0 || destY < 0 || destX + width > dest.Width || destY + height > dest.Height)
-            {
-                // TODO  - force destination area to be in bounds
-                throw new ArgumentException("destination area overlaps destination bounds");
+                throw new ArgumentException("flip area has negative dimensions");
             }
 
             // TODO - use linear algebra here for perf gains
-            switch (direction)
+            for (var dy = 0; dy < height; dy++)
             {
-                case FlipDirection.Horizontal:
-                    if (typeof(Bitmap) == typeof(T))
+                for (var dx = 0; dx < width; dx++)
+                {
+                    // Create a copy of the tile, flip this copy later
+                    Bitmap target = new Bitmap(32, 32, PixelFormat.Format8bppIndexed);
+                    BitmapData targetData = target.LockBits(
+                        new Rectangle(0, 0, 32, 32),
+                        ImageLockMode.WriteOnly,
+                        PixelFormat.Format32bppArgb);
+
+                    // Read the source Bitmap - paste these bits onto "target"
+                    Bitmap tile = src.Get(dx, dy);
+                    BitmapData tileData = tile.LockBits(
+                        new Rectangle(0, 0, 32, 32),
+                        ImageLockMode.ReadOnly,
+                        PixelFormat.Format32bppArgb);
+
+                    try
                     {
-                        for (var dy = 0; dy < height; dy++)
+                        unsafe
                         {
-                            for (var dx = 0; dx < width; dx++)
+                            var source = (byte*)tileData.Scan0;
+                            var dst = (byte*)targetData.Scan0;
+                            for (var row = 0; row < 32; row++)
                             {
-                                // Create a copy of the tile, flip this later
-                                Bitmap target = new Bitmap(32, 32, PixelFormat.Format8bppIndexed);
-                                BitmapData targetData = target.LockBits(
-                                    new Rectangle(0, 0, 32, 32),
-                                    ImageLockMode.WriteOnly,
-                                    PixelFormat.Format32bppArgb);
-
-                                // Read the source Bitmap - paste these bits onto "target"
-                                Bitmap tile = (Bitmap)(object)src.Get(dx, dy);
-                                BitmapData tileData = tile.LockBits(
-                                    new Rectangle(0, 0, 32, 32),
-                                    ImageLockMode.ReadOnly,
-                                    PixelFormat.Format32bppArgb);
-
-                                try
-                                {
-                                    unsafe
-                                    {
-                                        var source = (byte*)tileData.Scan0;
-                                        var dst = (byte*)targetData.Scan0;
-                                        for (var row = 0; row < 32; row++)
-                                        {
-                                            Buffer.MemoryCopy(
-                                                source + (row * tileData.Stride),
-                                                dst + (row * targetData.Stride),
-                                                32 * 4,
-                                                32 * 4);
-                                        }
-                                    }
-                                }
-                                finally
-                                {
-                                    target.UnlockBits(targetData);
-                                    tile.UnlockBits(tileData);
-                                }
-
-                                // Flip the target Bitmap.
-                                // Without creating a copy this will mess up everything in the Bitmap cache
-                                target.RotateFlip(RotateFlipType.RotateNoneFlipX);
-                                dest.Set(width - 1 - dx, dy, (T)(object)target);
+                                Buffer.MemoryCopy(
+                                    source + (row * tileData.Stride),
+                                    dst + (row * targetData.Stride),
+                                    32 * 4,
+                                    32 * 4);
                             }
                         }
                     }
-                    else
+                    finally
                     {
-                        for (var dy = 0; dy < height; dy++)
+                        target.UnlockBits(targetData);
+                        tile.UnlockBits(tileData);
+                    }
+
+                    // Flip the target Bitmap.
+                    // Without creating a copy this will mess up everything in the Bitmap cache
+                    if (direction == FlipDirection.Horizontal)
+                    {
+                        target.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                        dest.Set(width - 1 - dx, dy, target);
+                    }
+                    else if (direction == FlipDirection.Vertical)
+                    {
+                        target.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                        dest.Set(dx, height - 1 - dy, target);
+                    }
+                }
+            }
+        }
+
+        public static void FlipArea(IGrid<int> src, IGrid<int> dest, int width, int height, FlipDirection direction)
+        {
+            if (width < 0 || height < 0)
+            {
+                throw new ArgumentException("flip area has negative dimensions");
+            }
+
+            // TODO - use linear algebra instead of nested for loops here for perf gains
+            switch (direction)
+            {
+                case FlipDirection.Horizontal:
+                    for (var dy = 0; dy < height; dy++)
+                    {
+                        for (var dx = 0; dx < width; dx++)
                         {
-                            for (var dx = 0; dx < width; dx++)
-                            {
-                                dest.Set(width - 1 - dx, dy, src.Get(dx, dy));
-                            }
+                            dest.Set(width - 1 - dx, dy, src.Get(dx, dy));
                         }
                     }
 
