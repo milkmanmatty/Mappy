@@ -32,6 +32,10 @@ namespace Mappy.Models
 
         int HeightEditInterval { get; }
 
+        HeightEditMode HeightEditMode { get; }
+
+        int HeightEditSetValue { get; }
+
         int HeightEditCursorSize { get; }
 
         int VoidEditCursorSize { get; }

@@ -90,6 +90,17 @@ namespace Mappy.UI.Forms
                 .Select(x => x.ToString(CultureInfo.CurrentCulture))
                 .Subscribe(x => this.seaLevelValueLabel.Text = x);
             newModel.HeightEditInterval.Subscribe(x => this.intervalNumericUpDown.Value = x);
+            newModel.HeightEditMode.Subscribe(
+                x =>
+                    {
+                        this.incrementDecrementHeightRadioButton.Checked = x == HeightEditMode.IncrementDecrement;
+                        this.setHeightRadioButton.Checked = x == HeightEditMode.Set;
+                        this.intervalLabel.Enabled = x == HeightEditMode.IncrementDecrement;
+                        this.intervalNumericUpDown.Enabled = x == HeightEditMode.IncrementDecrement;
+                        this.selectedHeightLabel.Enabled = x == HeightEditMode.Set;
+                        this.selectedHeightNumericUpDown.Enabled = x == HeightEditMode.Set;
+                    });
+            newModel.HeightEditSetValue.Subscribe(x => this.selectedHeightNumericUpDown.Value = x);
             newModel.HeightEditCursorSize.Subscribe(x => this.cursorSizeNumericUpDown.Value = x);
             newModel.VoidEditCursorSize.Subscribe(x => this.voidCursorSizeNumericUpDown.Value = x);
 

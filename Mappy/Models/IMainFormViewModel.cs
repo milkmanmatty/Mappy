@@ -66,6 +66,10 @@ namespace Mappy.Models
 
         IObservable<int> HeightEditInterval { get; }
 
+        IObservable<HeightEditMode> HeightEditMode { get; }
+
+        IObservable<int> HeightEditSetValue { get; }
+
         IObservable<int> HeightEditCursorSize { get; }
 
         IObservable<int> VoidEditCursorSize { get; }
@@ -131,6 +135,10 @@ namespace Mappy.Models
         void SeaLevelTrackBarMouseUp();
 
         void HeightEditIntervalChanged(int value);
+
+        void HeightEditModeChanged(HeightEditMode mode);
+
+        void HeightEditSetValueChanged(int value);
 
         void HeightEditCursorSizeChanged(int value);
 

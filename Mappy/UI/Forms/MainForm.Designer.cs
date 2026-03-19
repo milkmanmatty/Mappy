@@ -94,6 +94,10 @@ namespace Mappy.UI.Forms
 			this.featuresTab = new System.Windows.Forms.TabPage();
 			this.startPositionsTab = new System.Windows.Forms.TabPage();
 			this.heightTab = new System.Windows.Forms.TabPage();
+			this.setHeightRadioButton = new System.Windows.Forms.RadioButton();
+			this.incrementDecrementHeightRadioButton = new System.Windows.Forms.RadioButton();
+			this.selectedHeightNumericUpDown = new System.Windows.Forms.NumericUpDown();
+			this.selectedHeightLabel = new System.Windows.Forms.Label();
 			this.cursorSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
 			this.cursorSizeLabel = new System.Windows.Forms.Label();
 			this.intervalNumericUpDown = new System.Windows.Forms.NumericUpDown();
@@ -131,6 +135,7 @@ namespace Mappy.UI.Forms
 			this.featuresTab.SuspendLayout();
 			this.startPositionsTab.SuspendLayout();
 			this.heightTab.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.selectedHeightNumericUpDown)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.cursorSizeNumericUpDown)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.intervalNumericUpDown)).BeginInit();
 			this.voidTab.SuspendLayout();
@@ -686,6 +691,10 @@ namespace Mappy.UI.Forms
 			// 
 			// heightTab
 			// 
+			this.heightTab.Controls.Add(this.setHeightRadioButton);
+			this.heightTab.Controls.Add(this.incrementDecrementHeightRadioButton);
+			this.heightTab.Controls.Add(this.selectedHeightNumericUpDown);
+			this.heightTab.Controls.Add(this.selectedHeightLabel);
 			this.heightTab.Controls.Add(this.cursorSizeNumericUpDown);
 			this.heightTab.Controls.Add(this.cursorSizeLabel);
 			this.heightTab.Controls.Add(this.intervalNumericUpDown);
@@ -698,6 +707,59 @@ namespace Mappy.UI.Forms
 			this.heightTab.TabIndex = 3;
 			this.heightTab.Text = "Height";
 			this.heightTab.UseVisualStyleBackColor = true;
+			// 
+			// setHeightRadioButton
+			// 
+			this.setHeightRadioButton.AutoSize = true;
+			this.setHeightRadioButton.Location = new System.Drawing.Point(6, 27);
+			this.setHeightRadioButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.setHeightRadioButton.Name = "setHeightRadioButton";
+			this.setHeightRadioButton.Size = new System.Drawing.Size(75, 17);
+			this.setHeightRadioButton.TabIndex = 7;
+			this.setHeightRadioButton.TabStop = true;
+			this.setHeightRadioButton.Text = "Set height";
+			this.setHeightRadioButton.UseVisualStyleBackColor = true;
+			this.setHeightRadioButton.CheckedChanged += new System.EventHandler(this.SetHeightRadioButtonCheckedChanged);
+			// 
+			// incrementDecrementHeightRadioButton
+			// 
+			this.incrementDecrementHeightRadioButton.AutoSize = true;
+			this.incrementDecrementHeightRadioButton.Checked = true;
+			this.incrementDecrementHeightRadioButton.Location = new System.Drawing.Point(6, 6);
+			this.incrementDecrementHeightRadioButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.incrementDecrementHeightRadioButton.Name = "incrementDecrementHeightRadioButton";
+			this.incrementDecrementHeightRadioButton.Size = new System.Drawing.Size(128, 17);
+			this.incrementDecrementHeightRadioButton.TabIndex = 6;
+			this.incrementDecrementHeightRadioButton.TabStop = true;
+			this.incrementDecrementHeightRadioButton.Text = "Increment/decrement";
+			this.incrementDecrementHeightRadioButton.UseVisualStyleBackColor = true;
+			this.incrementDecrementHeightRadioButton.CheckedChanged += new System.EventHandler(this.IncrementDecrementHeightRadioButtonCheckedChanged);
+			// 
+			// selectedHeightNumericUpDown
+			// 
+			this.selectedHeightNumericUpDown.Enabled = false;
+			this.selectedHeightNumericUpDown.Location = new System.Drawing.Point(98, 48);
+			this.selectedHeightNumericUpDown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.selectedHeightNumericUpDown.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+			this.selectedHeightNumericUpDown.Name = "selectedHeightNumericUpDown";
+			this.selectedHeightNumericUpDown.Size = new System.Drawing.Size(41, 20);
+			this.selectedHeightNumericUpDown.TabIndex = 5;
+			this.selectedHeightNumericUpDown.ValueChanged += new System.EventHandler(this.SelectedHeightNumericUpDownValueChanged);
+			// 
+			// selectedHeightLabel
+			// 
+			this.selectedHeightLabel.AutoSize = true;
+			this.selectedHeightLabel.Enabled = false;
+			this.selectedHeightLabel.Location = new System.Drawing.Point(4, 50);
+			this.selectedHeightLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.selectedHeightLabel.Name = "selectedHeightLabel";
+			this.selectedHeightLabel.Size = new System.Drawing.Size(80, 13);
+			this.selectedHeightLabel.TabIndex = 4;
+			this.selectedHeightLabel.Text = "Selected height";
 			// 
 			// voidTab
 			// 
@@ -748,7 +810,7 @@ namespace Mappy.UI.Forms
 			// 
 			// cursorSizeNumericUpDown
 			// 
-			this.cursorSizeNumericUpDown.Location = new System.Drawing.Point(65, 27);
+			this.cursorSizeNumericUpDown.Location = new System.Drawing.Point(98, 90);
 			this.cursorSizeNumericUpDown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
 			this.cursorSizeNumericUpDown.Minimum = new decimal(new int[] {
             1,
@@ -773,7 +835,7 @@ namespace Mappy.UI.Forms
 			// cursorSizeLabel
 			// 
 			this.cursorSizeLabel.AutoSize = true;
-			this.cursorSizeLabel.Location = new System.Drawing.Point(4, 29);
+			this.cursorSizeLabel.Location = new System.Drawing.Point(4, 92);
 			this.cursorSizeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.cursorSizeLabel.Name = "cursorSizeLabel";
 			this.cursorSizeLabel.Size = new System.Drawing.Size(58, 13);
@@ -782,7 +844,7 @@ namespace Mappy.UI.Forms
 			// 
 			// intervalNumericUpDown
 			// 
-			this.intervalNumericUpDown.Location = new System.Drawing.Point(65, 6);
+			this.intervalNumericUpDown.Location = new System.Drawing.Point(98, 69);
 			this.intervalNumericUpDown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
 			this.intervalNumericUpDown.Minimum = new decimal(new int[] {
             1,
@@ -791,7 +853,7 @@ namespace Mappy.UI.Forms
             0});
 			this.intervalNumericUpDown.Name = "intervalNumericUpDown";
 			this.intervalNumericUpDown.Size = new System.Drawing.Size(41, 20);
-			this.intervalNumericUpDown.TabIndex = 1;
+			this.intervalNumericUpDown.TabIndex = 2;
 			this.intervalNumericUpDown.Value = new decimal(new int[] {
             4,
             0,
@@ -802,7 +864,7 @@ namespace Mappy.UI.Forms
 			// intervalLabel
 			// 
 			this.intervalLabel.AutoSize = true;
-			this.intervalLabel.Location = new System.Drawing.Point(4, 8);
+			this.intervalLabel.Location = new System.Drawing.Point(4, 71);
 			this.intervalLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.intervalLabel.Name = "intervalLabel";
 			this.intervalLabel.Size = new System.Drawing.Size(42, 13);
@@ -966,6 +1028,7 @@ namespace Mappy.UI.Forms
 			this.startPositionsTab.ResumeLayout(false);
 			this.heightTab.ResumeLayout(false);
 			this.heightTab.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.selectedHeightNumericUpDown)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.cursorSizeNumericUpDown)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.intervalNumericUpDown)).EndInit();
 			this.voidTab.ResumeLayout(false);
@@ -1021,6 +1084,10 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.TabPage startPositionsTab;
         private StartPositionsView startPositionsView1;
         private System.Windows.Forms.TabPage heightTab;
+        private System.Windows.Forms.RadioButton setHeightRadioButton;
+        private System.Windows.Forms.RadioButton incrementDecrementHeightRadioButton;
+        private System.Windows.Forms.NumericUpDown selectedHeightNumericUpDown;
+        private System.Windows.Forms.Label selectedHeightLabel;
         private System.Windows.Forms.NumericUpDown cursorSizeNumericUpDown;
         private System.Windows.Forms.Label cursorSizeLabel;
         private System.Windows.Forms.NumericUpDown intervalNumericUpDown;
