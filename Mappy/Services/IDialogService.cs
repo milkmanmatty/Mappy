@@ -4,8 +4,8 @@ namespace Mappy.Services
     using System.Drawing;
     using System.Windows.Forms;
 
-    using Mappy.Models;
-    using Mappy.Views;
+    using Models;
+    using Views;
 
     public interface IDialogService
     {

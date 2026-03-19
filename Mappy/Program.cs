@@ -4,11 +4,11 @@ namespace Mappy
     using System.IO;
     using System.Windows.Forms;
 
-    using Mappy.IO;
-    using Mappy.Models;
-    using Mappy.Services;
-    using Mappy.UI.Forms;
-    using Mappy.Util;
+    using IO;
+    using Models;
+    using Services;
+    using UI.Forms;
+    using Util;
 
     public static class Program
     {
@@ -77,7 +77,7 @@ namespace Mappy
                 imageExportingService);
             mainForm.SetModel(new MainFormViewModel(model, dispatcher, featureService));
 
-            mainForm.SectionView.SetModel(new SectionViewViewModel(sectionsService, dispatcher));
+            mainForm.SectionView.SetModel(new SectionViewViewModel(sectionsService));
             mainForm.FeatureView.SetModel(new FeatureViewViewModel(featureService, dispatcher));
 
             mainForm.MapViewPanel.SetModel(new MapViewViewModel(model, dispatcher, featureService));
@@ -99,36 +99,6 @@ namespace Mappy
             }
 
             Application.Run(mainForm);
-        }
-
-        private static string GetCommandLinePathToOpen(string[] args)
-        {
-            if (args == null || args.Length == 0)
-            {
-                return null;
-            }
-
-            var path = args[0].Trim();
-            if (string.IsNullOrEmpty(path))
-            {
-                return null;
-            }
-
-            if (!File.Exists(path))
-            {
-                return null;
-            }
-
-            var ext = (Path.GetExtension(path) ?? string.Empty).ToLowerInvariant();
-            foreach (var supported in SupportedMapExtensions)
-            {
-                if (ext == supported)
-                {
-                    return path;
-                }
-            }
-
-            return null;
         }
 
         public static void HandleUnexpectedException(Exception ex)
@@ -169,7 +139,7 @@ namespace Mappy
                 MessageBox.Show(
                     null,
                     msg,
-                    "Fatal Error",
+                    @"Fatal Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 
@@ -185,7 +155,7 @@ namespace Mappy
 
             var result = MessageBox.Show(
                 errString,
-                "Fatal Error",
+                @"Fatal Error",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Error);
             if (result == DialogResult.Yes)
@@ -195,11 +165,41 @@ namespace Mappy
                 // Unfortunately there's no way to know whether this succeeded.
                 bugsnagClient.Notify(ex);
                 MessageBox.Show(
-                    "Attempted to send the report. Thanks for your help to improve Mappy.",
-                    "Report Sent",
+                    @"Attempted to send the report. Thanks for your help to improve Mappy.",
+                    @"Report Sent",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
+        }
+
+        private static string GetCommandLinePathToOpen(string[] args)
+        {
+            if (args == null || args.Length == 0)
+            {
+                return null;
+            }
+
+            var path = args[0].Trim();
+            if (string.IsNullOrEmpty(path))
+            {
+                return null;
+            }
+
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            var ext = (Path.GetExtension(path) ?? string.Empty).ToLowerInvariant();
+            foreach (var supported in SupportedMapExtensions)
+            {
+                if (ext == supported)
+                {
+                    return path;
+                }
+            }
+
+            return null;
         }
 
         private static void UnhandledException(object sender, UnhandledExceptionEventArgs e)

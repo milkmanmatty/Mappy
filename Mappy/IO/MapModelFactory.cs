@@ -5,10 +5,10 @@
     using System.Drawing;
     using System.Linq;
 
-    using Mappy.Collections;
-    using Mappy.Data;
-    using Mappy.Models;
-    using Mappy.Services;
+    using Collections;
+    using Data;
+    using Models;
+    using Services;
 
     using TAUtil;
     using TAUtil.Gdi.Bitmap;
@@ -89,6 +89,8 @@
                     }
                 }
             }
+
+            enumer.Dispose();
         }
 
         private static void ReadData(ITntSource tnt, MapModel model, List<Bitmap> tiles)
@@ -102,6 +104,8 @@
                     model.Tile.TileGrid.Set(x, y, tiles[enumer.Current]);
                 }
             }
+
+            enumer.Dispose();
         }
 
         private static Bitmap ToBitmap(MinimapInfo minimap)

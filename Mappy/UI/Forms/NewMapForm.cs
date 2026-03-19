@@ -99,7 +99,7 @@ namespace Mappy.UI.Forms
 
             var convertedX = (valX * 32) / 512.0f;
 
-            this.convertedWidthLabel.Text = $"({convertedX})";
+            this.convertedWidthLabel.Text = $@"({convertedX})";
         }
 
         private void HeightTextChanged(object sender, EventArgs e)
@@ -113,7 +113,7 @@ namespace Mappy.UI.Forms
 
             var convertedY = (valY * 32) / 512.0f;
 
-            this.convertedHeightLabel.Text = $"({convertedY})";
+            this.convertedHeightLabel.Text = $@"({convertedY})";
         }
     }
 }

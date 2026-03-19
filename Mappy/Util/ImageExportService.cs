@@ -2,7 +2,7 @@
 {
     using System.Drawing;
     using System.Drawing.Imaging;
-    using Mappy.Data;
+    using Data;
 
     public class ImageExportService
     {

@@ -5,8 +5,7 @@ namespace Mappy.IO
     using System.Drawing;
     using System.Linq;
 
-    using Mappy.Data;
-    using Mappy.Util;
+    using Data;
 
     public static class FeatureLoadingUtils
     {

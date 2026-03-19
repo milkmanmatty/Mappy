@@ -6,9 +6,9 @@
     using System.ComponentModel;
     using System.Drawing;
 
-    using Mappy.Collections;
-    using Mappy.Data;
-    using Mappy.Util;
+    using Collections;
+    using Data;
+    using Util;
 
     public class MapModel : Notifier, ISelectionModel
     {
@@ -229,11 +229,11 @@
                 throw new InvalidOperationException("No tile selected.");
             }
 
-            var tile = this.FloatingTiles[this.SelectedTile.Value];
-            var loc = tile.Location;
+            var floatTile = this.FloatingTiles[this.SelectedTile.Value];
+            var loc = floatTile.Location;
             loc.X += x;
             loc.Y += y;
-            tile.Location = loc;
+            floatTile.Location = loc;
         }
 
         public void DeleteSelectedTile()
@@ -437,10 +437,10 @@
 
         private void MergeTile(int index)
         {
-            var tile = this.FloatingTiles[index];
-            var src = tile.Item;
-            var x = tile.Location.X;
-            var y = tile.Location.Y;
+            var floatTile = this.FloatingTiles[index];
+            var src = floatTile.Item;
+            var x = floatTile.Location.X;
+            var y = floatTile.Location.Y;
 
             var dst = this.Tile;
 

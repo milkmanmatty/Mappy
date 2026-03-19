@@ -7,15 +7,14 @@ namespace Mappy.Util
     using System.Drawing.Imaging;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
+    using Collections;
+    using Data;
     using Geometry;
-    using Mappy.Collections;
-    using Mappy.Data;
-    using Mappy.Models;
-    using Mappy.Models.Enums;
-    using Mappy.Properties;
-    using Mappy.Services;
-    using Mappy.Util.ImageSampling;
+    using ImageSampling;
+    using Models;
+    using Models.Enums;
+    using Properties;
+    using Services;
     using TAUtil.Gdi.Palette;
 
     public static class Util
@@ -49,8 +48,7 @@ namespace Mappy.Util
                     new Vector3D((col * 16) + 0.5, (row * 16) + 0.5, height),
                     16.0,
                     16.0);
-                double distance;
-                if (rect.Intersect(ray, out distance))
+                if (rect.Intersect(ray, out _))
                 {
                     return new Point(col, row);
                 }
@@ -162,13 +160,6 @@ namespace Mappy.Util
             return mapping;
         }
 
-        public struct RenderMinimapArgs
-        {
-            public IReadOnlyMapModel MapModel { get; set; }
-
-            public FeatureService FeatureService { get; set; }
-        }
-
         public static BackgroundWorker RenderMinimapWorker()
         {
             var worker = new BackgroundWorker();
@@ -180,13 +171,6 @@ namespace Mappy.Util
                     RenderHighQualityMinimap(w, args);
                 };
             return worker;
-        }
-
-        public struct FeatureInfo
-        {
-            public Bitmap Image { get; set; }
-
-            public Point Location { get; set; }
         }
 
         public static IEnumerable<U> Choose<T, U>(this IEnumerable<T> coll, Func<T, Maybe<U>> f)
@@ -308,77 +292,6 @@ namespace Mappy.Util
                     entry.Key.UnlockBits(entry.Value);
                 }
             }
-        }
-
-        private static Color3f Color3fFromColor(Color c)
-        {
-            return new Color3f
-            {
-                R = c.R / 255.0f,
-                G = c.G / 255.0f,
-                B = c.B / 255.0f,
-            };
-        }
-
-        private static Color ColorFromColor3f(Color3f c)
-        {
-            return Color.FromArgb((int)(c.R * 255.0f), (int)(c.G * 255.0f), (int)(c.B * 255.0f));
-        }
-
-        private static Maybe<Bitmap> BitmapFromColorEnumerable(IEnumerable<Color> input, int width, int height, Func<bool> shouldCancel, Action<int> reportProgress)
-        {
-            var bitmap = new Bitmap(width, height);
-            var data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-            try
-            {
-                unsafe
-                {
-                    var ptr = (int*)data.Scan0;
-                    var i = 0;
-                    foreach (var c in input)
-                    {
-                        if (shouldCancel())
-                        {
-                            return Maybe.None<Bitmap>();
-                        }
-
-                        ptr[i++] = c.ToArgb();
-                        reportProgress((i * 100) / (width * height));
-                    }
-                }
-            }
-            finally
-            {
-                bitmap.UnlockBits(data);
-            }
-
-            return Maybe.Some(bitmap);
-        }
-
-        private static void CopyColorRange(BitmapData data, int dataStartIndex, Color[] output, int outputStartIndex, int length)
-        {
-            for (var i = 0; i < length; ++i)
-            {
-                unsafe
-                {
-                    var ptr = (int*)data.Scan0;
-                    var color = Color.FromArgb(ptr[dataStartIndex + i]);
-                    if (color.A > 0)
-                    {
-                        output[outputStartIndex + i] = color;
-                    }
-                }
-            }
-        }
-
-        private static void CopyRow(BitmapData data, int rowNumber, int startX, int length, Color[] output, int startIndex)
-        {
-            CopyColorRange(data, (rowNumber * data.Width) + startX, output, startIndex, length);
-        }
-
-        private static void CopyRow(BitmapData data, int rowNumber, Color[] output, int startIndex)
-        {
-            CopyRow(data, rowNumber, 0, data.Width, output, startIndex);
         }
 
         public static void RenderHighQualityMinimap(BackgroundWorker w, DoWorkEventArgs workArgs)
@@ -595,6 +508,150 @@ namespace Mappy.Util
             return (topLeft + topRight + bottomLeft + bottomRight) / 4;
         }
 
+        public static Bitmap BitmapFromFile(string filename)
+        {
+            // It was discovered that when loading 8bpp PNG images
+            // via Image.FromStream, we crash with an OOM exception
+            // when trying to display them.
+            // Further to that, when we try to quantize Bitmap instances
+            // that use the 8bpp format internally, using say Quantization.ToTAPalette,
+            // these images can end up being made darker even if our code
+            // does not actually change the pixel values.
+            //
+            // These appear to be .NET Framework or GDI+ bugs.
+            //
+            // Passing the Bitmap straight into another Bitmap constructor
+            // causes it to get converted to the 32 bit ARGB format
+            // which does not have these issues.
+            using (var bmp = new Bitmap(filename))
+            {
+                return new Bitmap(bmp);
+            }
+        }
+
+        public static IEnumerable<Color3f> Resize(IEnumerable<Color3f> input, int width, int height, int newWidth, int newHeight)
+        {
+            using (var enumerator = input.GetEnumerator())
+            {
+                var nBuffer = new int[newWidth];
+                var rowBuffer = new Color3f[newWidth];
+                var currentResizedY = 0;
+
+                for (var y = 0; y < height; ++y)
+                {
+                    var resizedY = (int)(y * (newHeight / (float)height));
+                    if (resizedY != currentResizedY)
+                    {
+                        foreach (var c in rowBuffer)
+                        {
+                            yield return c;
+                        }
+
+                        Array.Clear(rowBuffer, 0, nBuffer.Length);
+                        Array.Clear(nBuffer, 0, nBuffer.Length);
+                        currentResizedY = resizedY;
+                    }
+
+                    for (var x = 0; x < width; ++x)
+                    {
+                        var resizedX = (int)(x * (newWidth / (float)width));
+                        if (!enumerator.MoveNext())
+                        {
+                            throw new Exception("Enumerator contained too few elements");
+                        }
+
+                        rowBuffer[resizedX] = CombineAverage(rowBuffer[resizedX], enumerator.Current, ++nBuffer[resizedX]);
+                    }
+                }
+
+                foreach (var c in rowBuffer)
+                {
+                    yield return c;
+                }
+            }
+        }
+
+        private static Color3f CombineAverage(Color3f acc, Color3f val, int n)
+        {
+            return new Color3f
+            {
+                R = acc.R + ((val.R - acc.R) / n),
+                G = acc.G + ((val.G - acc.G) / n),
+                B = acc.B + ((val.B - acc.B) / n),
+            };
+        }
+
+        private static Color3f Color3fFromColor(Color c)
+        {
+            return new Color3f
+            {
+                R = c.R / 255.0f,
+                G = c.G / 255.0f,
+                B = c.B / 255.0f,
+            };
+        }
+
+        private static Color ColorFromColor3f(Color3f c)
+        {
+            return Color.FromArgb((int)(c.R * 255.0f), (int)(c.G * 255.0f), (int)(c.B * 255.0f));
+        }
+
+        private static Maybe<Bitmap> BitmapFromColorEnumerable(IEnumerable<Color> input, int width, int height, Func<bool> shouldCancel, Action<int> reportProgress)
+        {
+            var bitmap = new Bitmap(width, height);
+            var data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+            try
+            {
+                unsafe
+                {
+                    var ptr = (int*)data.Scan0;
+                    var i = 0;
+                    foreach (var c in input)
+                    {
+                        if (shouldCancel())
+                        {
+                            return Maybe.None<Bitmap>();
+                        }
+
+                        ptr[i++] = c.ToArgb();
+                        reportProgress((i * 100) / (width * height));
+                    }
+                }
+            }
+            finally
+            {
+                bitmap.UnlockBits(data);
+            }
+
+            return Maybe.Some(bitmap);
+        }
+
+        private static void CopyColorRange(BitmapData data, int dataStartIndex, Color[] output, int outputStartIndex, int length)
+        {
+            for (var i = 0; i < length; ++i)
+            {
+                unsafe
+                {
+                    var ptr = (int*)data.Scan0;
+                    var color = Color.FromArgb(ptr[dataStartIndex + i]);
+                    if (color.A > 0)
+                    {
+                        output[outputStartIndex + i] = color;
+                    }
+                }
+            }
+        }
+
+        private static void CopyRow(BitmapData data, int rowNumber, int startX, int length, Color[] output, int startIndex)
+        {
+            CopyColorRange(data, (rowNumber * data.Width) + startX, output, startIndex, length);
+        }
+
+        private static void CopyRow(BitmapData data, int rowNumber, Color[] output, int startIndex)
+        {
+            CopyRow(data, rowNumber, 0, data.Width, output, startIndex);
+        }
+
         private static Rectangle2D ComputeBoundingBox(IEnumerable<Line2D> lines)
         {
             return ComputeBoundingBox(ToPoints(lines));
@@ -660,25 +717,18 @@ namespace Mappy.Util
                 ProjectPoint(line.End));
         }
 
-        public static Bitmap BitmapFromFile(string filename)
+        public struct RenderMinimapArgs
         {
-            // It was discovered that when loading 8bpp PNG images
-            // via Image.FromStream, we crash with an OOM exception
-            // when trying to display them.
-            // Further to that, when we try to quantize Bitmap instances
-            // that use the 8bpp format internally, using say Quantization.ToTAPalette,
-            // these images can end up being made darker even if our code
-            // does not actually change the pixel values.
-            //
-            // These appear to be .NET Framework or GDI+ bugs.
-            //
-            // Passing the Bitmap straight into another Bitmap constructor
-            // causes it to get converted to the 32 bit ARGB format
-            // which does not have these issues.
-            using (var bmp = new Bitmap(filename))
-            {
-                return new Bitmap(bmp);
-            }
+            public IReadOnlyMapModel MapModel { get; set; }
+
+            public FeatureService FeatureService { get; set; }
+        }
+
+        public struct FeatureInfo
+        {
+            public Bitmap Image { get; set; }
+
+            public Point Location { get; set; }
         }
 
         public struct Color3f
@@ -690,58 +740,6 @@ namespace Mappy.Util
             public float G { get; set; }
 
             public float B { get; set; }
-        }
-
-        private static Color3f CombineAverage(Color3f acc, Color3f val, int n)
-        {
-            return new Color3f
-            {
-                R = acc.R + ((val.R - acc.R) / n),
-                G = acc.G + ((val.G - acc.G) / n),
-                B = acc.B + ((val.B - acc.B) / n),
-            };
-        }
-
-        public static IEnumerable<Color3f> Resize(IEnumerable<Color3f> input, int width, int height, int newWidth, int newHeight)
-        {
-            using (var enumerator = input.GetEnumerator())
-            {
-                var nBuffer = new int[newWidth];
-                var rowBuffer = new Color3f[newWidth];
-                var currentResizedY = 0;
-
-                for (var y = 0; y < height; ++y)
-                {
-                    var resizedY = (int)(y * (newHeight / (float)height));
-                    if (resizedY != currentResizedY)
-                    {
-                        foreach (var c in rowBuffer)
-                        {
-                            yield return c;
-                        }
-
-                        Array.Clear(rowBuffer, 0, nBuffer.Length);
-                        Array.Clear(nBuffer, 0, nBuffer.Length);
-                        currentResizedY = resizedY;
-                    }
-
-                    for (var x = 0; x < width; ++x)
-                    {
-                        var resizedX = (int)(x * (newWidth / (float)width));
-                        if (!enumerator.MoveNext())
-                        {
-                            throw new Exception("Enumerator contained too few elements");
-                        }
-
-                        rowBuffer[resizedX] = CombineAverage(rowBuffer[resizedX], enumerator.Current, ++nBuffer[resizedX]);
-                    }
-                }
-
-                foreach (var c in rowBuffer)
-                {
-                    yield return c;
-                }
-            }
         }
     }
 }

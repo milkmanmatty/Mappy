@@ -4,8 +4,8 @@ namespace Mappy.Operations
     using System.Collections.Generic;
     using System.Linq;
 
-    using Mappy.Collections;
-    using Mappy.Models;
+    using Collections;
+    using Models;
 
     public sealed class VoidBrushOperation : IReplayableOperation
     {
@@ -68,18 +68,18 @@ namespace Mappy.Operations
                 throw new InvalidOperationException("Cannot combine void operations from different maps.");
             }
 
-            var map = this.changes.ToDictionary(x => x.Index, x => x);
+            var mappings = this.changes.ToDictionary(x => x.Index, x => x);
 
             foreach (var change in other.changes)
             {
                 VoidChange previous;
-                if (map.TryGetValue(change.Index, out previous))
+                if (mappings.TryGetValue(change.Index, out previous))
                 {
-                    map[change.Index] = new VoidChange(change.Index, previous.OldValue, change.NewValue);
+                    mappings[change.Index] = new VoidChange(change.Index, previous.OldValue, change.NewValue);
                 }
                 else
                 {
-                    map[change.Index] = change;
+                    mappings[change.Index] = change;
                 }
             }
 
@@ -88,7 +88,7 @@ namespace Mappy.Operations
                 .GroupBy(x => x.Id)
                 .Select(x => x.First());
 
-            return new VoidBrushOperation(this.grid, map.Values, this.map, removed);
+            return new VoidBrushOperation(this.grid, mappings.Values, this.map, removed);
         }
 
         public readonly struct VoidChange

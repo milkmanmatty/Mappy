@@ -3,7 +3,7 @@
     using System;
     using System.Drawing;
 
-    using Mappy.UI.Controls;
+    using Controls;
 
     public abstract class AbstractDrawable : IDrawable
     {

@@ -3,8 +3,8 @@
     using System.Collections.Generic;
     using System.IO;
 
-    using Mappy.Data;
-    using Mappy.IO;
+    using Data;
+    using IO;
 
     using TAUtil.Hpi;
     using TAUtil.Sct;

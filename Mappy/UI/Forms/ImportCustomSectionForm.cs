@@ -36,8 +36,8 @@
         private void Button1Click(object sender, System.EventArgs e)
         {
             var dlg = new OpenFileDialog();
-            dlg.Title = "Open Graphic Image";
-            dlg.Filter = "PNG images|*.png|All files|*.*";
+            dlg.Title = @"Open Graphic Image";
+            dlg.Filter = @"PNG images|*.png|All files|*.*";
             var result = dlg.ShowDialog(this);
             if (result == DialogResult.OK)
             {
@@ -48,8 +48,8 @@
         private void Button2Click(object sender, System.EventArgs e)
         {
             var dlg = new OpenFileDialog();
-            dlg.Title = "Open Heightmap Image";
-            dlg.Filter = "Image files|*.png;*jpg;*.jpeg;*.gif;*.bmp|All files|*.*";
+            dlg.Title = @"Open Heightmap Image";
+            dlg.Filter = @"Image files|*.png;*jpg;*.jpeg;*.gif;*.bmp|All files|*.*";
             var result = dlg.ShowDialog(this);
             if (result == DialogResult.OK)
             {

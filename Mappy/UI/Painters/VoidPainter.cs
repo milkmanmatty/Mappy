@@ -5,7 +5,7 @@ namespace Mappy.UI.Painters
     using System.Drawing;
     using System.Linq;
 
-    using Mappy.Collections;
+    using Collections;
 
     public sealed class VoidPainter : IPainter, IDisposable
     {

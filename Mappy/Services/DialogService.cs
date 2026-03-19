@@ -5,9 +5,9 @@ namespace Mappy.Services
     using System.Drawing;
     using System.Windows.Forms;
 
-    using Mappy.Models;
-    using Mappy.UI.Forms;
-    using Mappy.Views;
+    using Models;
+    using UI.Forms;
+    using Views;
 
     public class DialogService : IDialogService
     {
@@ -54,7 +54,7 @@ namespace Mappy.Services
         public string AskUserToOpenFile()
         {
             var d = new OpenFileDialog();
-            d.Filter = "TA Map Files|*.hpi;*.ufo;*.ccx;*.gpf;*.gp3;*.tnt|All files|*.*";
+            d.Filter = @"TA Map Files|*.hpi;*.ufo;*.ccx;*.gpf;*.gp3;*.tnt|All files|*.*";
             if (d.ShowDialog(this.owner) == DialogResult.OK)
             {
                 return d.FileName;
@@ -66,7 +66,7 @@ namespace Mappy.Services
         public string AskUserToChooseMinimap()
         {
             var d = new OpenFileDialog();
-            d.Filter = "Image Files|*.png;*.jpg;*.jpeg;*.gif;*.bmp|All files|*.*";
+            d.Filter = @"Image Files|*.png;*.jpg;*.jpeg;*.gif;*.bmp|All files|*.*";
             if (d.ShowDialog(this.owner) == DialogResult.OK)
             {
                 return d.FileName;
@@ -78,7 +78,7 @@ namespace Mappy.Services
         public string AskUserToSaveFile()
         {
             var d = new SaveFileDialog();
-            d.Filter = "HPI files|*.hpi;*.ufo;*.ccx;*.gpf;*.gp3|TNT files|*.tnt|All files|*.*";
+            d.Filter = @"HPI files|*.hpi;*.ufo;*.ccx;*.gpf;*.gp3|TNT files|*.tnt|All files|*.*";
             d.AddExtension = true;
             d.DefaultExt = "ufo";
             var result = d.ShowDialog(this.owner);
@@ -93,8 +93,8 @@ namespace Mappy.Services
         public string AskUserToSaveMinimap()
         {
             var d = new SaveFileDialog();
-            d.Title = "Export Minimap";
-            d.Filter = "PNG files|*.png|All files|*.*";
+            d.Title = @"Export Minimap";
+            d.Filter = @"PNG files|*.png|All files|*.*";
             d.AddExtension = true;
             var result = d.ShowDialog(this.owner);
             if (result == DialogResult.OK)
@@ -108,8 +108,8 @@ namespace Mappy.Services
         public string AskUserToSaveHeightmap()
         {
             var d = new SaveFileDialog();
-            d.Title = "Export Heightmap";
-            d.Filter = "PNG files|*.png|All files|*.*";
+            d.Title = @"Export Heightmap";
+            d.Filter = @"PNG files|*.png|All files|*.*";
             d.AddExtension = true;
             var result = d.ShowDialog(this.owner);
             if (result == DialogResult.OK)
@@ -123,8 +123,8 @@ namespace Mappy.Services
         public string AskUserToSaveMapImage()
         {
             var d = new SaveFileDialog();
-            d.Title = "Export Map Image";
-            d.Filter = "PNG files|*.png|All files|*.*";
+            d.Title = @"Export Map Image";
+            d.Filter = @"PNG files|*.png|All files|*.*";
             d.AddExtension = true;
             var result = d.ShowDialog(this.owner);
             if (result == DialogResult.OK)
@@ -138,8 +138,8 @@ namespace Mappy.Services
         public string AskUserToChooseHeightmap(int width, int height)
         {
             var d = new OpenFileDialog();
-            d.Title = $"Import Heightmap ({width}x{height} image)";
-            d.Filter = "Image Files|*.png;*.jpg;*.jpeg;*.gif;*.bmp|All files|*.*";
+            d.Title = $@"Import Heightmap ({width}x{height} image)";
+            d.Filter = @"Image Files|*.png;*.jpg;*.jpeg;*.gif;*.bmp|All files|*.*";
             if (d.ShowDialog(this.owner) == DialogResult.OK)
             {
                 return d.FileName;
@@ -150,7 +150,7 @@ namespace Mappy.Services
 
         public DialogResult AskUserToDiscardChanges()
         {
-            return MessageBox.Show("There are unsaved changes. Save before closing?", "Save", MessageBoxButtons.YesNoCancel);
+            return MessageBox.Show(@"There are unsaved changes. Save before closing?", @"Save", MessageBoxButtons.YesNoCancel);
         }
 
         public Size AskUserNewMapSize()
@@ -165,7 +165,7 @@ namespace Mappy.Services
                 case DialogResult.Cancel:
                     return Size.Empty;
                 default:
-                    throw new ArgumentException("bad dialogresult");
+                    throw new ArgumentException(@"bad dialogresult");
             }
         }
 
@@ -216,7 +216,7 @@ namespace Mappy.Services
 
         public void ShowError(string message)
         {
-            MessageBox.Show(this.owner, message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this.owner, message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         public IProgressView CreateProgressView()

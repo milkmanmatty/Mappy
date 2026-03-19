@@ -7,15 +7,13 @@ namespace Mappy.Models
     using System.ComponentModel;
     using System.Drawing;
     using System.Linq;
-
-    using Mappy.Collections;
-    using Mappy.Data;
-    using Mappy.Models.BandboxBehaviours;
-    using Mappy.Models.Enums;
-    using Mappy.Operations;
-    using Mappy.Operations.SelectionModel;
-    using Mappy.Util;
-    using Mappy.Util.ImageSampling;
+    using BandboxBehaviours;
+    using Collections;
+    using Data;
+    using Enums;
+    using Operations;
+    using Operations.SelectionModel;
+    using Util;
 
     public sealed class UndoableMapModel : Notifier, IMainModel, IBandboxModel, IReadOnlyMapModel
     {
@@ -25,7 +23,7 @@ namespace Mappy.Models
 
         private readonly IBandboxBehaviour freeBandboxBehaviour;
 
-        private ISelectionModel model;
+        private readonly ISelectionModel model;
 
         private IBandboxBehaviour currentBandboxBehaviour;
 
@@ -310,8 +308,6 @@ namespace Mappy.Models
 
             var size = Math.Max(1, cursorSize);
             var grid = this.model.Tile.HeightGrid;
-            var width = grid.Width;
-            var height = grid.Height;
 
             if (size == 1)
             {
@@ -320,6 +316,7 @@ namespace Mappy.Models
                 {
                     this.AdjustHeightPoint(point.Value.X, point.Value.Y, delta);
                 }
+
                 return;
             }
 
@@ -865,7 +862,7 @@ namespace Mappy.Models
                 || heightmap.Height != this.model.Tile.HeightGrid.Height)
             {
                 throw new ArgumentException(
-                    "Dimensions do not match map heightmap",
+                    @"Dimensions do not match map heightmap",
                     nameof(heightmap));
             }
 

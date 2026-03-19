@@ -3,7 +3,7 @@ namespace Mappy.Operations
     using System.Collections.Generic;
     using System.Linq;
 
-    using Mappy.Collections;
+    using Collections;
 
     public class HeightBrushOperation : IReplayableOperation
     {

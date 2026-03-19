@@ -1,6 +1,6 @@
 ﻿namespace Mappy.Operations
 {
-    using Mappy.Collections;
+    using Collections;
 
     public class CopyAreaOperation<T> : IReplayableOperation
     {

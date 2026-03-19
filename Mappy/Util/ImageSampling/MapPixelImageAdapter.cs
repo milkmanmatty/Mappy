@@ -5,7 +5,7 @@
     using System.Drawing;
     using System.Drawing.Imaging;
 
-    using Mappy.Collections;
+    using Collections;
 
     public sealed class MapPixelImageAdapter : IPixelImage, IDisposable
     {

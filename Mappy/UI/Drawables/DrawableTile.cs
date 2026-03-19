@@ -2,8 +2,8 @@ namespace Mappy.UI.Drawables
 {
     using System.Drawing;
 
-    using Mappy.Data;
-    using Mappy.UI.Painters;
+    using Data;
+    using Painters;
 
     public class DrawableTile : AbstractDrawable
     {

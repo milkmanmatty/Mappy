@@ -5,16 +5,14 @@ namespace Mappy.Services
     using System.Drawing;
     using System.IO;
     using System.Linq;
-
-    using Mappy.Data;
-    using Mappy.IO;
-    using Mappy.IO.Gaf;
-    using Mappy.Util;
-
+    using Data;
+    using IO;
+    using IO.Gaf;
     using TAUtil._3do;
     using TAUtil.Gaf;
     using TAUtil.Gdi.Bitmap;
     using TAUtil.Hpi;
+    using Util;
 
     public class FeatureService
     {

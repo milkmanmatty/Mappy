@@ -8,20 +8,17 @@ namespace Mappy.Services
     using System.IO;
     using System.Linq;
     using System.Windows.Forms;
-
-    using Mappy.Collections;
-    using Mappy.Data;
-    using Mappy.IO;
-    using Mappy.Models;
-    using Mappy.Models.Enums;
-    using Mappy.UI.Controls;
-    using Mappy.Util;
-    using Mappy.Util.ImageSampling;
-
+    using Collections;
+    using Data;
+    using IO;
+    using Models;
+    using Models.Enums;
     using TAUtil;
     using TAUtil.Gdi.Palette;
     using TAUtil.Hpi;
     using TAUtil.Tnt;
+    using Util;
+    using Util.ImageSampling;
 
     public class Dispatcher
     {
@@ -1067,7 +1064,7 @@ namespace Mappy.Services
 
         private void RefreshMinimapHighQualityWithProgressHelper(UndoableMapModel map)
         {
-            var worker = Mappy.Util.Util.RenderMinimapWorker();
+            var worker = Util.RenderMinimapWorker();
 
             var dlg = this.dialogService.CreateProgressView();
             dlg.Title = "Generating Minimap";
@@ -1160,7 +1157,7 @@ namespace Mappy.Services
                     var worker = (BackgroundWorker)sender;
                     using (var s = File.Create(tempLoc))
                     {
-                        var success = Mappy.Util.Util.WriteMapImage(
+                        var success = Util.WriteMapImage(
                             s,
                             map.BaseTile.TileGrid,
                             worker.ReportProgress,

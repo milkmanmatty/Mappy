@@ -1,6 +1,6 @@
 namespace Mappy.Operations
 {
-    using Mappy.Models;
+    using Models;
 
     public class AddFeatureOperation : IReplayableOperation
     {

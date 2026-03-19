@@ -1,14 +1,12 @@
-﻿using Mappy.Models.Enums;
-
-namespace Mappy.Operations
+﻿namespace Mappy.Operations
 {
     using System;
     using System.Drawing;
 
-    using Mappy.Collections;
-    using Mappy.Data;
-    using Mappy.Models;
-    using Mappy.Operations.SelectionModel;
+    using Collections;
+    using Data;
+    using Models;
+    using SelectionModel;
 
     public static class OperationFactory
     {

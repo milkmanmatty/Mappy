@@ -2,7 +2,7 @@
 {
     using System.Drawing;
 
-    using Mappy.Models;
+    using Models;
 
     public class UpdateMinimapOperation : IReplayableOperation
     {

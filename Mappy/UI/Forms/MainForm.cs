@@ -5,11 +5,10 @@ namespace Mappy.UI.Forms
     using System.Globalization;
     using System.Reactive.Linq;
     using System.Windows.Forms;
-
+    using Controls;
     using Mappy;
-    using Mappy.Models;
-    using Mappy.UI.Controls;
-    using Mappy.Util;
+    using Models;
+    using Util;
 
     public partial class MainForm : Form
     {
@@ -26,10 +25,10 @@ namespace Mappy.UI.Forms
 
         public SectionView FeatureView => this.featureView;
 
-        public void SetModel(IMainFormViewModel model)
+        public void SetModel(IMainFormViewModel newModel)
         {
-            var gridSize = model.GridSize.CombineLatest(
-                model.GridVisible,
+            var gridSize = newModel.GridSize.CombineLatest(
+                newModel.GridVisible,
                 (size, visible) => visible ? new Size?(size) : null);
 
             gridSize.Subscribe(x => this.gridOffMenuItem.Checked = x == null);
@@ -42,67 +41,67 @@ namespace Mappy.UI.Forms
             gridSize.Subscribe(x => this.grid1024MenuItem.Checked = x == new Size(1024, 1024));
 
             // file menu bindings
-            model.CanSave.Subscribe(x => this.saveMenuItem.Enabled = x);
-            model.CanSaveAs.Subscribe(x => this.saveAsMenuItem.Enabled = x);
-            model.CanCloseMap.Subscribe(x => this.closeMenuItem.Enabled = x);
+            newModel.CanSave.Subscribe(x => this.saveMenuItem.Enabled = x);
+            newModel.CanSaveAs.Subscribe(x => this.saveAsMenuItem.Enabled = x);
+            newModel.CanCloseMap.Subscribe(x => this.closeMenuItem.Enabled = x);
 
-            model.CanImportMinimap.Subscribe(x => this.importMinimapMenuItem.Enabled = x);
-            model.CanExportMinimap.Subscribe(x => this.exportMinimapMenuItem.Enabled = x);
+            newModel.CanImportMinimap.Subscribe(x => this.importMinimapMenuItem.Enabled = x);
+            newModel.CanExportMinimap.Subscribe(x => this.exportMinimapMenuItem.Enabled = x);
 
-            model.CanImportHeightmap.Subscribe(x => this.importHeightmapMenuItem.Enabled = x);
-            model.CanExportHeightmap.Subscribe(x => this.exportHeightmapMenuItem.Enabled = x);
+            newModel.CanImportHeightmap.Subscribe(x => this.importHeightmapMenuItem.Enabled = x);
+            newModel.CanExportHeightmap.Subscribe(x => this.exportHeightmapMenuItem.Enabled = x);
 
-            model.CanExportMapImage.Subscribe(x => this.exportMapImageMenuItem.Enabled = x);
-            model.CanImportCustomSection.Subscribe(x => this.importCustomSectionMenuItem.Enabled = x);
+            newModel.CanExportMapImage.Subscribe(x => this.exportMapImageMenuItem.Enabled = x);
+            newModel.CanImportCustomSection.Subscribe(x => this.importCustomSectionMenuItem.Enabled = x);
 
             // edit menu bindings
-            model.CanUndo.Subscribe(x => this.undoMenuItem.Enabled = x);
-            model.CanRedo.Subscribe(x => this.redoMenuItem.Enabled = x);
-            model.CanCopy.Subscribe(x => this.copyMenuItem.Enabled = x);
-            model.CanCut.Subscribe(x => this.cutMenuItem.Enabled = x);
-            model.CanPaste.Subscribe(x => this.pasteMenuItem.Enabled = x);
-            model.CanFill.Subscribe(x => this.fillMenuItem.Enabled = x);
-            model.CanResizeMap.Subscribe(x => this.resizeMapMenuItem.Enabled = x);
-            model.CanFlip.Subscribe(x =>
+            newModel.CanUndo.Subscribe(x => this.undoMenuItem.Enabled = x);
+            newModel.CanRedo.Subscribe(x => this.redoMenuItem.Enabled = x);
+            newModel.CanCopy.Subscribe(x => this.copyMenuItem.Enabled = x);
+            newModel.CanCut.Subscribe(x => this.cutMenuItem.Enabled = x);
+            newModel.CanPaste.Subscribe(x => this.pasteMenuItem.Enabled = x);
+            newModel.CanFill.Subscribe(x => this.fillMenuItem.Enabled = x);
+            newModel.CanResizeMap.Subscribe(x => this.resizeMapMenuItem.Enabled = x);
+            newModel.CanFlip.Subscribe(x =>
             {
                 this.flipHorizontallyMenuItem.Enabled = x;
                 this.flipVerticallyMenuItem.Enabled = x;
             });
 
-            model.CanGenerateMinimap.Subscribe(x => this.generateMinimapMenuItem.Enabled = x);
-            model.CanGenerateMinimapHighQuality.Subscribe(x => this.generateMinimapHighQualityMenuItem.Enabled = x);
+            newModel.CanGenerateMinimap.Subscribe(x => this.generateMinimapMenuItem.Enabled = x);
+            newModel.CanGenerateMinimapHighQuality.Subscribe(x => this.generateMinimapHighQualityMenuItem.Enabled = x);
 
-            model.CanOpenAttributes.Subscribe(x => this.mapAttributesMenuItem.Enabled = x);
+            newModel.CanOpenAttributes.Subscribe(x => this.mapAttributesMenuItem.Enabled = x);
 
             // view menu bindings
-            model.MinimapVisible.Subscribe(x => this.toggleMinimapMenuItem.Checked = x);
-            model.HeightmapVisible.Subscribe(x => this.toggleHeightmapMenuItem.Checked = x);
-            model.HeightGridVisible.Subscribe(x => this.toggleHeightGridMenuItem.Checked = x);
-            model.VoidsVisible.Subscribe(x => this.toggleVoidsMenuItem.Checked = x);
-            model.FeaturesVisible.Subscribe(x => this.toggleFeaturesMenuItem.Checked = x);
+            newModel.MinimapVisible.Subscribe(x => this.toggleMinimapMenuItem.Checked = x);
+            newModel.HeightmapVisible.Subscribe(x => this.toggleHeightmapMenuItem.Checked = x);
+            newModel.HeightGridVisible.Subscribe(x => this.toggleHeightGridMenuItem.Checked = x);
+            newModel.VoidsVisible.Subscribe(x => this.toggleVoidsMenuItem.Checked = x);
+            newModel.FeaturesVisible.Subscribe(x => this.toggleFeaturesMenuItem.Checked = x);
 
             // sea level widget bindings
-            model.CanChangeSeaLevel.Subscribe(x => this.seaLevelLabel.Enabled = x);
-            model.CanChangeSeaLevel.Subscribe(x => this.seaLevelValueLabel.Enabled = x);
-            model.CanChangeSeaLevel.Subscribe(x => this.seaLevelTrackbar.Enabled = x);
+            newModel.CanChangeSeaLevel.Subscribe(x => this.seaLevelLabel.Enabled = x);
+            newModel.CanChangeSeaLevel.Subscribe(x => this.seaLevelValueLabel.Enabled = x);
+            newModel.CanChangeSeaLevel.Subscribe(x => this.seaLevelTrackbar.Enabled = x);
 
-            model.SeaLevel.Subscribe(x => this.seaLevelTrackbar.Value = x);
-            model.SeaLevel
+            newModel.SeaLevel.Subscribe(x => this.seaLevelTrackbar.Value = x);
+            newModel.SeaLevel
                 .Select(x => x.ToString(CultureInfo.CurrentCulture))
                 .Subscribe(x => this.seaLevelValueLabel.Text = x);
-            model.HeightEditInterval.Subscribe(x => this.intervalNumericUpDown.Value = x);
-            model.HeightEditCursorSize.Subscribe(x => this.cursorSizeNumericUpDown.Value = x);
-            model.VoidEditCursorSize.Subscribe(x => this.voidCursorSizeNumericUpDown.Value = x);
+            newModel.HeightEditInterval.Subscribe(x => this.intervalNumericUpDown.Value = x);
+            newModel.HeightEditCursorSize.Subscribe(x => this.cursorSizeNumericUpDown.Value = x);
+            newModel.VoidEditCursorSize.Subscribe(x => this.voidCursorSizeNumericUpDown.Value = x);
 
             // title text bindings
-            model.TitleText.Subscribe(x => this.Text = x);
+            newModel.TitleText.Subscribe(x => this.Text = x);
 
-            model.MousePositionText.Subscribe(x => this.mousePositionLabel.Text = x);
-            model.HeightText.Subscribe(x => this.heightLabel.Text = x);
-            model.VoidText.Subscribe(x => this.voidLabel.Text = x);
-            model.HoveredFeatureText.Subscribe(x => this.hoveredFeatureLabel.Text = x);
+            newModel.MousePositionText.Subscribe(x => this.mousePositionLabel.Text = x);
+            newModel.HeightText.Subscribe(x => this.heightLabel.Text = x);
+            newModel.VoidText.Subscribe(x => this.voidLabel.Text = x);
+            newModel.HoveredFeatureText.Subscribe(x => this.hoveredFeatureLabel.Text = x);
 
-            this.model = model;
+            this.model = newModel;
         }
 
         private void OpenMenuItemClick(object sender, EventArgs e)

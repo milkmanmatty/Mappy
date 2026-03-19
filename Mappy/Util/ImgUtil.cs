@@ -6,7 +6,7 @@
     using System.Drawing.Imaging;
     using System.IO;
     using System.Reflection;
-    using Mappy.Collections;
+    using Collections;
 
     /// <summary>
     /// Class specifically for housing utility methods for working with images.
@@ -141,14 +141,16 @@
             string[] lines = File.ReadAllLines(filename);
 
             // Skip first 3 lines (Header, Version, Count)
-            for (int i = 3; i < lines.Length; i++) {
+            for (int i = 3; i < lines.Length; i++)
+            {
                 if (string.IsNullOrWhiteSpace(lines[i]))
                 {
                     continue;
                 }
 
                 string[] parts = lines[i].Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                if (parts.Length >= 3) {
+                if (parts.Length >= 3)
+                {
                     colors.Add(Color.FromArgb(int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2])));
                 }
             }

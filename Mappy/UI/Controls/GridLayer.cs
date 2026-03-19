@@ -3,7 +3,7 @@
     using System;
     using System.Drawing;
 
-    using Mappy.UI.Painters;
+    using Painters;
 
     public sealed class GridLayer : AbstractLayer, IDisposable
     {

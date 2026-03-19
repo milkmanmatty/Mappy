@@ -4,9 +4,9 @@
     using System.Drawing;
     using System.Reactive.Linq;
 
-    using Mappy.Collections;
-    using Mappy.Models;
-    using Mappy.UI.Painters;
+    using Collections;
+    using Models;
+    using Painters;
 
     public sealed class VoidLayer : AbstractLayer, IDisposable
     {

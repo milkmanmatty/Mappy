@@ -4,10 +4,8 @@
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
-
+    using Collections;
     using Geometry;
-
-    using Mappy.Collections;
 
     public class ContourHeightPainter : IPainter
     {
@@ -87,15 +85,15 @@
             const float Interval = 4.0f;
 
             // find the height range
-            int[] heights =
+            int[] heightsArr =
             {
                 this.heights.Get(p.X, p.Y),
                 this.heights.Get(p.X + 1, p.Y),
                 this.heights.Get(p.X, p.Y + 1),
                 this.heights.Get(p.X + 1, p.Y + 1)
             };
-            var minHeight = (float)heights.Min();
-            var maxHeight = (float)heights.Max();
+            var minHeight = (float)heightsArr.Min();
+            var maxHeight = (float)heightsArr.Max();
 
             // offset by the base height
             minHeight -= StartHeight;

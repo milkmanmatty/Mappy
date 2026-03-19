@@ -7,7 +7,7 @@ namespace Mappy.UI.Controls
     using System.Reactive.Linq;
     using System.Windows.Forms;
 
-    using Mappy.Models;
+    using Models;
 
     using ListViewItem = System.Windows.Forms.ListViewItem;
 
@@ -32,15 +32,15 @@ namespace Mappy.UI.Controls
 
         public Size ImageSize { get; set; } = new Size(128, 128);
 
-        public void SetModel(ISectionViewViewModel model)
+        public void SetModel(ISectionViewViewModel newModel)
         {
-            model.ComboBox1Model.Buffer(2, 1).Subscribe(xs => this.UpdateComboBox1(xs[0], xs[1]));
+            newModel.ComboBox1Model.Buffer(2, 1).Subscribe(xs => this.UpdateComboBox1(xs[0], xs[1]));
 
-            model.ComboBox2Model.Buffer(2, 1).Subscribe(xs => this.UpdateComboBox2(xs[0], xs[1]));
+            newModel.ComboBox2Model.Buffer(2, 1).Subscribe(xs => this.UpdateComboBox2(xs[0], xs[1]));
 
-            model.ListViewItems.Subscribe(this.UpdateListView);
+            newModel.ListViewItems.Subscribe(this.UpdateListView);
 
-            this.model = model;
+            this.model = newModel;
         }
 
         private static void UpdateComboBox(ComboBox c, ComboBoxViewModel oldModel, ComboBoxViewModel newModel)
@@ -48,7 +48,7 @@ namespace Mappy.UI.Controls
             c.BeginUpdate();
 
             // yes we really want reference equality here
-            if (oldModel.Items != newModel.Items)
+            if (!ReferenceEquals(oldModel.Items, newModel.Items))
             {
                 c.Items.Clear();
                 foreach (var x in newModel.Items)

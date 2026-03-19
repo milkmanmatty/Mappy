@@ -35,7 +35,7 @@ namespace Mappy
         }
 
         /// <summary>
-        /// Main window state: 0 = Normal, 1 = Minimized, 2 = Maximized.
+        /// Gets or sets the main window state: 0 = Normal, 1 = Minimized, 2 = Maximized.
         /// </summary>
         public int WindowState { get; set; }
 
