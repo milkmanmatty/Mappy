@@ -10,6 +10,9 @@ Mappy is a modern map editor for Total Annihilation, seeking to replace the curr
 * Accurate, Cavedog quality minimaps.
 * No need to "compress" maps to remove duplicate tiles. Mappy does this automatically.
 * Scroll wheel support.
+* Void editing
+* Bandbox select/move/copy/paste for features and sections
+* Map resizing
 * No known bugs that creep their way into your published maps.
   For example, when you delete a feature in Annihilator, it still leaves a reference in your map.
   This is a problem if you're trying to get rid of a third-party feature pack.
@@ -41,9 +44,7 @@ Future Improvements
 
 In no particular order, here's a list of features that Mappy might one day support:
 
-* Void editing
-* Bandbox select/move for features
-* Map resizing
+* Creating tilesets from pngs
 * Anything Annihilator already does that's cool
 
 and possibly more.
