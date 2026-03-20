@@ -7,9 +7,9 @@ namespace Mappy.Models
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
 
-    using Data;
-    using Services;
-    using Util;
+    using Mappy.Data;
+    using Mappy.Services;
+    using Mappy.Util;
 
     public sealed class MinimapFormViewModel : Notifier, IMinimapFormViewModel
     {

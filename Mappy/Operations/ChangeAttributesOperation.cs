@@ -1,6 +1,6 @@
 ﻿namespace Mappy.Operations
 {
-    using Models;
+    using Mappy.Models;
 
     public class ChangeAttributesOperation : IReplayableOperation
     {

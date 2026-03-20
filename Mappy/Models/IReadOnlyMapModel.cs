@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.Drawing;
 
-    using Collections;
-    using Data;
+    using Mappy.Collections;
+    using Mappy.Data;
 
     public interface IReadOnlyMapModel
     {

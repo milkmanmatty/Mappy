@@ -1,6 +1,6 @@
 ﻿namespace Mappy.Operations.SelectionModel
 {
-    using Models;
+    using Mappy.Models;
 
     public class SelectTileOperation : IReplayableOperation
     {

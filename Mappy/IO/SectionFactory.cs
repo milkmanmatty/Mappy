@@ -4,9 +4,9 @@
     using System.Drawing;
     using System.Linq;
 
-    using Collections;
-    using Data;
-    using Services;
+    using Mappy.Collections;
+    using Mappy.Data;
+    using Mappy.Services;
 
     using TAUtil;
     using TAUtil.Gdi.Bitmap;

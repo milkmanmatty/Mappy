@@ -1,7 +1,7 @@
 ﻿namespace Mappy.Operations
 {
     using System;
-    using Data;
+    using Mappy.Data;
 
     public class MoveTileOperation : IReplayableOperation
     {

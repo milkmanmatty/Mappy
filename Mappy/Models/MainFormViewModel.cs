@@ -4,10 +4,10 @@ namespace Mappy.Models
     using System.Drawing;
     using System.Linq;
     using System.Reactive.Linq;
-    using Collections;
-    using Enums;
-    using Services;
-    using Util;
+    using Mappy.Collections;
+    using Mappy.Models.Enums;
+    using Mappy.Services;
+    using Mappy.Util;
 
     public class MainFormViewModel : IMainFormViewModel
     {

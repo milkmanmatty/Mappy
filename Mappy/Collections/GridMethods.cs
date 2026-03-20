@@ -3,7 +3,7 @@
     using System;
     using System.Drawing;
     using System.Drawing.Imaging;
-    using Models.Enums;
+    using Mappy.Models.Enums;
 
     /// <summary>
     /// Provides a set of extension methods for manipulating IGrid

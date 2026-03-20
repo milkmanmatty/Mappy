@@ -4,8 +4,8 @@ namespace Mappy.Operations
     using System.Collections.Generic;
     using System.Linq;
 
-    using Collections;
-    using Models;
+    using Mappy.Collections;
+    using Mappy.Models;
 
     public sealed class VoidBrushOperation : IReplayableOperation
     {

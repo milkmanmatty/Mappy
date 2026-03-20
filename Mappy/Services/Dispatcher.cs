@@ -8,25 +8,20 @@ namespace Mappy.Services
     using System.IO;
     using System.Linq;
     using System.Windows.Forms;
-    using Collections;
-    using Data;
-    using IO;
-    using Models;
-    using Models.Enums;
+    using Mappy.Collections;
+    using Mappy.Data;
+    using Mappy.IO;
+    using Mappy.Models;
+    using Mappy.Models.Enums;
+    using Mappy.Util;
+    using Mappy.Util.ImageSampling;
     using TAUtil;
     using TAUtil.Gdi.Palette;
     using TAUtil.Hpi;
     using TAUtil.Tnt;
-    using Util;
-    using Util.ImageSampling;
 
     public class Dispatcher
     {
-        private static readonly string TempDir = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-            "Mappy",
-            "Temp");
-
         private readonly CoreModel model;
 
         private readonly IDialogService dialogService;
@@ -420,10 +415,7 @@ namespace Mappy.Services
                         return;
                     }
 
-                    if (!Directory.Exists(TempDir))
-                    {
-                        Directory.CreateDirectory(TempDir);
-                    }
+                    ImgUtil.ValidateTemps();
 
                     IMapTile floatTile = map.FloatingTiles[map.SelectedTile.Value].Item;
 
@@ -436,13 +428,15 @@ namespace Mappy.Services
 
                     this.imageExportingService.ExportSection(
                         destTile,
-                        Path.Combine(TempDir, "fhGraphic.png"),
-                        Path.Combine(TempDir, "fhHeightmap.png"));
+                        Path.Combine(ImgUtil.TempDir, "fhGraphic.png"),
+                        Path.Combine(ImgUtil.TempDir, "fhHeightmap.png"));
 
                     this.ImportCustomSectionHelper(
                         map,
-                        Path.Combine(TempDir, "fhGraphic.png"),
-                        Path.Combine(TempDir, "fhHeightmap.png"));
+                        Path.Combine(ImgUtil.TempDir, "fhGraphic.png"),
+                        Path.Combine(ImgUtil.TempDir, "fhHeightmap.png"));
+
+                    ImgUtil.ClearTemps();
                 });
         }
 

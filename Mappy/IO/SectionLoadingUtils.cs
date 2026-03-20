@@ -2,7 +2,7 @@
 {
     using System;
 
-    using Data;
+    using Mappy.Data;
 
     public static class SectionLoadingUtils
     {

@@ -3,12 +3,12 @@
     using System;
     using System.Drawing;
 
-    using Util;
+    using Mappy.Util;
 
     /// <summary>
     /// Defines a free-form bandbox behaviour.
     /// In this mode, dragging out a bandbox selects features within an
-    /// area of the map
+    /// area of the map.
     /// </summary>
     public class FreeBandboxBehaviour : Notifier, IBandboxBehaviour
     {

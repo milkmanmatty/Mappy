@@ -2,8 +2,8 @@ namespace Mappy.Models
 {
     using System;
     using System.Drawing;
-    using Enums;
-    using Util;
+    using Mappy.Models.Enums;
+    using Mappy.Util;
 
     public class CoreModel : Notifier, IReadOnlyApplicationModel
     {

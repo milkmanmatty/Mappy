@@ -7,7 +7,7 @@
     using System.Reactive.Linq;
     using System.Windows.Forms;
 
-    using Models;
+    using Mappy.Models;
 
     using ListViewItem = System.Windows.Forms.ListViewItem;
 

@@ -6,8 +6,8 @@ namespace Mappy.Models
     using System.Linq;
     using System.Reactive.Subjects;
 
-    using Data;
-    using Services;
+    using Mappy.Data;
+    using Mappy.Services;
 
     public sealed class SectionViewViewModel : ISectionViewViewModel, IDisposable
     {

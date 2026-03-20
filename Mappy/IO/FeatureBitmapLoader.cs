@@ -5,12 +5,12 @@
     using System.Drawing;
     using System.IO;
     using System.Linq;
-    using Data;
-    using Gaf;
+    using Mappy.Data;
+    using Mappy.IO.Gaf;
+    using Mappy.Util;
     using TAUtil.Gaf;
     using TAUtil.Gdi.Bitmap;
     using TAUtil.Hpi;
-    using Util;
 
     public class FeatureBitmapLoader : AbstractHpiLoader<KeyValuePair<string, OffsetBitmap>>
     {

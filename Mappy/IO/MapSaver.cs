@@ -2,7 +2,7 @@
 {
     using System.IO;
 
-    using Models;
+    using Mappy.Models;
 
     using TAUtil.HpiUtil;
     using TAUtil.Tnt;

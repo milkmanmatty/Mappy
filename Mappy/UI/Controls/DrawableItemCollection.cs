@@ -6,7 +6,7 @@ namespace Mappy.UI.Controls
     using System.Drawing;
     using System.Linq;
 
-    using Collections;
+    using Mappy.Collections;
 
     public class DrawableItemCollection : ICollection<DrawableItem>, INotifyCollectionChanged
     {

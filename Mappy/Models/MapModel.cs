@@ -6,9 +6,9 @@
     using System.ComponentModel;
     using System.Drawing;
 
-    using Collections;
-    using Data;
-    using Util;
+    using Mappy.Collections;
+    using Mappy.Data;
+    using Mappy.Util;
 
     public class MapModel : Notifier, ISelectionModel
     {
@@ -131,7 +131,7 @@
         public ObservableCollection<Guid> SelectedFeatures => this.selectedFeatures;
 
         /// <summary>
-        /// <see cref="IMapModel.AddFeatureInstance"/>
+        /// <see cref="IMapModel.AddFeatureInstance"/>.
         /// </summary>
         public void AddFeatureInstance(FeatureInstance instance)
         {
@@ -143,7 +143,7 @@
         }
 
         /// <summary>
-        /// <see cref="IReadOnlyMapModel.GetFeatureInstance"/>
+        /// <see cref="IReadOnlyMapModel.GetFeatureInstance"/>.
         /// </summary>
         public FeatureInstance GetFeatureInstance(Guid id)
         {
@@ -151,7 +151,7 @@
         }
 
         /// <summary>
-        /// <see cref="IReadOnlyMapModel.GetFeatureInstanceAt"/>
+        /// <see cref="IReadOnlyMapModel.GetFeatureInstanceAt"/>.
         /// </summary>
         public FeatureInstance GetFeatureInstanceAt(int x, int y)
         {
@@ -165,7 +165,7 @@
         }
 
         /// <summary>
-        /// <see cref="IMapModel.UpdateFeatureInstance"/>
+        /// <see cref="IMapModel.UpdateFeatureInstance"/>.
         /// </summary>
         public void UpdateFeatureInstance(FeatureInstance instance, ISet<Guid> featureIgnoreList = null)
         {
@@ -184,7 +184,7 @@
         }
 
         /// <summary>
-        /// <see cref="IMapModel.RemoveFeatureInstance"/>
+        /// <see cref="IMapModel.RemoveFeatureInstance"/>.
         /// </summary>
         public void RemoveFeatureInstance(Guid id)
         {
@@ -197,7 +197,7 @@
         }
 
         /// <summary>
-        /// <see cref="IReadOnlyMapModel.HasFeatureInstanceAt"/>
+        /// <see cref="IReadOnlyMapModel.HasFeatureInstanceAt"/>.
         /// </summary>
         public bool HasFeatureInstanceAt(int x, int y)
         {
@@ -205,7 +205,7 @@
         }
 
         /// <summary>
-        /// <see cref="IReadOnlyMapModel.EnumerateFeatureInstances"/>
+        /// <see cref="IReadOnlyMapModel.EnumerateFeatureInstances"/>.
         /// </summary>
         public IEnumerable<FeatureInstance> EnumerateFeatureInstances()
         {
