@@ -3,7 +3,7 @@ namespace Mappy.Data
     using System;
     using System.Drawing;
 
-    using Collections;
+    using Mappy.Collections;
 
     /// <summary>
     /// Represents a tile on the map.

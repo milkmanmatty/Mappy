@@ -1,6 +1,6 @@
 ﻿namespace Mappy.UI.Forms
 {
-    using Controls;
+    using Mappy.UI.Controls;
 
     partial class MapAttributesForm
     {

@@ -2,7 +2,7 @@ namespace Mappy.Models
 {
     using System.ComponentModel;
     using System.Drawing;
-    using Enums;
+    using Mappy.Models.Enums;
 
     public interface IReadOnlyApplicationModel : INotifyPropertyChanged
     {

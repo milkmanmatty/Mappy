@@ -2,8 +2,8 @@ namespace Mappy.Data
 {
     using System.Drawing;
 
-    using Collections;
-    using Util;
+    using Mappy.Collections;
+    using Mappy.Util;
 
     /// <summary>
     /// Represents the "blueprint" for a feature.
@@ -11,13 +11,6 @@ namespace Mappy.Data
     /// </summary>
     public class Feature
     {
-        public struct ReclaimInfoStruct
-        {
-            public int MetalValue { get; set; }
-
-            public int EnergyValue { get; set; }
-        }
-
         public string Name { get; set; }
 
         public string World { get; set; }
@@ -51,6 +44,13 @@ namespace Mappy.Data
 
             var pos = new Point(projectedPosX - this.Offset.X, projectedPosY - this.Offset.Y);
             return new Rectangle(pos, this.Image.Size);
+        }
+
+        public struct ReclaimInfoStruct
+        {
+            public int MetalValue { get; set; }
+
+            public int EnergyValue { get; set; }
         }
     }
 }

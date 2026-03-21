@@ -14,7 +14,7 @@
         {
             Add,
             Move,
-            Remove
+            Remove,
         }
 
         public ActionType Action { get; private set; }

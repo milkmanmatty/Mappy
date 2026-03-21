@@ -5,7 +5,7 @@
     using System.Diagnostics;
     using System.Linq;
 
-    using Data;
+    using Mappy.Data;
 
     using TAUtil.Hpi;
 
@@ -22,7 +22,7 @@
                 HpiFileName = archive.FileName,
                 SctFileName = file.FullPath,
                 World = directories[1],
-                Category = directories[2]
+                Category = directories[2],
             });
         }
 

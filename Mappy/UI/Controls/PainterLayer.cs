@@ -2,7 +2,7 @@
 {
     using System.Drawing;
 
-    using Painters;
+    using Mappy.UI.Painters;
 
     public class PainterLayer : AbstractLayer
     {

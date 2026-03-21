@@ -2,8 +2,8 @@ namespace Mappy.UI.Painters
 {
     using System;
     using System.Drawing;
-    using Collections;
-    using Util;
+    using Mappy.Collections;
+    using Mappy.Util;
 
     public class HeightGridPainter : IPainter
     {

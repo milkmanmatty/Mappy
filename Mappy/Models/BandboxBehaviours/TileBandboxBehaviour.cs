@@ -3,7 +3,7 @@
     using System;
     using System.Drawing;
 
-    using Util;
+    using Mappy.Util;
 
     /// <summary>
     /// Defines a tile-based bandbox behaviour.

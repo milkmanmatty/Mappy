@@ -2,9 +2,9 @@
 {
     using System;
     using System.Drawing;
-    using Collections;
-    using Data;
-    using Services;
+    using Mappy.Collections;
+    using Mappy.Data;
+    using Mappy.Services;
 
     public sealed class FeatureInstance
     {
@@ -13,7 +13,7 @@
             Name = "default",
             Offset = new Point(0, 0),
             Footprint = new Size(1, 1),
-            Image = Properties.Resources.nofeature
+            Image = Properties.Resources.nofeature,
         };
 
         public FeatureInstance(Guid id, string featureName, int x, int y)

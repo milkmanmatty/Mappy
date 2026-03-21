@@ -11,7 +11,7 @@ namespace Mappy.Collections
     /// QuadTree provides fast quering of elements intersecting a point
     /// or rectangle.
     /// </summary>
-    /// <typeparam name="T">The type of the elements</typeparam>
+    /// <typeparam name="T">The type of the elements.</typeparam>
     public class QuadTree<T> : ICollection<T>
         where T : IQuadTreeItem
     {

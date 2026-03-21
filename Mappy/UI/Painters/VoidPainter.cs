@@ -5,7 +5,7 @@ namespace Mappy.UI.Painters
     using System.Drawing;
     using System.Linq;
 
-    using Collections;
+    using Mappy.Collections;
 
     public sealed class VoidPainter : IPainter, IDisposable
     {
@@ -48,7 +48,7 @@ namespace Mappy.UI.Painters
                 this.GetProjectedPoint(cell.X, cell.Y),
                 this.GetProjectedPoint(cell.X + 1, cell.Y),
                 this.GetProjectedPoint(cell.X + 1, cell.Y + 1),
-                this.GetProjectedPoint(cell.X, cell.Y + 1)
+                this.GetProjectedPoint(cell.X, cell.Y + 1),
             };
         }
 

@@ -1,7 +1,7 @@
 namespace Mappy.Data
 {
+    using Mappy.Util;
     using TAUtil.Tdf;
-    using Util;
 
     public class FeatureRecord
     {

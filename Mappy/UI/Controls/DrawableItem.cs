@@ -3,9 +3,9 @@ namespace Mappy.UI.Controls
     using System;
     using System.Drawing;
 
-    using Collections;
-    using Drawables;
-    using Util;
+    using Mappy.Collections;
+    using Mappy.UI.Drawables;
+    using Mappy.Util;
 
     public class DrawableItem : Notifier, IQuadTreeItem
     {

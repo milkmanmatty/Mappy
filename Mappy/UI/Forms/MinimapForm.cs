@@ -5,7 +5,7 @@
     using System.Reactive.Linq;
     using System.Windows.Forms;
 
-    using Models;
+    using Mappy.Models;
 
     public partial class MinimapForm : Form
     {

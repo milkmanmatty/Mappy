@@ -1,6 +1,6 @@
 ﻿namespace Mappy.Operations
 {
-    using Collections;
+    using Mappy.Collections;
 
     public class TileAreaOperation<T> : IReplayableOperation
     {

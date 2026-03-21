@@ -4,7 +4,7 @@ namespace Mappy.UI.Controls
     using System.Drawing;
     using System.Windows.Forms;
 
-    using Models;
+    using Mappy.Models;
 
     public partial class MapViewPanel : UserControl
     {

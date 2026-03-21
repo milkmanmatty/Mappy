@@ -3,6 +3,6 @@
     public enum FlipDirection
     {
         Horizontal,
-        Vertical
+        Vertical,
     }
 }

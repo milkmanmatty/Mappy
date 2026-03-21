@@ -6,12 +6,11 @@ namespace Mappy.Models
     using System.Linq;
     using System.Reactive;
     using System.Reactive.Linq;
-    using Collections;
-    using Data;
-    using Enums;
     using Mappy;
-    using Services;
-    using Util;
+    using Mappy.Collections;
+    using Mappy.Models.Enums;
+    using Mappy.Services;
+    using Mappy.Util;
 
     public class MainFormViewModel : IMainFormViewModel
     {

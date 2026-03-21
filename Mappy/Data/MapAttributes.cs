@@ -3,8 +3,8 @@
     using System;
     using System.Drawing;
     using System.IO;
+    using Mappy.Util;
     using TAUtil.Tdf;
-    using Util;
 
     /// <summary>
     /// Contains all the metadata about a map.
@@ -334,7 +334,7 @@
                 count++;
             }
 
-                r.WriteTdf(st);
+            r.WriteTdf(st);
         }
 
         protected virtual void OnStartPositionChanged(StartPositionChangedEventArgs e)

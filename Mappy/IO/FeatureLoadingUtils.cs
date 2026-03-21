@@ -5,7 +5,7 @@ namespace Mappy.IO
     using System.Drawing;
     using System.Linq;
 
-    using Data;
+    using Mappy.Data;
 
     public static class FeatureLoadingUtils
     {
@@ -28,7 +28,7 @@ namespace Mappy.IO
                 {
                     Records = features,
                     Errors = recordLoader.HpiErrors,
-                    FileErrors = recordLoader.FileErrors
+                    FileErrors = recordLoader.FileErrors,
                 };
             return true;
         }
@@ -42,7 +42,7 @@ namespace Mappy.IO
                     Maybe.Return(new Feature.ReclaimInfoStruct
                     {
                         EnergyValue = record.Energy,
-                        MetalValue = record.Metal
+                        MetalValue = record.Metal,
                     }) : Maybe.None<Feature.ReclaimInfoStruct>();
 
                 yield return new FeatureInfo

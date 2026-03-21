@@ -7,14 +7,14 @@ namespace Mappy.Util
     using System.Drawing.Imaging;
     using System.IO;
     using System.Linq;
-    using Collections;
-    using Data;
     using Geometry;
-    using ImageSampling;
-    using Models;
-    using Models.Enums;
-    using Properties;
-    using Services;
+    using Mappy.Collections;
+    using Mappy.Data;
+    using Mappy.Models;
+    using Mappy.Models.Enums;
+    using Mappy.Properties;
+    using Mappy.Services;
+    using Mappy.Util.ImageSampling;
     using TAUtil.Gdi.Palette;
 
     public static class Util
@@ -173,9 +173,9 @@ namespace Mappy.Util
             return worker;
         }
 
-        public static IEnumerable<U> Choose<T, U>(this IEnumerable<T> coll, Func<T, Maybe<U>> f)
+        public static IEnumerable<TU> Choose<T, TU>(this IEnumerable<T> coll, Func<T, Maybe<TU>> f)
         {
-            return coll.SelectMany(item => f(item).Match(x => new[] { x }, () => new U[] { }));
+            return coll.SelectMany(item => f(item).Match(x => new[] { x }, () => new TU[] { }));
         }
 
         public static IEnumerable<Color> EnumerateBigMinimapImage(RenderMinimapArgs args)
@@ -187,7 +187,7 @@ namespace Mappy.Util
                         .Select(rec => new FeatureInfo
                         {
                             Image = rec.Image,
-                            Location = rec.GetDrawBounds(args.MapModel.Tile.HeightGrid, f.X, f.Y).Location
+                            Location = rec.GetDrawBounds(args.MapModel.Tile.HeightGrid, f.X, f.Y).Location,
                         }))
                 .ToList();
             featuresList.Sort((a, b) =>

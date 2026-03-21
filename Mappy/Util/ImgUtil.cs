@@ -6,7 +6,8 @@
     using System.Drawing.Imaging;
     using System.IO;
     using System.Reflection;
-    using Collections;
+
+    using Mappy.Collections;
 
     /// <summary>
     /// Class specifically for housing utility methods for working with images.
@@ -15,6 +16,30 @@
     /// </summary>
     public static class ImgUtil
     {
+        public static readonly string TempDir = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            "Mappy",
+            "Temp");
+
+        public static void ValidateTemps()
+        {
+            if (!Directory.Exists(TempDir))
+            {
+                Directory.CreateDirectory(TempDir);
+            }
+        }
+
+        public static void ClearTemps()
+        {
+            foreach (var file in Directory.GetFiles(TempDir))
+            {
+                if (file.EndsWith(".png"))
+                {
+                    File.Delete(file);
+                }
+            }
+        }
+
         public static Grid<int> ReadHeightmap(Bitmap bmp)
         {
             var data = bmp.LockBits(

@@ -2,7 +2,7 @@
 {
     using System.Drawing;
 
-    using Collections;
+    using Mappy.Collections;
 
     public class BitmapGridPainter : IPainter
     {

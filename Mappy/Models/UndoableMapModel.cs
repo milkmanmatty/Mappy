@@ -7,14 +7,14 @@ namespace Mappy.Models
     using System.ComponentModel;
     using System.Drawing;
     using System.Linq;
-    using BandboxBehaviours;
-    using Collections;
-    using Data;
-    using Enums;
-    using Operations;
-    using Operations.SelectionModel;
-    using Util;
-    using Util.ImageSampling;
+    using Mappy.Collections;
+    using Mappy.Data;
+    using Mappy.Models.BandboxBehaviours;
+    using Mappy.Models.Enums;
+    using Mappy.Operations;
+    using Mappy.Operations.SelectionModel;
+    using Mappy.Util;
+    using Mappy.Util.ImageSampling;
 
     public sealed class UndoableMapModel : Notifier, IMainModel, IBandboxModel, IReadOnlyMapModel
     {
@@ -405,7 +405,7 @@ namespace Mappy.Models
 
             var singleChange = new List<HeightBrushOperation.HeightChange>
             {
-                new HeightBrushOperation.HeightChange(idx, oldValue, newValue)
+                new HeightBrushOperation.HeightChange(idx, oldValue, newValue),
             };
             this.ApplyHeightBrushOperation(new HeightBrushOperation(grid, singleChange));
         }
@@ -476,7 +476,7 @@ namespace Mappy.Models
 
             var singleChange = new List<HeightBrushOperation.HeightChange>
             {
-                new HeightBrushOperation.HeightChange(idx, oldValue, setValue)
+                new HeightBrushOperation.HeightChange(idx, oldValue, setValue),
             };
             this.ApplyHeightBrushOperation(new HeightBrushOperation(grid, singleChange));
         }

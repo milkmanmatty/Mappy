@@ -6,8 +6,8 @@ namespace Mappy.Models
     using System.ComponentModel;
     using System.Drawing;
 
-    using Collections;
-    using Data;
+    using Mappy.Collections;
+    using Mappy.Data;
 
     public interface IMainModel : INotifyPropertyChanged
     {

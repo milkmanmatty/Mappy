@@ -5,7 +5,7 @@
     using System.IO;
     using System.Linq;
 
-    using Data;
+    using Mappy.Data;
 
     using TAUtil.Hpi;
     using TAUtil.Tdf;

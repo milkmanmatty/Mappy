@@ -8,6 +8,6 @@ namespace Mappy.Models.Enums
         Height,
         Void,
         Attributes,
-        Other
+        Other,
     }
 }

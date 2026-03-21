@@ -3,7 +3,7 @@ namespace Mappy.UI.Drawables
     using System;
     using System.Drawing;
 
-    using Controls;
+    using Mappy.UI.Controls;
 
     public interface IDrawable
     {

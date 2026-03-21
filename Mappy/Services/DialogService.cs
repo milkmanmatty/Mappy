@@ -5,9 +5,9 @@ namespace Mappy.Services
     using System.Drawing;
     using System.Windows.Forms;
 
-    using Models;
-    using UI.Forms;
-    using Views;
+    using Mappy.Models;
+    using Mappy.UI.Forms;
+    using Mappy.Views;
 
     public class DialogService : IDialogService
     {
@@ -30,7 +30,7 @@ namespace Mappy.Services
             return new SectionImportPaths
             {
                 GraphicPath = dlg.GraphicPath,
-                HeightmapPath = dlg.HeightmapPath
+                HeightmapPath = dlg.HeightmapPath,
             };
         }
 

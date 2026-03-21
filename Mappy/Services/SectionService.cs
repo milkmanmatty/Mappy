@@ -6,8 +6,8 @@ namespace Mappy.Services
     using System.IO;
     using System.Linq;
 
-    using Data;
-    using IO;
+    using Mappy.Data;
+    using Mappy.IO;
 
     using TAUtil.Hpi;
     using TAUtil.Sct;

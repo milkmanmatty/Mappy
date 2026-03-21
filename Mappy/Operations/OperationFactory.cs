@@ -2,11 +2,11 @@
 {
     using System;
     using System.Drawing;
-    using Collections;
-    using Data;
-    using Models;
-    using Models.Enums;
-    using SelectionModel;
+    using Mappy.Collections;
+    using Mappy.Data;
+    using Mappy.Models;
+    using Mappy.Models.Enums;
+    using Mappy.Operations.SelectionModel;
 
     public static class OperationFactory
     {

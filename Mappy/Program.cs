@@ -4,11 +4,11 @@ namespace Mappy
     using System.IO;
     using System.Windows.Forms;
 
-    using IO;
-    using Models;
-    using Services;
-    using UI.Forms;
-    using Util;
+    using Mappy.IO;
+    using Mappy.Models;
+    using Mappy.Services;
+    using Mappy.UI.Forms;
+    using Mappy.Util;
 
     public static class Program
     {
@@ -21,7 +21,7 @@ namespace Mappy
 
         private static readonly string[] SupportedMapExtensions =
         {
-            ".hpi", ".ufo", ".ccx", ".gpf", ".gp3", ".tnt", ".sct"
+            ".hpi", ".ufo", ".ccx", ".gpf", ".gp3", ".tnt", ".sct",
         };
 
         private static Bugsnag.Client bugsnagClient;
@@ -37,7 +37,7 @@ namespace Mappy
             {
                 ApiKey = "fa43381b116de659fcf1cfda14884d98",
                 AppVersion = Application.ProductVersion,
-                AutoNotify = false
+                AutoNotify = false,
             });
 
             // install custom handler for fatal exceptions

@@ -8,15 +8,14 @@ namespace Mappy.Models
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
     using System.Windows.Forms;
-
-    using Collections;
-    using Data;
-    using Enums;
-    using Services;
-    using UI.Controls;
-    using UI.Drawables;
-    using UI.Tags;
-    using Util;
+    using Mappy.Collections;
+    using Mappy.Data;
+    using Mappy.Models.Enums;
+    using Mappy.Services;
+    using Mappy.UI.Controls;
+    using Mappy.UI.Drawables;
+    using Mappy.UI.Tags;
+    using Mappy.Util;
 
     public class MapViewViewModel : IMapViewViewModel
     {
@@ -39,7 +38,7 @@ namespace Mappy.Models
             Name = "default",
             Offset = new Point(0, 0),
             Footprint = new Size(1, 1),
-            Image = Properties.Resources.nofeature
+            Image = Properties.Resources.nofeature,
         };
 
         private readonly List<DrawableItem> tileMapping = new List<DrawableItem>();
@@ -900,6 +899,7 @@ namespace Mappy.Models
             this.UpdateVoidCursor(this.lastHoverPos);
         }
 
+        // ReSharper disable once UnusedMethodReturnValue.Local
         private bool TrySampleHeightIntoSetValue(Point location)
         {
             if (this.mapModel == null)
@@ -923,8 +923,8 @@ namespace Mappy.Models
                 return false;
             }
 
-            var grid = this.mapModel.BaseTile.HeightGrid;
-            var sampledHeight = grid.Get(anchor.Value.X, anchor.Value.Y);
+            var heightGrid = this.mapModel.BaseTile.HeightGrid;
+            var sampledHeight = heightGrid.Get(anchor.Value.X, anchor.Value.Y);
             this.dispatcher.SetHeightEditSetValue(sampledHeight);
             return true;
         }
@@ -1219,7 +1219,7 @@ namespace Mappy.Models
             var poly = new DrawablePolyline(localPoints, polySize, new Pen(HeightCursorBorderColor, 1));
             var polyItem = new DrawableItem(minX, minY, HeightCursorDepth, poly)
             {
-                Locked = true
+                Locked = true,
             };
             this.ReplaceVoidCursor(polyItem);
         }

@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    using Models;
+    using Mappy.Models;
 
     public class DeselectOperation : IReplayableOperation
     {

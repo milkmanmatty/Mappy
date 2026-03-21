@@ -4,7 +4,7 @@ namespace Mappy.Models
     using System.Drawing;
     using System.Windows.Forms;
 
-    using UI.Controls;
+    using Mappy.UI.Controls;
 
     public interface IMapViewViewModel
     {
