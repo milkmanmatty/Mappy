@@ -27,6 +27,7 @@ namespace Mappy.UI.Forms
             this.dragScrollSpeedYNumeric.Value = MappySettings.Settings.GetDragAutoScrollSpeedYOrDefault();
             this.fullResourceNamesCheckBox.Checked = MappySettings.Settings.FullResourceNames;
             this.featureReclaimAmountsCheckBox.Checked = MappySettings.Settings.ShowFeatureReclaimAmounts;
+            this.calculatedMetalDepositValueCheckBox.Checked = MappySettings.Settings.ShowCalculatedMetalDepositValue;
         }
 
         private void AddButtonClick(object sender, EventArgs e)
@@ -112,6 +113,7 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.DragAutoScrollSpeedY = (int)this.dragScrollSpeedYNumeric.Value;
             MappySettings.Settings.FullResourceNames = this.fullResourceNamesCheckBox.Checked;
             MappySettings.Settings.ShowFeatureReclaimAmounts = this.featureReclaimAmountsCheckBox.Checked;
+            MappySettings.Settings.ShowCalculatedMetalDepositValue = this.calculatedMetalDepositValueCheckBox.Checked;
             MappySettings.SaveSettings();
         }
     }
