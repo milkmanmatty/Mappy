@@ -45,6 +45,7 @@ namespace Mappy.UI.Forms
 			this.dragScrollSpeedYLabel = new System.Windows.Forms.Label();
 			this.dragScrollSpeedXLabel = new System.Windows.Forms.Label();
 			this.resourceNamesGroupBox = new System.Windows.Forms.GroupBox();
+			this.calculatedMetalDepositValueCheckBox = new System.Windows.Forms.CheckBox();
 			this.featureReclaimAmountsCheckBox = new System.Windows.Forms.CheckBox();
 			this.fullResourceNamesCheckBox = new System.Windows.Forms.CheckBox();
 			this.sidePanel.SuspendLayout();
@@ -149,7 +150,7 @@ namespace Mappy.UI.Forms
 			this.bottomPanel.Controls.Add(this.cancelButton);
 			this.bottomPanel.Controls.Add(this.okButton);
 			this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.bottomPanel.Location = new System.Drawing.Point(0, 436);
+			this.bottomPanel.Location = new System.Drawing.Point(0, 457);
 			this.bottomPanel.Name = "bottomPanel";
 			this.bottomPanel.Size = new System.Drawing.Size(450, 30);
 			this.bottomPanel.TabIndex = 8;
@@ -260,11 +261,12 @@ namespace Mappy.UI.Forms
 			// 
 			this.resourceNamesGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.resourceNamesGroupBox.Controls.Add(this.calculatedMetalDepositValueCheckBox);
 			this.resourceNamesGroupBox.Controls.Add(this.featureReclaimAmountsCheckBox);
 			this.resourceNamesGroupBox.Controls.Add(this.fullResourceNamesCheckBox);
 			this.resourceNamesGroupBox.Location = new System.Drawing.Point(12, 352);
 			this.resourceNamesGroupBox.Name = "resourceNamesGroupBox";
-			this.resourceNamesGroupBox.Size = new System.Drawing.Size(426, 74);
+			this.resourceNamesGroupBox.Size = new System.Drawing.Size(426, 95);
 			this.resourceNamesGroupBox.TabIndex = 12;
 			this.resourceNamesGroupBox.TabStop = false;
 			this.resourceNamesGroupBox.Text = "Resource Labels";
@@ -278,6 +280,16 @@ namespace Mappy.UI.Forms
 			this.featureReclaimAmountsCheckBox.TabIndex = 1;
 			this.featureReclaimAmountsCheckBox.Text = "Show feature reclaim amounts";
 			this.featureReclaimAmountsCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// calculatedMetalDepositValueCheckBox
+			// 
+			this.calculatedMetalDepositValueCheckBox.AutoSize = true;
+			this.calculatedMetalDepositValueCheckBox.Location = new System.Drawing.Point(17, 68);
+			this.calculatedMetalDepositValueCheckBox.Name = "calculatedMetalDepositValueCheckBox";
+			this.calculatedMetalDepositValueCheckBox.Size = new System.Drawing.Size(280, 17);
+			this.calculatedMetalDepositValueCheckBox.TabIndex = 2;
+			this.calculatedMetalDepositValueCheckBox.Text = "Calculated metal deposit value";
+			this.calculatedMetalDepositValueCheckBox.UseVisualStyleBackColor = true;
 			// 
 			// fullResourceNamesCheckBox
 			// 
@@ -293,7 +305,7 @@ namespace Mappy.UI.Forms
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(450, 466);
+			this.ClientSize = new System.Drawing.Size(450, 487);
 			this.Controls.Add(this.resourceNamesGroupBox);
 			this.Controls.Add(this.scrollSpeedGroupBox);
 			this.Controls.Add(this.mainGroupBox);
@@ -338,5 +350,6 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.GroupBox resourceNamesGroupBox;
         private System.Windows.Forms.CheckBox fullResourceNamesCheckBox;
         private System.Windows.Forms.CheckBox featureReclaimAmountsCheckBox;
+        private System.Windows.Forms.CheckBox calculatedMetalDepositValueCheckBox;
     }
 }

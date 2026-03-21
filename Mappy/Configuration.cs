@@ -27,6 +27,8 @@ namespace Mappy
 
         public bool ShowFeatureReclaimAmounts { get; set; }
 
+        public bool ShowCalculatedMetalDepositValue { get; set; }
+
         [XmlIgnore]
         public Color GridColor
         {
