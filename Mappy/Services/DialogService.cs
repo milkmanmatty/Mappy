@@ -243,5 +243,28 @@ namespace Mappy.Services
             var f = new AboutForm();
             f.ShowDialog(this.owner);
         }
+
+        public FlipOptions AskUserForFlipOptions()
+        {
+            var dialog = new FlipSectionForm();
+            var result = dialog.ShowDialog(this.owner);
+
+            switch (result)
+            {
+                case DialogResult.OK:
+                    return new FlipOptions
+                    {
+                        Direction = dialog.FlipDirection,
+                        ApplyShadows = dialog.RelightShadows,
+                    };
+                case DialogResult.Cancel:
+                    return new FlipOptions
+                    {
+                        Cancelled = true,
+                    };
+                default:
+                    throw new ArgumentException(@"bad dialogresult");
+            }
+        }
     }
 }

@@ -406,8 +406,15 @@ namespace Mappy.Services
                 });
         }
 
-        public void Flip(FlipDirection direction)
+        public void Flip()
         {
+            // Show dialog to get user preferences
+            var options = this.dialogService.AskUserForFlipOptions();
+            if (options == null || options.Cancelled)
+            {
+                return; // User cancelled
+            }
+
             this.model.Map.IfSome(
                 map =>
                 {
@@ -430,9 +437,9 @@ namespace Mappy.Services
                         destTile.HeightGrid,
                         floatTile.HeightGrid.Width,
                         floatTile.HeightGrid.Height,
-                        direction);
+                        options.Direction);
 
-                    var prefix = direction == FlipDirection.Horizontal ? "fh" : "fv";
+                    var prefix = options.Direction == FlipDirection.Horizontal ? "fh" : "fv";
                     var graphicPath = Path.Combine(ImgUtil.TempDir, prefix + "_Result.png");
                     var heightPath = Path.Combine(ImgUtil.TempDir, prefix + "Heightmap.png");
 
@@ -440,20 +447,27 @@ namespace Mappy.Services
                     heightBitmap.Save(heightPath, ImageFormat.Png); // export before resize
 
                     Bitmap graphicBitmap = ImgUtil.GetBitmapFromTilegrid(destTile.TileGrid);
+                    Bitmap result;
 
-                    // For TA this will never be true, but check anyway just in case
-                    if (graphicBitmap.Width != heightBitmap.Width || graphicBitmap.Height != heightBitmap.Height)
+                    if (options.ApplyShadows)
                     {
-                        heightBitmap = ImageRelightingService.BicubicResize(heightBitmap, graphicBitmap);
+                        // For TA this will never be true, but check anyway just in case
+                        if (graphicBitmap.Width != heightBitmap.Width || graphicBitmap.Height != heightBitmap.Height)
+                        {
+                            heightBitmap = ImageRelightingService.BicubicResize(heightBitmap, graphicBitmap);
+                        }
+
+                        result = ImageRelightingService.FlipAndRelightBitmap(
+                            graphicBitmap,
+                            heightBitmap,
+                            options.Direction,
+                            ImgUtil.GetLightDirectionFromEnum(LightDirection.BottomLeft));
+                    }
+                    else
+                    {
+                        result = ImgUtil.FlipBitmap(graphicBitmap, options.Direction);
                     }
 
-                    var img = ImageRelightingService.FlipAndRelightBitmap(
-                        graphicBitmap,
-                        heightBitmap,
-                        direction,
-                        ImgUtil.GetLightDirectionFromEnum(LightDirection.BottomLeft));
-
-                    Bitmap result = img;
                     result.Save(graphicPath, ImageFormat.Png);
 
                     heightBitmap.Dispose();
@@ -463,16 +477,6 @@ namespace Mappy.Services
 
                     // ImgUtil.ClearTemps();
                 });
-        }
-
-        public void FlipVertically()
-        {
-            this.model.Map.IfSome(map => { this.Flip(FlipDirection.Vertical); });
-        }
-
-        public void FlipHorizontally()
-        {
-            this.model.Map.IfSome(map => { this.Flip(FlipDirection.Horizontal); });
         }
 
         public void RefreshMinimap()
