@@ -147,7 +147,7 @@ namespace Mappy.UI.Forms
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(491, 47);
             this.button1.TabIndex = 6;
-            this.button1.Text = "Confess your sins to Venom";
+            this.button1.Text = "Flip Terrain Section";
             this.button1.UseVisualStyleBackColor = true;
             // 
             // warningImg

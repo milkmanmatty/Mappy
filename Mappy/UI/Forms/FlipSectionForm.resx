@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="warningLabel.Text" xml:space="preserve">
-    <value>Terrain sections with baked directional lighting will show incorrect lighting when flipped - especially those with cast shadows, which cannot be fixed. Relighting may improve form shadows, but for best results, only flip sections without cast shadows.</value>
+    <value>Terrain sections with baked directional lighting will show incorrect lighting when flipped - especially those with "cast shadows", which CANNOT be fixed. Relighting may improve "form shadows", but for best results, only flip sections without cast shadows.</value>
   </data>
 </root>
