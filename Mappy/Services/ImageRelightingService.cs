@@ -302,33 +302,30 @@
                         // Clamp to ambient to prevent divide by zero in Step 4
                         origShading = Math.Max(ambientLight, origShading);
 
-                        // --- STEP 4: De-light the Original Image ---
-                        // Lookup exact color via 8bpp Palette
-                        byte paletteIndex = origRow[srcX];
-                        Color origColor = palette[paletteIndex];
+                        // De-light the Original Image
+                        Color origColor = DelightToCreateAlbedo(
+                            origRow,
+                            srcX,
+                            palette,
+                            origShading,
+                            out float albedoR,
+                            out float albedoG,
+                            out float albedoB);
 
-                        // Strip shadows to get flat Albedo
-                        float albedoR = origColor.R / origShading;
-                        float albedoG = origColor.G / origShading;
-                        float albedoB = origColor.B / origShading;
+                        // Re-light
+                        byte r = RelightPixel(
+                            newLightDir,
+                            normal,
+                            ambientLight,
+                            albedoR,
+                            albedoG,
+                            albedoB,
+                            origColor,
+                            out byte g,
+                            out byte b,
+                            out byte a);
 
-                        // --- STEP 5: Re-light ---
-                        // Calculate new shading
-                        float newShading = Vector3.Dot(normal, newLightDir);
-                        newShading = Math.Max(ambientLight, newShading);
-
-                        // Apply new lighting to the Albedo
-                        float finalR = albedoR * newShading;
-                        float finalG = albedoG * newShading;
-                        float finalB = albedoB * newShading;
-
-                        // Clamp results to valid 0-255 byte range
-                        byte r = (byte)Math.Min(255, Math.Max(0, finalR));
-                        byte g = (byte)Math.Min(255, Math.Max(0, finalG));
-                        byte b = (byte)Math.Min(255, Math.Max(0, finalB));
-                        byte a = origColor.A; // Preserve original Alpha
-
-                        // --- Write to Output ---
+                        // Write to Output
                         // Strict Format32bppArgb memory ordering: Blue, Green, Red, Alpha
                         int outIdx = x * 4;
                         outRow[outIdx] = b;
@@ -346,7 +343,7 @@
                 outputBmp.UnlockBits(outData);
             }
 
-            Quantization.ToTAPalette(outputBmp);
+            // Quantization.ToTAPalette(outputBmp);
 
             return ImgUtil.Convert32bppTo8bppIndexed(outputBmp);
         }
@@ -377,6 +374,55 @@
             float dy = (hDown - hUp) * normalStrength;
 
             return Vector3.Normalize(new Vector3(-dx, -dy, 1.0f));
+        }
+
+        private static unsafe Color DelightToCreateAlbedo(
+            byte* origRow,
+            int srcX,
+            Color[] palette,
+            float origShading,
+            out float albedoR,
+            out float albedoG,
+            out float albedoB)
+        {
+            // Lookup exact color via 8bpp Palette
+            byte paletteIndex = origRow[srcX];
+            Color origColor = palette[paletteIndex];
+
+            // Strip shadows to get flat Albedo
+            albedoR = origColor.R / origShading;
+            albedoG = origColor.G / origShading;
+            albedoB = origColor.B / origShading;
+            return origColor;
+        }
+
+        private static byte RelightPixel(
+            Vector3 newLightDir,
+            Vector3 normal,
+            float ambientLight,
+            float albedoR,
+            float albedoG,
+            float albedoB,
+            Color origColor,
+            out byte g,
+            out byte b,
+            out byte a)
+        {
+            // Calculate new shading
+            float newShading = Vector3.Dot(normal, newLightDir);
+            newShading = Math.Max(ambientLight, newShading);
+
+            // Apply new lighting to the Albedo
+            float finalR = albedoR * newShading;
+            float finalG = albedoG * newShading;
+            float finalB = albedoB * newShading;
+
+            // Clamp results to valid 0-255 byte range
+            byte r = (byte)Math.Min(255, Math.Max(0, finalR));
+            g = (byte)Math.Min(255, Math.Max(0, finalG));
+            b = (byte)Math.Min(255, Math.Max(0, finalB));
+            a = origColor.A;
+            return r;
         }
     }
 }
