@@ -208,7 +208,6 @@
     <Compile Include="Operations\ChangeStartPositionOperation.cs" />
     <Compile Include="Operations\BatchMoveFeatureOperation.cs" />
     <Compile Include="Operations\FillAreaOperation.cs" />
-    <Compile Include="Operations\FlipAreaOperation.cs" />
     <Compile Include="Operations\HeightBrushOperation.cs" />
     <Compile Include="Operations\VoidBrushOperation.cs" />
     <Compile Include="Operations\MoveFeatureOperation.cs" />

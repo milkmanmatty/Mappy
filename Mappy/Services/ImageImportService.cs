@@ -1,4 +1,4 @@
-﻿namespace Mappy.Util
+﻿namespace Mappy.Services
 {
     using System;
     using System.Collections.Generic;
@@ -9,7 +9,7 @@
     using Hjg.Pngcs.Chunks;
     using Mappy.Collections;
     using Mappy.Data;
-    using Mappy.Services;
+    using Mappy.Util;
     using TAUtil.Gdi.Palette;
     using PixelFormat = System.Drawing.Imaging.PixelFormat;
 

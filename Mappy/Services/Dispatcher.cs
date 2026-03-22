@@ -419,45 +419,45 @@ namespace Mappy.Services
                     GridMethods.Copy(floatTile.TileGrid, destTile.TileGrid, 0, 0, 0, 0, floatTile.TileGrid.Width, floatTile.TileGrid.Height);
                     GridMethods.Copy(floatTile.HeightGrid, destTile.HeightGrid, 0, 0, 0, 0, floatTile.HeightGrid.Width, floatTile.HeightGrid.Height);
 
-                    // GridMethods.FlipArea(floatTile.TileGrid, destTile.TileGrid, floatTile.TileGrid.Width, floatTile.TileGrid.Height, direction);
-                    GridMethods.FlipArea(floatTile.HeightGrid, destTile.HeightGrid, floatTile.HeightGrid.Width, floatTile.HeightGrid.Height, direction);
+                    // Only flip heightmap, graphic will be flipped later
+                    GridMethods.FlipArea(
+                        floatTile.HeightGrid,
+                        destTile.HeightGrid,
+                        floatTile.HeightGrid.Width,
+                        floatTile.HeightGrid.Height,
+                        direction);
 
                     var prefix = direction == FlipDirection.Horizontal ? "fh" : "fv";
                     var graphicPath = Path.Combine(ImgUtil.TempDir, prefix + "_Result.png");
                     var heightPath = Path.Combine(ImgUtil.TempDir, prefix + "Heightmap.png");
 
-                    this.ResynthesizeAlbedo(destTile, direction, graphicPath, heightPath);
+                    Bitmap heightBitmap = ImgUtil.GetBitmapFromHeightmapGrid(destTile.HeightGrid);
+                    heightBitmap.Save(heightPath, ImageFormat.Png); // export before resize
+
+                    Bitmap graphicBitmap = ImgUtil.GetBitmapFromTilegrid(destTile.TileGrid);
+
+                    // For TA this will never be true, but check anyway just in case
+                    if (graphicBitmap.Width != heightBitmap.Width || graphicBitmap.Height != heightBitmap.Height)
+                    {
+                        heightBitmap = ImageRelightingService.BicubicResize(heightBitmap, graphicBitmap);
+                    }
+
+                    var img = ImageRelightingService.FlipAndRelightBitmap(
+                        graphicBitmap,
+                        heightBitmap,
+                        direction,
+                        ImgUtil.GetLightDirectionFromEnum(LightDirection.BottomLeft));
+
+                    Bitmap result = img;
+                    result.Save(graphicPath, ImageFormat.Png);
+
+                    heightBitmap.Dispose();
+                    result.Dispose();
 
                     this.ImportCustomSectionHelper(map, graphicPath, heightPath);
 
                     // ImgUtil.ClearTemps();
-
                 });
-        }
-
-        private void ResynthesizeAlbedo(IMapTile destTile, FlipDirection dir, string graphicPath, string heightPath)
-        {
-            Bitmap heightBitmap = ImgUtil.GetBitmapFromHeightmapGrid(destTile.HeightGrid);
-            Bitmap graphicBitmap = ImgUtil.GetBitmapFromTilegrid(destTile.TileGrid);
-
-            // For TA this will never be true, but check anyway just in case
-            if (graphicBitmap.Width != heightBitmap.Width || graphicBitmap.Height != heightBitmap.Height)
-            {
-                heightBitmap = ImageRelightingService.BicubicResize(heightBitmap, graphicBitmap);
-            }
-
-            heightBitmap.Save(heightPath, ImageFormat.Png);
-
-            var img = ImageRelightingService.FlipAndRelightBitmap(
-                graphicBitmap,
-                heightBitmap,
-                dir,
-                ImgUtil.GetLightDirectionFromEnum(LightDirection.BottomLeft));
-
-            Bitmap result = img;
-            result.Save(graphicPath, ImageFormat.Png);
-            result.Dispose();
-            heightBitmap.Dispose();
         }
 
         public void FlipVertically()
