@@ -178,6 +178,11 @@ namespace Mappy.Services
             }
         }
 
+        public void ShowInfo()
+        {
+            this.dialogService.ShowInfo();
+        }
+
         public void ShowAbout()
         {
             this.dialogService.ShowAbout();

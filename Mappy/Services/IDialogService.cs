@@ -44,5 +44,7 @@ namespace Mappy.Services
         IProgressView CreateProgressView();
 
         void ShowAbout();
+
+        void ShowInfo();
     }
 }
