@@ -41,14 +41,16 @@ namespace Mappy.UI.Forms
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.warningImg = new System.Windows.Forms.PictureBox();
             this.flipDirectionGroupBox.SuspendLayout();
             this.RelightGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.warningImg)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Location = new System.Drawing.Point(12, 128);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(449, 64);
             this.label1.TabIndex = 1;
@@ -58,7 +60,7 @@ namespace Mappy.UI.Forms
             // 
             this.flipDirectionGroupBox.Controls.Add(this.flipVertRadio);
             this.flipDirectionGroupBox.Controls.Add(this.flipHoriRadio);
-            this.flipDirectionGroupBox.Location = new System.Drawing.Point(12, 76);
+            this.flipDirectionGroupBox.Location = new System.Drawing.Point(12, 195);
             this.flipDirectionGroupBox.Name = "flipDirectionGroupBox";
             this.flipDirectionGroupBox.Size = new System.Drawing.Size(448, 113);
             this.flipDirectionGroupBox.TabIndex = 2;
@@ -89,7 +91,7 @@ namespace Mappy.UI.Forms
             // 
             this.RelightGroupBox.Controls.Add(this.doNotRelightRadio);
             this.RelightGroupBox.Controls.Add(this.relightRadio);
-            this.RelightGroupBox.Location = new System.Drawing.Point(12, 257);
+            this.RelightGroupBox.Location = new System.Drawing.Point(12, 376);
             this.RelightGroupBox.Name = "RelightGroupBox";
             this.RelightGroupBox.Size = new System.Drawing.Size(448, 110);
             this.RelightGroupBox.TabIndex = 3;
@@ -119,7 +121,7 @@ namespace Mappy.UI.Forms
             // label2
             // 
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(12, 199);
+            this.label2.Location = new System.Drawing.Point(12, 318);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(449, 35);
             this.label2.TabIndex = 4;
@@ -128,7 +130,7 @@ namespace Mappy.UI.Forms
             // label3
             // 
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(12, 234);
+            this.label3.Location = new System.Drawing.Point(12, 353);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(446, 20);
             this.label3.TabIndex = 5;
@@ -137,18 +139,27 @@ namespace Mappy.UI.Forms
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(12, 373);
+            this.button1.Location = new System.Drawing.Point(12, 492);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(448, 47);
             this.button1.TabIndex = 6;
             this.button1.Text = "Confess your sins to Venom";
             this.button1.UseVisualStyleBackColor = true;
             // 
+            // warningImg
+            // 
+            this.warningImg.Location = new System.Drawing.Point(13, 21);
+            this.warningImg.Name = "warningImg";
+            this.warningImg.Size = new System.Drawing.Size(44, 44);
+            this.warningImg.TabIndex = 7;
+            this.warningImg.TabStop = false;
+            // 
             // FlipSectionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(470, 431);
+            this.ClientSize = new System.Drawing.Size(470, 549);
+            this.Controls.Add(this.warningImg);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -163,8 +174,11 @@ namespace Mappy.UI.Forms
             this.TopMost = true;
             this.flipDirectionGroupBox.ResumeLayout(false);
             this.RelightGroupBox.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.warningImg)).EndInit();
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.PictureBox warningImg;
 
         private System.Windows.Forms.Button button1;
 

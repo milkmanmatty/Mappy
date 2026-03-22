@@ -441,7 +441,6 @@
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="Assets\PALETTE.PAL" />
     <None Include="default.json.sample">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
