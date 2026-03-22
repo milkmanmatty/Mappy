@@ -232,7 +232,13 @@ namespace Mappy.Services
             return f.ShowDialog(this.owner) == DialogResult.OK;
         }
 
-        public void ShowAbout()
+        public void ShowInfo()
+        {
+            var f = new InfoForm();
+            f.ShowDialog(this.owner);
+        }
+
+		public void ShowAbout()
         {
             var f = new AboutForm();
             f.ShowDialog(this.owner);

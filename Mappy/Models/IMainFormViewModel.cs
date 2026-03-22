@@ -96,6 +96,8 @@ namespace Mappy.Models
 
         void PreferencesMenuItemClick();
 
+        void InfoMenuItemClick();
+
         void AboutMenuItemClick();
 
         void MapAttributesMenuItemClick();

@@ -240,6 +240,11 @@ namespace Mappy.Models
             this.dispatcher.OpenPreferences();
         }
 
+        public void InfoMenuItemClick()
+        {
+            this.dispatcher.ShowInfo();
+        }
+
         public void AboutMenuItemClick()
         {
             this.dispatcher.ShowAbout();

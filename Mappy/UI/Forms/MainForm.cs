@@ -176,6 +176,11 @@ namespace Mappy.UI.Forms
             this.model.NewMenuItemClick();
         }
 
+        private void InfoMenuItemClick(object sender, EventArgs e)
+        {
+            this.model.InfoMenuItemClick();
+        }
+
         private void AboutMenuItemClick(object sender, EventArgs e)
         {
             this.model.AboutMenuItemClick();
