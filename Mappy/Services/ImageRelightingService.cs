@@ -279,17 +279,18 @@
                 {
                     var srcY = flipDir == FlipDirection.Vertical ? height - 1 - y : y;
 
-                    byte* outRow = outPtr + (srcY * outData.Stride);
+                    byte* outRow = outPtr + (y * outData.Stride);
                     byte* origRow = origPtr + (srcY * origData.Stride);
 
                     for (int x = 0; x < width; x++)
                     {
                         var srcX = flipDir == FlipDirection.Horizontal ? width - 1 - x : x;
 
+                        // Don't use srcX or srcY here!
                         Vector3 normal = GenerateNormalMap(
                             heightPtr,
-                            srcX,
-                            srcY,
+                            x,
+                            y,
                             width,
                             height,
                             heightMapStride,
