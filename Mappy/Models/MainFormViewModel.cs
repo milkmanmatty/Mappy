@@ -8,6 +8,7 @@ namespace Mappy.Models
     using System.Reactive.Linq;
     using Mappy;
     using Mappy.Collections;
+    using Mappy.Data;
     using Mappy.Models.Enums;
     using Mappy.Services;
     using Mappy.Util;
