@@ -31,6 +31,7 @@ namespace Mappy.UI.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlipSectionForm));
             this.label1 = new System.Windows.Forms.Label();
             this.flipDirectionGroupBox = new System.Windows.Forms.GroupBox();
             this.flipVertRadio = new System.Windows.Forms.RadioButton();
@@ -42,6 +43,7 @@ namespace Mappy.UI.Forms
             this.label3 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.warningImg = new System.Windows.Forms.PictureBox();
+            this.warningLabel = new System.Windows.Forms.Label();
             this.flipDirectionGroupBox.SuspendLayout();
             this.RelightGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.warningImg)).BeginInit();
@@ -148,17 +150,27 @@ namespace Mappy.UI.Forms
             // 
             // warningImg
             // 
-            this.warningImg.Location = new System.Drawing.Point(13, 21);
+            this.warningImg.Image = global::Mappy.Properties.Resources.Warning;
+            this.warningImg.Location = new System.Drawing.Point(12, 44);
             this.warningImg.Name = "warningImg";
-            this.warningImg.Size = new System.Drawing.Size(44, 44);
+            this.warningImg.Size = new System.Drawing.Size(48, 48);
             this.warningImg.TabIndex = 7;
             this.warningImg.TabStop = false;
+            // 
+            // warningLabel
+            // 
+            this.warningLabel.Location = new System.Drawing.Point(75, 18);
+            this.warningLabel.Name = "warningLabel";
+            this.warningLabel.Size = new System.Drawing.Size(372, 110);
+            this.warningLabel.TabIndex = 8;
+            this.warningLabel.Text = resources.GetString("warningLabel.Text");
             // 
             // FlipSectionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(470, 549);
+            this.Controls.Add(this.warningLabel);
             this.Controls.Add(this.warningImg);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label3);
@@ -177,6 +189,8 @@ namespace Mappy.UI.Forms
             ((System.ComponentModel.ISupportInitialize)(this.warningImg)).EndInit();
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Label warningLabel;
 
         private System.Windows.Forms.PictureBox warningImg;
 
