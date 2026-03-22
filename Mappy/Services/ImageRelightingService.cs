@@ -85,10 +85,10 @@
                     {
                         // 1. Calculate normals from the heightmap using central difference
                         // We read the Blue channel (offset 0) assuming the heightmap is grayscale
-                        float hLeft = hgtPtr[y * stride + (x - 1) * 4];
-                        float hRight = hgtPtr[y * stride + (x + 1) * 4];
-                        float hUp = hgtPtr[(y - 1) * stride + x * 4];
-                        float hDown = hgtPtr[(y + 1) * stride + x * 4];
+                        float hLeft = hgtPtr[(y * stride) + ((x - 1) * 4)];
+                        float hRight = hgtPtr[(y * stride) + ((x + 1) * 4)];
+                        float hUp = hgtPtr[((y - 1) * stride) + (x * 4)];
+                        float hDown = hgtPtr[((y + 1) * stride) + (x * 4)];
 
                         float dzdx = (hRight - hLeft) / 255f * depthScale;
                         float dzdy = (hDown - hUp) / 255f * depthScale;
@@ -189,11 +189,11 @@
                     for (var x = 1; x < width - 1; x++)
                     {
                         // Calculate byte offsets
-                        int curr = y * srcData.Stride + x * 4;
+                        int curr = (y * srcData.Stride) + (x * 4);
                         int left = curr - 4;
                         int right = curr + 4;
-                        int top = (y - 1) * srcData.Stride + x * 4;
-                        int bottom = (y + 1) * srcData.Stride + x * 4;
+                        int top = ((y - 1) * srcData.Stride) + (x * 4);
+                        int bottom = ((y + 1) * srcData.Stride) + (x * 4);
 
                         // Calculate Gradients from Heightmap (B-channel of heightmap)
                         float dx = (hgtPtr[left] - hgtPtr[right]) / 255f;
@@ -206,11 +206,11 @@
                         float spec = (float)Math.Pow(Math.Max(Vector3.Dot(normal, halfway), 0), 32f) * 0.5f;
 
                         // Apply to Channels (B, G, R, A order in GDI+)
-                        for (var c = 0; c < 3; c++) // Blue, Green, Red
+                        for (var c = 0; c < 3; c++)
                         {
                             float color = srcPtr[curr + c];
                             outPtr[curr + c] =
-                                (byte)Util.Clamp(color / origShading * targetShading + spec * 255, 0, 255);
+                                (byte)Util.Clamp((color / origShading * targetShading) + (spec * 255), 0, 255);
                         }
 
                         outPtr[curr + 3] = srcPtr[curr + 3]; // Alpha
@@ -226,7 +226,6 @@
 
             return output;
         }
-
 
         /// <summary>
         /// De-lights and re-lights an 8bpp indexed image based on a heightmap.
