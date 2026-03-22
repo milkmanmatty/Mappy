@@ -36,8 +36,6 @@ namespace Mappy.Services
 
         private readonly ImageImportService imageImportingService;
 
-        private readonly ImageExportService imageExportingService;
-
         private readonly BitmapCache tileCache;
 
         private readonly Random rng = new Random();
@@ -50,8 +48,7 @@ namespace Mappy.Services
             FeatureService featureService,
             MapLoadingService mapLoadingService,
             ImageImportService imageImportingService,
-            BitmapCache tileCache,
-            ImageExportService imageExportingService)
+            BitmapCache tileCache)
         {
             this.model = model;
             this.dialogService = dialogService;
@@ -61,7 +58,6 @@ namespace Mappy.Services
             this.mapLoadingService = mapLoadingService;
             this.imageImportingService = imageImportingService;
             this.tileCache = tileCache;
-            this.imageExportingService = imageExportingService;
         }
 
         public void Initialize()
@@ -423,20 +419,44 @@ namespace Mappy.Services
                     GridMethods.Copy(floatTile.TileGrid, destTile.TileGrid, 0, 0, 0, 0, floatTile.TileGrid.Width, floatTile.TileGrid.Height);
                     GridMethods.Copy(floatTile.HeightGrid, destTile.HeightGrid, 0, 0, 0, 0, floatTile.HeightGrid.Width, floatTile.HeightGrid.Height);
 
-                    GridMethods.FlipArea(floatTile.TileGrid, destTile.TileGrid, floatTile.TileGrid.Width, floatTile.TileGrid.Height, direction);
-                    GridMethods.FlipArea(floatTile.HeightGrid, destTile.HeightGrid, floatTile.HeightGrid.Width, floatTile.HeightGrid.Height, direction);
+                    // Only flip heightmap, graphic will be flipped later
+                    GridMethods.FlipArea(
+                        floatTile.HeightGrid,
+                        destTile.HeightGrid,
+                        floatTile.HeightGrid.Width,
+                        floatTile.HeightGrid.Height,
+                        direction);
 
-                    this.imageExportingService.ExportSection(
-                        destTile,
-                        Path.Combine(ImgUtil.TempDir, "fhGraphic.png"),
-                        Path.Combine(ImgUtil.TempDir, "fhHeightmap.png"));
+                    var prefix = direction == FlipDirection.Horizontal ? "fh" : "fv";
+                    var graphicPath = Path.Combine(ImgUtil.TempDir, prefix + "_Result.png");
+                    var heightPath = Path.Combine(ImgUtil.TempDir, prefix + "Heightmap.png");
 
-                    this.ImportCustomSectionHelper(
-                        map,
-                        Path.Combine(ImgUtil.TempDir, "fhGraphic.png"),
-                        Path.Combine(ImgUtil.TempDir, "fhHeightmap.png"));
+                    Bitmap heightBitmap = ImgUtil.GetBitmapFromHeightmapGrid(destTile.HeightGrid);
+                    heightBitmap.Save(heightPath, ImageFormat.Png); // export before resize
 
-                    ImgUtil.ClearTemps();
+                    Bitmap graphicBitmap = ImgUtil.GetBitmapFromTilegrid(destTile.TileGrid);
+
+                    // For TA this will never be true, but check anyway just in case
+                    if (graphicBitmap.Width != heightBitmap.Width || graphicBitmap.Height != heightBitmap.Height)
+                    {
+                        heightBitmap = ImageRelightingService.BicubicResize(heightBitmap, graphicBitmap);
+                    }
+
+                    var img = ImageRelightingService.FlipAndRelightBitmap(
+                        graphicBitmap,
+                        heightBitmap,
+                        direction,
+                        ImgUtil.GetLightDirectionFromEnum(LightDirection.BottomLeft));
+
+                    Bitmap result = img;
+                    result.Save(graphicPath, ImageFormat.Png);
+
+                    heightBitmap.Dispose();
+                    result.Dispose();
+
+                    this.ImportCustomSectionHelper(map, graphicPath, heightPath);
+
+                    // ImgUtil.ClearTemps();
                 });
         }
 
@@ -1118,7 +1138,7 @@ namespace Mappy.Services
 
             try
             {
-                var b = ImgUtil.ExportHeightmap(map.BaseTile.HeightGrid);
+                var b = ImgUtil.GetBitmapFromHeightmapGrid(map.BaseTile.HeightGrid);
                 using (var s = File.Create(loc))
                 {
                     b.Save(s, ImageFormat.Png);

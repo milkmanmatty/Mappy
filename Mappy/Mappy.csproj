@@ -61,6 +61,7 @@
     <Reference Include="Bugsnag, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bugsnag.2.0.2\lib\net45\Bugsnag.dll</HintPath>
     </Reference>
+    <Reference Include="mscorlib" />
     <Reference Include="Ookii.Dialogs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Ookii.Dialogs\Ookii.Dialogs.dll</HintPath>
@@ -71,7 +72,17 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
       <Private>True</Private>
@@ -92,7 +103,13 @@
       <HintPath>..\packages\Rx-WinForms.2.2.5\lib\net45\System.Reactive.Windows.Forms.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Text.Encoding.CodePages, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encoding.CodePages.5.0.0\lib\net461\System.Text.Encoding.CodePages.dll</HintPath>
+    </Reference>
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
@@ -164,6 +181,7 @@
     <Compile Include="Models\Enums\FlipDirection.cs" />
     <Compile Include="Models\Enums\GUITab.cs" />
     <Compile Include="Models\Enums\HeightEditMode.cs" />
+    <Compile Include="Models\Enums\LightDirection.cs" />
     <Compile Include="Models\FeatureClipboardRecord.cs" />
     <Compile Include="Models\FeatureInstance.cs" />
     <Compile Include="Models\FeatureInstanceEventArgs.cs" />
@@ -190,7 +208,6 @@
     <Compile Include="Operations\ChangeStartPositionOperation.cs" />
     <Compile Include="Operations\BatchMoveFeatureOperation.cs" />
     <Compile Include="Operations\FillAreaOperation.cs" />
-    <Compile Include="Operations\FlipAreaOperation.cs" />
     <Compile Include="Operations\HeightBrushOperation.cs" />
     <Compile Include="Operations\VoidBrushOperation.cs" />
     <Compile Include="Operations\MoveFeatureOperation.cs" />
@@ -213,6 +230,8 @@
     <Compile Include="Services\Dispatcher.cs" />
     <Compile Include="Services\FeatureService.cs" />
     <Compile Include="Services\IDialogService.cs" />
+    <Compile Include="Services\ImageImportService.cs" />
+    <Compile Include="Services\ImageRelightingService.cs" />
     <Compile Include="Services\MapLoadingService.cs" />
     <Compile Include="Services\SectionBitmapService.cs" />
     <Compile Include="Data\SectionInfo.cs" />
@@ -322,8 +341,6 @@
     <Compile Include="UI\Tags\IMapItemTag.cs" />
     <Compile Include="UI\Tags\SectionTag.cs" />
     <Compile Include="UI\Tags\StartPositionTag.cs" />
-    <Compile Include="Util\ImageExportService.cs" />
-    <Compile Include="Util\ImageImportService.cs" />
     <Compile Include="Util\ImageSampling\BilinearWrapper.cs" />
     <Compile Include="Util\ImageSampling\IPixelImage.cs" />
     <Compile Include="Util\ImageSampling\NearestNeighbourPaletteWrapper.cs" />

@@ -1242,7 +1242,7 @@ namespace Mappy.Models
 
         private void UpdateCanFlip()
         {
-            this.CanFlip = this.SelectedTile.HasValue && this.FloatingTiles[this.SelectedTile.Value] != null;
+            this.CanFlip = this.SelectedTile.HasValue;
         }
 
         private void UndoManagerOnIsMarkedChanged(object sender, EventArgs eventArgs)

@@ -63,7 +63,6 @@ namespace Mappy
             var mapModelFactory = new MapModelFactory(tileCache);
             var mapLoadingService = new MapLoadingService(sectionFactory, mapModelFactory);
             var imageImportingService = new ImageImportService(tileCache);
-            var imageExportingService = new ImageExportService();
             var model = new CoreModel();
             var dispatcher = new Dispatcher(
                 model,
@@ -73,8 +72,7 @@ namespace Mappy
                 featureService,
                 mapLoadingService,
                 imageImportingService,
-                tileCache,
-                imageExportingService);
+                tileCache);
             mainForm.SetModel(new MainFormViewModel(model, dispatcher, featureService));
 
             mainForm.SectionView.SetModel(new SectionViewViewModel(sectionsService));
