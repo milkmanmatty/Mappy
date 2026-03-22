@@ -7,8 +7,10 @@ namespace Mappy.Models
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
 
+    using Mappy;
     using Mappy.Data;
     using Mappy.Services;
+    using Mappy.Util;
 
     public sealed class FeatureViewViewModel : ISectionViewViewModel, IDisposable
     {
@@ -153,8 +155,20 @@ namespace Mappy.Models
 
         private string BuildLabel(Feature feature)
         {
-            var baseLabel = this.BuildBaseLabel(feature);
-            return baseLabel + System.Environment.NewLine + this.BuildReclaimLabel(feature);
+            var lines = new List<string> { this.BuildBaseLabel(feature) };
+            var reclaim = this.BuildReclaimLabel(feature);
+            if (!string.IsNullOrEmpty(reclaim))
+            {
+                lines.Add(reclaim);
+            }
+
+            var metal = this.BuildMetalDepositLabel(feature);
+            if (!string.IsNullOrEmpty(metal))
+            {
+                lines.Add(metal);
+            }
+
+            return string.Join(Environment.NewLine, lines);
         }
 
         private string BuildBaseLabel(Feature feature)
@@ -182,6 +196,16 @@ namespace Mappy.Models
             return feature.ReclaimInfo.Match(
                 rec => $" E:{rec.EnergyValue}, M:{rec.MetalValue}",
                 () => string.Empty);
+        }
+
+        private string BuildMetalDepositLabel(Feature feature)
+        {
+            if (feature.MetalSpotValue <= 0)
+            {
+                return string.Empty;
+            }
+
+            return MetalSpotDisplayFormat.FormatDisplayValue(feature);
         }
 
         private void UpdateWorlds()

@@ -347,6 +347,7 @@
     <Compile Include="Util\ImageSampling\MapPixelImageAdapter.cs" />
     <Compile Include="Util\ImageSampling\NearestNeighbourWrapper.cs" />
     <Compile Include="Util\ImgUtil.cs" />
+    <Compile Include="Util\MetalSpotDisplayFormat.cs" />
     <Compile Include="Util\Notifier.cs" />
     <Compile Include="Util\OffsetBitmap.cs" />
     <Compile Include="Util\Util.cs" />
