@@ -52,7 +52,7 @@ namespace Mappy.UI.Forms
             this.flipDirectionGroupBox.Controls.Add(this.flipHoriRadio);
             this.flipDirectionGroupBox.Location = new System.Drawing.Point(12, 164);
             this.flipDirectionGroupBox.Name = "flipDirectionGroupBox";
-            this.flipDirectionGroupBox.Size = new System.Drawing.Size(177, 113);
+            this.flipDirectionGroupBox.Size = new System.Drawing.Size(242, 113);
             this.flipDirectionGroupBox.TabIndex = 2;
             this.flipDirectionGroupBox.TabStop = false;
             this.flipDirectionGroupBox.Text = "Flip direction";
@@ -81,9 +81,9 @@ namespace Mappy.UI.Forms
             // 
             this.RelightGroupBox.Controls.Add(this.doNotRelightRadio);
             this.RelightGroupBox.Controls.Add(this.relightRadio);
-            this.RelightGroupBox.Location = new System.Drawing.Point(207, 167);
+            this.RelightGroupBox.Location = new System.Drawing.Point(262, 164);
             this.RelightGroupBox.Name = "RelightGroupBox";
-            this.RelightGroupBox.Size = new System.Drawing.Size(296, 110);
+            this.RelightGroupBox.Size = new System.Drawing.Size(242, 113);
             this.RelightGroupBox.TabIndex = 3;
             this.RelightGroupBox.TabStop = false;
             this.RelightGroupBox.Text = "Relight terrain?";
@@ -92,7 +92,7 @@ namespace Mappy.UI.Forms
             // 
             this.doNotRelightRadio.Location = new System.Drawing.Point(9, 68);
             this.doNotRelightRadio.Name = "doNotRelightRadio";
-            this.doNotRelightRadio.Size = new System.Drawing.Size(245, 28);
+            this.doNotRelightRadio.Size = new System.Drawing.Size(227, 28);
             this.doNotRelightRadio.TabIndex = 1;
             this.doNotRelightRadio.Text = "Use original lighting";
             this.doNotRelightRadio.UseVisualStyleBackColor = true;
@@ -102,7 +102,7 @@ namespace Mappy.UI.Forms
             this.relightRadio.Checked = true;
             this.relightRadio.Location = new System.Drawing.Point(9, 25);
             this.relightRadio.Name = "relightRadio";
-            this.relightRadio.Size = new System.Drawing.Size(238, 37);
+            this.relightRadio.Size = new System.Drawing.Size(227, 37);
             this.relightRadio.TabIndex = 0;
             this.relightRadio.TabStop = true;
             this.relightRadio.Text = "Relight form shadows";
@@ -121,9 +121,9 @@ namespace Mappy.UI.Forms
             // warningImg
             // 
             this.warningImg.Image = global::Mappy.Properties.Resources.Warning;
-            this.warningImg.Location = new System.Drawing.Point(12, 29);
+            this.warningImg.Location = new System.Drawing.Point(12, 21);
             this.warningImg.Name = "warningImg";
-            this.warningImg.Size = new System.Drawing.Size(72, 64);
+            this.warningImg.Size = new System.Drawing.Size(72, 72);
             this.warningImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.warningImg.TabIndex = 7;
             this.warningImg.TabStop = false;
@@ -135,7 +135,7 @@ namespace Mappy.UI.Forms
             this.warningLabel.Name = "warningLabel";
             this.warningLabel.Size = new System.Drawing.Size(413, 64);
             this.warningLabel.TabIndex = 8;
-            this.warningLabel.Text = "Terrain sections with baked directional lighting will show incorrect lighting whe" + "n flipped - especially those with \"cast shadows\" which CANNOT be fixed.";
+            this.warningLabel.Text = "Terrain sections with baked directional lighting will show incorrect lighting whe" + "n flipped - especially those with \"cast shadows\" which CANNOT be fixed automatic" + "ally.";
             // 
             // label1
             // 
@@ -143,7 +143,7 @@ namespace Mappy.UI.Forms
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(489, 48);
             this.label1.TabIndex = 9;
-            this.label1.Text = "Relighting may improve \"form shadows\", but for best results only flip sections wi" + "thout cast shadows.";
+            this.label1.Text = "Relighting may improve \"form shadows\" but for best results, only flip sections wi" + "thout cast shadows.";
             // 
             // FlipSectionForm
             // 
@@ -161,6 +161,7 @@ namespace Mappy.UI.Forms
             this.MinimizeBox = false;
             this.Name = "FlipSectionForm";
             this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = " ";
             this.TopMost = true;
             this.flipDirectionGroupBox.ResumeLayout(false);
