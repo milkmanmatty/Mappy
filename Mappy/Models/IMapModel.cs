@@ -1,14 +1,18 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System;
     using System.Collections.Generic;
     using System.Drawing;
+
+    using Mappy.Data;
 
     public interface IMapModel : IReadOnlyMapModel
     {
         new Bitmap Minimap { get; set; }
 
         new int SeaLevel { get; set; }
+
+        new int ActiveSchemaIndex { get; set; }
 
         /// <summary>
         /// Adds the given feature instance.
@@ -37,5 +41,11 @@
         /// </summary>
         /// <param name="id">The ID of the instance to remove.</param>
         void RemoveFeatureInstance(Guid id);
+
+        void AddSchemaUnit(int schemaIndex, SchemaUnit unit);
+
+        void RemoveSchemaUnit(int schemaIndex, Guid unitId);
+
+        void UpdateSchemaUnit(int schemaIndex, SchemaUnit unit);
     }
 }

@@ -214,6 +214,14 @@ namespace Mappy.Services
             return null;
         }
 
+        public int? AskUnitPlayerNumber(IWin32Window owner, int defaultPlayer = 1)
+        {
+            using (var f = new UI.Forms.UnitPlayerPromptForm(defaultPlayer))
+            {
+                return f.ShowDialog(owner ?? this.owner) == DialogResult.OK ? f.PlayerNumber : (int?)null;
+            }
+        }
+
         public void ShowError(string message)
         {
             MessageBox.Show(this.owner, message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

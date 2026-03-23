@@ -90,6 +90,7 @@ namespace Mappy.UI.Forms
 			this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.sidebarTabs = new System.Windows.Forms.TabControl();
+			this.otaMissionTab = new System.Windows.Forms.TabPage();
 			this.sectionsTab = new System.Windows.Forms.TabPage();
 			this.sectionsView = new Mappy.UI.Controls.SectionView();
 			this.featuresTab = new System.Windows.Forms.TabPage();
@@ -627,14 +628,14 @@ namespace Mappy.UI.Forms
 			// infoToolStripMenuItem
 			// 
 			this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-			this.infoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.infoToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
 			this.infoToolStripMenuItem.Text = "Hotkeys";
 			this.infoToolStripMenuItem.Click += new System.EventHandler(this.InfoMenuItemClick);
 			// 
 			// aboutMenuItem
 			// 
 			this.aboutMenuItem.Name = "aboutMenuItem";
-			this.aboutMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.aboutMenuItem.Size = new System.Drawing.Size(117, 22);
 			this.aboutMenuItem.Text = "&About...";
 			this.aboutMenuItem.Click += new System.EventHandler(this.AboutMenuItemClick);
 			// 
@@ -646,21 +647,33 @@ namespace Mappy.UI.Forms
 			this.sidebarTabs.Controls.Add(this.heightTab);
 			this.sidebarTabs.Controls.Add(this.voidTab);
 			this.sidebarTabs.Controls.Add(this.attributesTab);
+			this.sidebarTabs.Controls.Add(this.otaMissionTab);
 			this.sidebarTabs.Dock = System.Windows.Forms.DockStyle.Left;
 			this.sidebarTabs.Location = new System.Drawing.Point(0, 24);
+			this.sidebarTabs.Multiline = true;
 			this.sidebarTabs.Name = "sidebarTabs";
 			this.sidebarTabs.SelectedIndex = 0;
 			this.sidebarTabs.Size = new System.Drawing.Size(215, 538);
 			this.sidebarTabs.TabIndex = 4;
 			this.sidebarTabs.SelectedIndexChanged += new System.EventHandler(this.GUITabs_SelectedIndexChanged);
 			// 
+			// otaMissionTab
+			// 
+			this.otaMissionTab.Location = new System.Drawing.Point(4, 40);
+			this.otaMissionTab.Name = "otaMissionTab";
+			this.otaMissionTab.Padding = new System.Windows.Forms.Padding(6);
+			this.otaMissionTab.Size = new System.Drawing.Size(207, 494);
+			this.otaMissionTab.TabIndex = 0;
+			this.otaMissionTab.Text = "Units";
+			this.otaMissionTab.UseVisualStyleBackColor = true;
+			// 
 			// sectionsTab
 			// 
 			this.sectionsTab.Controls.Add(this.sectionsView);
-			this.sectionsTab.Location = new System.Drawing.Point(4, 22);
+			this.sectionsTab.Location = new System.Drawing.Point(4, 40);
 			this.sectionsTab.Name = "sectionsTab";
 			this.sectionsTab.Padding = new System.Windows.Forms.Padding(3);
-			this.sectionsTab.Size = new System.Drawing.Size(207, 512);
+			this.sectionsTab.Size = new System.Drawing.Size(207, 494);
 			this.sectionsTab.TabIndex = 0;
 			this.sectionsTab.Text = "Sections";
 			this.sectionsTab.UseVisualStyleBackColor = true;
@@ -672,7 +685,7 @@ namespace Mappy.UI.Forms
 			this.sectionsView.Location = new System.Drawing.Point(3, 3);
 			this.sectionsView.Margin = new System.Windows.Forms.Padding(4);
 			this.sectionsView.Name = "sectionsView";
-			this.sectionsView.Size = new System.Drawing.Size(201, 506);
+			this.sectionsView.Size = new System.Drawing.Size(201, 488);
 			this.sectionsView.TabIndex = 3;
 			// 
 			// featuresTab
@@ -850,11 +863,11 @@ namespace Mappy.UI.Forms
 			// 
 			this.voidTab.Controls.Add(this.voidCursorSizeNumericUpDown);
 			this.voidTab.Controls.Add(this.voidCursorSizeLabel);
-			this.voidTab.Location = new System.Drawing.Point(4, 22);
+			this.voidTab.Location = new System.Drawing.Point(4, 40);
 			this.voidTab.Margin = new System.Windows.Forms.Padding(2);
 			this.voidTab.Name = "voidTab";
 			this.voidTab.Padding = new System.Windows.Forms.Padding(2);
-			this.voidTab.Size = new System.Drawing.Size(207, 512);
+			this.voidTab.Size = new System.Drawing.Size(207, 494);
 			this.voidTab.TabIndex = 4;
 			this.voidTab.Text = "Void";
 			this.voidTab.UseVisualStyleBackColor = true;
@@ -893,11 +906,11 @@ namespace Mappy.UI.Forms
 			this.attributesTab.Controls.Add(this.seaLevelValueLabel);
 			this.attributesTab.Controls.Add(this.seaLevelLabel);
 			this.attributesTab.Controls.Add(this.seaLevelTrackbar);
-			this.attributesTab.Location = new System.Drawing.Point(4, 22);
+			this.attributesTab.Location = new System.Drawing.Point(4, 40);
 			this.attributesTab.Margin = new System.Windows.Forms.Padding(2);
 			this.attributesTab.Name = "attributesTab";
 			this.attributesTab.Padding = new System.Windows.Forms.Padding(2);
-			this.attributesTab.Size = new System.Drawing.Size(207, 512);
+			this.attributesTab.Size = new System.Drawing.Size(207, 494);
 			this.attributesTab.TabIndex = 5;
 			this.attributesTab.Text = "Attributes";
 			this.attributesTab.UseVisualStyleBackColor = true;
@@ -1064,6 +1077,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripMenuItem generateMinimapMenuItem;
         private System.Windows.Forms.TabControl sidebarTabs;
         private System.Windows.Forms.Splitter sidebarSplitter;
+        private System.Windows.Forms.TabPage otaMissionTab;
         private System.Windows.Forms.TabPage sectionsTab;
         private System.Windows.Forms.TabPage featuresTab;
         private SectionView featureView;

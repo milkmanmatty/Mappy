@@ -521,6 +521,12 @@ namespace Mappy.UI.Forms
                 e.Handled = true;
             }
 
+            if (e.Control && e.KeyCode == Keys.D7 && this.missionTab != null)
+            {
+                this.sidebarTabs.SelectedTab = this.missionTab;
+                e.Handled = true;
+            }
+
             if (e.Shift && e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
             {
                 var playerIndex = e.KeyCode == Keys.D0 ? 9 : (e.KeyCode - Keys.D1);

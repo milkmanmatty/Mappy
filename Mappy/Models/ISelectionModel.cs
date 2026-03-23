@@ -1,4 +1,4 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System;
     using System.Collections.ObjectModel;
@@ -22,7 +22,11 @@
 
         int? SelectedStartPosition { get; }
 
+        int? SelectedStartSchemaIndex { get; }
+
         ObservableCollection<Guid> SelectedFeatures { get; }
+
+        ObservableCollection<MapUnitRef> SelectedUnits { get; }
 
         void SelectTile(int index);
 
@@ -42,7 +46,15 @@
 
         void DeletedSelectedFeatures();
 
-        void SelectStartPosition(int index);
+        void SelectUnit(MapUnitRef unitRef);
+
+        void DeselectUnit(MapUnitRef unitRef);
+
+        void DeselectUnits();
+
+        void DeleteSelectedUnits();
+
+        void SelectStartPosition(int schemaIndex, int startSlotIndex);
 
         void DeselectStartPosition();
 

@@ -28,6 +28,8 @@ namespace Mappy.Models
 
         private IBandboxBehaviour currentBandboxBehaviour;
 
+        private GUITab selectedGuiTab;
+
         private Point viewportLocation;
 
         private int deltaX;
@@ -157,6 +159,16 @@ namespace Mappy.Models
 
         public int? SelectedStartPosition => this.model.SelectedStartPosition;
 
+        public int? SelectedStartSchemaIndex => this.model.SelectedStartSchemaIndex;
+
+        public ObservableCollection<MapUnitRef> SelectedUnits => this.model.SelectedUnits;
+
+        public int ActiveSchemaIndex
+        {
+            get => this.model.ActiveSchemaIndex;
+            set => this.model.ActiveSchemaIndex = value;
+        }
+
         public Point ViewportLocation
         {
             get => this.viewportLocation;
@@ -237,21 +249,22 @@ namespace Mappy.Models
                     new SelectFeatureOperation(this.model, id)));
         }
 
-        public void SelectStartPosition(int index)
+        public void SelectStartPosition(int schemaIndex, int startSlotIndex)
         {
             this.undoManager.Execute(new CompositeOperation(
                 OperationFactory.CreateDeselectAndMergeOperation(this.model),
-                new SelectStartPositionOperation(this.model, index)));
+                new SelectStartPositionOperation(this.model, schemaIndex, startSlotIndex)));
         }
 
-        public void DragDropStartPosition(int index, int x, int y)
+        public void DragDropStartPosition(int startSlotIndex, int x, int y)
         {
             var location = new Point(x, y);
+            var schema = this.model.ActiveSchemaIndex;
 
             var op = new CompositeOperation(
                 OperationFactory.CreateDeselectAndMergeOperation(this.model),
-                new ChangeStartPositionOperation(this.model, index, location),
-                new SelectStartPositionOperation(this.model, index));
+                new ChangeStartPositionOperation(this.model, schema, startSlotIndex, location),
+                new SelectStartPositionOperation(this.model, schema, startSlotIndex));
 
             this.undoManager.Execute(op);
             this.previousTranslationOpen = false;
@@ -606,12 +619,17 @@ namespace Mappy.Models
 
         public void TranslateSelection(int x, int y)
         {
-            if (this.SelectedStartPosition.HasValue)
+            if (this.SelectedStartPosition.HasValue && this.SelectedStartSchemaIndex.HasValue)
             {
                 this.TranslateStartPosition(
+                    this.SelectedStartSchemaIndex.Value,
                     this.SelectedStartPosition.Value,
                     x,
                     y);
+            }
+            else if (this.SelectedUnits.Count > 0)
+            {
+                this.TranslateSelectedUnitsPixelDelta(x, y);
             }
             else if (this.SelectedTile.HasValue)
             {
@@ -672,7 +690,9 @@ namespace Mappy.Models
 
         public void ClearSelection()
         {
-            if (this.SelectedTile == null && (this.SelectedFeatures == null || this.SelectedFeatures.Count == 0) && this.SelectedStartPosition == null)
+            if (this.SelectedTile == null && (this.SelectedFeatures == null || this.SelectedFeatures.Count == 0)
+                && (this.SelectedStartPosition == null || this.SelectedStartSchemaIndex == null)
+                && (this.SelectedUnits == null || this.SelectedUnits.Count == 0))
             {
                 return;
             }
@@ -712,19 +732,33 @@ namespace Mappy.Models
                 this.undoManager.Execute(new CompositeOperation(deSelectOp, removeOp));
             }
 
-            if (this.SelectedStartPosition.HasValue)
+            if (this.SelectedStartPosition.HasValue && this.SelectedStartSchemaIndex.HasValue)
             {
                 var deSelectOp = new DeselectOperation(this.model);
-                var removeOp = new RemoveStartPositionOperation(this.model, this.SelectedStartPosition.Value);
+                var removeOp = new RemoveStartPositionOperation(
+                    this.model,
+                    this.SelectedStartSchemaIndex.Value,
+                    this.SelectedStartPosition.Value);
                 this.undoManager.Execute(new CompositeOperation(deSelectOp, removeOp));
+            }
+
+            if (this.SelectedUnits.Count > 0)
+            {
+                var unitRefs = this.SelectedUnits.ToList();
+                var ops = new List<IReplayableOperation>();
+                ops.Add(new DeselectOperation(this.model));
+                ops.AddRange(unitRefs.Select(u => new RemoveSchemaUnitOperation(this.model, u.SchemaIndex, u.UnitId)));
+                this.undoManager.Execute(new CompositeOperation(ops));
             }
         }
 
         public void UpdateSelectedGUITab(GUITab newTab)
         {
+            this.selectedGuiTab = newTab;
             switch (newTab)
             {
                 case GUITab.Features:
+                case GUITab.Mission:
                     this.currentBandboxBehaviour = this.freeBandboxBehaviour;
                     break;
                 case GUITab.Sections:
@@ -741,7 +775,56 @@ namespace Mappy.Models
 
         public Point? GetStartPosition(int index)
         {
-            return this.model.Attributes.GetStartPosition(index);
+            return this.model.Attributes.GetStartPosition(this.model.ActiveSchemaIndex, index);
+        }
+
+        public IReadOnlyList<Point?> GetStartPositionVariantsForSlot(int startSlotIndex)
+        {
+            var list = new List<Point?>();
+            for (var s = 0; s < this.model.Attributes.Schemas.Count; s++)
+            {
+                list.Add(this.model.Attributes.GetStartPosition(s, startSlotIndex));
+            }
+
+            return list;
+        }
+
+        public void DragDropSchemaUnit(string unitName, int x, int y, int player)
+        {
+            var schema = this.model.ActiveSchemaIndex;
+            var u = new SchemaUnit(Guid.NewGuid(), unitName)
+            {
+                XPos = x,
+                ZPos = y,
+                Player = player,
+            };
+            var hx = x / 16;
+            var hy = y / 16;
+            if (hx >= 0 && hy >= 0 && hx < this.model.Tile.HeightGrid.Width && hy < this.model.Tile.HeightGrid.Height)
+            {
+                u.YPos = this.model.Tile.HeightGrid.Get(hx, hy);
+            }
+
+            var addOp = new AddSchemaUnitOperation(this.model, schema, u);
+            var selectOp = new SelectUnitOperation(this.model, new MapUnitRef(schema, u.Id));
+            var op = new CompositeOperation(
+                OperationFactory.CreateDeselectAndMergeOperation(this.model),
+                addOp,
+                selectOp);
+            this.undoManager.Execute(op);
+        }
+
+        public void SelectUnit(MapUnitRef r)
+        {
+            this.undoManager.Execute(
+                new CompositeOperation(
+                    OperationFactory.CreateDeselectAndMergeOperation(this.model),
+                    new SelectUnitOperation(this.model, r)));
+        }
+
+        public void ApplySchemaUnitEdit(int schemaIndex, SchemaUnit edited)
+        {
+            this.undoManager.Execute(new UpdateSchemaUnitOperation(this.model, schemaIndex, edited));
         }
 
         public void LiftAndSelectArea(int x, int y, int width, int height)
@@ -757,6 +840,32 @@ namespace Mappy.Models
             {
                 var loc1 = new Point(x, y);
                 var loc2 = new Point(x + width, y + height);
+                var minX = Math.Min(loc1.X, loc2.X);
+                var maxX = Math.Max(loc1.X, loc2.X);
+                var minY = Math.Min(loc1.Y, loc2.Y);
+                var maxY = Math.Max(loc1.Y, loc2.Y);
+
+                if (this.selectedGuiTab == GUITab.Mission)
+                {
+                    var selections = new List<IReplayableOperation>();
+                    for (var si = 0; si < this.model.Attributes.Schemas.Count; si++)
+                    {
+                        foreach (var u in this.model.Attributes.Schemas[si].Units)
+                        {
+                            if (u.XPos >= minX && u.XPos <= maxX && u.ZPos >= minY && u.ZPos <= maxY)
+                            {
+                                selections.Add(new AddUnitToSelectionOperation(this.model, new MapUnitRef(si, u.Id)));
+                            }
+                        }
+                    }
+
+                    if (selections.Count > 0)
+                    {
+                        this.undoManager.Execute(new CompositeOperation(selections));
+                    }
+
+                    return;
+                }
 
                 var validItems = new List<FeatureInstance>();
                 foreach (var f in this.EnumerateFeatureInstances())
@@ -769,13 +878,13 @@ namespace Mappy.Models
                     }
                 }
 
-                List<IReplayableOperation> selections = new List<IReplayableOperation>();
-                for (int i = 0; i < validItems.Count(); i++)
+                var featureSelections = new List<IReplayableOperation>();
+                for (int i = 0; i < validItems.Count; i++)
                 {
-                    selections.Add(new SelectFeatureOperation(this.model, validItems.ElementAt(i).Id));
+                    featureSelections.Add(new SelectFeatureOperation(this.model, validItems[i].Id));
                 }
 
-                this.undoManager.Execute(new CompositeOperation(selections));
+                this.undoManager.Execute(new CompositeOperation(featureSelections));
             }
         }
 
@@ -890,22 +999,35 @@ namespace Mappy.Models
                 }
             }
 
-            MapAttributesResult.FromModel(source).MergeInto(resizedModel);
+            resizedModel.Attributes.CopyFrom(source.Attributes);
+            resizedModel.ActiveSchemaIndex = Math.Min(source.ActiveSchemaIndex, Math.Max(0, resizedModel.Attributes.Schemas.Count - 1));
 
             var maxX = (newWidth * 32) - 1;
             var maxY = (newHeight * 32) - 1;
-            for (var i = 0; i < 10; i++)
+            for (var si = 0; si < resizedModel.Attributes.Schemas.Count; si++)
             {
-                var startPosition = source.Attributes.GetStartPosition(i);
-                if (!startPosition.HasValue)
+                for (var i = 0; i < 10; i++)
                 {
-                    continue;
+                    var startPosition = resizedModel.Attributes.GetStartPosition(si, i);
+                    if (!startPosition.HasValue)
+                    {
+                        continue;
+                    }
+
+                    var p = startPosition.Value;
+                    if (p.X < 0 || p.Y < 0 || p.X > maxX || p.Y > maxY)
+                    {
+                        resizedModel.Attributes.SetStartPosition(si, i, null);
+                    }
                 }
 
-                var p = startPosition.Value;
-                if (p.X >= 0 && p.Y >= 0 && p.X <= maxX && p.Y <= maxY)
+                var toRemove = resizedModel.Attributes.Schemas[si].Units
+                    .Where(u => u.XPos < 0 || u.ZPos < 0 || u.XPos > maxX || u.ZPos > maxY)
+                    .Select(u => u.Id)
+                    .ToList();
+                foreach (var id in toRemove)
                 {
-                    resizedModel.Attributes.SetStartPosition(i, p);
+                    resizedModel.RemoveSchemaUnit(si, id);
                 }
             }
 
@@ -992,6 +1114,9 @@ namespace Mappy.Models
             this.OnPropertyChanged(nameof(this.SelectedTile));
             this.OnPropertyChanged(nameof(this.SelectedFeatures));
             this.OnPropertyChanged(nameof(this.SelectedStartPosition));
+            this.OnPropertyChanged(nameof(this.SelectedStartSchemaIndex));
+            this.OnPropertyChanged(nameof(this.SelectedUnits));
+            this.OnPropertyChanged(nameof(this.ActiveSchemaIndex));
         }
 
         private void PasteMapTileNoDeduplicate(IMapTile tile, int x, int y)
@@ -1023,6 +1148,13 @@ namespace Mappy.Models
         private void AttributesOnStartPositionChanged(object sender, StartPositionChangedEventArgs e)
         {
             this.StartPositionChanged?.Invoke(this, e);
+        }
+
+        private void SelectedUnitsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            this.OnPropertyChanged(nameof(this.SelectedUnits));
+            this.UpdateCanCopy();
+            this.UpdateCanCut();
         }
 
         private void AddAndSelectTile(IMapTile tile, int x, int y)
@@ -1174,21 +1306,21 @@ namespace Mappy.Models
             this.previousTranslationOpen = true;
         }
 
-        private void TranslateStartPosition(int i, int x, int y)
+        private void TranslateStartPosition(int schemaIndex, int i, int x, int y)
         {
-            var startPos = this.model.Attributes.GetStartPosition(i);
+            var startPos = this.model.Attributes.GetStartPosition(schemaIndex, i);
 
             if (startPos == null)
             {
                 throw new ArgumentException("Start position " + i + " has not been placed");
             }
 
-            this.TranslateStartPositionTo(i, startPos.Value.X + x, startPos.Value.Y + y);
+            this.TranslateStartPositionTo(schemaIndex, i, startPos.Value.X + x, startPos.Value.Y + y);
         }
 
-        private void TranslateStartPositionTo(int i, int x, int y)
+        private void TranslateStartPositionTo(int schemaIndex, int i, int x, int y)
         {
-            var newOp = new ChangeStartPositionOperation(this.model, i, new Point(x, y));
+            var newOp = new ChangeStartPositionOperation(this.model, schemaIndex, i, new Point(x, y));
 
             ChangeStartPositionOperation lastOp = null;
             if (this.undoManager.CanUndo)
@@ -1196,7 +1328,7 @@ namespace Mappy.Models
                 lastOp = this.undoManager.PeekUndo() as ChangeStartPositionOperation;
             }
 
-            if (this.previousTranslationOpen && lastOp != null && lastOp.Index == i)
+            if (this.previousTranslationOpen && lastOp != null && lastOp.SchemaIndex == schemaIndex && lastOp.StartSlotIndex == i)
             {
                 newOp.Execute();
                 this.undoManager.Replace(lastOp.Combine(newOp));
@@ -1207,6 +1339,41 @@ namespace Mappy.Models
             }
 
             this.previousTranslationOpen = true;
+        }
+
+        private void TranslateSelectedUnitsPixelDelta(int dx, int dy)
+        {
+            if (dx == 0 && dy == 0)
+            {
+                return;
+            }
+
+            var refs = this.SelectedUnits.ToList();
+            if (refs.Count == 0)
+            {
+                return;
+            }
+
+            var ops = new List<IReplayableOperation>(refs.Count);
+            foreach (var r in refs)
+            {
+                var u = this.model.Attributes.GetUnit(r.SchemaIndex, r.UnitId);
+                var nu = u.ClonePreservingId();
+                nu.XPos += dx;
+                nu.ZPos += dy;
+                var hx = nu.XPos / 16;
+                var hz = nu.ZPos / 16;
+                var grid = this.model.Tile.HeightGrid;
+                if (hx >= 0 && hz >= 0 && hx < grid.Width && hz < grid.Height)
+                {
+                    nu.YPos = grid.Get(hx, hz);
+                }
+
+                ops.Add(new UpdateSchemaUnitOperation(this.model, r.SchemaIndex, nu));
+            }
+
+            this.undoManager.Execute(new CompositeOperation(ops));
+            this.previousTranslationOpen = false;
         }
 
         private void BandboxBehaviourPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -1227,12 +1394,12 @@ namespace Mappy.Models
 
         private void UpdateCanCopy()
         {
-            this.CanCopy = this.SelectedTile.HasValue || this.SelectedFeatures.Count > 0;
+            this.CanCopy = this.SelectedTile.HasValue || this.SelectedFeatures.Count > 0 || this.SelectedUnits.Count > 0;
         }
 
         private void UpdateCanCut()
         {
-            this.CanCut = this.SelectedTile.HasValue || this.SelectedFeatures.Count > 0;
+            this.CanCut = this.SelectedTile.HasValue || this.SelectedFeatures.Count > 0 || this.SelectedUnits.Count > 0;
         }
 
         private void UpdateCanFill()
@@ -1284,6 +1451,7 @@ namespace Mappy.Models
             selectionModel.Attributes.StartPositionChanged += this.AttributesOnStartPositionChanged;
             selectionModel.FeatureInstanceChanged += this.ModelOnFeatureInstanceChanged;
             selectionModel.SelectedFeatures.CollectionChanged += this.SelectedFeaturesCollectionChanged;
+            selectionModel.SelectedUnits.CollectionChanged += this.SelectedUnitsCollectionChanged;
         }
 
         private void DetachModelHandlers(ISelectionModel selectionModel)
@@ -1295,6 +1463,7 @@ namespace Mappy.Models
             selectionModel.Attributes.StartPositionChanged -= this.AttributesOnStartPositionChanged;
             selectionModel.FeatureInstanceChanged -= this.ModelOnFeatureInstanceChanged;
             selectionModel.SelectedFeatures.CollectionChanged -= this.SelectedFeaturesCollectionChanged;
+            selectionModel.SelectedUnits.CollectionChanged -= this.SelectedUnitsCollectionChanged;
         }
 
         private void ModelOnFeatureInstanceChanged(object sender, FeatureInstanceEventArgs e)

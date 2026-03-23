@@ -57,6 +57,8 @@ namespace Mappy
             var featureService = new FeatureService();
             FeatureInstance.FeatureService = featureService;
 
+            var unitCatalogService = new UnitCatalogService();
+
             var sectionsService = new SectionService();
             var sectionFactory = new SectionFactory(tileCache);
             var sectionBitmapService = new SectionBitmapService(sectionFactory);
@@ -70,6 +72,7 @@ namespace Mappy
                 sectionsService,
                 sectionBitmapService,
                 featureService,
+                unitCatalogService,
                 mapLoadingService,
                 imageImportingService,
                 tileCache);
@@ -78,7 +81,8 @@ namespace Mappy
             mainForm.SectionView.SetModel(new SectionViewViewModel(sectionsService));
             mainForm.FeatureView.SetModel(new FeatureViewViewModel(featureService, dispatcher));
 
-            mainForm.MapViewPanel.SetModel(new MapViewViewModel(model, dispatcher, featureService));
+            mainForm.MapViewPanel.SetModel(new MapViewViewModel(model, dispatcher, featureService, unitCatalogService));
+            mainForm.SetMissionServices(model, dispatcher, unitCatalogService);
 
             var minimapForm = new MinimapForm();
             minimapForm.Owner = mainForm;

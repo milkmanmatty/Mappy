@@ -1,4 +1,4 @@
-﻿namespace Mappy.Operations.SelectionModel
+namespace Mappy.Operations.SelectionModel
 {
     using System;
     using System.Collections.Generic;
@@ -11,9 +11,13 @@
 
         private int? prevTile;
 
-        private int? prevStart;
+        private int? prevStartSchema;
+
+        private int? prevStartSlot;
 
         private List<Guid> features;
+
+        private List<MapUnitRef> units;
 
         public DeselectOperation(ISelectionModel model)
         {
@@ -24,7 +28,9 @@
         {
             this.prevTile = this.model.SelectedTile;
             this.features = new List<Guid>(this.model.SelectedFeatures);
-            this.prevStart = this.model.SelectedStartPosition;
+            this.units = new List<MapUnitRef>(this.model.SelectedUnits);
+            this.prevStartSchema = this.model.SelectedStartSchemaIndex;
+            this.prevStartSlot = this.model.SelectedStartPosition;
 
             this.model.DeselectAll();
         }
@@ -36,14 +42,19 @@
                 this.model.SelectTile(this.prevTile.Value);
             }
 
-            if (this.prevStart.HasValue)
+            if (this.prevStartSchema.HasValue && this.prevStartSlot.HasValue)
             {
-                this.model.SelectStartPosition(this.prevStart.Value);
+                this.model.SelectStartPosition(this.prevStartSchema.Value, this.prevStartSlot.Value);
             }
 
             foreach (var f in this.features)
             {
                 this.model.SelectFeature(f);
+            }
+
+            foreach (var u in this.units)
+            {
+                this.model.SelectUnit(u);
             }
         }
     }

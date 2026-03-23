@@ -4,16 +4,19 @@ namespace Mappy.UI.Tags
 
     public class StartPositionTag : IMapItemTag
     {
-        public StartPositionTag(int index)
+        public StartPositionTag(int schemaIndex, int startSlotIndex)
         {
-            this.Index = index;
+            this.SchemaIndex = schemaIndex;
+            this.StartSlotIndex = startSlotIndex;
         }
 
-        public int Index { get; }
+        public int SchemaIndex { get; }
+
+        public int StartSlotIndex { get; }
 
         public void SelectItem(Dispatcher dispatcher)
         {
-            dispatcher.SelectStartPosition(this.Index);
+            dispatcher.SelectStartPosition(this.SchemaIndex, this.StartSlotIndex);
         }
     }
 }

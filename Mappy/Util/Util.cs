@@ -450,6 +450,8 @@ namespace Mappy.Util
                     return GUITab.Height;
                 case "voidTab":
                     return GUITab.Void;
+                case "missionTab":
+                    return GUITab.Mission;
                 default:
                     return GUITab.Other;
             }

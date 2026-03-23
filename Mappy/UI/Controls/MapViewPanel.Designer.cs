@@ -52,6 +52,7 @@ namespace Mappy.UI.Controls
             this.mapView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MapViewMouseDown);
             this.mapView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MapViewMouseMove);
             this.mapView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MapViewMouseUp);
+            this.mapView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MapViewMouseDoubleClick);
             // 
             // MapViewPanel
             // 

@@ -32,6 +32,8 @@ namespace Mappy.Services
 
         private readonly FeatureService featureService;
 
+        private readonly UnitCatalogService unitCatalogService;
+
         private readonly MapLoadingService mapLoadingService;
 
         private readonly ImageImportService imageImportingService;
@@ -40,12 +42,15 @@ namespace Mappy.Services
 
         private readonly Random rng = new Random();
 
+        private readonly int[] startPositionViewCycle = new int[10];
+
         public Dispatcher(
             CoreModel model,
             IDialogService dialogService,
             SectionService sectionService,
             SectionBitmapService sectionBitmapService,
             FeatureService featureService,
+            UnitCatalogService unitCatalogService,
             MapLoadingService mapLoadingService,
             ImageImportService imageImportingService,
             BitmapCache tileCache)
@@ -55,6 +60,7 @@ namespace Mappy.Services
             this.sectionService = sectionService;
             this.sectionBitmapService = sectionBitmapService;
             this.featureService = featureService;
+            this.unitCatalogService = unitCatalogService;
             this.mapLoadingService = mapLoadingService;
             this.imageImportingService = imageImportingService;
             this.tileCache = tileCache;
@@ -75,7 +81,7 @@ namespace Mappy.Services
                     var w = (BackgroundWorker)sender;
 
                     if (!SectionLoadingUtils.LoadSections(
-                        i => w.ReportProgress((50 * i) / 100),
+                        i => w.ReportProgress((40 * i) / 100),
                         () => w.CancellationPending,
                         out var result))
                     {
@@ -84,9 +90,18 @@ namespace Mappy.Services
                     }
 
                     if (!FeatureLoadingUtils.LoadFeatures(
-                        i => w.ReportProgress(50 + ((50 * i) / 100)),
+                        i => w.ReportProgress(40 + ((30 * i) / 100)),
                         () => w.CancellationPending,
                         out var featureResult))
+                    {
+                        args.Cancel = true;
+                        return;
+                    }
+
+                    if (!UnitLoadingUtils.LoadUnitNames(
+                        i => w.ReportProgress(70 + ((30 * i) / 100)),
+                        () => w.CancellationPending,
+                        out var unitResult))
                     {
                         args.Cancel = true;
                         return;
@@ -95,13 +110,16 @@ namespace Mappy.Services
                     args.Result = new SectionFeatureLoadResult(
                             result.Records,
                             featureResult.Records,
+                            unitResult.Records,
                             result.Errors
                                 .Concat(featureResult.Errors)
+                                .Concat(unitResult.Errors)
                                 .GroupBy(x => x.HpiPath)
                                 .Select(x => x.First())
                                 .ToList(),
                             result.FileErrors
                                 .Concat(featureResult.FileErrors)
+                                .Concat(unitResult.FileErrors)
                                 .ToList());
                 };
 
@@ -126,6 +144,8 @@ namespace Mappy.Services
                     this.sectionService.AddSections(sectionResult.Sections);
 
                     this.featureService.AddFeatures(sectionResult.Features);
+
+                    this.unitCatalogService.AddNames(sectionResult.UnitNames);
 
                     if (sectionResult.Errors.Count > 0 || sectionResult.FileErrors.Count > 0)
                     {
@@ -596,19 +616,51 @@ namespace Mappy.Services
             this.model.SetViewportLocation(location);
         }
 
-        public void CenterViewOnStartPosition(int index)
+        public void CenterViewOnStartPosition(int startSlotIndex)
         {
             this.model.Map.IfSome(
                 map =>
                     {
-                        var pos = map.GetStartPosition(index);
-                        if (!pos.HasValue)
+                        if (startSlotIndex < 0 || startSlotIndex >= 10)
                         {
                             return;
                         }
 
-                        var viewportX = pos.Value.X - (this.model.ViewportWidth / 2);
-                        var viewportY = pos.Value.Y - (this.model.ViewportHeight / 2);
+                        var variants = map.GetStartPositionVariantsForSlot(startSlotIndex);
+                        var schemaIndices = new List<int>();
+                        for (var s = 0; s < variants.Count; s++)
+                        {
+                            if (variants[s].HasValue)
+                            {
+                                schemaIndices.Add(s);
+                            }
+                        }
+
+                        if (schemaIndices.Count == 0)
+                        {
+                            return;
+                        }
+
+                        var distinctPlaces = schemaIndices
+                            .Select(s => variants[s].Value)
+                            .GroupBy(p => (p.X, p.Y))
+                            .ToList();
+
+                        Point chosen;
+                        if (distinctPlaces.Count == 1)
+                        {
+                            chosen = distinctPlaces[0].First();
+                        }
+                        else
+                        {
+                            var c = this.startPositionViewCycle[startSlotIndex] % schemaIndices.Count;
+                            var sch = schemaIndices[c];
+                            chosen = variants[sch].Value;
+                            this.startPositionViewCycle[startSlotIndex] = (c + 1) % schemaIndices.Count;
+                        }
+
+                        var viewportX = chosen.X - (this.model.ViewportWidth / 2);
+                        var viewportY = chosen.Y - (this.model.ViewportHeight / 2);
                         this.model.SetViewportLocation(new Point(viewportX, viewportY));
                     });
         }
@@ -683,9 +735,73 @@ namespace Mappy.Services
             this.model.Map.IfSome(x => x.SelectFeature(id));
         }
 
-        public void SelectStartPosition(int index)
+        public void SelectStartPosition(int schemaIndex, int startSlotIndex)
         {
-            this.model.Map.IfSome(x => x.SelectStartPosition(index));
+            this.model.Map.IfSome(x => x.SelectStartPosition(schemaIndex, startSlotIndex));
+        }
+
+        public void SelectUnit(int schemaIndex, Guid unitId)
+        {
+            this.model.Map.IfSome(x => x.SelectUnit(new MapUnitRef(schemaIndex, unitId)));
+        }
+
+        public void PlaceUnitFromSidebar(string unitName, int x, int y)
+        {
+            var player = this.dialogService.AskUnitPlayerNumber(null, 1);
+            if (!player.HasValue)
+            {
+                return;
+            }
+
+            this.model.Map.IfSome(m => m.DragDropSchemaUnit(unitName, x, y, player.Value));
+        }
+
+        public void SetActiveSchemaIndex(int index)
+        {
+            this.model.Map.IfSome(m => m.ActiveSchemaIndex = index);
+        }
+
+        public void AddMapSchema()
+        {
+            this.model.Map.IfSome(
+                m =>
+                    {
+                        m.Attributes.AddSchema();
+                        m.ActiveSchemaIndex = m.Attributes.Schemas.Count - 1;
+                    });
+        }
+
+        public void RemoveActiveMapSchema()
+        {
+            this.model.Map.IfSome(
+                m =>
+                    {
+                        if (m.Attributes.RemoveSchemaAt(m.ActiveSchemaIndex))
+                        {
+                            m.ActiveSchemaIndex = Math.Min(m.ActiveSchemaIndex, m.Attributes.Schemas.Count - 1);
+                        }
+                    });
+        }
+
+        public void EditSchemaUnit(int schemaIndex, Guid unitId)
+        {
+            this.model.Map.IfSome(
+                m =>
+                    {
+                        var u = m.Attributes.GetUnit(schemaIndex, unitId).ClonePreservingId();
+                        using (var f = new UI.Forms.UnitPropertiesForm())
+                        {
+                            f.Bind(u);
+                            if (f.ShowDialog() != DialogResult.OK)
+                            {
+                                return;
+                            }
+
+                            f.ApplyTo(u);
+                        }
+
+                        m.ApplySchemaUnitEdit(schemaIndex, u);
+                    });
         }
 
         public void SetSelectedFeature(string featureName)
@@ -989,13 +1105,17 @@ namespace Mappy.Services
             }
 
             var tntPath = HpiPath.Combine("maps", mapName + ".tnt");
-            this.model.Map = Maybe.Some(this.mapLoadingService.CreateFromHpi(filename, tntPath, readOnly));
+            var mapModel = this.mapLoadingService.CreateFromHpi(filename, tntPath, readOnly);
+            this.model.Map = Maybe.Some(mapModel);
+            this.IngestOtaUnitNames(mapModel);
             this.SetSelectedGUITabForMap();
         }
 
         private void OpenTnt(string filename)
         {
-            this.model.Map = Maybe.Some(this.mapLoadingService.CreateFromTnt(filename));
+            var mapModel = this.mapLoadingService.CreateFromTnt(filename);
+            this.model.Map = Maybe.Some(mapModel);
+            this.IngestOtaUnitNames(mapModel);
             this.SetSelectedGUITabForMap();
         }
 
@@ -1027,13 +1147,35 @@ namespace Mappy.Services
 
         private void New(int width, int height)
         {
-            this.model.Map = Maybe.Some(MapLoadingService.CreateMap(width, height));
+            var mapModel = MapLoadingService.CreateMap(width, height);
+            this.model.Map = Maybe.Some(mapModel);
+            this.IngestOtaUnitNames(mapModel);
             this.SetSelectedGUITabForMap();
         }
 
         private void OpenSct(string filename)
         {
-            this.model.Map = Maybe.Some(this.mapLoadingService.CreateFromSct(filename));
+            var mapModel = this.mapLoadingService.CreateFromSct(filename);
+            this.model.Map = Maybe.Some(mapModel);
+            this.IngestOtaUnitNames(mapModel);
+        }
+
+        /// <summary>
+        /// Ensures unit types referenced by the map appear in the placement list even when
+        /// archive scanning missed them or the user has minimal search paths.
+        /// </summary>
+        private void IngestOtaUnitNames(UndoableMapModel map)
+        {
+            if (map == null)
+            {
+                return;
+            }
+
+            var names = map.Attributes.Schemas
+                .SelectMany(s => s.Units)
+                .Select(u => u.Unitname)
+                .Where(n => !string.IsNullOrWhiteSpace(n));
+            this.unitCatalogService.AddNames(names);
         }
 
         private Maybe<Grid<int>> LoadHeightmapFromUser(int width, int height)

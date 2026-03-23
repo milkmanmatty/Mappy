@@ -1,4 +1,4 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System;
     using System.Collections.Generic;
@@ -30,7 +30,13 @@
 
         private int? selectedStartPosition;
 
+        private int? selectedStartSchemaIndex;
+
         private int? selectedTile;
+
+        private int activeSchemaIndex;
+
+        private readonly ObservableCollection<MapUnitRef> selectedUnits = new ObservableCollection<MapUnitRef>();
 
         public MapModel(int width, int height)
             : this(width, height, new MapAttributes())
@@ -64,6 +70,8 @@
             g.FillRectangle(Brushes.White, 0, 0, this.Minimap.Width, this.Minimap.Height);
 
             this.FloatingTilesChanged += this.FloatingTilesListChanged;
+
+            this.Attributes.SchemaUnitsChanged += this.OnAttributesSchemaUnitsChanged;
         }
 
         public event EventHandler<FeatureInstanceEventArgs> FeatureInstanceChanged;
@@ -94,6 +102,17 @@
 
         public MapAttributes Attributes { get; }
 
+        public int ActiveSchemaIndex
+        {
+            get => this.activeSchemaIndex;
+            set
+            {
+                var max = Math.Max(0, this.Attributes.Schemas.Count - 1);
+                var v = Math.Max(0, Math.Min(value, max));
+                this.SetField(ref this.activeSchemaIndex, v, nameof(this.ActiveSchemaIndex));
+            }
+        }
+
         public IMapTile Tile => this.tile;
 
         public IList<Positioned<IMapTile>> FloatingTiles => this.floatingTiles;
@@ -121,6 +140,14 @@
             get => this.selectedStartPosition;
             private set => this.SetField(ref this.selectedStartPosition, value, nameof(this.SelectedStartPosition));
         }
+
+        public int? SelectedStartSchemaIndex
+        {
+            get => this.selectedStartSchemaIndex;
+            private set => this.SetField(ref this.selectedStartSchemaIndex, value, nameof(this.SelectedStartSchemaIndex));
+        }
+
+        public ObservableCollection<MapUnitRef> SelectedUnits => this.selectedUnits;
 
         public int? SelectedTile
         {
@@ -212,6 +239,21 @@
             return this.featureInstances.Values;
         }
 
+        public void AddSchemaUnit(int schemaIndex, SchemaUnit unit)
+        {
+            this.Attributes.AddUnit(schemaIndex, unit);
+        }
+
+        public void RemoveSchemaUnit(int schemaIndex, Guid unitId)
+        {
+            this.Attributes.RemoveUnit(schemaIndex, unitId);
+        }
+
+        public void UpdateSchemaUnit(int schemaIndex, SchemaUnit unit)
+        {
+            this.Attributes.ReplaceUnit(schemaIndex, unit);
+        }
+
         public void SelectTile(int index)
         {
             this.SelectedTile = index;
@@ -283,24 +325,26 @@
             }
         }
 
-        public void SelectStartPosition(int index)
+        public void SelectStartPosition(int schemaIndex, int startSlotIndex)
         {
-            this.SelectedStartPosition = index;
+            this.SelectedStartSchemaIndex = schemaIndex;
+            this.SelectedStartPosition = startSlotIndex;
         }
 
         public void DeselectStartPosition()
         {
+            this.SelectedStartSchemaIndex = null;
             this.SelectedStartPosition = null;
         }
 
         public void TranslateSelectedStartPosition(int x, int y)
         {
-            if (!this.SelectedStartPosition.HasValue)
+            if (!this.SelectedStartPosition.HasValue || !this.SelectedStartSchemaIndex.HasValue)
             {
                 throw new InvalidOperationException("No start position selected.");
             }
 
-            var pos = this.Attributes.GetStartPosition(this.SelectedStartPosition.Value);
+            var pos = this.Attributes.GetStartPosition(this.SelectedStartSchemaIndex.Value, this.SelectedStartPosition.Value);
 
             if (!pos.HasValue)
             {
@@ -310,17 +354,52 @@
             var newPos = pos.Value;
             newPos.X += x;
             newPos.Y += y;
-            this.Attributes.SetStartPosition(this.SelectedStartPosition.Value, newPos);
+            this.Attributes.SetStartPosition(this.SelectedStartSchemaIndex.Value, this.SelectedStartPosition.Value, newPos);
         }
 
         public void DeleteSelectedStartPosition()
         {
-            if (!this.SelectedStartPosition.HasValue)
+            if (!this.SelectedStartPosition.HasValue || !this.SelectedStartSchemaIndex.HasValue)
             {
                 throw new InvalidOperationException("No start position selected.");
             }
 
-            this.Attributes.SetStartPosition(this.SelectedStartPosition.Value, null);
+            this.Attributes.SetStartPosition(this.SelectedStartSchemaIndex.Value, this.SelectedStartPosition.Value, null);
+        }
+
+        public void SelectUnit(MapUnitRef unitRef)
+        {
+            if (!this.selectedUnits.Contains(unitRef))
+            {
+                this.selectedUnits.Add(unitRef);
+            }
+        }
+
+        public void DeselectUnit(MapUnitRef unitRef)
+        {
+            for (var i = this.selectedUnits.Count - 1; i >= 0; i--)
+            {
+                if (this.selectedUnits[i].Equals(unitRef))
+                {
+                    this.selectedUnits.RemoveAt(i);
+                }
+            }
+        }
+
+        public void DeselectUnits()
+        {
+            this.selectedUnits.Clear();
+        }
+
+        public void DeleteSelectedUnits()
+        {
+            var copy = new List<MapUnitRef>(this.selectedUnits);
+            foreach (var r in copy)
+            {
+                this.RemoveSchemaUnit(r.SchemaIndex, r.UnitId);
+            }
+
+            this.DeselectUnits();
         }
 
         public void DeselectAll()
@@ -328,6 +407,7 @@
             this.DeselectFeatures();
             this.DeselectStartPosition();
             this.DeselectTile();
+            this.DeselectUnits();
         }
 
         private void AddFeatureInstanceInternal(FeatureInstance instance, ISet<Guid> featureIgnoreList = null)
@@ -432,6 +512,21 @@
                 case FeatureInstanceEventArgs.ActionType.Remove:
                     this.SelectedFeatures.Remove(e.FeatureInstanceId);
                     break;
+            }
+        }
+
+        private void OnAttributesSchemaUnitsChanged(object sender, SchemaUnitsChangedEventArgs e)
+        {
+            if (e.Action == SchemaUnitsChangedEventArgs.ActionKind.Remove)
+            {
+                for (var i = this.selectedUnits.Count - 1; i >= 0; i--)
+                {
+                    var u = this.selectedUnits[i];
+                    if (u.SchemaIndex == e.SchemaIndex && u.UnitId == e.UnitId)
+                    {
+                        this.selectedUnits.RemoveAt(i);
+                    }
+                }
             }
         }
 

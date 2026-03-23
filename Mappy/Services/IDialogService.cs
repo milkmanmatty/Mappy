@@ -39,6 +39,8 @@ namespace Mappy.Services
 
         MapAttributesResult AskUserForMapAttributes(MapAttributesResult r);
 
+        int? AskUnitPlayerNumber(IWin32Window owner, int defaultPlayer = 1);
+
         void ShowError(string message);
 
         IProgressView CreateProgressView();

@@ -10,6 +10,8 @@ namespace Mappy.Models
 
         public string AiProfile { get; set; }
 
+        public string SchemaType { get; set; }
+
         public string Planet { get; set; }
 
         public string Players { get; set; }
@@ -30,6 +32,14 @@ namespace Mappy.Models
 
         public int MohoMetal { get; set; }
 
+        public int HumanMetal { get; set; }
+
+        public int ComputerMetal { get; set; }
+
+        public int HumanEnergy { get; set; }
+
+        public int ComputerEnergy { get; set; }
+
         public string MeteorWeapon { get; set; }
 
         public int MeteorRadius { get; set; }
@@ -49,27 +59,39 @@ namespace Mappy.Models
         public static MapAttributesResult FromModel(IMapModel map)
         {
             var attrs = map.Attributes;
+            var si = map.ActiveSchemaIndex;
+            if (si < 0 || si >= attrs.Schemas.Count)
+            {
+                si = 0;
+            }
+
+            var sch = attrs.Schemas[si];
             return new MapAttributesResult
                 {
-                    AiProfile = attrs.AiProfile,
+                    AiProfile = sch.AiProfile,
+                    SchemaType = sch.SchemaType,
                     Description = attrs.Description,
                     Gravity = attrs.Gravity,
                     ImpassibleWater = attrs.LavaWorld,
                     MaxWindSpeed = attrs.MaxWindSpeed,
                     Memory = attrs.Memory,
-                    MeteorDensity = attrs.MeteorDensity,
-                    MeteorDuration = attrs.MeteorDuration,
-                    MeteorInterval = attrs.MeteorInterval,
-                    MeteorRadius = attrs.MeteorRadius,
-                    MeteorWeapon = attrs.MeteorWeapon,
+                    MeteorDensity = sch.MeteorDensity,
+                    MeteorDuration = sch.MeteorDuration,
+                    MeteorInterval = sch.MeteorInterval,
+                    MeteorRadius = sch.MeteorRadius,
+                    MeteorWeapon = sch.MeteorWeapon,
                     MinWindSpeed = attrs.MinWindSpeed,
-                    MohoMetal = attrs.MohoMetal,
+                    MohoMetal = sch.MohoMetal,
+                    HumanMetal = sch.HumanMetal,
+                    ComputerMetal = sch.ComputerMetal,
+                    HumanEnergy = sch.HumanEnergy,
+                    ComputerEnergy = sch.ComputerEnergy,
                     Name = attrs.Name,
                     Planet = attrs.Planet,
                     Players = attrs.NumPlayers,
                     SeaLevel = map.SeaLevel,
                     SolarStrength = attrs.SolarStrength,
-                    SurfaceMetal = attrs.SurfaceMetal,
+                    SurfaceMetal = sch.SurfaceMetal,
                     TidalStrength = attrs.TidalStrength,
                     WaterDamage = attrs.WaterDamage,
                     WaterDoesDamage = attrs.WaterDoesDamage,
@@ -79,29 +101,42 @@ namespace Mappy.Models
         public void MergeInto(IMapModel map)
         {
             var attrs = map.Attributes;
+            var si = map.ActiveSchemaIndex;
+            if (si < 0 || si >= attrs.Schemas.Count)
+            {
+                si = 0;
+            }
 
-            attrs.AiProfile = this.AiProfile;
+            var sch = attrs.Schemas[si];
+
             attrs.Description = this.Description;
             attrs.Gravity = this.Gravity;
             attrs.LavaWorld = this.ImpassibleWater;
             attrs.MaxWindSpeed = this.MaxWindSpeed;
             attrs.Memory = this.Memory;
-            attrs.MeteorDensity = this.MeteorDensity;
-            attrs.MeteorDuration = this.MeteorDuration;
-            attrs.MeteorInterval = this.MeteorInterval;
-            attrs.MeteorRadius = this.MeteorRadius;
-            attrs.MeteorWeapon = this.MeteorWeapon;
             attrs.MinWindSpeed = this.MinWindSpeed;
-            attrs.MohoMetal = this.MohoMetal;
             attrs.Name = this.Name;
             attrs.Planet = this.Planet;
             attrs.NumPlayers = this.Players;
             map.SeaLevel = this.SeaLevel;
             attrs.SolarStrength = this.SolarStrength;
-            attrs.SurfaceMetal = this.SurfaceMetal;
             attrs.TidalStrength = this.TidalStrength;
             attrs.WaterDamage = this.WaterDamage;
             attrs.WaterDoesDamage = this.WaterDoesDamage;
+
+            sch.AiProfile = this.AiProfile;
+            sch.SchemaType = this.SchemaType ?? sch.SchemaType;
+            sch.SurfaceMetal = this.SurfaceMetal;
+            sch.MohoMetal = this.MohoMetal;
+            sch.HumanMetal = this.HumanMetal;
+            sch.ComputerMetal = this.ComputerMetal;
+            sch.HumanEnergy = this.HumanEnergy;
+            sch.ComputerEnergy = this.ComputerEnergy;
+            sch.MeteorWeapon = this.MeteorWeapon ?? string.Empty;
+            sch.MeteorRadius = this.MeteorRadius;
+            sch.MeteorDensity = this.MeteorDensity;
+            sch.MeteorDuration = this.MeteorDuration;
+            sch.MeteorInterval = this.MeteorInterval;
         }
     }
 }

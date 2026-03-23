@@ -89,6 +89,17 @@ namespace Mappy.UI.Controls
             }
         }
 
+        private void MapViewMouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (this.spaceKeyDown)
+            {
+                return;
+            }
+
+            var loc = this.mapView.ToVirtualPoint(e.Location);
+            this.model.MouseDoubleClick(loc);
+        }
+
         private void MapViewMouseMove(object sender, MouseEventArgs e)
         {
             if (this.panning)

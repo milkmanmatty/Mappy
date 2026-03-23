@@ -28,6 +28,8 @@ namespace Mappy.Models
 
         void MouseRightDown(Point location);
 
+        void MouseDoubleClick(Point location);
+
         void MouseMove(Point locattion);
 
         void MouseUp();
