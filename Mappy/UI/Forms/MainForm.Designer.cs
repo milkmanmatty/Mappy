@@ -389,7 +389,7 @@ namespace Mappy.UI.Forms
 	        this.exportSectionMenuItem.Enabled = false;
 	        this.exportSectionMenuItem.Name = "exportSectionMenuItem";
 	        this.exportSectionMenuItem.Size = new System.Drawing.Size(343, 30);
-	        this.exportSectionMenuItem.Text = "Export Section";
+	        this.exportSectionMenuItem.Text = "Export Section...";
 	        this.exportSectionMenuItem.Click += new System.EventHandler(this.ExportSectionMenuItemClick);
 	        // 
 	        // flipMenuItem
