@@ -167,7 +167,7 @@
         }
 
         // This should probably be in TAUtil.GDI/Palette
-        public static List<System.Drawing.Color> GetTaPalette()
+        public static List<Color> GetTaPalette()
         {
             string exePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
             return LoadJascPal(Path.Combine(exePath, @"Assets\TA Palette.pal"));
@@ -218,6 +218,67 @@
             }
 
             return bmp;
+        }
+
+        /// <summary>
+        /// Flips an 8bpp indexed image based on a given direction.
+        /// </summary>
+        public static unsafe Bitmap FlipBitmap(Bitmap orig8bpp, FlipDirection flipDir)
+        {
+            if (orig8bpp.PixelFormat != PixelFormat.Format8bppIndexed)
+            {
+                throw new ArgumentException("Original image must be 8bpp Indexed.");
+            }
+
+            int width = orig8bpp.Width;
+            int height = orig8bpp.Height;
+
+            // Output will be 32bpp true color due to mathematical lighting calculations
+            Bitmap outputBmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
+            BitmapData origData = orig8bpp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format8bppIndexed);
+            BitmapData outData = outputBmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+
+            // Extract the color palette from the 8bpp image
+            Color[] palette = orig8bpp.Palette.Entries;
+
+            try
+            {
+                byte* origPtr = (byte*)origData.Scan0;
+                byte* outPtr = (byte*)outData.Scan0;
+
+                for (int y = 0; y < height; y++)
+                {
+                    var srcY = flipDir == FlipDirection.Vertical ? height - 1 - y : y;
+
+                    byte* outRow = outPtr + (y * outData.Stride);
+                    byte* origRow = origPtr + (srcY * origData.Stride);
+
+                    for (int x = 0; x < width; x++)
+                    {
+                        var srcX = flipDir == FlipDirection.Horizontal ? width - 1 - x : x;
+
+                        byte paletteIndex = origRow[srcX];
+                        Color origColor = palette[paletteIndex];
+
+                        // Write to Output
+                        // Strict Format32bppArgb memory ordering: Blue, Green, Red, Alpha
+                        int outIdx = x * 4;
+                        outRow[outIdx] = origColor.B;
+                        outRow[outIdx + 1] = origColor.G;
+                        outRow[outIdx + 2] = origColor.R;
+                        outRow[outIdx + 3] = origColor.A;
+                    }
+                }
+            }
+            finally
+            {
+                // Clean up memory locks
+                orig8bpp.UnlockBits(origData);
+                outputBmp.UnlockBits(outData);
+            }
+
+            return ImgUtil.Convert32bppTo8bppIndexed(outputBmp);
         }
 
         // Could be public

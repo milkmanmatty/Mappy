@@ -186,6 +186,7 @@
     <Compile Include="Models\FeatureInstance.cs" />
     <Compile Include="Models\FeatureInstanceEventArgs.cs" />
     <Compile Include="Models\FeatureViewViewModel.cs" />
+    <Compile Include="Models\FlipOptions.cs" />
     <Compile Include="Models\IMainFormViewModel.cs" />
     <Compile Include="Models\IMainModel.cs" />
     <Compile Include="Models\IMapViewViewModel.cs" />
@@ -298,6 +299,12 @@
     <Compile Include="UI\Forms\AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Forms\FlipSectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\FlipSectionForm.Designer.cs">
+      <DependentUpon>FlipSectionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Forms\ImportCustomSectionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -398,6 +405,9 @@
     <EmbeddedResource Include="UI\Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\FlipSectionForm.resx">
+      <DependentUpon>FlipSectionForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\ImportCustomSectionForm.resx">
       <DependentUpon>ImportCustomSectionForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -431,7 +441,6 @@
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="Assets\PALETTE.PAL" />
     <None Include="default.json.sample">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

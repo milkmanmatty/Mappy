@@ -390,14 +390,9 @@ namespace Mappy.Models
             this.dispatcher.ResizeMap();
         }
 
-        public void FlipHorizontallyMenuItemClick()
+        public void FlipMenuItemClick()
         {
-            this.dispatcher.FlipHorizontally();
-        }
-
-        public void FlipVerticallyMenuItemClick()
-        {
-            this.dispatcher.FlipVertically();
+            this.dispatcher.Flip();
         }
 
         public void ImportMinimapMenuItemClick()

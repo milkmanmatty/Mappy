@@ -154,9 +154,7 @@ namespace Mappy.Models
 
         void ResizeMapMenuItemClick();
 
-        void FlipHorizontallyMenuItemClick();
-
-        void FlipVerticallyMenuItemClick();
+        void FlipMenuItemClick();
 
         void PasteMenuItemClick();
 
