@@ -201,7 +201,7 @@
     <Compile Include="Models\MapViewViewModel.cs" />
     <Compile Include="Models\MinimapFormViewModel.cs" />
     <Compile Include="Models\SectionFeatureLoadResult.cs" />
-    <Compile Include="Models\SectionImportPaths.cs" />
+    <Compile Include="Models\SectionImportExportPaths.cs" />
     <Compile Include="Models\SectionViewViewModel.cs" />
     <Compile Include="Models\UndoableMapModel.cs" />
     <Compile Include="Operations\AddFeatureOperation.cs" />
@@ -287,6 +287,12 @@
     <Compile Include="UI\Drawables\DrawablePolyline.cs" />
     <Compile Include="UI\Drawables\DrawableTile.cs" />
     <Compile Include="UI\Drawables\IDrawable.cs" />
+    <Compile Include="UI\Forms\ExportCustomSectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\ExportCustomSectionForm.Designer.cs">
+      <DependentUpon>ExportCustomSectionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Forms\InfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -398,6 +404,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\StartPositionsView.resx">
       <DependentUpon>StartPositionsView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\ExportCustomSectionForm.resx">
+      <DependentUpon>ExportCustomSectionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\InfoForm.resx">
       <DependentUpon>InfoForm.cs</DependentUpon>

@@ -395,6 +395,11 @@ namespace Mappy.Models
             this.dispatcher.Flip();
         }
 
+        public void ExportSectionMenuItemClick()
+        {
+            this.dispatcher.ExportSelectedSection();
+        }
+
         public void ImportMinimapMenuItemClick()
         {
             this.dispatcher.ImportMinimap();

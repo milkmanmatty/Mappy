@@ -423,7 +423,7 @@ namespace Mappy.Services
                         return;
                     }
 
-                    ImgUtil.ValidateTemps();
+                    ImgUtil.ValidateDir(ImgUtil.TempDir);
 
                     IMapTile floatTile = map.FloatingTiles[map.SelectedTile.Value].Item;
 
@@ -477,6 +477,44 @@ namespace Mappy.Services
 
                     // ImgUtil.ClearTemps();
                 });
+        }
+
+        public void ExportSelectedSection()
+        {
+            var options = this.dialogService.AskUserToChooseSectionExportPaths();
+            if (options == null || string.IsNullOrEmpty(options.GraphicPath) || string.IsNullOrEmpty(options.HeightmapPath))
+            {
+                return; // User cancelled
+            }
+
+            this.model.Map.IfSome(
+                map =>
+                {
+                    if (!map.SelectedTile.HasValue || !map.FloatingTiles.Any() || map.FloatingTiles[map.SelectedTile.Value].Item == null)
+                    {
+                        return;
+                    }
+
+                    ImgUtil.ValidateDir(ImgUtil.ExportDir);
+
+                    IMapTile floatTile = map.FloatingTiles[map.SelectedTile.Value].Item;
+
+                    MapTile destTile = new MapTile(floatTile.TileGrid.Width, floatTile.TileGrid.Height);
+                    GridMethods.Copy(floatTile.TileGrid, destTile.TileGrid, 0, 0, 0, 0, floatTile.TileGrid.Width, floatTile.TileGrid.Height);
+                    GridMethods.Copy(floatTile.HeightGrid, destTile.HeightGrid, 0, 0, 0, 0, floatTile.HeightGrid.Width, floatTile.HeightGrid.Height);
+
+                    var graphicPath = Path.Combine(options.GraphicPath);
+                    var heightPath = Path.Combine(options.HeightmapPath);
+
+                    Bitmap heightBitmap = ImgUtil.GetBitmapFromHeightmapGrid(destTile.HeightGrid);
+                    heightBitmap.Save(heightPath, ImageFormat.Png);
+
+                    Bitmap graphicBitmap = ImgUtil.GetBitmapFromTilegrid(destTile.TileGrid);
+                    graphicBitmap.Save(graphicPath, ImageFormat.Png);
+
+                    heightBitmap.Dispose();
+                    graphicBitmap.Dispose();
+            });
         }
 
         public void RefreshMinimap()
