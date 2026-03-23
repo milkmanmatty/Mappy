@@ -18,7 +18,7 @@ namespace Mappy.Services
             this.owner = owner;
         }
 
-        public SectionImportPaths AskUserToChooseSectionImportPaths()
+        public SectionImportExportPaths AskUserToChooseSectionImportPaths()
         {
             var dlg = new ImportCustomSectionForm();
             var result = dlg.ShowDialog(this.owner);
@@ -27,7 +27,23 @@ namespace Mappy.Services
                 return null;
             }
 
-            return new SectionImportPaths
+            return new SectionImportExportPaths
+            {
+                GraphicPath = dlg.GraphicPath,
+                HeightmapPath = dlg.HeightmapPath,
+            };
+        }
+
+        public SectionImportExportPaths AskUserToChooseSectionExportPaths()
+        {
+            var dlg = new ExportCustomSectionForm();
+            var result = dlg.ShowDialog(this.owner);
+            if (result != DialogResult.OK)
+            {
+                return null;
+            }
+
+            return new SectionImportExportPaths
             {
                 GraphicPath = dlg.GraphicPath,
                 HeightmapPath = dlg.HeightmapPath,

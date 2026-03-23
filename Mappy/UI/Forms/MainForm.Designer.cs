@@ -64,6 +64,7 @@ namespace Mappy.UI.Forms
 	        this.pasteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.fillMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.resizeMapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.exportSectionMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.flipMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.mapAttributesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.generateMinimapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,8 +87,8 @@ namespace Mappy.UI.Forms
 	        this.gridColorMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.toggleFeaturesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-	        this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.sidebarTabs = new System.Windows.Forms.TabControl();
 	        this.sectionsTab = new System.Windows.Forms.TabPage();
 	        this.sectionsView = new Mappy.UI.Controls.SectionView();
@@ -316,7 +317,7 @@ namespace Mappy.UI.Forms
 	        // 
 	        // editMenuItem
 	        // 
-	        this.editMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.undoMenuItem, this.redoMenuItem, toolStripSeparator7, this.cutMenuItem, this.copyMenuItem, this.pasteMenuItem, this.fillMenuItem, this.resizeMapMenuItem, this.flipMenuItem, toolStripSeparator9, this.mapAttributesMenuItem, toolStripSeparator3, this.generateMinimapMenuItem, this.generateMinimapHighQualityMenuItem, toolStripSeparator4, this.preferencesMenuItem });
+	        this.editMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.undoMenuItem, this.redoMenuItem, toolStripSeparator7, this.cutMenuItem, this.copyMenuItem, this.pasteMenuItem, this.fillMenuItem, this.resizeMapMenuItem, this.exportSectionMenuItem, this.flipMenuItem, toolStripSeparator9, this.mapAttributesMenuItem, toolStripSeparator3, this.generateMinimapMenuItem, this.generateMinimapHighQualityMenuItem, toolStripSeparator4, this.preferencesMenuItem });
 	        this.editMenuItem.Name = "editMenuItem";
 	        this.editMenuItem.Size = new System.Drawing.Size(54, 29);
 	        this.editMenuItem.Text = "&Edit";
@@ -382,6 +383,14 @@ namespace Mappy.UI.Forms
 	        this.resizeMapMenuItem.Size = new System.Drawing.Size(343, 30);
 	        this.resizeMapMenuItem.Text = "Resize Map...";
 	        this.resizeMapMenuItem.Click += new System.EventHandler(this.ResizeMapMenuItemClick);
+	        // 
+	        // exportSectionMenuItem
+	        // 
+	        this.exportSectionMenuItem.Enabled = false;
+	        this.exportSectionMenuItem.Name = "exportSectionMenuItem";
+	        this.exportSectionMenuItem.Size = new System.Drawing.Size(343, 30);
+	        this.exportSectionMenuItem.Text = "Export Section...";
+	        this.exportSectionMenuItem.Click += new System.EventHandler(this.ExportSectionMenuItemClick);
 	        // 
 	        // flipMenuItem
 	        // 
@@ -552,26 +561,24 @@ namespace Mappy.UI.Forms
 	        // 
 	        // helpMenuItem
 	        // 
-	        this.helpMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-		        this.infoToolStripMenuItem,
-		        this.aboutMenuItem});
+	        this.helpMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.infoToolStripMenuItem, this.aboutMenuItem });
 	        this.helpMenuItem.Name = "helpMenuItem";
 	        this.helpMenuItem.Size = new System.Drawing.Size(61, 29);
 	        this.helpMenuItem.Text = "&Help";
 	        // 
-	        // aboutMenuItem
-	        // 
-	        this.aboutMenuItem.Name = "aboutMenuItem";
-	        this.aboutMenuItem.Size = new System.Drawing.Size(152, 30);
-	        this.aboutMenuItem.Text = "&About...";
-	        this.aboutMenuItem.Click += new System.EventHandler(this.AboutMenuItemClick);
-	        // 
 	        // infoToolStripMenuItem
 	        // 
 	        this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-	        this.infoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+	        this.infoToolStripMenuItem.Size = new System.Drawing.Size(149, 30);
 	        this.infoToolStripMenuItem.Text = "Hotkeys";
 	        this.infoToolStripMenuItem.Click += new System.EventHandler(this.InfoMenuItemClick);
+	        // 
+	        // aboutMenuItem
+	        // 
+	        this.aboutMenuItem.Name = "aboutMenuItem";
+	        this.aboutMenuItem.Size = new System.Drawing.Size(149, 30);
+	        this.aboutMenuItem.Text = "&About...";
+	        this.aboutMenuItem.Click += new System.EventHandler(this.AboutMenuItemClick);
 	        // 
 	        // sidebarTabs
 	        // 
@@ -933,6 +940,8 @@ namespace Mappy.UI.Forms
 	        this.ResumeLayout(false);
 	        this.PerformLayout();
         }
+
+        private System.Windows.Forms.ToolStripMenuItem exportSectionMenuItem;
 
         #endregion
 
