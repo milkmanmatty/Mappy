@@ -77,24 +77,22 @@ namespace Mappy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hotkeys
-        ///
-        ///Ctrl + 1 - select Sections tab
+        ///   Looks up a localized string similar to Ctrl + 1 - select Sections tab
         ///Ctrl + 2 - select Features tab
         ///Ctrl + 3 - select Starts tab
         ///Ctrl + 4 - select Height tab
         ///Ctrl + 5 - select Void tab
         ///Ctrl + 6 - select Attributes tab
         ///
+        ///Main Map
+        ///Pan - hold space, left-click and drag to pan the map
         ///Shift + 1 through Shift-0 - centre on player start position
         ///
         ///Height editing (all modes)
-        ///Shift + mousewheel up - increase cursor size
-        ///Shift + mousewheel down - decrease cursor size
-        ///Ctrl + Shift + mousewheel up - increase &apos;Interval&apos;
-        ///Ctrl + Shift + mousewheel down - decrease &apos;Interval&apos;
-        ///
-        ///Height editing (set  [rest of string was truncated]&quot;;.
+        ///Shift + mouse wheel up - increase &apos;Cursor size&apos;
+        ///Shift + mouse wheel down - decrease &apos;Cursor size&apos;
+        ///Ctrl + Shift + mouse wheel up - increase &apos;Interval&apos;
+        ///Ctrl + Shift + m [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string InfoText {
             get {
