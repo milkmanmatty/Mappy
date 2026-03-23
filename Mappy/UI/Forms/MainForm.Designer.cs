@@ -86,8 +86,8 @@ namespace Mappy.UI.Forms
 	        this.gridColorMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.toggleFeaturesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-	        this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.sidebarTabs = new System.Windows.Forms.TabControl();
 	        this.sectionsTab = new System.Windows.Forms.TabPage();
 	        this.sectionsView = new Mappy.UI.Controls.SectionView();
@@ -552,10 +552,19 @@ namespace Mappy.UI.Forms
 	        // 
 	        // helpMenuItem
 	        // 
-	        this.helpMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.aboutMenuItem });
+	        this.helpMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+		        this.infoToolStripMenuItem,
+		        this.aboutMenuItem});
 	        this.helpMenuItem.Name = "helpMenuItem";
 	        this.helpMenuItem.Size = new System.Drawing.Size(61, 29);
 	        this.helpMenuItem.Text = "&Help";
+	        // 
+	        // aboutMenuItem
+	        // 
+	        this.aboutMenuItem.Name = "aboutMenuItem";
+	        this.aboutMenuItem.Size = new System.Drawing.Size(152, 30);
+	        this.aboutMenuItem.Text = "&About...";
+	        this.aboutMenuItem.Click += new System.EventHandler(this.AboutMenuItemClick);
 	        // 
 	        // infoToolStripMenuItem
 	        // 
@@ -563,13 +572,6 @@ namespace Mappy.UI.Forms
 	        this.infoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 	        this.infoToolStripMenuItem.Text = "Hotkeys";
 	        this.infoToolStripMenuItem.Click += new System.EventHandler(this.InfoMenuItemClick);
-	        // 
-	        // aboutMenuItem
-	        // 
-	        this.aboutMenuItem.Name = "aboutMenuItem";
-	        this.aboutMenuItem.Size = new System.Drawing.Size(146, 30);
-	        this.aboutMenuItem.Text = "&About...";
-	        this.aboutMenuItem.Click += new System.EventHandler(this.AboutMenuItemClick);
 	        // 
 	        // sidebarTabs
 	        // 
@@ -949,7 +951,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripMenuItem toggleMinimapMenuItem;
         private System.Windows.Forms.ToolStripMenuItem undoMenuItem;
         private System.Windows.Forms.ToolStripMenuItem redoMenuItem;
-        private SectionView sectionsView;
+        private Mappy.UI.Controls.SectionView sectionsView;
         private System.Windows.Forms.ToolStripMenuItem newMenuItem;
         private System.Windows.Forms.ToolStripMenuItem generateMinimapMenuItem;
         private System.Windows.Forms.TabControl sidebarTabs;

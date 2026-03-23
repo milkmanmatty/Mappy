@@ -238,7 +238,7 @@ namespace Mappy.Services
             f.ShowDialog(this.owner);
         }
 
-		public void ShowAbout()
+        public void ShowAbout()
         {
             var f = new AboutForm();
             f.ShowDialog(this.owner);
