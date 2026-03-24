@@ -332,6 +332,11 @@ namespace Mappy.Models
 
         public void MouseDoubleClick(Point location)
         {
+            if (this.model.SelectedGUITab != GUITab.Mission)
+            {
+                return;
+            }
+
             var hit = this.itemsLayer.Value.HitTest(location.X, location.Y);
             if (hit?.Tag is UnitTag ut)
             {

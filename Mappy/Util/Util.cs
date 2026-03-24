@@ -451,6 +451,7 @@ namespace Mappy.Util
                 case "voidTab":
                     return GUITab.Void;
                 case "missionTab":
+                case "otaMissionTab":
                     return GUITab.Mission;
                 default:
                     return GUITab.Other;
