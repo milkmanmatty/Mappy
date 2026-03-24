@@ -301,6 +301,7 @@ namespace Mappy.Services
 
             this.sectionService.NotifySectionsChanged();
             this.featureService.NotifyFeaturesChanged();
+            this.unitCatalogService.NotifyUnitPickerLabelsChanged();
         }
 
         public void Close()

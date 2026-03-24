@@ -48,6 +48,8 @@ namespace Mappy.UI.Forms
 			this.calculatedMetalDepositValueCheckBox = new System.Windows.Forms.CheckBox();
 			this.featureReclaimAmountsCheckBox = new System.Windows.Forms.CheckBox();
 			this.fullResourceNamesCheckBox = new System.Windows.Forms.CheckBox();
+			this.missionUnitLabelsGroupBox = new System.Windows.Forms.GroupBox();
+			this.showUnitFriendlyNameFirstCheckBox = new System.Windows.Forms.CheckBox();
 			this.sidePanel.SuspendLayout();
 			this.bottomPanel.SuspendLayout();
 			this.searchPathsPanel.SuspendLayout();
@@ -56,6 +58,7 @@ namespace Mappy.UI.Forms
 			((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedYNumeric)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).BeginInit();
 			this.resourceNamesGroupBox.SuspendLayout();
+			this.missionUnitLabelsGroupBox.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// searchPathsListView
@@ -150,7 +153,7 @@ namespace Mappy.UI.Forms
 			this.bottomPanel.Controls.Add(this.cancelButton);
 			this.bottomPanel.Controls.Add(this.okButton);
 			this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.bottomPanel.Location = new System.Drawing.Point(0, 457);
+			this.bottomPanel.Location = new System.Drawing.Point(0, 515);
 			this.bottomPanel.Name = "bottomPanel";
 			this.bottomPanel.Size = new System.Drawing.Size(450, 30);
 			this.bottomPanel.TabIndex = 8;
@@ -301,11 +304,34 @@ namespace Mappy.UI.Forms
 			this.fullResourceNamesCheckBox.Text = "Full resource names";
 			this.fullResourceNamesCheckBox.UseVisualStyleBackColor = true;
 			// 
+			// missionUnitLabelsGroupBox
+			// 
+			this.missionUnitLabelsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.missionUnitLabelsGroupBox.Controls.Add(this.showUnitFriendlyNameFirstCheckBox);
+			this.missionUnitLabelsGroupBox.Location = new System.Drawing.Point(12, 455);
+			this.missionUnitLabelsGroupBox.Name = "missionUnitLabelsGroupBox";
+			this.missionUnitLabelsGroupBox.Size = new System.Drawing.Size(426, 52);
+			this.missionUnitLabelsGroupBox.TabIndex = 13;
+			this.missionUnitLabelsGroupBox.TabStop = false;
+			this.missionUnitLabelsGroupBox.Text = "Unit list";
+			// 
+			// showUnitFriendlyNameFirstCheckBox
+			// 
+			this.showUnitFriendlyNameFirstCheckBox.AutoSize = true;
+			this.showUnitFriendlyNameFirstCheckBox.Location = new System.Drawing.Point(17, 22);
+			this.showUnitFriendlyNameFirstCheckBox.Name = "showUnitFriendlyNameFirstCheckBox";
+			this.showUnitFriendlyNameFirstCheckBox.Size = new System.Drawing.Size(392, 17);
+			this.showUnitFriendlyNameFirstCheckBox.TabIndex = 0;
+			this.showUnitFriendlyNameFirstCheckBox.Text = "Prioritise friendly name";
+			this.showUnitFriendlyNameFirstCheckBox.UseVisualStyleBackColor = true;
+			// 
 			// PreferencesForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(450, 487);
+			this.ClientSize = new System.Drawing.Size(450, 550);
+			this.Controls.Add(this.missionUnitLabelsGroupBox);
 			this.Controls.Add(this.resourceNamesGroupBox);
 			this.Controls.Add(this.scrollSpeedGroupBox);
 			this.Controls.Add(this.mainGroupBox);
@@ -325,6 +351,8 @@ namespace Mappy.UI.Forms
 			((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).EndInit();
 			this.resourceNamesGroupBox.ResumeLayout(false);
 			this.resourceNamesGroupBox.PerformLayout();
+			this.missionUnitLabelsGroupBox.ResumeLayout(false);
+			this.missionUnitLabelsGroupBox.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -351,5 +379,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.CheckBox fullResourceNamesCheckBox;
         private System.Windows.Forms.CheckBox featureReclaimAmountsCheckBox;
         private System.Windows.Forms.CheckBox calculatedMetalDepositValueCheckBox;
+        private System.Windows.Forms.GroupBox missionUnitLabelsGroupBox;
+        private System.Windows.Forms.CheckBox showUnitFriendlyNameFirstCheckBox;
     }
 }

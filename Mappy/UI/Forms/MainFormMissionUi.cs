@@ -59,6 +59,11 @@ namespace Mappy.UI.Forms
             var mapStream = core.PropertyAsObservable(x => x.Map, nameof(core.Map));
             mapStream.Subscribe(_ => this.OnMissionMapChanged());
             catalog.NamesChanged += (_, __) => this.RefreshMissionUnitsList();
+            catalog.UnitPickerLabelsChanged += (_, __) =>
+                {
+                    this.RefreshMissionUnitsList();
+                    this.RefreshMissionPlacedUnitsTree();
+                };
             this.RefreshMissionUnitsList();
             this.OnMissionMapChanged();
         }

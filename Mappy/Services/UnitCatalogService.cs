@@ -3,6 +3,7 @@ namespace Mappy.Services
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Mappy;
     using Mappy.Data;
 
     public class UnitCatalogService
@@ -17,7 +18,14 @@ namespace Mappy.Services
 
         public event EventHandler NamesChanged;
 
+        public event EventHandler UnitPickerLabelsChanged;
+
         public string SelectedUnitName { get; set; }
+
+        public void NotifyUnitPickerLabelsChanged()
+        {
+            this.UnitPickerLabelsChanged?.Invoke(this, EventArgs.Empty);
+        }
 
         public void AddNames(IEnumerable<string> unitNames)
         {
@@ -99,6 +107,11 @@ namespace Mappy.Services
 
             if (this.displayNameByUnit.TryGetValue(unitInternalName, out var dn) && !string.IsNullOrWhiteSpace(dn))
             {
+                if (MappySettings.Settings.ShowUnitFriendlyNameFirst)
+                {
+                    return dn + " (" + unitInternalName + ")";
+                }
+
                 return unitInternalName + " (" + dn + ")";
             }
 

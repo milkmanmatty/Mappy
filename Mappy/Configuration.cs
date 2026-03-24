@@ -29,6 +29,8 @@ namespace Mappy
 
         public bool ShowCalculatedMetalDepositValue { get; set; }
 
+        public bool ShowUnitFriendlyNameFirst { get; set; }
+
         [XmlIgnore]
         public Color GridColor
         {
