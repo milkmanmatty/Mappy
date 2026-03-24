@@ -219,6 +219,7 @@
     <Compile Include="Operations\ChangeAttributesOperation.cs" />
     <Compile Include="Operations\ChangeStartPositionOperation.cs" />
     <Compile Include="Operations\BatchMoveFeatureOperation.cs" />
+    <Compile Include="Operations\BatchMoveSchemaUnitsOperation.cs" />
     <Compile Include="Operations\FillAreaOperation.cs" />
     <Compile Include="Operations\HeightBrushOperation.cs" />
     <Compile Include="Operations\VoidBrushOperation.cs" />

@@ -1481,26 +1481,25 @@ namespace Mappy.Models
                 return;
             }
 
-            var ops = new List<IReplayableOperation>(refs.Count);
-            foreach (var r in refs)
-            {
-                var u = this.model.Attributes.GetUnit(r.SchemaIndex, r.UnitId);
-                var nu = u.ClonePreservingId();
-                nu.XPos += dx;
-                nu.ZPos += dy;
-                var hx = nu.XPos / 16;
-                var hz = nu.ZPos / 16;
-                var grid = this.model.Tile.HeightGrid;
-                if (hx >= 0 && hz >= 0 && hx < grid.Width && hz < grid.Height)
-                {
-                    nu.YPos = grid.Get(hx, hz);
-                }
+            var newOp = new BatchMoveSchemaUnitsOperation(this.model, refs, dx, dy);
 
-                ops.Add(new UpdateSchemaUnitOperation(this.model, r.SchemaIndex, nu));
+            BatchMoveSchemaUnitsOperation lastOp = null;
+            if (this.undoManager.CanUndo)
+            {
+                lastOp = this.undoManager.PeekUndo() as BatchMoveSchemaUnitsOperation;
             }
 
-            this.undoManager.Execute(new CompositeOperation(ops));
-            this.previousTranslationOpen = false;
+            if (this.previousTranslationOpen && lastOp != null && lastOp.CanCombine(newOp))
+            {
+                newOp.Execute();
+                this.undoManager.Replace(lastOp.Combine(newOp));
+            }
+            else
+            {
+                this.undoManager.Execute(newOp);
+            }
+
+            this.previousTranslationOpen = true;
         }
 
         private void BandboxBehaviourPropertyChanged(object sender, PropertyChangedEventArgs e)
