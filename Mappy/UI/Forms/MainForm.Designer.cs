@@ -86,6 +86,18 @@ namespace Mappy.UI.Forms
 			this.grid1024MenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.gridColorMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toggleFeaturesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.playerMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.playerPromptMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.player1MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.player2MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.player3MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.player4MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.player5MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.player6MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.player7MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.player8MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.player9MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.player10MenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -209,6 +221,7 @@ namespace Mappy.UI.Forms
             this.fileMenuItem,
             this.editMenuItem,
             this.viewMenuItem,
+            this.playerMenuItem,
             this.helpMenuItem});
 			this.topMenu.Location = new System.Drawing.Point(0, 0);
 			this.topMenu.Name = "topMenu";
@@ -615,6 +628,114 @@ namespace Mappy.UI.Forms
 			this.toggleFeaturesMenuItem.Size = new System.Drawing.Size(229, 22);
 			this.toggleFeaturesMenuItem.Text = "Features";
 			this.toggleFeaturesMenuItem.Click += new System.EventHandler(this.ToggleFeaturesMenuItemClick);
+			// 
+			// playerMenuItem
+			// 
+			this.playerMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.playerPromptMenuItem,
+            this.player1MenuItem,
+            this.player2MenuItem,
+            this.player3MenuItem,
+            this.player4MenuItem,
+            this.player5MenuItem,
+            this.player6MenuItem,
+            this.player7MenuItem,
+            this.player8MenuItem,
+            this.player9MenuItem,
+            this.player10MenuItem});
+			this.playerMenuItem.Name = "playerMenuItem";
+			this.playerMenuItem.Size = new System.Drawing.Size(48, 22);
+			this.playerMenuItem.Text = "&Player";
+			// 
+			// playerPromptMenuItem
+			// 
+			this.playerPromptMenuItem.Checked = true;
+			this.playerPromptMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.playerPromptMenuItem.Name = "playerPromptMenuItem";
+			this.playerPromptMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.playerPromptMenuItem.Tag = 0;
+			this.playerPromptMenuItem.Text = "Prompt";
+			this.playerPromptMenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+			// 
+			// player1MenuItem
+			// 
+			this.player1MenuItem.Name = "player1MenuItem";
+			this.player1MenuItem.Size = new System.Drawing.Size(180, 22);
+			this.player1MenuItem.Tag = 1;
+			this.player1MenuItem.Text = "Player 1";
+			this.player1MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+			// 
+			// player2MenuItem
+			// 
+			this.player2MenuItem.Name = "player2MenuItem";
+			this.player2MenuItem.Size = new System.Drawing.Size(180, 22);
+			this.player2MenuItem.Tag = 2;
+			this.player2MenuItem.Text = "Player 2";
+			this.player2MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+			// 
+			// player3MenuItem
+			// 
+			this.player3MenuItem.Name = "player3MenuItem";
+			this.player3MenuItem.Size = new System.Drawing.Size(180, 22);
+			this.player3MenuItem.Tag = 3;
+			this.player3MenuItem.Text = "Player 3";
+			this.player3MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+			// 
+			// player4MenuItem
+			// 
+			this.player4MenuItem.Name = "player4MenuItem";
+			this.player4MenuItem.Size = new System.Drawing.Size(180, 22);
+			this.player4MenuItem.Tag = 4;
+			this.player4MenuItem.Text = "Player 4";
+			this.player4MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+			// 
+			// player5MenuItem
+			// 
+			this.player5MenuItem.Name = "player5MenuItem";
+			this.player5MenuItem.Size = new System.Drawing.Size(180, 22);
+			this.player5MenuItem.Tag = 5;
+			this.player5MenuItem.Text = "Player 5";
+			this.player5MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+			// 
+			// player6MenuItem
+			// 
+			this.player6MenuItem.Name = "player6MenuItem";
+			this.player6MenuItem.Size = new System.Drawing.Size(180, 22);
+			this.player6MenuItem.Tag = 6;
+			this.player6MenuItem.Text = "Player 6";
+			this.player6MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+			// 
+			// player7MenuItem
+			// 
+			this.player7MenuItem.Name = "player7MenuItem";
+			this.player7MenuItem.Size = new System.Drawing.Size(180, 22);
+			this.player7MenuItem.Tag = 7;
+			this.player7MenuItem.Text = "Player 7";
+			this.player7MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+			// 
+			// player8MenuItem
+			// 
+			this.player8MenuItem.Name = "player8MenuItem";
+			this.player8MenuItem.Size = new System.Drawing.Size(180, 22);
+			this.player8MenuItem.Tag = 8;
+			this.player8MenuItem.Text = "Player 8";
+			this.player8MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+			// 
+			// player9MenuItem
+			// 
+			this.player9MenuItem.Name = "player9MenuItem";
+			this.player9MenuItem.Size = new System.Drawing.Size(180, 22);
+			this.player9MenuItem.Tag = 9;
+			this.player9MenuItem.Text = "Player 9";
+			this.player9MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+			// 
+			// player10MenuItem
+			// 
+			this.player10MenuItem.Name = "player10MenuItem";
+			this.player10MenuItem.Size = new System.Drawing.Size(180, 22);
+			this.player10MenuItem.Tag = 10;
+			this.player10MenuItem.Text = "Player 10";
+			this.player10MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
 			// 
 			// helpMenuItem
 			// 
@@ -1092,6 +1213,18 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripMenuItem grid1024MenuItem;
         private System.Windows.Forms.ToolStripMenuItem gridColorMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toggleFeaturesMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem playerMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem playerPromptMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem player1MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem player2MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem player3MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem player4MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem player5MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem player6MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem player7MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem player8MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem player9MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem player10MenuItem;
         private System.Windows.Forms.ToolStripMenuItem mapAttributesMenuItem;
         private System.Windows.Forms.TabPage startPositionsTab;
         private StartPositionsView startPositionsView1;

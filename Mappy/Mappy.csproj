@@ -187,6 +187,7 @@
     <Compile Include="Models\Enums\GUITab.cs" />
     <Compile Include="Models\Enums\HeightEditMode.cs" />
     <Compile Include="Models\Enums\LightDirection.cs" />
+    <Compile Include="Models\Enums\UnitPlacementPlayerMenuChoice.cs" />
     <Compile Include="Models\FeatureClipboardRecord.cs" />
     <Compile Include="Models\FeatureInstance.cs" />
     <Compile Include="Models\FeatureInstanceEventArgs.cs" />
@@ -387,6 +388,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Forms\NewSchemaTypePromptForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\UnitPlayerPickerForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Forms\UnitPropertiesForm.cs">

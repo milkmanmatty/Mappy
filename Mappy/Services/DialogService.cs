@@ -230,6 +230,19 @@ namespace Mappy.Services
             }
         }
 
+        public int? PickUnitPlayerAtScreenPoint(Point screenLocation)
+        {
+            using (var f = new UI.Forms.UnitPlayerPickerForm())
+            {
+                f.StartPosition = FormStartPosition.Manual;
+                var wa = Screen.FromPoint(screenLocation).WorkingArea;
+                var x = Math.Max(wa.Left, Math.Min(screenLocation.X, wa.Right - f.Width));
+                var y = Math.Max(wa.Top, Math.Min(screenLocation.Y, wa.Bottom - f.Height));
+                f.Location = new Point(x, y);
+                return f.ShowDialog(this.owner) == DialogResult.OK ? f.SelectedPlayer : null;
+            }
+        }
+
         public void ShowError(string message)
         {
             MessageBox.Show(this.owner, message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

@@ -39,5 +39,7 @@ namespace Mappy.Models
         int HeightEditCursorSize { get; }
 
         int VoidEditCursorSize { get; }
+
+        UnitPlacementPlayerMenuChoice UnitPlacementPlayerMenuChoice { get; }
     }
 }

@@ -43,6 +43,8 @@ namespace Mappy.Services
 
         string AskUserForNewSchemaType(string defaultSchemaType);
 
+        int? PickUnitPlayerAtScreenPoint(Point screenLocation);
+
         void ShowError(string message);
 
         IProgressView CreateProgressView();

@@ -225,7 +225,7 @@ namespace Mappy.Models
 
         public ILayer GuidesLayer => this.guides;
 
-        public void DragDrop(IDataObject data, Point location)
+        public void DragDrop(IDataObject data, Point location, Point screenLocation)
         {
             if (data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -248,7 +248,7 @@ namespace Mappy.Models
                 if (dataString != null && dataString.StartsWith("MAPPYUNIT|", StringComparison.Ordinal))
                 {
                     var un = dataString.Substring("MAPPYUNIT|".Length);
-                    this.dispatcher.PlaceUnitFromSidebar(un, location.X, location.Y);
+                    this.dispatcher.PlaceUnitFromSidebar(un, location.X, location.Y, screenLocation);
                 }
                 else
                 {
@@ -339,7 +339,7 @@ namespace Mappy.Models
             }
         }
 
-        public void MouseRightDown(Point location)
+        public void MouseRightDown(Point location, Point screenLocation)
         {
             this.mouseDown = true;
             this.lastMousePos = location;
@@ -369,7 +369,7 @@ namespace Mappy.Models
                 && this.model.SelectedGUITab == GUITab.Mission
                 && !string.IsNullOrEmpty(this.unitCatalogService.SelectedUnitName))
             {
-                this.dispatcher.PlaceUnitFromSidebar(this.unitCatalogService.SelectedUnitName, location.X, location.Y);
+                this.dispatcher.PlaceUnitFromSidebar(this.unitCatalogService.SelectedUnitName, location.X, location.Y, screenLocation);
             }
             else if (!this.itemsLayer.Value.IsInSelection(location.X, location.Y) &&
                 this.featureService.SelectedFeature != null)

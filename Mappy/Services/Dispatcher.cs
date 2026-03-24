@@ -745,15 +745,28 @@ namespace Mappy.Services
             this.model.Map.IfSome(x => x.SelectUnit(new MapUnitRef(schemaIndex, unitId)));
         }
 
-        public void PlaceUnitFromSidebar(string unitName, int x, int y)
+        public void PlaceUnitFromSidebar(string unitName, int x, int y, Point screenLocation)
         {
-            var player = this.dialogService.AskUnitPlayerNumber(null, 1);
-            if (!player.HasValue)
+            int? player;
+            if (this.model.UnitPlacementPlayerMenuChoice == UnitPlacementPlayerMenuChoice.Prompt)
             {
-                return;
+                player = this.dialogService.PickUnitPlayerAtScreenPoint(screenLocation);
+                if (!player.HasValue)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                player = (int)this.model.UnitPlacementPlayerMenuChoice;
             }
 
             this.model.Map.IfSome(m => m.DragDropSchemaUnit(unitName, x, y, player.Value));
+        }
+
+        public void SetUnitPlacementPlayerMenuChoice(UnitPlacementPlayerMenuChoice choice)
+        {
+            this.model.UnitPlacementPlayerMenuChoice = choice;
         }
 
         public void SetActiveSchemaIndex(int index)
