@@ -707,6 +707,32 @@ namespace Mappy.Services
                     });
         }
 
+        public void CenterViewOnSchemaUnit(int schemaIndex, Guid unitId)
+        {
+            this.model.Map.IfSome(
+                map =>
+                    {
+                        if (schemaIndex < 0 || schemaIndex >= map.Attributes.Schemas.Count)
+                        {
+                            return;
+                        }
+
+                        SchemaUnit u;
+                        try
+                        {
+                            u = map.Attributes.GetUnit(schemaIndex, unitId);
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            return;
+                        }
+
+                        var viewportX = u.XPos - (this.model.ViewportWidth / 2);
+                        var viewportY = u.ZPos - (this.model.ViewportHeight / 2);
+                        this.model.SetViewportLocation(new Point(viewportX, viewportY));
+                    });
+        }
+
         public void SetViewportSize(Size size)
         {
             this.model.SetViewportSize(size);
