@@ -29,6 +29,14 @@ namespace Mappy.UI.Forms
 
         private ListBox missionUnitsList;
 
+        private TabControl missionUnitPickerTabs;
+
+        private TreeView missionArmUnitsTree;
+
+        private TreeView missionCoreUnitsTree;
+
+        private TreeView missionOtherUnitsTree;
+
         private TreeView missionPlacedUnitsTree;
 
         private MapAttributes missionPlacedUnitsAttributesSubscription;
@@ -168,6 +176,13 @@ namespace Mappy.UI.Forms
                 0,
                 3);
 
+            this.missionUnitPickerTabs = new TabControl
+            {
+                Dock = DockStyle.Fill,
+                Margin = new Padding(0, 0, 0, 0),
+            };
+
+            var tabAll = new TabPage("All");
             this.missionUnitsList = new ListBox
             {
                 Dock = DockStyle.Fill,
@@ -181,7 +196,24 @@ namespace Mappy.UI.Forms
                     }
                 };
             this.missionUnitsList.MouseDown += this.MissionUnitsList_MouseDown;
-            root.Controls.Add(this.missionUnitsList, 0, 4);
+            tabAll.Controls.Add(this.missionUnitsList);
+
+            this.missionArmUnitsTree = this.CreateMissionSideUnitTree();
+            this.missionCoreUnitsTree = this.CreateMissionSideUnitTree();
+            this.missionOtherUnitsTree = this.CreateMissionSideUnitTree();
+
+            this.missionUnitPickerTabs.TabPages.Add(tabAll);
+            var tabArm = new TabPage("ARM");
+            tabArm.Controls.Add(this.missionArmUnitsTree);
+            this.missionUnitPickerTabs.TabPages.Add(tabArm);
+            var tabCore = new TabPage("CORE");
+            tabCore.Controls.Add(this.missionCoreUnitsTree);
+            this.missionUnitPickerTabs.TabPages.Add(tabCore);
+            var tabOther = new TabPage("Other");
+            tabOther.Controls.Add(this.missionOtherUnitsTree);
+            this.missionUnitPickerTabs.TabPages.Add(tabOther);
+
+            root.Controls.Add(this.missionUnitPickerTabs, 0, 4);
 
             root.Controls.Add(
                 new Label
@@ -415,6 +447,45 @@ namespace Mappy.UI.Forms
             public Guid? UnitId { get; }
         }
 
+        private TreeView CreateMissionSideUnitTree()
+        {
+            var tv = new TreeView
+            {
+                Dock = DockStyle.Fill,
+                HideSelection = false,
+                ShowLines = true,
+                ShowRootLines = false,
+            };
+            tv.AfterSelect += this.MissionSideUnitTree_AfterSelect;
+            tv.ItemDrag += this.MissionSideUnitTree_ItemDrag;
+            return tv;
+        }
+
+        private void MissionSideUnitTree_AfterSelect(object sender, EventArgs e)
+        {
+            if (sender is TreeView tv && tv.SelectedNode?.Tag is string s && !string.IsNullOrEmpty(s))
+            {
+                this.missionUnitCatalog.SelectedUnitName = s;
+            }
+        }
+
+        private void MissionSideUnitTree_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            if (!(sender is TreeView tv))
+            {
+                return;
+            }
+
+            if (!(e.Item is TreeNode n) || !(n.Tag is string name) || string.IsNullOrEmpty(name))
+            {
+                return;
+            }
+
+            tv.SelectedNode = n;
+            this.missionUnitCatalog.SelectedUnitName = name;
+            tv.DoDragDrop("MAPPYUNIT|" + name, DragDropEffects.Copy);
+        }
+
         private void MissionUnitsList_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left)
@@ -454,6 +525,55 @@ namespace Mappy.UI.Forms
                 {
                     this.missionUnitsList.SelectedIndex = i;
                 }
+            }
+
+            this.RefreshMissionSideUnitTrees(sel);
+        }
+
+        private void RefreshMissionSideUnitTrees(string preferredSelection)
+        {
+            this.FillSideUnitTree(this.missionArmUnitsTree, UnitSideCategory.Arm, preferredSelection);
+            this.FillSideUnitTree(this.missionCoreUnitsTree, UnitSideCategory.Core, preferredSelection);
+            this.FillSideUnitTree(this.missionOtherUnitsTree, UnitSideCategory.Other, preferredSelection);
+        }
+
+        private void FillSideUnitTree(TreeView tv, UnitSideCategory side, string preferredSelection)
+        {
+            if (tv == null || tv.IsDisposed || this.missionUnitCatalog == null)
+            {
+                return;
+            }
+
+            tv.BeginUpdate();
+            try
+            {
+                tv.Nodes.Clear();
+                foreach (var name in this.missionUnitCatalog.EnumerateSorted())
+                {
+                    if (this.missionUnitCatalog.GetUnitSide(name) != side)
+                    {
+                        continue;
+                    }
+
+                    tv.Nodes.Add(new TreeNode(name) { Tag = name });
+                }
+
+                if (!string.IsNullOrEmpty(preferredSelection)
+                    && this.missionUnitCatalog.GetUnitSide(preferredSelection) == side)
+                {
+                    foreach (TreeNode n in tv.Nodes)
+                    {
+                        if (n.Tag is string t && string.Equals(t, preferredSelection, StringComparison.OrdinalIgnoreCase))
+                        {
+                            tv.SelectedNode = n;
+                            break;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                tv.EndUpdate();
             }
         }
     }

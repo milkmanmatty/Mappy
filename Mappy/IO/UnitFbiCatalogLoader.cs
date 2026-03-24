@@ -3,18 +3,44 @@ namespace Mappy.IO
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
+    using System.Text;
+
+    using Mappy.Data;
 
     using TAUtil.Hpi;
+    using TAUtil.Tdf;
 
-    public class UnitNameFbiLoader : AbstractHpiLoader<string>
+    public class UnitFbiCatalogLoader : AbstractHpiLoader<UnitCatalogLoadRecord>
     {
         protected override void LoadFile(HpiArchive archive, HpiArchive.FileInfo file)
         {
             var name = Path.GetFileNameWithoutExtension(file.Name);
-            if (!string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name))
             {
-                this.Records.Add(name);
+                return;
             }
+
+            var side = UnitSideCategory.Other;
+            if (file.Size > 0 && file.Size < 10_000_000)
+            {
+                try
+                {
+                    var buf = new byte[file.Size];
+                    archive.Extract(file, buf);
+                    using (var ms = new MemoryStream(buf, false))
+                    using (var reader = new StreamReader(ms, Encoding.Default))
+                    {
+                        var root = TdfNode.LoadTdf(reader);
+                        side = ClassifySideFromTdf(root);
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            this.Records.Add(new UnitCatalogLoadRecord(name, side));
         }
 
         protected override IEnumerable<HpiArchive.FileInfo> EnumerateFiles(HpiArchive r)
@@ -80,6 +106,52 @@ namespace Mappy.IO
                     }
                 }
             }
+        }
+
+        private static string FindSideRaw(TdfNode node)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+
+            if (node.Entries.TryGetValue("Side", out var s))
+            {
+                return s;
+            }
+
+            foreach (var child in node.Keys.Values)
+            {
+                var t = FindSideRaw(child);
+                if (t != null)
+                {
+                    return t;
+                }
+            }
+
+            return null;
+        }
+
+        private static UnitSideCategory ClassifySideFromTdf(TdfNode root)
+        {
+            var raw = FindSideRaw(root);
+            if (string.IsNullOrWhiteSpace(raw))
+            {
+                return UnitSideCategory.Other;
+            }
+
+            raw = raw.Trim();
+            if (raw.Equals("ARM", StringComparison.OrdinalIgnoreCase))
+            {
+                return UnitSideCategory.Arm;
+            }
+
+            if (raw.Equals("CORE", StringComparison.OrdinalIgnoreCase))
+            {
+                return UnitSideCategory.Core;
+            }
+
+            return UnitSideCategory.Other;
         }
     }
 }

@@ -98,7 +98,7 @@ namespace Mappy.Services
                         return;
                     }
 
-                    if (!UnitLoadingUtils.LoadUnitNames(
+                    if (!UnitLoadingUtils.LoadUnitCatalog(
                         i => w.ReportProgress(70 + ((30 * i) / 100)),
                         () => w.CancellationPending,
                         out var unitResult))
@@ -145,7 +145,7 @@ namespace Mappy.Services
 
                     this.featureService.AddFeatures(sectionResult.Features);
 
-                    this.unitCatalogService.AddNames(sectionResult.UnitNames);
+                    this.unitCatalogService.AddCatalogRecords(sectionResult.UnitCatalog);
 
                     if (sectionResult.Errors.Count > 0 || sectionResult.FileErrors.Count > 0)
                     {
@@ -370,29 +370,43 @@ namespace Mappy.Services
                         }
                         else
                         {
-                            switch (data)
+                            if (data is FeatureClipboardRecord featureRecord)
                             {
-                                case FeatureClipboardRecord record:
-                                    map.DragDropFeature(record.FeatureName, loc.X, loc.Y);
-                                    return;
-                                case List<FeatureClipboardRecord> featureList:
+                                map.DragDropFeature(featureRecord.FeatureName, loc.X, loc.Y);
+                                return;
+                            }
+
+                            var featureList = data as List<FeatureClipboardRecord>;
+                            if (featureList != null)
+                            {
+                                map.ClearSelection();
+                                foreach (var feature in featureList)
                                 {
-                                    map.ClearSelection();
-                                    foreach (var feature in featureList)
-                                    {
-                                        // Split these up so they can be debugged better
-                                        // force locs between 0 and MapWidth/Height
-                                        int xLocUnsafe = map.ViewportLocation.X + feature.VPOffsetX;
-                                        int xLoc = Math.Min(map.MapWidth * 32, Math.Max(0, xLocUnsafe));
+                                    // Split these up so they can be debugged better
+                                    // force locs between 0 and MapWidth/Height
+                                    int xLocUnsafe = map.ViewportLocation.X + feature.VPOffsetX;
+                                    int xLoc = Math.Min(map.MapWidth * 32, Math.Max(0, xLocUnsafe));
 
-                                        int yLocUnsafe = map.ViewportLocation.Y + feature.VPOffsetY;
-                                        int yLoc = Math.Min(map.MapHeight * 32, Math.Max(0, yLocUnsafe));
+                                    int yLocUnsafe = map.ViewportLocation.Y + feature.VPOffsetY;
+                                    int yLoc = Math.Min(map.MapHeight * 32, Math.Max(0, yLocUnsafe));
 
-                                        map.DragDropFeature(feature.FeatureName, xLoc, yLoc, false);
-                                    }
-
-                                    break;
+                                    map.DragDropFeature(feature.FeatureName, xLoc, yLoc, false);
                                 }
+
+                                return;
+                            }
+
+                            if (data is SchemaUnitClipboardRecord unitRecord)
+                            {
+                                this.PasteSchemaUnitsFromClipboardRecords(map, new[] { unitRecord });
+                                return;
+                            }
+
+                            var unitList = data as List<SchemaUnitClipboardRecord>;
+                            if (unitList != null)
+                            {
+                                this.PasteSchemaUnitsFromClipboardRecords(map, unitList);
+                                return;
                             }
                         }
                     });
@@ -1056,6 +1070,28 @@ namespace Mappy.Services
                 return true;
             }
 
+            if (map.SelectedUnits.Count > 0)
+            {
+                var vp = map.ViewportLocation;
+                var records = new List<SchemaUnitClipboardRecord>();
+                foreach (var r in map.SelectedUnits)
+                {
+                    var u = map.Attributes.GetUnit(r.SchemaIndex, r.UnitId);
+                    records.Add(new SchemaUnitClipboardRecord(u, vp));
+                }
+
+                if (records.Count == 1)
+                {
+                    Clipboard.SetData(DataFormats.Serializable, records[0]);
+                }
+                else
+                {
+                    Clipboard.SetData(DataFormats.Serializable, records);
+                }
+
+                return true;
+            }
+
             if (map.SelectedTile.HasValue)
             {
                 var tile = map.FloatingTiles[map.SelectedTile.Value].Item;
@@ -1064,6 +1100,25 @@ namespace Mappy.Services
             }
 
             return false;
+        }
+
+        private void PasteSchemaUnitsFromClipboardRecords(UndoableMapModel map, IList<SchemaUnitClipboardRecord> records)
+        {
+            if (records == null || records.Count == 0)
+            {
+                return;
+            }
+
+            var vp = map.ViewportLocation;
+            var mw = map.MapWidth * 32;
+            var mh = map.MapHeight * 32;
+            var units = new List<SchemaUnit>(records.Count);
+            foreach (var r in records)
+            {
+                units.Add(r.ToNewSchemaUnit(vp, mw, mh));
+            }
+
+            map.PasteSchemaUnitCopies(units);
         }
 
         private void SetSelectedGUITabForMap()

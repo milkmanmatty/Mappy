@@ -846,6 +846,40 @@ namespace Mappy.Models
                     selectOp));
         }
 
+        public void PasteSchemaUnitCopies(IReadOnlyList<SchemaUnit> units)
+        {
+            if (units == null || units.Count == 0)
+            {
+                return;
+            }
+
+            var schema = this.model.ActiveSchemaIndex;
+            var ops = new List<IReplayableOperation>();
+            ops.Add(OperationFactory.CreateDeselectAndMergeOperation(this.model));
+            foreach (var u in units)
+            {
+                SyncSchemaUnitYPosFromHeightGrid(u, this.model);
+                ops.Add(new AddSchemaUnitOperation(this.model, schema, u));
+            }
+
+            foreach (var u in units)
+            {
+                ops.Add(new AddUnitToSelectionOperation(this.model, new MapUnitRef(schema, u.Id)));
+            }
+
+            this.undoManager.Execute(new CompositeOperation(ops));
+        }
+
+        private static void SyncSchemaUnitYPosFromHeightGrid(SchemaUnit u, IMapModel map)
+        {
+            var hx = u.XPos / 16;
+            var hy = u.ZPos / 16;
+            if (hx >= 0 && hy >= 0 && hx < map.Tile.HeightGrid.Width && hy < map.Tile.HeightGrid.Height)
+            {
+                u.YPos = map.Tile.HeightGrid.Get(hx, hy);
+            }
+        }
+
         public void LiftAndSelectArea(int x, int y, int width, int height)
         {
             if (this.currentBandboxBehaviour == this.tileBandboxBehaviour)

@@ -148,6 +148,8 @@
     <Compile Include="Data\MapSchema.cs" />
     <Compile Include="Data\MapTile.cs" />
     <Compile Include="Data\SchemaUnit.cs" />
+    <Compile Include="Data\UnitCatalogLoadRecord.cs" />
+    <Compile Include="Data\UnitSideCategory.cs" />
     <Compile Include="Data\Positioned.cs" />
     <Compile Include="Data\SchemaUnitsChangedEventArgs.cs" />
     <Compile Include="Data\Section.cs" />
@@ -160,7 +162,7 @@
     <Compile Include="IO\FeatureTdfLoader.cs" />
     <Compile Include="IO\FeatureLoadingUtils.cs" />
     <Compile Include="IO\UnitLoadingUtils.cs" />
-    <Compile Include="IO\UnitNameFbiLoader.cs" />
+    <Compile Include="IO\UnitFbiCatalogLoader.cs" />
     <Compile Include="IO\Gaf\GafEntry.cs" />
     <Compile Include="IO\Gaf\GafEntryArrayAdapter.cs" />
     <Compile Include="IO\Gaf\GafFrame.cs" />
@@ -189,6 +191,7 @@
     <Compile Include="Models\Enums\LightDirection.cs" />
     <Compile Include="Models\Enums\UnitPlacementPlayerMenuChoice.cs" />
     <Compile Include="Models\FeatureClipboardRecord.cs" />
+    <Compile Include="Models\SchemaUnitClipboardRecord.cs" />
     <Compile Include="Models\FeatureInstance.cs" />
     <Compile Include="Models\FeatureInstanceEventArgs.cs" />
     <Compile Include="Models\FeatureViewViewModel.cs" />

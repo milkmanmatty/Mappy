@@ -10,13 +10,13 @@ namespace Mappy.Models
         public SectionFeatureLoadResult(
             IList<SectionInfo> sections,
             IList<FeatureInfo> features,
-            IList<string> unitNames,
+            IList<UnitCatalogLoadRecord> unitCatalog,
             List<HpiErrorInfo> errors,
             List<HpiInnerFileErrorInfo> fileErrors)
         {
             this.Sections = sections;
             this.Features = features;
-            this.UnitNames = unitNames;
+            this.UnitCatalog = unitCatalog;
             this.Errors = errors;
             this.FileErrors = fileErrors;
         }
@@ -25,7 +25,7 @@ namespace Mappy.Models
 
         public IList<FeatureInfo> Features { get; }
 
-        public IList<string> UnitNames { get; }
+        public IList<UnitCatalogLoadRecord> UnitCatalog { get; }
 
         public List<HpiErrorInfo> Errors { get; }
 
