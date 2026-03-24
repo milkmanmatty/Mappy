@@ -22,6 +22,7 @@ namespace Mappy.IO
             }
 
             var side = UnitSideCategory.Other;
+            string displayName = null;
             if (file.Size > 0 && file.Size < 10_000_000)
             {
                 try
@@ -33,6 +34,7 @@ namespace Mappy.IO
                     {
                         var root = TdfNode.LoadTdf(reader);
                         side = ClassifySideFromTdf(root);
+                        displayName = FindUnitNameEntryFromTdf(root);
                     }
                 }
                 catch (Exception)
@@ -40,7 +42,7 @@ namespace Mappy.IO
                 }
             }
 
-            this.Records.Add(new UnitCatalogLoadRecord(name, side));
+            this.Records.Add(new UnitCatalogLoadRecord(name, side, displayName));
         }
 
         protected override IEnumerable<HpiArchive.FileInfo> EnumerateFiles(HpiArchive r)
@@ -123,6 +125,30 @@ namespace Mappy.IO
             foreach (var child in node.Keys.Values)
             {
                 var t = FindSideRaw(child);
+                if (t != null)
+                {
+                    return t;
+                }
+            }
+
+            return null;
+        }
+
+        private static string FindUnitNameEntryFromTdf(TdfNode node)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+
+            if (node.Entries.TryGetValue("Name", out var n))
+            {
+                return n;
+            }
+
+            foreach (var child in node.Keys.Values)
+            {
+                var t = FindUnitNameEntryFromTdf(child);
                 if (t != null)
                 {
                     return t;

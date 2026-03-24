@@ -41,6 +41,8 @@ namespace Mappy.UI.Forms
 
         private MapAttributes missionPlacedUnitsAttributesSubscription;
 
+        private Timer missionPlacedUnitsTreeMoveDebounceTimer;
+
         private Button missionAddSchemaButton;
 
         private Button missionRemoveSchemaButton;
@@ -190,17 +192,20 @@ namespace Mappy.UI.Forms
             };
             this.missionUnitsList.SelectedIndexChanged += (_, __) =>
                 {
-                    if (this.missionUnitsList.SelectedItem is string s)
+                    if (this.missionUnitsList.SelectedItem is MissionUnitPickerItem item)
                     {
-                        this.missionUnitCatalog.SelectedUnitName = s;
+                        this.missionUnitCatalog.SelectedUnitName = item.InternalName;
                     }
                 };
             this.missionUnitsList.MouseDown += this.MissionUnitsList_MouseDown;
+            this.missionUnitsList.DrawItem += this.MissionUnitsList_DrawItem;
             tabAll.Controls.Add(this.missionUnitsList);
 
             this.missionArmUnitsTree = this.CreateMissionSideUnitTree();
             this.missionCoreUnitsTree = this.CreateMissionSideUnitTree();
             this.missionOtherUnitsTree = this.CreateMissionSideUnitTree();
+
+            this.ApplyMissionUnitPickerRowMetrics();
 
             this.missionUnitPickerTabs.TabPages.Add(tabAll);
             var tabArm = new TabPage("ARM");
@@ -235,6 +240,49 @@ namespace Mappy.UI.Forms
             root.Controls.Add(this.missionPlacedUnitsTree, 0, 6);
 
             this.missionTab.Controls.Add(root);
+        }
+
+        private void ApplyMissionUnitPickerRowMetrics()
+        {
+            if (this.missionUnitsList == null)
+            {
+                return;
+            }
+
+            var font = this.Font;
+            var rowHeight = Math.Max(font.Height + 4, 19);
+
+            this.missionUnitsList.Font = font;
+            this.missionUnitsList.DrawMode = DrawMode.OwnerDrawFixed;
+            this.missionUnitsList.ItemHeight = rowHeight;
+
+            foreach (var tv in new[] { this.missionArmUnitsTree, this.missionCoreUnitsTree, this.missionOtherUnitsTree })
+            {
+                if (tv != null)
+                {
+                    tv.Font = font;
+                    tv.ItemHeight = rowHeight;
+                }
+            }
+        }
+
+        private void MissionUnitsList_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0)
+            {
+                return;
+            }
+
+            var lb = (ListBox)sender;
+            e.DrawBackground();
+            var text = lb.Items[e.Index]?.ToString() ?? string.Empty;
+            var flags = TextFormatFlags.Left
+                        | TextFormatFlags.VerticalCenter
+                        | TextFormatFlags.SingleLine
+                        | TextFormatFlags.EndEllipsis
+                        | TextFormatFlags.GlyphOverhangPadding;
+            TextRenderer.DrawText(e.Graphics, text, lb.Font, e.Bounds, e.ForeColor, flags);
+            e.DrawFocusRectangle();
         }
 
         private void MissionToolbarSchemaCombo_SelectedIndexChanged(object sender, EventArgs e)
@@ -357,6 +405,7 @@ namespace Mappy.UI.Forms
 
         private void DetachMissionPlacedUnitsListener()
         {
+            this.CancelMissionPlacedUnitsTreeMoveDebounce();
             if (this.missionPlacedUnitsAttributesSubscription != null)
             {
                 this.missionPlacedUnitsAttributesSubscription.SchemaUnitsChanged -= this.MissionPlacedUnits_SchemaUnitsChanged;
@@ -373,11 +422,66 @@ namespace Mappy.UI.Forms
 
             if (this.InvokeRequired)
             {
-                this.BeginInvoke(new Action(this.RefreshMissionPlacedUnitsTree));
+                this.BeginInvoke(new Action<SchemaUnitsChangedEventArgs>(this.MissionPlacedUnits_SchemaUnitsChangedCore), e);
             }
             else
             {
+                this.MissionPlacedUnits_SchemaUnitsChangedCore(e);
+            }
+        }
+
+        private void MissionPlacedUnits_SchemaUnitsChangedCore(SchemaUnitsChangedEventArgs e)
+        {
+            if (this.IsDisposed)
+            {
+                return;
+            }
+
+            if (e.Action == SchemaUnitsChangedEventArgs.ActionKind.Move)
+            {
+                this.ScheduleMissionPlacedUnitsTreeMoveDebounce();
+            }
+            else
+            {
+                this.CancelMissionPlacedUnitsTreeMoveDebounce();
                 this.RefreshMissionPlacedUnitsTree();
+            }
+        }
+
+        private void EnsureMissionPlacedUnitsTreeMoveDebounceTimer()
+        {
+            if (this.missionPlacedUnitsTreeMoveDebounceTimer != null)
+            {
+                return;
+            }
+
+            this.missionPlacedUnitsTreeMoveDebounceTimer = new Timer { Interval = 120 };
+            this.missionPlacedUnitsTreeMoveDebounceTimer.Tick += this.MissionPlacedUnitsTreeMoveDebounceTimer_Tick;
+        }
+
+        private void MissionPlacedUnitsTreeMoveDebounceTimer_Tick(object sender, EventArgs e)
+        {
+            this.CancelMissionPlacedUnitsTreeMoveDebounce();
+            this.RefreshMissionPlacedUnitsTree();
+        }
+
+        private void ScheduleMissionPlacedUnitsTreeMoveDebounce()
+        {
+            if (this.missionPlacedUnitsTree == null || this.missionPlacedUnitsTree.IsDisposed)
+            {
+                return;
+            }
+
+            this.EnsureMissionPlacedUnitsTreeMoveDebounceTimer();
+            this.missionPlacedUnitsTreeMoveDebounceTimer.Stop();
+            this.missionPlacedUnitsTreeMoveDebounceTimer.Start();
+        }
+
+        private void CancelMissionPlacedUnitsTreeMoveDebounce()
+        {
+            if (this.missionPlacedUnitsTreeMoveDebounceTimer != null)
+            {
+                this.missionPlacedUnitsTreeMoveDebounceTimer.Stop();
             }
         }
 
@@ -387,6 +491,8 @@ namespace Mappy.UI.Forms
             {
                 return;
             }
+
+            this.CancelMissionPlacedUnitsTreeMoveDebounce();
 
             this.missionPlacedUnitsTree.BeginUpdate();
             try
@@ -405,9 +511,10 @@ namespace Mappy.UI.Forms
                                 };
                                 foreach (var u in sch.Units.OrderBy(x => x.Unitname, StringComparer.OrdinalIgnoreCase).ThenBy(x => x.Player).ThenBy(x => x.Id))
                                 {
+                                    var unitTitle = this.missionUnitCatalog.FormatUnitPickerLabel(u.Unitname);
                                     var label = string.IsNullOrEmpty(u.Ident)
-                                        ? $"{u.Unitname} [P{u.Player}]"
-                                        : $"{u.Unitname} [P{u.Player}] — {u.Ident}";
+                                        ? $"{unitTitle} [P{u.Player}]"
+                                        : $"{unitTitle} [P{u.Player}] — {u.Ident}";
                                     parent.Nodes.Add(
                                         new TreeNode(label)
                                         {
@@ -445,6 +552,26 @@ namespace Mappy.UI.Forms
             public int SchemaIndex { get; }
 
             public Guid? UnitId { get; }
+        }
+
+        private sealed class MissionUnitPickerItem
+        {
+            private readonly UnitCatalogService catalog;
+
+            public MissionUnitPickerItem(string internalName, UnitCatalogService catalog)
+            {
+                this.InternalName = internalName ?? string.Empty;
+                this.catalog = catalog;
+            }
+
+            public string InternalName { get; }
+
+            public override string ToString()
+            {
+                return this.catalog != null
+                    ? this.catalog.FormatUnitPickerLabel(this.InternalName)
+                    : this.InternalName;
+            }
         }
 
         private TreeView CreateMissionSideUnitTree()
@@ -494,14 +621,14 @@ namespace Mappy.UI.Forms
             }
 
             var i = this.missionUnitsList.IndexFromPoint(e.Location);
-            if (i < 0 || !(this.missionUnitsList.Items[i] is string name) || string.IsNullOrEmpty(name))
+            if (i < 0 || !(this.missionUnitsList.Items[i] is MissionUnitPickerItem item) || string.IsNullOrEmpty(item.InternalName))
             {
                 return;
             }
 
             this.missionUnitsList.SelectedIndex = i;
-            this.missionUnitCatalog.SelectedUnitName = name;
-            this.missionUnitsList.DoDragDrop("MAPPYUNIT|" + name, DragDropEffects.Copy);
+            this.missionUnitCatalog.SelectedUnitName = item.InternalName;
+            this.missionUnitsList.DoDragDrop("MAPPYUNIT|" + item.InternalName, DragDropEffects.Copy);
         }
 
         private void RefreshMissionUnitsList()
@@ -515,12 +642,12 @@ namespace Mappy.UI.Forms
             this.missionUnitsList.Items.Clear();
             foreach (var n in this.missionUnitCatalog.EnumerateSorted())
             {
-                this.missionUnitsList.Items.Add(n);
+                this.missionUnitsList.Items.Add(new MissionUnitPickerItem(n, this.missionUnitCatalog));
             }
 
             if (!string.IsNullOrEmpty(sel))
             {
-                var i = this.missionUnitsList.Items.Cast<string>().ToList().FindIndex(x => string.Equals(x, sel, StringComparison.OrdinalIgnoreCase));
+                var i = this.missionUnitsList.Items.Cast<MissionUnitPickerItem>().ToList().FindIndex(x => string.Equals(x.InternalName, sel, StringComparison.OrdinalIgnoreCase));
                 if (i >= 0)
                 {
                     this.missionUnitsList.SelectedIndex = i;
@@ -555,7 +682,8 @@ namespace Mappy.UI.Forms
                         continue;
                     }
 
-                    tv.Nodes.Add(new TreeNode(name) { Tag = name });
+                    var text = this.missionUnitCatalog.FormatUnitPickerLabel(name);
+                    tv.Nodes.Add(new TreeNode(text) { Tag = name });
                 }
 
                 if (!string.IsNullOrEmpty(preferredSelection)

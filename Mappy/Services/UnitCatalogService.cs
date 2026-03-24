@@ -12,6 +12,9 @@ namespace Mappy.Services
         private readonly Dictionary<string, UnitSideCategory> sideByName =
             new Dictionary<string, UnitSideCategory>(StringComparer.OrdinalIgnoreCase);
 
+        private readonly Dictionary<string, string> displayNameByUnit =
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
         public event EventHandler NamesChanged;
 
         public string SelectedUnitName { get; set; }
@@ -69,12 +72,37 @@ namespace Mappy.Services
                     this.sideByName[name] = r.Side;
                     changed = true;
                 }
+
+                if (!string.IsNullOrWhiteSpace(r.DisplayName))
+                {
+                    var dn = r.DisplayName.Trim();
+                    if (!this.displayNameByUnit.TryGetValue(name, out var prevDn) || string.IsNullOrWhiteSpace(prevDn))
+                    {
+                        this.displayNameByUnit[name] = dn;
+                        changed = true;
+                    }
+                }
             }
 
             if (changed)
             {
                 this.NamesChanged?.Invoke(this, EventArgs.Empty);
             }
+        }
+
+        public string FormatUnitPickerLabel(string unitInternalName)
+        {
+            if (string.IsNullOrEmpty(unitInternalName))
+            {
+                return string.Empty;
+            }
+
+            if (this.displayNameByUnit.TryGetValue(unitInternalName, out var dn) && !string.IsNullOrWhiteSpace(dn))
+            {
+                return unitInternalName + " (" + dn + ")";
+            }
+
+            return unitInternalName;
         }
 
         public UnitSideCategory GetUnitSide(string unitName)

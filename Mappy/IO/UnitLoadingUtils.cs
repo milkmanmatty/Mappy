@@ -31,11 +31,18 @@ namespace Mappy.IO
                 var name = r.Name.Trim();
                 if (!merged.TryGetValue(name, out var existing))
                 {
-                    merged[name] = new UnitCatalogLoadRecord(name, r.Side);
+                    merged[name] = r;
                 }
-                else if (existing.Side == UnitSideCategory.Other && r.Side != UnitSideCategory.Other)
+                else
                 {
-                    merged[name] = new UnitCatalogLoadRecord(name, r.Side);
+                    var side = existing.Side;
+                    if (existing.Side == UnitSideCategory.Other && r.Side != UnitSideCategory.Other)
+                    {
+                        side = r.Side;
+                    }
+
+                    var display = MergeDisplayName(existing.DisplayName, r.DisplayName);
+                    merged[name] = new UnitCatalogLoadRecord(name, side, display);
                 }
             }
 
@@ -49,6 +56,21 @@ namespace Mappy.IO
                 FileErrors = loader.FileErrors,
             };
             return true;
+        }
+
+        private static string MergeDisplayName(string a, string b)
+        {
+            if (!string.IsNullOrWhiteSpace(a))
+            {
+                return a.Trim();
+            }
+
+            if (!string.IsNullOrWhiteSpace(b))
+            {
+                return b.Trim();
+            }
+
+            return null;
         }
     }
 }
