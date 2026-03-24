@@ -65,8 +65,8 @@ namespace Mappy.UI.Forms
             model.CanFill.Subscribe(x => this.fillMenuItem.Enabled = x);
             model.CanFlip.Subscribe(x =>
             {
-                this.flipHorizontallyMenuItem.Enabled = x;
-                this.flipVerticallyMenuItem.Enabled = x;
+                this.flipMenuItem.Enabled = x;
+                this.exportSectionMenuItem.Enabled = x;
             });
             model.CanResizeMap.Subscribe(x => this.resizeMapMenuItem.Enabled = x);
 
@@ -333,14 +333,14 @@ namespace Mappy.UI.Forms
             this.model.ResizeMapMenuItemClick();
         }
 
-        private void FlipHorizontallyMenuItemClick(object sender, EventArgs e)
+        private void FlipMenuItemClick(object sender, EventArgs e)
         {
-            this.model.FlipHorizontallyMenuItemClick();
+            this.model.FlipMenuItemClick();
         }
 
-        private void FlipVerticallyMenuItemClick(object sender, EventArgs e)
+        private void ExportSectionMenuItemClick(object sender, EventArgs e)
         {
-            this.model.FlipVerticallyMenuItemClick();
+            this.model.ExportSectionMenuItemClick();
         }
 
         private void MainFormLoad(object sender, EventArgs e)

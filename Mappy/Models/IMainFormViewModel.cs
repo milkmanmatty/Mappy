@@ -154,15 +154,15 @@ namespace Mappy.Models
 
         void CutMenuItemClick();
 
+        void PasteMenuItemClick();
+
         void FillMenuItemClick();
 
         void ResizeMapMenuItemClick();
 
-        void FlipHorizontallyMenuItemClick();
+        void FlipMenuItemClick();
 
-        void FlipVerticallyMenuItemClick();
-
-        void PasteMenuItemClick();
+        void ExportSectionMenuItemClick();
 
         void ImportMinimapMenuItemClick();
 

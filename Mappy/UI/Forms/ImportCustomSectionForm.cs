@@ -33,7 +33,7 @@
             this.Close();
         }
 
-        private void Button1Click(object sender, System.EventArgs e)
+        private void GraphicBrowseClick(object sender, System.EventArgs e)
         {
             var dlg = new OpenFileDialog();
             dlg.Title = @"Open Graphic Image";
@@ -45,7 +45,7 @@
             }
         }
 
-        private void Button2Click(object sender, System.EventArgs e)
+        private void HeightmapBrowseClick(object sender, System.EventArgs e)
         {
             var dlg = new OpenFileDialog();
             dlg.Title = @"Open Heightmap Image";

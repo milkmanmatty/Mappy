@@ -30,1150 +30,1038 @@ namespace Mappy.UI.Forms
         /// </summary>
         private void InitializeComponent()
         {
-			System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-			System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-			System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
-			System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
-			System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
-			System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
-			System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
-			System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-			System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-			System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-			System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			this.topMenu = new System.Windows.Forms.MenuStrip();
-			this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.newMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.openMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.saveMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.saveAsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.closeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.importMinimapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.importHeightmapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.importCustomSectionMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.exportMinimapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.exportHeightmapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.exportMapImageMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.editMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.undoMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.redoMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.cutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.copyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.pasteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.fillMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.resizeMapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.flipHorizontallyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.flipVerticallyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mapAttributesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.generateMinimapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.generateMinimapHighQualityMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.preferencesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.viewMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toggleHeightmapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toggleHeightGridMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toggleMinimapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toggleVoidsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.gridMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.gridOffMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.grid16MenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.grid32MenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.grid64MenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.grid128MenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.grid256MenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.grid512MenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.grid1024MenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.gridColorMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toggleFeaturesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.playerMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.playerPromptMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.player1MenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.player2MenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.player3MenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.player4MenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.player5MenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.player6MenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.player7MenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.player8MenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.player9MenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.player10MenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.sidebarTabs = new System.Windows.Forms.TabControl();
-			this.otaMissionTab = new System.Windows.Forms.TabPage();
-			this.sectionsTab = new System.Windows.Forms.TabPage();
-			this.sectionsView = new Mappy.UI.Controls.SectionView();
-			this.featuresTab = new System.Windows.Forms.TabPage();
-			this.featureView = new Mappy.UI.Controls.SectionView();
-			this.startPositionsTab = new System.Windows.Forms.TabPage();
-			this.startPositionsView1 = new Mappy.UI.Controls.StartPositionsView();
-			this.heightTab = new System.Windows.Forms.TabPage();
-			this.setHeightRadioButton = new System.Windows.Forms.RadioButton();
-			this.incrementDecrementHeightRadioButton = new System.Windows.Forms.RadioButton();
-			this.selectedHeightNumericUpDown = new System.Windows.Forms.NumericUpDown();
-			this.selectedHeightLabel = new System.Windows.Forms.Label();
-			this.cursorSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
-			this.cursorSizeLabel = new System.Windows.Forms.Label();
-			this.intervalNumericUpDown = new System.Windows.Forms.NumericUpDown();
-			this.intervalLabel = new System.Windows.Forms.Label();
-			this.voidTab = new System.Windows.Forms.TabPage();
-			this.voidCursorSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
-			this.voidCursorSizeLabel = new System.Windows.Forms.Label();
-			this.attributesTab = new System.Windows.Forms.TabPage();
-			this.seaLevelValueLabel = new System.Windows.Forms.Label();
-			this.seaLevelLabel = new System.Windows.Forms.Label();
-			this.seaLevelTrackbar = new System.Windows.Forms.TrackBar();
-			this.sidebarSplitter = new System.Windows.Forms.Splitter();
-			this.statusStrip = new System.Windows.Forms.StatusStrip();
-			this.mousePositionLabel = new System.Windows.Forms.ToolStripStatusLabel();
-			this.heightLabel = new System.Windows.Forms.ToolStripStatusLabel();
-			this.voidLabel = new System.Windows.Forms.ToolStripStatusLabel();
-			this.hoveredFeatureLabel = new System.Windows.Forms.ToolStripStatusLabel();
-			this.mapViewPanel = new Mappy.UI.Controls.MapViewPanel();
-			toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-			toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-			toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-			toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
-			toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
-			toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
-			toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
-			toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-			toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-			toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-			toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-			this.topMenu.SuspendLayout();
-			this.sidebarTabs.SuspendLayout();
-			this.sectionsTab.SuspendLayout();
-			this.featuresTab.SuspendLayout();
-			this.startPositionsTab.SuspendLayout();
-			this.heightTab.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.selectedHeightNumericUpDown)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.cursorSizeNumericUpDown)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.intervalNumericUpDown)).BeginInit();
-			this.voidTab.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.voidCursorSizeNumericUpDown)).BeginInit();
-			this.attributesTab.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.seaLevelTrackbar)).BeginInit();
-			this.statusStrip.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// toolStripSeparator1
-			// 
-			toolStripSeparator1.Name = "toolStripSeparator1";
-			toolStripSeparator1.Size = new System.Drawing.Size(203, 6);
-			// 
-			// toolStripSeparator2
-			// 
-			toolStripSeparator2.Name = "toolStripSeparator2";
-			toolStripSeparator2.Size = new System.Drawing.Size(203, 6);
-			// 
-			// toolStripSeparator8
-			// 
-			toolStripSeparator8.Name = "toolStripSeparator8";
-			toolStripSeparator8.Size = new System.Drawing.Size(203, 6);
-			// 
-			// toolStripSeparator11
-			// 
-			toolStripSeparator11.Name = "toolStripSeparator11";
-			toolStripSeparator11.Size = new System.Drawing.Size(203, 6);
-			// 
-			// toolStripSeparator10
-			// 
-			toolStripSeparator10.Name = "toolStripSeparator10";
-			toolStripSeparator10.Size = new System.Drawing.Size(203, 6);
-			// 
-			// toolStripSeparator7
-			// 
-			toolStripSeparator7.Name = "toolStripSeparator7";
-			toolStripSeparator7.Size = new System.Drawing.Size(247, 6);
-			// 
-			// toolStripSeparator9
-			// 
-			toolStripSeparator9.Name = "toolStripSeparator9";
-			toolStripSeparator9.Size = new System.Drawing.Size(247, 6);
-			// 
-			// toolStripSeparator3
-			// 
-			toolStripSeparator3.Name = "toolStripSeparator3";
-			toolStripSeparator3.Size = new System.Drawing.Size(247, 6);
-			// 
-			// toolStripSeparator4
-			// 
-			toolStripSeparator4.Name = "toolStripSeparator4";
-			toolStripSeparator4.Size = new System.Drawing.Size(247, 6);
-			// 
-			// toolStripSeparator5
-			// 
-			toolStripSeparator5.Name = "toolStripSeparator5";
-			toolStripSeparator5.Size = new System.Drawing.Size(152, 6);
-			// 
-			// toolStripSeparator6
-			// 
-			toolStripSeparator6.Name = "toolStripSeparator6";
-			toolStripSeparator6.Size = new System.Drawing.Size(152, 6);
-			// 
-			// topMenu
-			// 
-			this.topMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
-			this.topMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileMenuItem,
-            this.editMenuItem,
-            this.viewMenuItem,
-            this.playerMenuItem,
-            this.helpMenuItem});
-			this.topMenu.Location = new System.Drawing.Point(0, 0);
-			this.topMenu.Name = "topMenu";
-			this.topMenu.Padding = new System.Windows.Forms.Padding(4, 1, 0, 1);
-			this.topMenu.Size = new System.Drawing.Size(784, 24);
-			this.topMenu.TabIndex = 1;
-			this.topMenu.Text = "menuStrip1";
-			// 
-			// fileMenuItem
-			// 
-			this.fileMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newMenuItem,
-            this.openMenuItem,
-            toolStripSeparator1,
-            this.saveMenuItem,
-            this.saveAsMenuItem,
-            toolStripSeparator2,
-            this.closeMenuItem,
-            toolStripSeparator8,
-            this.importMinimapMenuItem,
-            this.importHeightmapMenuItem,
-            this.importCustomSectionMenuItem,
-            toolStripSeparator11,
-            this.exportMinimapMenuItem,
-            this.exportHeightmapMenuItem,
-            this.exportMapImageMenuItem,
-            toolStripSeparator10,
-            this.exitMenuItem});
-			this.fileMenuItem.Name = "fileMenuItem";
-			this.fileMenuItem.Size = new System.Drawing.Size(37, 22);
-			this.fileMenuItem.Text = "&File";
-			// 
-			// newMenuItem
-			// 
-			this.newMenuItem.Name = "newMenuItem";
-			this.newMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-			this.newMenuItem.Size = new System.Drawing.Size(206, 22);
-			this.newMenuItem.Text = "&New...";
-			this.newMenuItem.Click += new System.EventHandler(this.NewMenuItemClick);
-			// 
-			// openMenuItem
-			// 
-			this.openMenuItem.Name = "openMenuItem";
-			this.openMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.openMenuItem.Size = new System.Drawing.Size(206, 22);
-			this.openMenuItem.Text = "&Open...";
-			this.openMenuItem.Click += new System.EventHandler(this.OpenMenuItemClick);
-			// 
-			// saveMenuItem
-			// 
-			this.saveMenuItem.Enabled = false;
-			this.saveMenuItem.Name = "saveMenuItem";
-			this.saveMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-			this.saveMenuItem.Size = new System.Drawing.Size(206, 22);
-			this.saveMenuItem.Text = "&Save";
-			this.saveMenuItem.Click += new System.EventHandler(this.SaveMenuItemClick);
-			// 
-			// saveAsMenuItem
-			// 
-			this.saveAsMenuItem.Enabled = false;
-			this.saveAsMenuItem.Name = "saveAsMenuItem";
-			this.saveAsMenuItem.Size = new System.Drawing.Size(206, 22);
-			this.saveAsMenuItem.Text = "Save &As...";
-			this.saveAsMenuItem.Click += new System.EventHandler(this.SaveAsMenuItemClick);
-			// 
-			// closeMenuItem
-			// 
-			this.closeMenuItem.Enabled = false;
-			this.closeMenuItem.Name = "closeMenuItem";
-			this.closeMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
-			this.closeMenuItem.Size = new System.Drawing.Size(206, 22);
-			this.closeMenuItem.Text = "&Close";
-			this.closeMenuItem.Click += new System.EventHandler(this.CloseMenuItemClick);
-			// 
-			// importMinimapMenuItem
-			// 
-			this.importMinimapMenuItem.Enabled = false;
-			this.importMinimapMenuItem.Name = "importMinimapMenuItem";
-			this.importMinimapMenuItem.Size = new System.Drawing.Size(206, 22);
-			this.importMinimapMenuItem.Text = "Import Minimap...";
-			this.importMinimapMenuItem.Click += new System.EventHandler(this.ImportMinimapMenuItemClick);
-			// 
-			// importHeightmapMenuItem
-			// 
-			this.importHeightmapMenuItem.Enabled = false;
-			this.importHeightmapMenuItem.Name = "importHeightmapMenuItem";
-			this.importHeightmapMenuItem.Size = new System.Drawing.Size(206, 22);
-			this.importHeightmapMenuItem.Text = "Import Heightmap...";
-			this.importHeightmapMenuItem.Click += new System.EventHandler(this.ImportHeightmapMenuItemClick);
-			// 
-			// importCustomSectionMenuItem
-			// 
-			this.importCustomSectionMenuItem.Enabled = false;
-			this.importCustomSectionMenuItem.Name = "importCustomSectionMenuItem";
-			this.importCustomSectionMenuItem.Size = new System.Drawing.Size(206, 22);
-			this.importCustomSectionMenuItem.Text = "Import Custom Section...";
-			this.importCustomSectionMenuItem.Click += new System.EventHandler(this.ImportCustomSectionMenuItemClick);
-			// 
-			// exportMinimapMenuItem
-			// 
-			this.exportMinimapMenuItem.Enabled = false;
-			this.exportMinimapMenuItem.Name = "exportMinimapMenuItem";
-			this.exportMinimapMenuItem.Size = new System.Drawing.Size(206, 22);
-			this.exportMinimapMenuItem.Text = "Export Minimap...";
-			this.exportMinimapMenuItem.Click += new System.EventHandler(this.ExportMinimapMenuItemClick);
-			// 
-			// exportHeightmapMenuItem
-			// 
-			this.exportHeightmapMenuItem.Enabled = false;
-			this.exportHeightmapMenuItem.Name = "exportHeightmapMenuItem";
-			this.exportHeightmapMenuItem.Size = new System.Drawing.Size(206, 22);
-			this.exportHeightmapMenuItem.Text = "Export Heightmap...";
-			this.exportHeightmapMenuItem.Click += new System.EventHandler(this.ExportHeightmapMenuItemClick);
-			// 
-			// exportMapImageMenuItem
-			// 
-			this.exportMapImageMenuItem.Enabled = false;
-			this.exportMapImageMenuItem.Name = "exportMapImageMenuItem";
-			this.exportMapImageMenuItem.Size = new System.Drawing.Size(206, 22);
-			this.exportMapImageMenuItem.Text = "Export Map Image...";
-			this.exportMapImageMenuItem.Click += new System.EventHandler(this.ExportMapImageMenuItemClick);
-			// 
-			// exitMenuItem
-			// 
-			this.exitMenuItem.Name = "exitMenuItem";
-			this.exitMenuItem.Size = new System.Drawing.Size(206, 22);
-			this.exitMenuItem.Text = "E&xit";
-			this.exitMenuItem.Click += new System.EventHandler(this.ExitMenuItemClick);
-			// 
-			// editMenuItem
-			// 
-			this.editMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.undoMenuItem,
-            this.redoMenuItem,
-            toolStripSeparator7,
-            this.cutMenuItem,
-            this.copyMenuItem,
-            this.pasteMenuItem,
-            this.fillMenuItem,
-            this.resizeMapMenuItem,
-            this.flipHorizontallyMenuItem,
-            this.flipVerticallyMenuItem,
-            toolStripSeparator9,
-            this.mapAttributesMenuItem,
-            toolStripSeparator3,
-            this.generateMinimapMenuItem,
-            this.generateMinimapHighQualityMenuItem,
-            toolStripSeparator4,
-            this.preferencesMenuItem});
-			this.editMenuItem.Name = "editMenuItem";
-			this.editMenuItem.Size = new System.Drawing.Size(39, 22);
-			this.editMenuItem.Text = "&Edit";
-			// 
-			// undoMenuItem
-			// 
-			this.undoMenuItem.Enabled = false;
-			this.undoMenuItem.Name = "undoMenuItem";
-			this.undoMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-			this.undoMenuItem.Size = new System.Drawing.Size(250, 22);
-			this.undoMenuItem.Text = "&Undo";
-			this.undoMenuItem.Click += new System.EventHandler(this.UndoMenuItemClick);
-			// 
-			// redoMenuItem
-			// 
-			this.redoMenuItem.Enabled = false;
-			this.redoMenuItem.Name = "redoMenuItem";
-			this.redoMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-			this.redoMenuItem.Size = new System.Drawing.Size(250, 22);
-			this.redoMenuItem.Text = "&Redo";
-			this.redoMenuItem.Click += new System.EventHandler(this.RedoMenuItemClick);
-			// 
-			// cutMenuItem
-			// 
-			this.cutMenuItem.Enabled = false;
-			this.cutMenuItem.Name = "cutMenuItem";
-			this.cutMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-			this.cutMenuItem.Size = new System.Drawing.Size(250, 22);
-			this.cutMenuItem.Text = "Cut";
-			this.cutMenuItem.Click += new System.EventHandler(this.CutMenuItemClick);
-			// 
-			// copyMenuItem
-			// 
-			this.copyMenuItem.Enabled = false;
-			this.copyMenuItem.Name = "copyMenuItem";
-			this.copyMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.copyMenuItem.Size = new System.Drawing.Size(250, 22);
-			this.copyMenuItem.Text = "Copy";
-			this.copyMenuItem.Click += new System.EventHandler(this.CopyMenuItemClick);
-			// 
-			// pasteMenuItem
-			// 
-			this.pasteMenuItem.Enabled = false;
-			this.pasteMenuItem.Name = "pasteMenuItem";
-			this.pasteMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-			this.pasteMenuItem.Size = new System.Drawing.Size(250, 22);
-			this.pasteMenuItem.Text = "Paste";
-			this.pasteMenuItem.Click += new System.EventHandler(this.PasteMenuItemClick);
-			// 
-			// fillMenuItem
-			// 
-			this.fillMenuItem.Enabled = false;
-			this.fillMenuItem.Name = "fillMenuItem";
-			this.fillMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-			this.fillMenuItem.Size = new System.Drawing.Size(250, 22);
-			this.fillMenuItem.Text = "Fill Map";
-			this.fillMenuItem.Click += new System.EventHandler(this.FillMenuItemClick);
-			// 
-			// resizeMapMenuItem
-			// 
-			this.resizeMapMenuItem.Enabled = false;
-			this.resizeMapMenuItem.Name = "resizeMapMenuItem";
-			this.resizeMapMenuItem.Size = new System.Drawing.Size(250, 22);
-			this.resizeMapMenuItem.Text = "Resize Map...";
-			this.resizeMapMenuItem.Click += new System.EventHandler(this.ResizeMapMenuItemClick);
-			// 
-			// flipHorizontallyMenuItem
-			// 
-			this.flipHorizontallyMenuItem.Enabled = false;
-			this.flipHorizontallyMenuItem.Name = "flipHorizontallyMenuItem";
-			this.flipHorizontallyMenuItem.Size = new System.Drawing.Size(250, 22);
-			this.flipHorizontallyMenuItem.Text = "Flip Horizontally";
-			this.flipHorizontallyMenuItem.Click += new System.EventHandler(this.FlipHorizontallyMenuItemClick);
-			// 
-			// flipVerticallyMenuItem
-			// 
-			this.flipVerticallyMenuItem.Enabled = false;
-			this.flipVerticallyMenuItem.Name = "flipVerticallyMenuItem";
-			this.flipVerticallyMenuItem.Size = new System.Drawing.Size(250, 22);
-			this.flipVerticallyMenuItem.Text = "Flip Vertically";
-			this.flipVerticallyMenuItem.Click += new System.EventHandler(this.FlipVerticallyMenuItemClick);
-			// 
-			// mapAttributesMenuItem
-			// 
-			this.mapAttributesMenuItem.Enabled = false;
-			this.mapAttributesMenuItem.Name = "mapAttributesMenuItem";
-			this.mapAttributesMenuItem.Size = new System.Drawing.Size(250, 22);
-			this.mapAttributesMenuItem.Text = "Map Attributes...";
-			this.mapAttributesMenuItem.Click += new System.EventHandler(this.MapAttributesMenuItemClick);
-			// 
-			// generateMinimapMenuItem
-			// 
-			this.generateMinimapMenuItem.Enabled = false;
-			this.generateMinimapMenuItem.Name = "generateMinimapMenuItem";
-			this.generateMinimapMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-			this.generateMinimapMenuItem.Size = new System.Drawing.Size(250, 22);
-			this.generateMinimapMenuItem.Text = "&Generate Minimap";
-			this.generateMinimapMenuItem.Click += new System.EventHandler(this.GenerateMinimapMenuItemClick);
-			// 
-			// generateMinimapHighQualityMenuItem
-			// 
-			this.generateMinimapHighQualityMenuItem.Enabled = false;
-			this.generateMinimapHighQualityMenuItem.Name = "generateMinimapHighQualityMenuItem";
-			this.generateMinimapHighQualityMenuItem.Size = new System.Drawing.Size(250, 22);
-			this.generateMinimapHighQualityMenuItem.Text = "Generate Minimap (High Quality)";
-			this.generateMinimapHighQualityMenuItem.Click += new System.EventHandler(this.GenerateMinimapHighQualityMenuItemClick);
-			// 
-			// preferencesMenuItem
-			// 
-			this.preferencesMenuItem.Name = "preferencesMenuItem";
-			this.preferencesMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-			this.preferencesMenuItem.Size = new System.Drawing.Size(250, 22);
-			this.preferencesMenuItem.Text = "&Preferences...";
-			this.preferencesMenuItem.Click += new System.EventHandler(this.PreferencesMenuItemClick);
-			// 
-			// viewMenuItem
-			// 
-			this.viewMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toggleHeightmapMenuItem,
-            this.toggleHeightGridMenuItem,
-            this.toggleMinimapMenuItem,
-            this.toggleVoidsMenuItem,
-            this.gridMenuItem,
-            this.toggleFeaturesMenuItem});
-			this.viewMenuItem.Name = "viewMenuItem";
-			this.viewMenuItem.Size = new System.Drawing.Size(44, 22);
-			this.viewMenuItem.Text = "&View";
-			// 
-			// toggleHeightmapMenuItem
-			// 
-			this.toggleHeightmapMenuItem.Name = "toggleHeightmapMenuItem";
-			this.toggleHeightmapMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
-			this.toggleHeightmapMenuItem.Size = new System.Drawing.Size(229, 22);
-			this.toggleHeightmapMenuItem.Text = "&Heightmap Contours";
-			this.toggleHeightmapMenuItem.Click += new System.EventHandler(this.ToggleHeightmapMenuItemClick);
-			// 
-			// toggleHeightGridMenuItem
-			// 
-			this.toggleHeightGridMenuItem.Name = "toggleHeightGridMenuItem";
-			this.toggleHeightGridMenuItem.Size = new System.Drawing.Size(229, 22);
-			this.toggleHeightGridMenuItem.Text = "Heightmap &Grid";
-			this.toggleHeightGridMenuItem.Click += new System.EventHandler(this.ToggleHeightGridMenuItemClick);
-			// 
-			// toggleMinimapMenuItem
-			// 
-			this.toggleMinimapMenuItem.Name = "toggleMinimapMenuItem";
-			this.toggleMinimapMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
-			this.toggleMinimapMenuItem.Size = new System.Drawing.Size(229, 22);
-			this.toggleMinimapMenuItem.Text = "&Minimap";
-			this.toggleMinimapMenuItem.Click += new System.EventHandler(this.ToggleMinimapMenuItemClick);
-			// 
-			// toggleVoidsMenuItem
-			// 
-			this.toggleVoidsMenuItem.Name = "toggleVoidsMenuItem";
-			this.toggleVoidsMenuItem.Size = new System.Drawing.Size(229, 22);
-			this.toggleVoidsMenuItem.Text = "Voids";
-			this.toggleVoidsMenuItem.Click += new System.EventHandler(this.ToggleVoidsMenuItemClick);
-			// 
-			// gridMenuItem
-			// 
-			this.gridMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.gridOffMenuItem,
-            toolStripSeparator5,
-            this.grid16MenuItem,
-            this.grid32MenuItem,
-            this.grid64MenuItem,
-            this.grid128MenuItem,
-            this.grid256MenuItem,
-            this.grid512MenuItem,
-            this.grid1024MenuItem,
-            toolStripSeparator6,
-            this.gridColorMenuItem});
-			this.gridMenuItem.Name = "gridMenuItem";
-			this.gridMenuItem.Size = new System.Drawing.Size(229, 22);
-			this.gridMenuItem.Text = "Grid";
-			// 
-			// gridOffMenuItem
-			// 
-			this.gridOffMenuItem.Checked = true;
-			this.gridOffMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.gridOffMenuItem.Name = "gridOffMenuItem";
-			this.gridOffMenuItem.Size = new System.Drawing.Size(155, 22);
-			this.gridOffMenuItem.Tag = "0";
-			this.gridOffMenuItem.Text = "Off";
-			this.gridOffMenuItem.Click += new System.EventHandler(this.GridOffMenuItemClick);
-			// 
-			// grid16MenuItem
-			// 
-			this.grid16MenuItem.Name = "grid16MenuItem";
-			this.grid16MenuItem.Size = new System.Drawing.Size(155, 22);
-			this.grid16MenuItem.Tag = "16";
-			this.grid16MenuItem.Text = "16x16";
-			this.grid16MenuItem.Click += new System.EventHandler(this.GridMenuItemClick);
-			// 
-			// grid32MenuItem
-			// 
-			this.grid32MenuItem.Name = "grid32MenuItem";
-			this.grid32MenuItem.Size = new System.Drawing.Size(155, 22);
-			this.grid32MenuItem.Tag = "32";
-			this.grid32MenuItem.Text = "32x32";
-			this.grid32MenuItem.Click += new System.EventHandler(this.GridMenuItemClick);
-			// 
-			// grid64MenuItem
-			// 
-			this.grid64MenuItem.Name = "grid64MenuItem";
-			this.grid64MenuItem.Size = new System.Drawing.Size(155, 22);
-			this.grid64MenuItem.Tag = "64";
-			this.grid64MenuItem.Text = "64x64";
-			this.grid64MenuItem.Click += new System.EventHandler(this.GridMenuItemClick);
-			// 
-			// grid128MenuItem
-			// 
-			this.grid128MenuItem.Name = "grid128MenuItem";
-			this.grid128MenuItem.Size = new System.Drawing.Size(155, 22);
-			this.grid128MenuItem.Tag = "128";
-			this.grid128MenuItem.Text = "128x128";
-			this.grid128MenuItem.Click += new System.EventHandler(this.GridMenuItemClick);
-			// 
-			// grid256MenuItem
-			// 
-			this.grid256MenuItem.Name = "grid256MenuItem";
-			this.grid256MenuItem.Size = new System.Drawing.Size(155, 22);
-			this.grid256MenuItem.Tag = "256";
-			this.grid256MenuItem.Text = "256x256";
-			this.grid256MenuItem.Click += new System.EventHandler(this.GridMenuItemClick);
-			// 
-			// grid512MenuItem
-			// 
-			this.grid512MenuItem.Name = "grid512MenuItem";
-			this.grid512MenuItem.Size = new System.Drawing.Size(155, 22);
-			this.grid512MenuItem.Tag = "512";
-			this.grid512MenuItem.Text = "512x512";
-			this.grid512MenuItem.Click += new System.EventHandler(this.GridMenuItemClick);
-			// 
-			// grid1024MenuItem
-			// 
-			this.grid1024MenuItem.Name = "grid1024MenuItem";
-			this.grid1024MenuItem.Size = new System.Drawing.Size(155, 22);
-			this.grid1024MenuItem.Tag = "1024";
-			this.grid1024MenuItem.Text = "1024x1024";
-			this.grid1024MenuItem.Click += new System.EventHandler(this.GridMenuItemClick);
-			// 
-			// gridColorMenuItem
-			// 
-			this.gridColorMenuItem.Name = "gridColorMenuItem";
-			this.gridColorMenuItem.Size = new System.Drawing.Size(155, 22);
-			this.gridColorMenuItem.Text = "Choose Color...";
-			this.gridColorMenuItem.Click += new System.EventHandler(this.GridColorMenuItemClick);
-			// 
-			// toggleFeaturesMenuItem
-			// 
-			this.toggleFeaturesMenuItem.Checked = true;
-			this.toggleFeaturesMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.toggleFeaturesMenuItem.Name = "toggleFeaturesMenuItem";
-			this.toggleFeaturesMenuItem.Size = new System.Drawing.Size(229, 22);
-			this.toggleFeaturesMenuItem.Text = "Features";
-			this.toggleFeaturesMenuItem.Click += new System.EventHandler(this.ToggleFeaturesMenuItemClick);
-			// 
-			// playerMenuItem
-			// 
-			this.playerMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.playerPromptMenuItem,
-            this.player1MenuItem,
-            this.player2MenuItem,
-            this.player3MenuItem,
-            this.player4MenuItem,
-            this.player5MenuItem,
-            this.player6MenuItem,
-            this.player7MenuItem,
-            this.player8MenuItem,
-            this.player9MenuItem,
-            this.player10MenuItem});
-			this.playerMenuItem.Name = "playerMenuItem";
-			this.playerMenuItem.Size = new System.Drawing.Size(48, 22);
-			this.playerMenuItem.Text = "&Player";
-			// 
-			// playerPromptMenuItem
-			// 
-			this.playerPromptMenuItem.Checked = true;
-			this.playerPromptMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.playerPromptMenuItem.Name = "playerPromptMenuItem";
-			this.playerPromptMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.playerPromptMenuItem.Tag = 0;
-			this.playerPromptMenuItem.Text = "Prompt";
-			this.playerPromptMenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
-			// 
-			// player1MenuItem
-			// 
-			this.player1MenuItem.Name = "player1MenuItem";
-			this.player1MenuItem.Size = new System.Drawing.Size(180, 22);
-			this.player1MenuItem.Tag = 1;
-			this.player1MenuItem.Text = "Player 1";
-			this.player1MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
-			// 
-			// player2MenuItem
-			// 
-			this.player2MenuItem.Name = "player2MenuItem";
-			this.player2MenuItem.Size = new System.Drawing.Size(180, 22);
-			this.player2MenuItem.Tag = 2;
-			this.player2MenuItem.Text = "Player 2";
-			this.player2MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
-			// 
-			// player3MenuItem
-			// 
-			this.player3MenuItem.Name = "player3MenuItem";
-			this.player3MenuItem.Size = new System.Drawing.Size(180, 22);
-			this.player3MenuItem.Tag = 3;
-			this.player3MenuItem.Text = "Player 3";
-			this.player3MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
-			// 
-			// player4MenuItem
-			// 
-			this.player4MenuItem.Name = "player4MenuItem";
-			this.player4MenuItem.Size = new System.Drawing.Size(180, 22);
-			this.player4MenuItem.Tag = 4;
-			this.player4MenuItem.Text = "Player 4";
-			this.player4MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
-			// 
-			// player5MenuItem
-			// 
-			this.player5MenuItem.Name = "player5MenuItem";
-			this.player5MenuItem.Size = new System.Drawing.Size(180, 22);
-			this.player5MenuItem.Tag = 5;
-			this.player5MenuItem.Text = "Player 5";
-			this.player5MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
-			// 
-			// player6MenuItem
-			// 
-			this.player6MenuItem.Name = "player6MenuItem";
-			this.player6MenuItem.Size = new System.Drawing.Size(180, 22);
-			this.player6MenuItem.Tag = 6;
-			this.player6MenuItem.Text = "Player 6";
-			this.player6MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
-			// 
-			// player7MenuItem
-			// 
-			this.player7MenuItem.Name = "player7MenuItem";
-			this.player7MenuItem.Size = new System.Drawing.Size(180, 22);
-			this.player7MenuItem.Tag = 7;
-			this.player7MenuItem.Text = "Player 7";
-			this.player7MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
-			// 
-			// player8MenuItem
-			// 
-			this.player8MenuItem.Name = "player8MenuItem";
-			this.player8MenuItem.Size = new System.Drawing.Size(180, 22);
-			this.player8MenuItem.Tag = 8;
-			this.player8MenuItem.Text = "Player 8";
-			this.player8MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
-			// 
-			// player9MenuItem
-			// 
-			this.player9MenuItem.Name = "player9MenuItem";
-			this.player9MenuItem.Size = new System.Drawing.Size(180, 22);
-			this.player9MenuItem.Tag = 9;
-			this.player9MenuItem.Text = "Player 9";
-			this.player9MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
-			// 
-			// player10MenuItem
-			// 
-			this.player10MenuItem.Name = "player10MenuItem";
-			this.player10MenuItem.Size = new System.Drawing.Size(180, 22);
-			this.player10MenuItem.Tag = 10;
-			this.player10MenuItem.Text = "Player 10";
-			this.player10MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
-			// 
-			// helpMenuItem
-			// 
-			this.helpMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.infoToolStripMenuItem,
-            this.aboutMenuItem});
-			this.helpMenuItem.Name = "helpMenuItem";
-			this.helpMenuItem.Size = new System.Drawing.Size(44, 22);
-			this.helpMenuItem.Text = "&Help";
-			// 
-			// infoToolStripMenuItem
-			// 
-			this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-			this.infoToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
-			this.infoToolStripMenuItem.Text = "Hotkeys";
-			this.infoToolStripMenuItem.Click += new System.EventHandler(this.InfoMenuItemClick);
-			// 
-			// aboutMenuItem
-			// 
-			this.aboutMenuItem.Name = "aboutMenuItem";
-			this.aboutMenuItem.Size = new System.Drawing.Size(117, 22);
-			this.aboutMenuItem.Text = "&About...";
-			this.aboutMenuItem.Click += new System.EventHandler(this.AboutMenuItemClick);
-			// 
-			// sidebarTabs
-			// 
-			this.sidebarTabs.Controls.Add(this.sectionsTab);
-			this.sidebarTabs.Controls.Add(this.featuresTab);
-			this.sidebarTabs.Controls.Add(this.startPositionsTab);
-			this.sidebarTabs.Controls.Add(this.heightTab);
-			this.sidebarTabs.Controls.Add(this.voidTab);
-			this.sidebarTabs.Controls.Add(this.attributesTab);
-			this.sidebarTabs.Controls.Add(this.otaMissionTab);
-			this.sidebarTabs.Dock = System.Windows.Forms.DockStyle.Left;
-			this.sidebarTabs.Location = new System.Drawing.Point(0, 24);
-			this.sidebarTabs.Multiline = true;
-			this.sidebarTabs.Name = "sidebarTabs";
-			this.sidebarTabs.SelectedIndex = 0;
-			this.sidebarTabs.Size = new System.Drawing.Size(215, 538);
-			this.sidebarTabs.TabIndex = 4;
-			this.sidebarTabs.SelectedIndexChanged += new System.EventHandler(this.GUITabs_SelectedIndexChanged);
-			// 
-			// otaMissionTab
-			// 
-			this.otaMissionTab.Location = new System.Drawing.Point(4, 40);
-			this.otaMissionTab.Name = "otaMissionTab";
-			this.otaMissionTab.Padding = new System.Windows.Forms.Padding(6);
-			this.otaMissionTab.Size = new System.Drawing.Size(207, 494);
-			this.otaMissionTab.TabIndex = 0;
-			this.otaMissionTab.Text = "Units";
-			this.otaMissionTab.UseVisualStyleBackColor = true;
-			// 
-			// sectionsTab
-			// 
-			this.sectionsTab.Controls.Add(this.sectionsView);
-			this.sectionsTab.Location = new System.Drawing.Point(4, 40);
-			this.sectionsTab.Name = "sectionsTab";
-			this.sectionsTab.Padding = new System.Windows.Forms.Padding(3);
-			this.sectionsTab.Size = new System.Drawing.Size(207, 494);
-			this.sectionsTab.TabIndex = 0;
-			this.sectionsTab.Text = "Sections";
-			this.sectionsTab.UseVisualStyleBackColor = true;
-			// 
-			// sectionsView
-			// 
-			this.sectionsView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.sectionsView.ImageSize = new System.Drawing.Size(128, 128);
-			this.sectionsView.Location = new System.Drawing.Point(3, 3);
-			this.sectionsView.Margin = new System.Windows.Forms.Padding(4);
-			this.sectionsView.Name = "sectionsView";
-			this.sectionsView.Size = new System.Drawing.Size(201, 488);
-			this.sectionsView.TabIndex = 3;
-			// 
-			// featuresTab
-			// 
-			this.featuresTab.Controls.Add(this.featureView);
-			this.featuresTab.Location = new System.Drawing.Point(4, 22);
-			this.featuresTab.Name = "featuresTab";
-			this.featuresTab.Padding = new System.Windows.Forms.Padding(3);
-			this.featuresTab.Size = new System.Drawing.Size(207, 512);
-			this.featuresTab.TabIndex = 1;
-			this.featuresTab.Text = "Features";
-			this.featuresTab.UseVisualStyleBackColor = true;
-			// 
-			// featureView
-			// 
-			this.featureView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.featureView.ImageSize = new System.Drawing.Size(64, 64);
-			this.featureView.Location = new System.Drawing.Point(3, 3);
-			this.featureView.Margin = new System.Windows.Forms.Padding(4);
-			this.featureView.Name = "featureView";
-			this.featureView.Size = new System.Drawing.Size(201, 506);
-			this.featureView.TabIndex = 0;
-			// 
-			// startPositionsTab
-			// 
-			this.startPositionsTab.Controls.Add(this.startPositionsView1);
-			this.startPositionsTab.Location = new System.Drawing.Point(4, 22);
-			this.startPositionsTab.Name = "startPositionsTab";
-			this.startPositionsTab.Padding = new System.Windows.Forms.Padding(3);
-			this.startPositionsTab.Size = new System.Drawing.Size(207, 512);
-			this.startPositionsTab.TabIndex = 2;
-			this.startPositionsTab.Text = "Starts";
-			this.startPositionsTab.UseVisualStyleBackColor = true;
-			// 
-			// startPositionsView1
-			// 
-			this.startPositionsView1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.startPositionsView1.Location = new System.Drawing.Point(3, 3);
-			this.startPositionsView1.Margin = new System.Windows.Forms.Padding(4);
-			this.startPositionsView1.Name = "startPositionsView1";
-			this.startPositionsView1.Size = new System.Drawing.Size(201, 506);
-			this.startPositionsView1.TabIndex = 0;
-			// 
-			// heightTab
-			// 
-			this.heightTab.Controls.Add(this.setHeightRadioButton);
-			this.heightTab.Controls.Add(this.incrementDecrementHeightRadioButton);
-			this.heightTab.Controls.Add(this.selectedHeightNumericUpDown);
-			this.heightTab.Controls.Add(this.selectedHeightLabel);
-			this.heightTab.Controls.Add(this.cursorSizeNumericUpDown);
-			this.heightTab.Controls.Add(this.cursorSizeLabel);
-			this.heightTab.Controls.Add(this.intervalNumericUpDown);
-			this.heightTab.Controls.Add(this.intervalLabel);
-			this.heightTab.Location = new System.Drawing.Point(4, 22);
-			this.heightTab.Margin = new System.Windows.Forms.Padding(2);
-			this.heightTab.Name = "heightTab";
-			this.heightTab.Padding = new System.Windows.Forms.Padding(2);
-			this.heightTab.Size = new System.Drawing.Size(207, 512);
-			this.heightTab.TabIndex = 3;
-			this.heightTab.Text = "Height";
-			this.heightTab.UseVisualStyleBackColor = true;
-			// 
-			// setHeightRadioButton
-			// 
-			this.setHeightRadioButton.AutoSize = true;
-			this.setHeightRadioButton.Location = new System.Drawing.Point(6, 27);
-			this.setHeightRadioButton.Margin = new System.Windows.Forms.Padding(2);
-			this.setHeightRadioButton.Name = "setHeightRadioButton";
-			this.setHeightRadioButton.Size = new System.Drawing.Size(73, 17);
-			this.setHeightRadioButton.TabIndex = 7;
-			this.setHeightRadioButton.TabStop = true;
-			this.setHeightRadioButton.Text = "Set height";
-			this.setHeightRadioButton.UseVisualStyleBackColor = true;
-			this.setHeightRadioButton.CheckedChanged += new System.EventHandler(this.SetHeightRadioButtonCheckedChanged);
-			// 
-			// incrementDecrementHeightRadioButton
-			// 
-			this.incrementDecrementHeightRadioButton.AutoSize = true;
-			this.incrementDecrementHeightRadioButton.Checked = true;
-			this.incrementDecrementHeightRadioButton.Location = new System.Drawing.Point(6, 6);
-			this.incrementDecrementHeightRadioButton.Margin = new System.Windows.Forms.Padding(2);
-			this.incrementDecrementHeightRadioButton.Name = "incrementDecrementHeightRadioButton";
-			this.incrementDecrementHeightRadioButton.Size = new System.Drawing.Size(127, 17);
-			this.incrementDecrementHeightRadioButton.TabIndex = 6;
-			this.incrementDecrementHeightRadioButton.TabStop = true;
-			this.incrementDecrementHeightRadioButton.Text = "Increment/decrement";
-			this.incrementDecrementHeightRadioButton.UseVisualStyleBackColor = true;
-			this.incrementDecrementHeightRadioButton.CheckedChanged += new System.EventHandler(this.IncrementDecrementHeightRadioButtonCheckedChanged);
-			// 
-			// selectedHeightNumericUpDown
-			// 
-			this.selectedHeightNumericUpDown.Enabled = false;
-			this.selectedHeightNumericUpDown.Location = new System.Drawing.Point(98, 48);
-			this.selectedHeightNumericUpDown.Margin = new System.Windows.Forms.Padding(2);
-			this.selectedHeightNumericUpDown.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-			this.selectedHeightNumericUpDown.Name = "selectedHeightNumericUpDown";
-			this.selectedHeightNumericUpDown.Size = new System.Drawing.Size(41, 20);
-			this.selectedHeightNumericUpDown.TabIndex = 5;
-			this.selectedHeightNumericUpDown.ValueChanged += new System.EventHandler(this.SelectedHeightNumericUpDownValueChanged);
-			// 
-			// selectedHeightLabel
-			// 
-			this.selectedHeightLabel.AutoSize = true;
-			this.selectedHeightLabel.Enabled = false;
-			this.selectedHeightLabel.Location = new System.Drawing.Point(4, 50);
-			this.selectedHeightLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-			this.selectedHeightLabel.Name = "selectedHeightLabel";
-			this.selectedHeightLabel.Size = new System.Drawing.Size(81, 13);
-			this.selectedHeightLabel.TabIndex = 4;
-			this.selectedHeightLabel.Text = "Selected height";
-			// 
-			// cursorSizeNumericUpDown
-			// 
-			this.cursorSizeNumericUpDown.Location = new System.Drawing.Point(98, 90);
-			this.cursorSizeNumericUpDown.Margin = new System.Windows.Forms.Padding(2);
-			this.cursorSizeNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.cursorSizeNumericUpDown.Name = "cursorSizeNumericUpDown";
-			this.cursorSizeNumericUpDown.Size = new System.Drawing.Size(41, 20);
-			this.cursorSizeNumericUpDown.TabIndex = 3;
-			this.cursorSizeNumericUpDown.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.cursorSizeNumericUpDown.ValueChanged += new System.EventHandler(this.CursorSizeNumericUpDownValueChanged);
-			// 
-			// cursorSizeLabel
-			// 
-			this.cursorSizeLabel.AutoSize = true;
-			this.cursorSizeLabel.Location = new System.Drawing.Point(4, 92);
-			this.cursorSizeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-			this.cursorSizeLabel.Name = "cursorSizeLabel";
-			this.cursorSizeLabel.Size = new System.Drawing.Size(58, 13);
-			this.cursorSizeLabel.TabIndex = 2;
-			this.cursorSizeLabel.Text = "Cursor size";
-			// 
-			// intervalNumericUpDown
-			// 
-			this.intervalNumericUpDown.Location = new System.Drawing.Point(98, 69);
-			this.intervalNumericUpDown.Margin = new System.Windows.Forms.Padding(2);
-			this.intervalNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.intervalNumericUpDown.Name = "intervalNumericUpDown";
-			this.intervalNumericUpDown.Size = new System.Drawing.Size(41, 20);
-			this.intervalNumericUpDown.TabIndex = 2;
-			this.intervalNumericUpDown.Value = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-			this.intervalNumericUpDown.ValueChanged += new System.EventHandler(this.HeightIntervalNumericUpDownValueChanged);
-			// 
-			// intervalLabel
-			// 
-			this.intervalLabel.AutoSize = true;
-			this.intervalLabel.Location = new System.Drawing.Point(4, 71);
-			this.intervalLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-			this.intervalLabel.Name = "intervalLabel";
-			this.intervalLabel.Size = new System.Drawing.Size(42, 13);
-			this.intervalLabel.TabIndex = 0;
-			this.intervalLabel.Text = "Interval";
-			// 
-			// voidTab
-			// 
-			this.voidTab.Controls.Add(this.voidCursorSizeNumericUpDown);
-			this.voidTab.Controls.Add(this.voidCursorSizeLabel);
-			this.voidTab.Location = new System.Drawing.Point(4, 40);
-			this.voidTab.Margin = new System.Windows.Forms.Padding(2);
-			this.voidTab.Name = "voidTab";
-			this.voidTab.Padding = new System.Windows.Forms.Padding(2);
-			this.voidTab.Size = new System.Drawing.Size(207, 494);
-			this.voidTab.TabIndex = 4;
-			this.voidTab.Text = "Void";
-			this.voidTab.UseVisualStyleBackColor = true;
-			// 
-			// voidCursorSizeNumericUpDown
-			// 
-			this.voidCursorSizeNumericUpDown.Location = new System.Drawing.Point(65, 6);
-			this.voidCursorSizeNumericUpDown.Margin = new System.Windows.Forms.Padding(2);
-			this.voidCursorSizeNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.voidCursorSizeNumericUpDown.Name = "voidCursorSizeNumericUpDown";
-			this.voidCursorSizeNumericUpDown.Size = new System.Drawing.Size(41, 20);
-			this.voidCursorSizeNumericUpDown.TabIndex = 1;
-			this.voidCursorSizeNumericUpDown.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.voidCursorSizeNumericUpDown.ValueChanged += new System.EventHandler(this.VoidCursorSizeNumericUpDownValueChanged);
-			// 
-			// voidCursorSizeLabel
-			// 
-			this.voidCursorSizeLabel.AutoSize = true;
-			this.voidCursorSizeLabel.Location = new System.Drawing.Point(4, 8);
-			this.voidCursorSizeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-			this.voidCursorSizeLabel.Name = "voidCursorSizeLabel";
-			this.voidCursorSizeLabel.Size = new System.Drawing.Size(58, 13);
-			this.voidCursorSizeLabel.TabIndex = 0;
-			this.voidCursorSizeLabel.Text = "Cursor size";
-			// 
-			// attributesTab
-			// 
-			this.attributesTab.Controls.Add(this.seaLevelValueLabel);
-			this.attributesTab.Controls.Add(this.seaLevelLabel);
-			this.attributesTab.Controls.Add(this.seaLevelTrackbar);
-			this.attributesTab.Location = new System.Drawing.Point(4, 40);
-			this.attributesTab.Margin = new System.Windows.Forms.Padding(2);
-			this.attributesTab.Name = "attributesTab";
-			this.attributesTab.Padding = new System.Windows.Forms.Padding(2);
-			this.attributesTab.Size = new System.Drawing.Size(207, 494);
-			this.attributesTab.TabIndex = 5;
-			this.attributesTab.Text = "Attributes";
-			this.attributesTab.UseVisualStyleBackColor = true;
-			// 
-			// seaLevelValueLabel
-			// 
-			this.seaLevelValueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.seaLevelValueLabel.Enabled = false;
-			this.seaLevelValueLabel.Location = new System.Drawing.Point(173, 5);
-			this.seaLevelValueLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-			this.seaLevelValueLabel.Name = "seaLevelValueLabel";
-			this.seaLevelValueLabel.Size = new System.Drawing.Size(32, 14);
-			this.seaLevelValueLabel.TabIndex = 10;
-			this.seaLevelValueLabel.Text = "0";
-			this.seaLevelValueLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// seaLevelLabel
-			// 
-			this.seaLevelLabel.AutoSize = true;
-			this.seaLevelLabel.Enabled = false;
-			this.seaLevelLabel.Location = new System.Drawing.Point(4, 5);
-			this.seaLevelLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-			this.seaLevelLabel.Name = "seaLevelLabel";
-			this.seaLevelLabel.Size = new System.Drawing.Size(55, 13);
-			this.seaLevelLabel.TabIndex = 9;
-			this.seaLevelLabel.Text = "Sea Level";
-			// 
-			// seaLevelTrackbar
-			// 
-			this.seaLevelTrackbar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.seaLevelTrackbar.Enabled = false;
-			this.seaLevelTrackbar.Location = new System.Drawing.Point(62, 5);
-			this.seaLevelTrackbar.Margin = new System.Windows.Forms.Padding(2);
-			this.seaLevelTrackbar.Maximum = 255;
-			this.seaLevelTrackbar.Name = "seaLevelTrackbar";
-			this.seaLevelTrackbar.Size = new System.Drawing.Size(106, 45);
-			this.seaLevelTrackbar.TabIndex = 8;
-			this.seaLevelTrackbar.TickFrequency = 16;
-			this.seaLevelTrackbar.ValueChanged += new System.EventHandler(this.SeaLevelTrackBarValueChanged);
-			this.seaLevelTrackbar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.SeaLevelTrackBarMouseUp);
-			// 
-			// sidebarSplitter
-			// 
-			this.sidebarSplitter.Location = new System.Drawing.Point(215, 24);
-			this.sidebarSplitter.MinExtra = 200;
-			this.sidebarSplitter.MinSize = 160;
-			this.sidebarSplitter.Name = "sidebarSplitter";
-			this.sidebarSplitter.Size = new System.Drawing.Size(4, 538);
-			this.sidebarSplitter.TabIndex = 7;
-			this.sidebarSplitter.TabStop = false;
-			// 
-			// statusStrip
-			// 
-			this.statusStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
-			this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mousePositionLabel,
-            this.heightLabel,
-            this.voidLabel,
-            this.hoveredFeatureLabel});
-			this.statusStrip.Location = new System.Drawing.Point(219, 540);
-			this.statusStrip.Name = "statusStrip";
-			this.statusStrip.Size = new System.Drawing.Size(565, 22);
-			this.statusStrip.TabIndex = 6;
-			this.statusStrip.Text = "statusStrip1";
-			// 
-			// mousePositionLabel
-			// 
-			this.mousePositionLabel.Name = "mousePositionLabel";
-			this.mousePositionLabel.Size = new System.Drawing.Size(49, 17);
-			this.mousePositionLabel.Text = "X: -, Y: -";
-			// 
-			// heightLabel
-			// 
-			this.heightLabel.Name = "heightLabel";
-			this.heightLabel.Size = new System.Drawing.Size(27, 17);
-			this.heightLabel.Text = "H: -";
-			// 
-			// voidLabel
-			// 
-			this.voidLabel.Name = "voidLabel";
-			this.voidLabel.Size = new System.Drawing.Size(41, 17);
-			this.voidLabel.Text = "Void: -";
-			// 
-			// hoveredFeatureLabel
-			// 
-			this.hoveredFeatureLabel.Name = "hoveredFeatureLabel";
-			this.hoveredFeatureLabel.Size = new System.Drawing.Size(22, 17);
-			this.hoveredFeatureLabel.Text = "---";
-			// 
-			// mapViewPanel
-			// 
-			this.mapViewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.mapViewPanel.Location = new System.Drawing.Point(219, 24);
-			this.mapViewPanel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.mapViewPanel.Name = "mapViewPanel";
-			this.mapViewPanel.Size = new System.Drawing.Size(565, 516);
-			this.mapViewPanel.TabIndex = 5;
-			// 
-			// MainForm
-			// 
-			this.AllowDrop = true;
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(784, 562);
-			this.Controls.Add(this.mapViewPanel);
-			this.Controls.Add(this.statusStrip);
-			this.Controls.Add(this.sidebarSplitter);
-			this.Controls.Add(this.sidebarTabs);
-			this.Controls.Add(this.topMenu);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.KeyPreview = true;
-			this.MainMenuStrip = this.topMenu;
-			this.Name = "MainForm";
-			this.Text = "Mappy";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
-			this.Load += new System.EventHandler(this.MainFormLoad);
-			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainFormDragDrop);
-			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainFormDragEnter);
-			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
-			this.topMenu.ResumeLayout(false);
-			this.topMenu.PerformLayout();
-			this.sidebarTabs.ResumeLayout(false);
-			this.sectionsTab.ResumeLayout(false);
-			this.featuresTab.ResumeLayout(false);
-			this.startPositionsTab.ResumeLayout(false);
-			this.heightTab.ResumeLayout(false);
-			this.heightTab.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.selectedHeightNumericUpDown)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.cursorSizeNumericUpDown)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.intervalNumericUpDown)).EndInit();
-			this.voidTab.ResumeLayout(false);
-			this.voidTab.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.voidCursorSizeNumericUpDown)).EndInit();
-			this.attributesTab.ResumeLayout(false);
-			this.attributesTab.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.seaLevelTrackbar)).EndInit();
-			this.statusStrip.ResumeLayout(false);
-			this.statusStrip.PerformLayout();
-			this.ResumeLayout(false);
-			this.PerformLayout();
-
+	        System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+	        System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+	        System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+	        System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
+	        System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
+	        System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+	        System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
+	        System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+	        System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+	        System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+	        System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+	        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+	        this.topMenu = new System.Windows.Forms.MenuStrip();
+	        this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.newMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.openMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.saveMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.saveAsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.closeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.importMinimapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.importHeightmapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.importCustomSectionMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.exportMinimapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.exportHeightmapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.exportMapImageMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.editMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.undoMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.redoMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.cutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.copyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.pasteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.fillMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.resizeMapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.exportSectionMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.flipMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.mapAttributesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.generateMinimapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.generateMinimapHighQualityMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.preferencesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.viewMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.toggleHeightmapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.toggleHeightGridMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.toggleMinimapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.toggleVoidsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.gridMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.gridOffMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.grid16MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.grid32MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.grid64MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.grid128MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.grid256MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.grid512MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.grid1024MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.gridColorMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.toggleFeaturesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.playerMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.playerPromptMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.player1MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.player2MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.player3MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.player4MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.player5MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.player6MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.player7MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.player8MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.player9MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.player10MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.sidebarTabs = new System.Windows.Forms.TabControl();
+	        this.otaMissionTab = new System.Windows.Forms.TabPage();
+	        this.sectionsTab = new System.Windows.Forms.TabPage();
+	        this.sectionsView = new Mappy.UI.Controls.SectionView();
+	        this.featuresTab = new System.Windows.Forms.TabPage();
+	        this.featureView = new Mappy.UI.Controls.SectionView();
+	        this.startPositionsTab = new System.Windows.Forms.TabPage();
+	        this.startPositionsView1 = new Mappy.UI.Controls.StartPositionsView();
+	        this.heightTab = new System.Windows.Forms.TabPage();
+	        this.setHeightRadioButton = new System.Windows.Forms.RadioButton();
+	        this.incrementDecrementHeightRadioButton = new System.Windows.Forms.RadioButton();
+	        this.selectedHeightNumericUpDown = new System.Windows.Forms.NumericUpDown();
+	        this.selectedHeightLabel = new System.Windows.Forms.Label();
+	        this.cursorSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
+	        this.cursorSizeLabel = new System.Windows.Forms.Label();
+	        this.intervalNumericUpDown = new System.Windows.Forms.NumericUpDown();
+	        this.intervalLabel = new System.Windows.Forms.Label();
+	        this.voidTab = new System.Windows.Forms.TabPage();
+	        this.voidCursorSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
+	        this.voidCursorSizeLabel = new System.Windows.Forms.Label();
+	        this.attributesTab = new System.Windows.Forms.TabPage();
+	        this.seaLevelValueLabel = new System.Windows.Forms.Label();
+	        this.seaLevelLabel = new System.Windows.Forms.Label();
+	        this.seaLevelTrackbar = new System.Windows.Forms.TrackBar();
+	        this.sidebarSplitter = new System.Windows.Forms.Splitter();
+	        this.statusStrip = new System.Windows.Forms.StatusStrip();
+	        this.mousePositionLabel = new System.Windows.Forms.ToolStripStatusLabel();
+	        this.heightLabel = new System.Windows.Forms.ToolStripStatusLabel();
+	        this.voidLabel = new System.Windows.Forms.ToolStripStatusLabel();
+	        this.hoveredFeatureLabel = new System.Windows.Forms.ToolStripStatusLabel();
+	        this.mapViewPanel = new Mappy.UI.Controls.MapViewPanel();
+	        toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+	        toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+	        toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+	        toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
+	        toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
+	        toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+	        toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+	        toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+	        toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+	        toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+	        toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+	        this.topMenu.SuspendLayout();
+	        this.sidebarTabs.SuspendLayout();
+	        this.sectionsTab.SuspendLayout();
+	        this.featuresTab.SuspendLayout();
+	        this.startPositionsTab.SuspendLayout();
+	        this.heightTab.SuspendLayout();
+	        ((System.ComponentModel.ISupportInitialize)(this.selectedHeightNumericUpDown)).BeginInit();
+	        ((System.ComponentModel.ISupportInitialize)(this.cursorSizeNumericUpDown)).BeginInit();
+	        ((System.ComponentModel.ISupportInitialize)(this.intervalNumericUpDown)).BeginInit();
+	        this.voidTab.SuspendLayout();
+	        ((System.ComponentModel.ISupportInitialize)(this.voidCursorSizeNumericUpDown)).BeginInit();
+	        this.attributesTab.SuspendLayout();
+	        ((System.ComponentModel.ISupportInitialize)(this.seaLevelTrackbar)).BeginInit();
+	        this.statusStrip.SuspendLayout();
+	        this.SuspendLayout();
+	        // 
+	        // toolStripSeparator1
+	        // 
+	        toolStripSeparator1.Name = "toolStripSeparator1";
+	        toolStripSeparator1.Size = new System.Drawing.Size(278, 6);
+	        // 
+	        // toolStripSeparator2
+	        // 
+	        toolStripSeparator2.Name = "toolStripSeparator2";
+	        toolStripSeparator2.Size = new System.Drawing.Size(278, 6);
+	        // 
+	        // toolStripSeparator8
+	        // 
+	        toolStripSeparator8.Name = "toolStripSeparator8";
+	        toolStripSeparator8.Size = new System.Drawing.Size(278, 6);
+	        // 
+	        // toolStripSeparator11
+	        // 
+	        toolStripSeparator11.Name = "toolStripSeparator11";
+	        toolStripSeparator11.Size = new System.Drawing.Size(278, 6);
+	        // 
+	        // toolStripSeparator10
+	        // 
+	        toolStripSeparator10.Name = "toolStripSeparator10";
+	        toolStripSeparator10.Size = new System.Drawing.Size(278, 6);
+	        // 
+	        // toolStripSeparator7
+	        // 
+	        toolStripSeparator7.Name = "toolStripSeparator7";
+	        toolStripSeparator7.Size = new System.Drawing.Size(340, 6);
+	        // 
+	        // toolStripSeparator9
+	        // 
+	        toolStripSeparator9.Name = "toolStripSeparator9";
+	        toolStripSeparator9.Size = new System.Drawing.Size(340, 6);
+	        // 
+	        // toolStripSeparator3
+	        // 
+	        toolStripSeparator3.Name = "toolStripSeparator3";
+	        toolStripSeparator3.Size = new System.Drawing.Size(340, 6);
+	        // 
+	        // toolStripSeparator4
+	        // 
+	        toolStripSeparator4.Name = "toolStripSeparator4";
+	        toolStripSeparator4.Size = new System.Drawing.Size(340, 6);
+	        // 
+	        // toolStripSeparator5
+	        // 
+	        toolStripSeparator5.Name = "toolStripSeparator5";
+	        toolStripSeparator5.Size = new System.Drawing.Size(201, 6);
+	        // 
+	        // toolStripSeparator6
+	        // 
+	        toolStripSeparator6.Name = "toolStripSeparator6";
+	        toolStripSeparator6.Size = new System.Drawing.Size(201, 6);
+	        // 
+	        // topMenu
+	        // 
+	        this.topMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
+	        this.topMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.fileMenuItem, this.editMenuItem, this.viewMenuItem, this.playerMenuItem, this.helpMenuItem });
+	        this.topMenu.Location = new System.Drawing.Point(0, 0);
+	        this.topMenu.Name = "topMenu";
+	        this.topMenu.Size = new System.Drawing.Size(1176, 33);
+	        this.topMenu.TabIndex = 1;
+	        this.topMenu.Text = "menuStrip1";
+	        // 
+	        // fileMenuItem
+	        // 
+	        this.fileMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.newMenuItem, this.openMenuItem, toolStripSeparator1, this.saveMenuItem, this.saveAsMenuItem, toolStripSeparator2, this.closeMenuItem, toolStripSeparator8, this.importMinimapMenuItem, this.importHeightmapMenuItem, this.importCustomSectionMenuItem, toolStripSeparator11, this.exportMinimapMenuItem, this.exportHeightmapMenuItem, this.exportMapImageMenuItem, toolStripSeparator10, this.exitMenuItem });
+	        this.fileMenuItem.Name = "fileMenuItem";
+	        this.fileMenuItem.Size = new System.Drawing.Size(50, 29);
+	        this.fileMenuItem.Text = "&File";
+	        // 
+	        // newMenuItem
+	        // 
+	        this.newMenuItem.Name = "newMenuItem";
+	        this.newMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+	        this.newMenuItem.Size = new System.Drawing.Size(281, 30);
+	        this.newMenuItem.Text = "&New...";
+	        this.newMenuItem.Click += new System.EventHandler(this.NewMenuItemClick);
+	        // 
+	        // openMenuItem
+	        // 
+	        this.openMenuItem.Name = "openMenuItem";
+	        this.openMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+	        this.openMenuItem.Size = new System.Drawing.Size(281, 30);
+	        this.openMenuItem.Text = "&Open...";
+	        this.openMenuItem.Click += new System.EventHandler(this.OpenMenuItemClick);
+	        // 
+	        // saveMenuItem
+	        // 
+	        this.saveMenuItem.Enabled = false;
+	        this.saveMenuItem.Name = "saveMenuItem";
+	        this.saveMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+	        this.saveMenuItem.Size = new System.Drawing.Size(281, 30);
+	        this.saveMenuItem.Text = "&Save";
+	        this.saveMenuItem.Click += new System.EventHandler(this.SaveMenuItemClick);
+	        // 
+	        // saveAsMenuItem
+	        // 
+	        this.saveAsMenuItem.Enabled = false;
+	        this.saveAsMenuItem.Name = "saveAsMenuItem";
+	        this.saveAsMenuItem.Size = new System.Drawing.Size(281, 30);
+	        this.saveAsMenuItem.Text = "Save &As...";
+	        this.saveAsMenuItem.Click += new System.EventHandler(this.SaveAsMenuItemClick);
+	        // 
+	        // closeMenuItem
+	        // 
+	        this.closeMenuItem.Enabled = false;
+	        this.closeMenuItem.Name = "closeMenuItem";
+	        this.closeMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
+	        this.closeMenuItem.Size = new System.Drawing.Size(281, 30);
+	        this.closeMenuItem.Text = "&Close";
+	        this.closeMenuItem.Click += new System.EventHandler(this.CloseMenuItemClick);
+	        // 
+	        // importMinimapMenuItem
+	        // 
+	        this.importMinimapMenuItem.Enabled = false;
+	        this.importMinimapMenuItem.Name = "importMinimapMenuItem";
+	        this.importMinimapMenuItem.Size = new System.Drawing.Size(281, 30);
+	        this.importMinimapMenuItem.Text = "Import Minimap...";
+	        this.importMinimapMenuItem.Click += new System.EventHandler(this.ImportMinimapMenuItemClick);
+	        // 
+	        // importHeightmapMenuItem
+	        // 
+	        this.importHeightmapMenuItem.Enabled = false;
+	        this.importHeightmapMenuItem.Name = "importHeightmapMenuItem";
+	        this.importHeightmapMenuItem.Size = new System.Drawing.Size(281, 30);
+	        this.importHeightmapMenuItem.Text = "Import Heightmap...";
+	        this.importHeightmapMenuItem.Click += new System.EventHandler(this.ImportHeightmapMenuItemClick);
+	        // 
+	        // importCustomSectionMenuItem
+	        // 
+	        this.importCustomSectionMenuItem.Enabled = false;
+	        this.importCustomSectionMenuItem.Name = "importCustomSectionMenuItem";
+	        this.importCustomSectionMenuItem.Size = new System.Drawing.Size(281, 30);
+	        this.importCustomSectionMenuItem.Text = "Import Custom Section...";
+	        this.importCustomSectionMenuItem.Click += new System.EventHandler(this.ImportCustomSectionMenuItemClick);
+	        // 
+	        // exportMinimapMenuItem
+	        // 
+	        this.exportMinimapMenuItem.Enabled = false;
+	        this.exportMinimapMenuItem.Name = "exportMinimapMenuItem";
+	        this.exportMinimapMenuItem.Size = new System.Drawing.Size(281, 30);
+	        this.exportMinimapMenuItem.Text = "Export Minimap...";
+	        this.exportMinimapMenuItem.Click += new System.EventHandler(this.ExportMinimapMenuItemClick);
+	        // 
+	        // exportHeightmapMenuItem
+	        // 
+	        this.exportHeightmapMenuItem.Enabled = false;
+	        this.exportHeightmapMenuItem.Name = "exportHeightmapMenuItem";
+	        this.exportHeightmapMenuItem.Size = new System.Drawing.Size(281, 30);
+	        this.exportHeightmapMenuItem.Text = "Export Heightmap...";
+	        this.exportHeightmapMenuItem.Click += new System.EventHandler(this.ExportHeightmapMenuItemClick);
+	        // 
+	        // exportMapImageMenuItem
+	        // 
+	        this.exportMapImageMenuItem.Enabled = false;
+	        this.exportMapImageMenuItem.Name = "exportMapImageMenuItem";
+	        this.exportMapImageMenuItem.Size = new System.Drawing.Size(281, 30);
+	        this.exportMapImageMenuItem.Text = "Export Map Image...";
+	        this.exportMapImageMenuItem.Click += new System.EventHandler(this.ExportMapImageMenuItemClick);
+	        // 
+	        // exitMenuItem
+	        // 
+	        this.exitMenuItem.Name = "exitMenuItem";
+	        this.exitMenuItem.Size = new System.Drawing.Size(281, 30);
+	        this.exitMenuItem.Text = "E&xit";
+	        this.exitMenuItem.Click += new System.EventHandler(this.ExitMenuItemClick);
+	        // 
+	        // editMenuItem
+	        // 
+	        this.editMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.undoMenuItem, this.redoMenuItem, toolStripSeparator7, this.cutMenuItem, this.copyMenuItem, this.pasteMenuItem, this.fillMenuItem, this.resizeMapMenuItem, this.exportSectionMenuItem, this.flipMenuItem, toolStripSeparator9, this.mapAttributesMenuItem, toolStripSeparator3, this.generateMinimapMenuItem, this.generateMinimapHighQualityMenuItem, toolStripSeparator4, this.preferencesMenuItem });
+	        this.editMenuItem.Name = "editMenuItem";
+	        this.editMenuItem.Size = new System.Drawing.Size(54, 29);
+	        this.editMenuItem.Text = "&Edit";
+	        // 
+	        // undoMenuItem
+	        // 
+	        this.undoMenuItem.Enabled = false;
+	        this.undoMenuItem.Name = "undoMenuItem";
+	        this.undoMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
+	        this.undoMenuItem.Size = new System.Drawing.Size(343, 30);
+	        this.undoMenuItem.Text = "&Undo";
+	        this.undoMenuItem.Click += new System.EventHandler(this.UndoMenuItemClick);
+	        // 
+	        // redoMenuItem
+	        // 
+	        this.redoMenuItem.Enabled = false;
+	        this.redoMenuItem.Name = "redoMenuItem";
+	        this.redoMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
+	        this.redoMenuItem.Size = new System.Drawing.Size(343, 30);
+	        this.redoMenuItem.Text = "&Redo";
+	        this.redoMenuItem.Click += new System.EventHandler(this.RedoMenuItemClick);
+	        // 
+	        // cutMenuItem
+	        // 
+	        this.cutMenuItem.Enabled = false;
+	        this.cutMenuItem.Name = "cutMenuItem";
+	        this.cutMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
+	        this.cutMenuItem.Size = new System.Drawing.Size(343, 30);
+	        this.cutMenuItem.Text = "Cut";
+	        this.cutMenuItem.Click += new System.EventHandler(this.CutMenuItemClick);
+	        // 
+	        // copyMenuItem
+	        // 
+	        this.copyMenuItem.Enabled = false;
+	        this.copyMenuItem.Name = "copyMenuItem";
+	        this.copyMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+	        this.copyMenuItem.Size = new System.Drawing.Size(343, 30);
+	        this.copyMenuItem.Text = "Copy";
+	        this.copyMenuItem.Click += new System.EventHandler(this.CopyMenuItemClick);
+	        // 
+	        // pasteMenuItem
+	        // 
+	        this.pasteMenuItem.Enabled = false;
+	        this.pasteMenuItem.Name = "pasteMenuItem";
+	        this.pasteMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+	        this.pasteMenuItem.Size = new System.Drawing.Size(343, 30);
+	        this.pasteMenuItem.Text = "Paste";
+	        this.pasteMenuItem.Click += new System.EventHandler(this.PasteMenuItemClick);
+	        // 
+	        // fillMenuItem
+	        // 
+	        this.fillMenuItem.Enabled = false;
+	        this.fillMenuItem.Name = "fillMenuItem";
+	        this.fillMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
+	        this.fillMenuItem.Size = new System.Drawing.Size(343, 30);
+	        this.fillMenuItem.Text = "Fill Map";
+	        this.fillMenuItem.Click += new System.EventHandler(this.FillMenuItemClick);
+	        // 
+	        // resizeMapMenuItem
+	        // 
+	        this.resizeMapMenuItem.Enabled = false;
+	        this.resizeMapMenuItem.Name = "resizeMapMenuItem";
+	        this.resizeMapMenuItem.Size = new System.Drawing.Size(343, 30);
+	        this.resizeMapMenuItem.Text = "Resize Map...";
+	        this.resizeMapMenuItem.Click += new System.EventHandler(this.ResizeMapMenuItemClick);
+	        // 
+	        // exportSectionMenuItem
+	        // 
+	        this.exportSectionMenuItem.Enabled = false;
+	        this.exportSectionMenuItem.Name = "exportSectionMenuItem";
+	        this.exportSectionMenuItem.Size = new System.Drawing.Size(343, 30);
+	        this.exportSectionMenuItem.Text = "Export Section...";
+	        this.exportSectionMenuItem.Click += new System.EventHandler(this.ExportSectionMenuItemClick);
+	        // 
+	        // flipMenuItem
+	        // 
+	        this.flipMenuItem.Enabled = false;
+	        this.flipMenuItem.Name = "flipMenuItem";
+	        this.flipMenuItem.Size = new System.Drawing.Size(343, 30);
+	        this.flipMenuItem.Text = "Flip Section...";
+	        this.flipMenuItem.Click += new System.EventHandler(this.FlipMenuItemClick);
+	        // 
+	        // mapAttributesMenuItem
+	        // 
+	        this.mapAttributesMenuItem.Enabled = false;
+	        this.mapAttributesMenuItem.Name = "mapAttributesMenuItem";
+	        this.mapAttributesMenuItem.Size = new System.Drawing.Size(343, 30);
+	        this.mapAttributesMenuItem.Text = "Map Attributes...";
+	        this.mapAttributesMenuItem.Click += new System.EventHandler(this.MapAttributesMenuItemClick);
+	        // 
+	        // generateMinimapMenuItem
+	        // 
+	        this.generateMinimapMenuItem.Enabled = false;
+	        this.generateMinimapMenuItem.Name = "generateMinimapMenuItem";
+	        this.generateMinimapMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+	        this.generateMinimapMenuItem.Size = new System.Drawing.Size(343, 30);
+	        this.generateMinimapMenuItem.Text = "&Generate Minimap";
+	        this.generateMinimapMenuItem.Click += new System.EventHandler(this.GenerateMinimapMenuItemClick);
+	        // 
+	        // generateMinimapHighQualityMenuItem
+	        // 
+	        this.generateMinimapHighQualityMenuItem.Enabled = false;
+	        this.generateMinimapHighQualityMenuItem.Name = "generateMinimapHighQualityMenuItem";
+	        this.generateMinimapHighQualityMenuItem.Size = new System.Drawing.Size(343, 30);
+	        this.generateMinimapHighQualityMenuItem.Text = "Generate Minimap (High Quality)";
+	        this.generateMinimapHighQualityMenuItem.Click += new System.EventHandler(this.GenerateMinimapHighQualityMenuItemClick);
+	        // 
+	        // preferencesMenuItem
+	        // 
+	        this.preferencesMenuItem.Name = "preferencesMenuItem";
+	        this.preferencesMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+	        this.preferencesMenuItem.Size = new System.Drawing.Size(343, 30);
+	        this.preferencesMenuItem.Text = "&Preferences...";
+	        this.preferencesMenuItem.Click += new System.EventHandler(this.PreferencesMenuItemClick);
+	        // 
+	        // viewMenuItem
+	        // 
+	        this.viewMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.toggleHeightmapMenuItem, this.toggleHeightGridMenuItem, this.toggleMinimapMenuItem, this.toggleVoidsMenuItem, this.gridMenuItem, this.toggleFeaturesMenuItem });
+	        this.viewMenuItem.Name = "viewMenuItem";
+	        this.viewMenuItem.Size = new System.Drawing.Size(61, 29);
+	        this.viewMenuItem.Text = "&View";
+	        // 
+	        // toggleHeightmapMenuItem
+	        // 
+	        this.toggleHeightmapMenuItem.Name = "toggleHeightmapMenuItem";
+	        this.toggleHeightmapMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
+	        this.toggleHeightmapMenuItem.Size = new System.Drawing.Size(315, 30);
+	        this.toggleHeightmapMenuItem.Text = "&Heightmap Contours";
+	        this.toggleHeightmapMenuItem.Click += new System.EventHandler(this.ToggleHeightmapMenuItemClick);
+	        // 
+	        // toggleHeightGridMenuItem
+	        // 
+	        this.toggleHeightGridMenuItem.Name = "toggleHeightGridMenuItem";
+	        this.toggleHeightGridMenuItem.Size = new System.Drawing.Size(315, 30);
+	        this.toggleHeightGridMenuItem.Text = "Heightmap &Grid";
+	        this.toggleHeightGridMenuItem.Click += new System.EventHandler(this.ToggleHeightGridMenuItemClick);
+	        // 
+	        // toggleMinimapMenuItem
+	        // 
+	        this.toggleMinimapMenuItem.Name = "toggleMinimapMenuItem";
+	        this.toggleMinimapMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
+	        this.toggleMinimapMenuItem.Size = new System.Drawing.Size(315, 30);
+	        this.toggleMinimapMenuItem.Text = "&Minimap";
+	        this.toggleMinimapMenuItem.Click += new System.EventHandler(this.ToggleMinimapMenuItemClick);
+	        // 
+	        // toggleVoidsMenuItem
+	        // 
+	        this.toggleVoidsMenuItem.Name = "toggleVoidsMenuItem";
+	        this.toggleVoidsMenuItem.Size = new System.Drawing.Size(315, 30);
+	        this.toggleVoidsMenuItem.Text = "Voids";
+	        this.toggleVoidsMenuItem.Click += new System.EventHandler(this.ToggleVoidsMenuItemClick);
+	        // 
+	        // gridMenuItem
+	        // 
+	        this.gridMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.gridOffMenuItem, toolStripSeparator5, this.grid16MenuItem, this.grid32MenuItem, this.grid64MenuItem, this.grid128MenuItem, this.grid256MenuItem, this.grid512MenuItem, this.grid1024MenuItem, toolStripSeparator6, this.gridColorMenuItem });
+	        this.gridMenuItem.Name = "gridMenuItem";
+	        this.gridMenuItem.Size = new System.Drawing.Size(315, 30);
+	        this.gridMenuItem.Text = "Grid";
+	        // 
+	        // gridOffMenuItem
+	        // 
+	        this.gridOffMenuItem.Checked = true;
+	        this.gridOffMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+	        this.gridOffMenuItem.Name = "gridOffMenuItem";
+	        this.gridOffMenuItem.Size = new System.Drawing.Size(204, 30);
+	        this.gridOffMenuItem.Tag = "0";
+	        this.gridOffMenuItem.Text = "Off";
+	        this.gridOffMenuItem.Click += new System.EventHandler(this.GridOffMenuItemClick);
+	        // 
+	        // grid16MenuItem
+	        // 
+	        this.grid16MenuItem.Name = "grid16MenuItem";
+	        this.grid16MenuItem.Size = new System.Drawing.Size(204, 30);
+	        this.grid16MenuItem.Tag = "16";
+	        this.grid16MenuItem.Text = "16x16";
+	        this.grid16MenuItem.Click += new System.EventHandler(this.GridMenuItemClick);
+	        // 
+	        // grid32MenuItem
+	        // 
+	        this.grid32MenuItem.Name = "grid32MenuItem";
+	        this.grid32MenuItem.Size = new System.Drawing.Size(204, 30);
+	        this.grid32MenuItem.Tag = "32";
+	        this.grid32MenuItem.Text = "32x32";
+	        this.grid32MenuItem.Click += new System.EventHandler(this.GridMenuItemClick);
+	        // 
+	        // grid64MenuItem
+	        // 
+	        this.grid64MenuItem.Name = "grid64MenuItem";
+	        this.grid64MenuItem.Size = new System.Drawing.Size(204, 30);
+	        this.grid64MenuItem.Tag = "64";
+	        this.grid64MenuItem.Text = "64x64";
+	        this.grid64MenuItem.Click += new System.EventHandler(this.GridMenuItemClick);
+	        // 
+	        // grid128MenuItem
+	        // 
+	        this.grid128MenuItem.Name = "grid128MenuItem";
+	        this.grid128MenuItem.Size = new System.Drawing.Size(204, 30);
+	        this.grid128MenuItem.Tag = "128";
+	        this.grid128MenuItem.Text = "128x128";
+	        this.grid128MenuItem.Click += new System.EventHandler(this.GridMenuItemClick);
+	        // 
+	        // grid256MenuItem
+	        // 
+	        this.grid256MenuItem.Name = "grid256MenuItem";
+	        this.grid256MenuItem.Size = new System.Drawing.Size(204, 30);
+	        this.grid256MenuItem.Tag = "256";
+	        this.grid256MenuItem.Text = "256x256";
+	        this.grid256MenuItem.Click += new System.EventHandler(this.GridMenuItemClick);
+	        // 
+	        // grid512MenuItem
+	        // 
+	        this.grid512MenuItem.Name = "grid512MenuItem";
+	        this.grid512MenuItem.Size = new System.Drawing.Size(204, 30);
+	        this.grid512MenuItem.Tag = "512";
+	        this.grid512MenuItem.Text = "512x512";
+	        this.grid512MenuItem.Click += new System.EventHandler(this.GridMenuItemClick);
+	        // 
+	        // grid1024MenuItem
+	        // 
+	        this.grid1024MenuItem.Name = "grid1024MenuItem";
+	        this.grid1024MenuItem.Size = new System.Drawing.Size(204, 30);
+	        this.grid1024MenuItem.Tag = "1024";
+	        this.grid1024MenuItem.Text = "1024x1024";
+	        this.grid1024MenuItem.Click += new System.EventHandler(this.GridMenuItemClick);
+	        // 
+	        // gridColorMenuItem
+	        // 
+	        this.gridColorMenuItem.Name = "gridColorMenuItem";
+	        this.gridColorMenuItem.Size = new System.Drawing.Size(204, 30);
+	        this.gridColorMenuItem.Text = "Choose Color...";
+	        this.gridColorMenuItem.Click += new System.EventHandler(this.GridColorMenuItemClick);
+	        // 
+	        // toggleFeaturesMenuItem
+	        // 
+	        this.toggleFeaturesMenuItem.Checked = true;
+	        this.toggleFeaturesMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+	        this.toggleFeaturesMenuItem.Name = "toggleFeaturesMenuItem";
+	        this.toggleFeaturesMenuItem.Size = new System.Drawing.Size(315, 30);
+	        this.toggleFeaturesMenuItem.Text = "Features";
+	        this.toggleFeaturesMenuItem.Click += new System.EventHandler(this.ToggleFeaturesMenuItemClick);
+	        // 
+	        // playerMenuItem
+	        // 
+	        this.playerMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.playerPromptMenuItem, this.player1MenuItem, this.player2MenuItem, this.player3MenuItem, this.player4MenuItem, this.player5MenuItem, this.player6MenuItem, this.player7MenuItem, this.player8MenuItem, this.player9MenuItem, this.player10MenuItem });
+	        this.playerMenuItem.Name = "playerMenuItem";
+	        this.playerMenuItem.Size = new System.Drawing.Size(67, 29);
+	        this.playerMenuItem.Text = "&Player";
+	        // 
+	        // playerPromptMenuItem
+	        // 
+	        this.playerPromptMenuItem.Checked = true;
+	        this.playerPromptMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+	        this.playerPromptMenuItem.Name = "playerPromptMenuItem";
+	        this.playerPromptMenuItem.Size = new System.Drawing.Size(200, 30);
+	        this.playerPromptMenuItem.Tag = 0;
+	        this.playerPromptMenuItem.Text = "Prompt";
+	        this.playerPromptMenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+	        // 
+	        // player1MenuItem
+	        // 
+	        this.player1MenuItem.Name = "player1MenuItem";
+	        this.player1MenuItem.Size = new System.Drawing.Size(200, 30);
+	        this.player1MenuItem.Tag = 1;
+	        this.player1MenuItem.Text = "Player 1";
+	        this.player1MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+	        // 
+	        // player2MenuItem
+	        // 
+	        this.player2MenuItem.Name = "player2MenuItem";
+	        this.player2MenuItem.Size = new System.Drawing.Size(200, 30);
+	        this.player2MenuItem.Tag = 2;
+	        this.player2MenuItem.Text = "Player 2";
+	        this.player2MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+	        // 
+	        // player3MenuItem
+	        // 
+	        this.player3MenuItem.Name = "player3MenuItem";
+	        this.player3MenuItem.Size = new System.Drawing.Size(200, 30);
+	        this.player3MenuItem.Tag = 3;
+	        this.player3MenuItem.Text = "Player 3";
+	        this.player3MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+	        // 
+	        // player4MenuItem
+	        // 
+	        this.player4MenuItem.Name = "player4MenuItem";
+	        this.player4MenuItem.Size = new System.Drawing.Size(200, 30);
+	        this.player4MenuItem.Tag = 4;
+	        this.player4MenuItem.Text = "Player 4";
+	        this.player4MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+	        // 
+	        // player5MenuItem
+	        // 
+	        this.player5MenuItem.Name = "player5MenuItem";
+	        this.player5MenuItem.Size = new System.Drawing.Size(200, 30);
+	        this.player5MenuItem.Tag = 5;
+	        this.player5MenuItem.Text = "Player 5";
+	        this.player5MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+	        // 
+	        // player6MenuItem
+	        // 
+	        this.player6MenuItem.Name = "player6MenuItem";
+	        this.player6MenuItem.Size = new System.Drawing.Size(200, 30);
+	        this.player6MenuItem.Tag = 6;
+	        this.player6MenuItem.Text = "Player 6";
+	        this.player6MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+	        // 
+	        // player7MenuItem
+	        // 
+	        this.player7MenuItem.Name = "player7MenuItem";
+	        this.player7MenuItem.Size = new System.Drawing.Size(200, 30);
+	        this.player7MenuItem.Tag = 7;
+	        this.player7MenuItem.Text = "Player 7";
+	        this.player7MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+	        // 
+	        // player8MenuItem
+	        // 
+	        this.player8MenuItem.Name = "player8MenuItem";
+	        this.player8MenuItem.Size = new System.Drawing.Size(200, 30);
+	        this.player8MenuItem.Tag = 8;
+	        this.player8MenuItem.Text = "Player 8";
+	        this.player8MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+	        // 
+	        // player9MenuItem
+	        // 
+	        this.player9MenuItem.Name = "player9MenuItem";
+	        this.player9MenuItem.Size = new System.Drawing.Size(200, 30);
+	        this.player9MenuItem.Tag = 9;
+	        this.player9MenuItem.Text = "Player 9";
+	        this.player9MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+	        // 
+	        // player10MenuItem
+	        // 
+	        this.player10MenuItem.Name = "player10MenuItem";
+	        this.player10MenuItem.Size = new System.Drawing.Size(200, 30);
+	        this.player10MenuItem.Tag = 10;
+	        this.player10MenuItem.Text = "Player 10";
+	        this.player10MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+	        // 
+	        // helpMenuItem
+	        // 
+	        this.helpMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.infoToolStripMenuItem, this.aboutMenuItem });
+	        this.helpMenuItem.Name = "helpMenuItem";
+	        this.helpMenuItem.Size = new System.Drawing.Size(61, 29);
+	        this.helpMenuItem.Text = "&Help";
+	        // 
+	        // infoToolStripMenuItem
+	        // 
+	        this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
+	        this.infoToolStripMenuItem.Size = new System.Drawing.Size(149, 30);
+	        this.infoToolStripMenuItem.Text = "Hotkeys";
+	        this.infoToolStripMenuItem.Click += new System.EventHandler(this.InfoMenuItemClick);
+	        // 
+	        // aboutMenuItem
+	        // 
+	        this.aboutMenuItem.Name = "aboutMenuItem";
+	        this.aboutMenuItem.Size = new System.Drawing.Size(149, 30);
+	        this.aboutMenuItem.Text = "&About...";
+	        this.aboutMenuItem.Click += new System.EventHandler(this.AboutMenuItemClick);
+	        // 
+	        // otaMissionTab
+	        // 
+	        this.otaMissionTab.Location = new System.Drawing.Point(4, 29);
+	        this.otaMissionTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+	        this.otaMissionTab.Name = "otaMissionTab";
+	        this.otaMissionTab.Padding = new System.Windows.Forms.Padding(6);
+	        this.otaMissionTab.Size = new System.Drawing.Size(314, 799);
+	        this.otaMissionTab.TabIndex = 6;
+	        this.otaMissionTab.Text = "Units";
+	        this.otaMissionTab.UseVisualStyleBackColor = true;
+	        // 
+	        // sidebarTabs
+	        // 
+	        this.sidebarTabs.Controls.Add(this.sectionsTab);
+	        this.sidebarTabs.Controls.Add(this.featuresTab);
+	        this.sidebarTabs.Controls.Add(this.startPositionsTab);
+	        this.sidebarTabs.Controls.Add(this.heightTab);
+	        this.sidebarTabs.Controls.Add(this.voidTab);
+	        this.sidebarTabs.Controls.Add(this.attributesTab);
+	        this.sidebarTabs.Controls.Add(this.otaMissionTab);
+	        this.sidebarTabs.Dock = System.Windows.Forms.DockStyle.Left;
+	        this.sidebarTabs.Location = new System.Drawing.Point(0, 33);
+	        this.sidebarTabs.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+	        this.sidebarTabs.Multiline = true;
+	        this.sidebarTabs.Name = "sidebarTabs";
+	        this.sidebarTabs.SelectedIndex = 0;
+	        this.sidebarTabs.Size = new System.Drawing.Size(322, 832);
+	        this.sidebarTabs.TabIndex = 4;
+	        this.sidebarTabs.SelectedIndexChanged += new System.EventHandler(this.GUITabs_SelectedIndexChanged);
+	        // 
+	        // sectionsTab
+	        // 
+	        this.sectionsTab.Controls.Add(this.sectionsView);
+	        this.sectionsTab.Location = new System.Drawing.Point(4, 29);
+	        this.sectionsTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+	        this.sectionsTab.Name = "sectionsTab";
+	        this.sectionsTab.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+	        this.sectionsTab.Size = new System.Drawing.Size(314, 799);
+	        this.sectionsTab.TabIndex = 0;
+	        this.sectionsTab.Text = "Sections";
+	        this.sectionsTab.UseVisualStyleBackColor = true;
+	        // 
+	        // sectionsView
+	        // 
+	        this.sectionsView.Dock = System.Windows.Forms.DockStyle.Fill;
+	        this.sectionsView.ImageSize = new System.Drawing.Size(128, 128);
+	        this.sectionsView.Location = new System.Drawing.Point(4, 5);
+	        this.sectionsView.Margin = new System.Windows.Forms.Padding(6);
+	        this.sectionsView.Name = "sectionsView";
+	        this.sectionsView.Size = new System.Drawing.Size(306, 789);
+	        this.sectionsView.TabIndex = 3;
+	        // 
+	        // featuresTab
+	        // 
+	        this.featuresTab.Controls.Add(this.featureView);
+	        this.featuresTab.Location = new System.Drawing.Point(4, 29);
+	        this.featuresTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+	        this.featuresTab.Name = "featuresTab";
+	        this.featuresTab.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+	        this.featuresTab.Size = new System.Drawing.Size(314, 799);
+	        this.featuresTab.TabIndex = 1;
+	        this.featuresTab.Text = "Features";
+	        this.featuresTab.UseVisualStyleBackColor = true;
+	        // 
+	        // featureView
+	        // 
+	        this.featureView.Dock = System.Windows.Forms.DockStyle.Fill;
+	        this.featureView.ImageSize = new System.Drawing.Size(64, 64);
+	        this.featureView.Location = new System.Drawing.Point(4, 5);
+	        this.featureView.Margin = new System.Windows.Forms.Padding(6);
+	        this.featureView.Name = "featureView";
+	        this.featureView.Size = new System.Drawing.Size(306, 789);
+	        this.featureView.TabIndex = 0;
+	        // 
+	        // startPositionsTab
+	        // 
+	        this.startPositionsTab.Controls.Add(this.startPositionsView1);
+	        this.startPositionsTab.Location = new System.Drawing.Point(4, 29);
+	        this.startPositionsTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+	        this.startPositionsTab.Name = "startPositionsTab";
+	        this.startPositionsTab.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+	        this.startPositionsTab.Size = new System.Drawing.Size(314, 799);
+	        this.startPositionsTab.TabIndex = 2;
+	        this.startPositionsTab.Text = "Starts";
+	        this.startPositionsTab.UseVisualStyleBackColor = true;
+	        // 
+	        // startPositionsView1
+	        // 
+	        this.startPositionsView1.Dock = System.Windows.Forms.DockStyle.Fill;
+	        this.startPositionsView1.Location = new System.Drawing.Point(4, 5);
+	        this.startPositionsView1.Margin = new System.Windows.Forms.Padding(6);
+	        this.startPositionsView1.Name = "startPositionsView1";
+	        this.startPositionsView1.Size = new System.Drawing.Size(306, 789);
+	        this.startPositionsView1.TabIndex = 0;
+	        // 
+	        // heightTab
+	        // 
+	        this.heightTab.Controls.Add(this.setHeightRadioButton);
+	        this.heightTab.Controls.Add(this.incrementDecrementHeightRadioButton);
+	        this.heightTab.Controls.Add(this.selectedHeightNumericUpDown);
+	        this.heightTab.Controls.Add(this.selectedHeightLabel);
+	        this.heightTab.Controls.Add(this.cursorSizeNumericUpDown);
+	        this.heightTab.Controls.Add(this.cursorSizeLabel);
+	        this.heightTab.Controls.Add(this.intervalNumericUpDown);
+	        this.heightTab.Controls.Add(this.intervalLabel);
+	        this.heightTab.Location = new System.Drawing.Point(4, 29);
+	        this.heightTab.Name = "heightTab";
+	        this.heightTab.Padding = new System.Windows.Forms.Padding(3);
+	        this.heightTab.Size = new System.Drawing.Size(314, 799);
+	        this.heightTab.TabIndex = 3;
+	        this.heightTab.Text = "Height";
+	        this.heightTab.UseVisualStyleBackColor = true;
+	        // 
+	        // setHeightRadioButton
+	        // 
+	        this.setHeightRadioButton.AutoSize = true;
+	        this.setHeightRadioButton.Location = new System.Drawing.Point(9, 42);
+	        this.setHeightRadioButton.Name = "setHeightRadioButton";
+	        this.setHeightRadioButton.Size = new System.Drawing.Size(107, 24);
+	        this.setHeightRadioButton.TabIndex = 7;
+	        this.setHeightRadioButton.TabStop = true;
+	        this.setHeightRadioButton.Text = "Set height";
+	        this.setHeightRadioButton.UseVisualStyleBackColor = true;
+	        this.setHeightRadioButton.CheckedChanged += new System.EventHandler(this.SetHeightRadioButtonCheckedChanged);
+	        // 
+	        // incrementDecrementHeightRadioButton
+	        // 
+	        this.incrementDecrementHeightRadioButton.AutoSize = true;
+	        this.incrementDecrementHeightRadioButton.Checked = true;
+	        this.incrementDecrementHeightRadioButton.Location = new System.Drawing.Point(9, 9);
+	        this.incrementDecrementHeightRadioButton.Name = "incrementDecrementHeightRadioButton";
+	        this.incrementDecrementHeightRadioButton.Size = new System.Drawing.Size(186, 24);
+	        this.incrementDecrementHeightRadioButton.TabIndex = 6;
+	        this.incrementDecrementHeightRadioButton.TabStop = true;
+	        this.incrementDecrementHeightRadioButton.Text = "Increment/decrement";
+	        this.incrementDecrementHeightRadioButton.UseVisualStyleBackColor = true;
+	        this.incrementDecrementHeightRadioButton.CheckedChanged += new System.EventHandler(this.IncrementDecrementHeightRadioButtonCheckedChanged);
+	        // 
+	        // selectedHeightNumericUpDown
+	        // 
+	        this.selectedHeightNumericUpDown.Enabled = false;
+	        this.selectedHeightNumericUpDown.Location = new System.Drawing.Point(147, 74);
+	        this.selectedHeightNumericUpDown.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+	        this.selectedHeightNumericUpDown.Name = "selectedHeightNumericUpDown";
+	        this.selectedHeightNumericUpDown.Size = new System.Drawing.Size(62, 26);
+	        this.selectedHeightNumericUpDown.TabIndex = 5;
+	        this.selectedHeightNumericUpDown.ValueChanged += new System.EventHandler(this.SelectedHeightNumericUpDownValueChanged);
+	        // 
+	        // selectedHeightLabel
+	        // 
+	        this.selectedHeightLabel.AutoSize = true;
+	        this.selectedHeightLabel.Enabled = false;
+	        this.selectedHeightLabel.Location = new System.Drawing.Point(6, 77);
+	        this.selectedHeightLabel.Name = "selectedHeightLabel";
+	        this.selectedHeightLabel.Size = new System.Drawing.Size(120, 20);
+	        this.selectedHeightLabel.TabIndex = 4;
+	        this.selectedHeightLabel.Text = "Selected height";
+	        // 
+	        // cursorSizeNumericUpDown
+	        // 
+	        this.cursorSizeNumericUpDown.Location = new System.Drawing.Point(147, 138);
+	        this.cursorSizeNumericUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+	        this.cursorSizeNumericUpDown.Name = "cursorSizeNumericUpDown";
+	        this.cursorSizeNumericUpDown.Size = new System.Drawing.Size(62, 26);
+	        this.cursorSizeNumericUpDown.TabIndex = 3;
+	        this.cursorSizeNumericUpDown.Value = new decimal(new int[] { 1, 0, 0, 0 });
+	        this.cursorSizeNumericUpDown.ValueChanged += new System.EventHandler(this.CursorSizeNumericUpDownValueChanged);
+	        // 
+	        // cursorSizeLabel
+	        // 
+	        this.cursorSizeLabel.AutoSize = true;
+	        this.cursorSizeLabel.Location = new System.Drawing.Point(6, 142);
+	        this.cursorSizeLabel.Name = "cursorSizeLabel";
+	        this.cursorSizeLabel.Size = new System.Drawing.Size(88, 20);
+	        this.cursorSizeLabel.TabIndex = 2;
+	        this.cursorSizeLabel.Text = "Cursor size";
+	        // 
+	        // intervalNumericUpDown
+	        // 
+	        this.intervalNumericUpDown.Location = new System.Drawing.Point(147, 106);
+	        this.intervalNumericUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+	        this.intervalNumericUpDown.Name = "intervalNumericUpDown";
+	        this.intervalNumericUpDown.Size = new System.Drawing.Size(62, 26);
+	        this.intervalNumericUpDown.TabIndex = 2;
+	        this.intervalNumericUpDown.Value = new decimal(new int[] { 4, 0, 0, 0 });
+	        this.intervalNumericUpDown.ValueChanged += new System.EventHandler(this.HeightIntervalNumericUpDownValueChanged);
+	        // 
+	        // intervalLabel
+	        // 
+	        this.intervalLabel.AutoSize = true;
+	        this.intervalLabel.Location = new System.Drawing.Point(6, 109);
+	        this.intervalLabel.Name = "intervalLabel";
+	        this.intervalLabel.Size = new System.Drawing.Size(61, 20);
+	        this.intervalLabel.TabIndex = 0;
+	        this.intervalLabel.Text = "Interval";
+	        // 
+	        // voidTab
+	        // 
+	        this.voidTab.Controls.Add(this.voidCursorSizeNumericUpDown);
+	        this.voidTab.Controls.Add(this.voidCursorSizeLabel);
+	        this.voidTab.Location = new System.Drawing.Point(4, 29);
+	        this.voidTab.Name = "voidTab";
+	        this.voidTab.Padding = new System.Windows.Forms.Padding(3);
+	        this.voidTab.Size = new System.Drawing.Size(314, 799);
+	        this.voidTab.TabIndex = 4;
+	        this.voidTab.Text = "Void";
+	        this.voidTab.UseVisualStyleBackColor = true;
+	        // 
+	        // voidCursorSizeNumericUpDown
+	        // 
+	        this.voidCursorSizeNumericUpDown.Location = new System.Drawing.Point(98, 9);
+	        this.voidCursorSizeNumericUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+	        this.voidCursorSizeNumericUpDown.Name = "voidCursorSizeNumericUpDown";
+	        this.voidCursorSizeNumericUpDown.Size = new System.Drawing.Size(62, 26);
+	        this.voidCursorSizeNumericUpDown.TabIndex = 1;
+	        this.voidCursorSizeNumericUpDown.Value = new decimal(new int[] { 1, 0, 0, 0 });
+	        this.voidCursorSizeNumericUpDown.ValueChanged += new System.EventHandler(this.VoidCursorSizeNumericUpDownValueChanged);
+	        // 
+	        // voidCursorSizeLabel
+	        // 
+	        this.voidCursorSizeLabel.AutoSize = true;
+	        this.voidCursorSizeLabel.Location = new System.Drawing.Point(6, 12);
+	        this.voidCursorSizeLabel.Name = "voidCursorSizeLabel";
+	        this.voidCursorSizeLabel.Size = new System.Drawing.Size(88, 20);
+	        this.voidCursorSizeLabel.TabIndex = 0;
+	        this.voidCursorSizeLabel.Text = "Cursor size";
+	        // 
+	        // attributesTab
+	        // 
+	        this.attributesTab.Controls.Add(this.seaLevelValueLabel);
+	        this.attributesTab.Controls.Add(this.seaLevelLabel);
+	        this.attributesTab.Controls.Add(this.seaLevelTrackbar);
+	        this.attributesTab.Location = new System.Drawing.Point(4, 29);
+	        this.attributesTab.Name = "attributesTab";
+	        this.attributesTab.Padding = new System.Windows.Forms.Padding(3);
+	        this.attributesTab.Size = new System.Drawing.Size(314, 799);
+	        this.attributesTab.TabIndex = 5;
+	        this.attributesTab.Text = "Attributes";
+	        this.attributesTab.UseVisualStyleBackColor = true;
+	        // 
+	        // seaLevelValueLabel
+	        // 
+	        this.seaLevelValueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+	        this.seaLevelValueLabel.Enabled = false;
+	        this.seaLevelValueLabel.Location = new System.Drawing.Point(260, 8);
+	        this.seaLevelValueLabel.Name = "seaLevelValueLabel";
+	        this.seaLevelValueLabel.Size = new System.Drawing.Size(48, 22);
+	        this.seaLevelValueLabel.TabIndex = 10;
+	        this.seaLevelValueLabel.Text = "0";
+	        this.seaLevelValueLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+	        // 
+	        // seaLevelLabel
+	        // 
+	        this.seaLevelLabel.AutoSize = true;
+	        this.seaLevelLabel.Enabled = false;
+	        this.seaLevelLabel.Location = new System.Drawing.Point(6, 8);
+	        this.seaLevelLabel.Name = "seaLevelLabel";
+	        this.seaLevelLabel.Size = new System.Drawing.Size(79, 20);
+	        this.seaLevelLabel.TabIndex = 9;
+	        this.seaLevelLabel.Text = "Sea Level";
+	        // 
+	        // seaLevelTrackbar
+	        // 
+	        this.seaLevelTrackbar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+	        this.seaLevelTrackbar.Enabled = false;
+	        this.seaLevelTrackbar.Location = new System.Drawing.Point(93, 8);
+	        this.seaLevelTrackbar.Maximum = 255;
+	        this.seaLevelTrackbar.Name = "seaLevelTrackbar";
+	        this.seaLevelTrackbar.Size = new System.Drawing.Size(159, 69);
+	        this.seaLevelTrackbar.TabIndex = 8;
+	        this.seaLevelTrackbar.TickFrequency = 16;
+	        this.seaLevelTrackbar.ValueChanged += new System.EventHandler(this.SeaLevelTrackBarValueChanged);
+	        this.seaLevelTrackbar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.SeaLevelTrackBarMouseUp);
+	        // 
+	        // sidebarSplitter
+	        // 
+	        this.sidebarSplitter.Location = new System.Drawing.Point(322, 33);
+	        this.sidebarSplitter.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+	        this.sidebarSplitter.MinExtra = 200;
+	        this.sidebarSplitter.MinSize = 160;
+	        this.sidebarSplitter.Name = "sidebarSplitter";
+	        this.sidebarSplitter.Size = new System.Drawing.Size(6, 832);
+	        this.sidebarSplitter.TabIndex = 7;
+	        this.sidebarSplitter.TabStop = false;
+	        // 
+	        // statusStrip
+	        // 
+	        this.statusStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
+	        this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.mousePositionLabel, this.heightLabel, this.voidLabel, this.hoveredFeatureLabel });
+	        this.statusStrip.Location = new System.Drawing.Point(328, 835);
+	        this.statusStrip.Name = "statusStrip";
+	        this.statusStrip.Padding = new System.Windows.Forms.Padding(2, 0, 21, 0);
+	        this.statusStrip.Size = new System.Drawing.Size(848, 30);
+	        this.statusStrip.TabIndex = 6;
+	        this.statusStrip.Text = "statusStrip1";
+	        // 
+	        // mousePositionLabel
+	        // 
+	        this.mousePositionLabel.Name = "mousePositionLabel";
+	        this.mousePositionLabel.Size = new System.Drawing.Size(74, 25);
+	        this.mousePositionLabel.Text = "X: -, Y: -";
+	        // 
+	        // heightLabel
+	        // 
+	        this.heightLabel.Name = "heightLabel";
+	        this.heightLabel.Size = new System.Drawing.Size(41, 25);
+	        this.heightLabel.Text = "H: -";
+	        // 
+	        // voidLabel
+	        // 
+	        this.voidLabel.Name = "voidLabel";
+	        this.voidLabel.Size = new System.Drawing.Size(64, 25);
+	        this.voidLabel.Text = "Void: -";
+	        // 
+	        // hoveredFeatureLabel
+	        // 
+	        this.hoveredFeatureLabel.Name = "hoveredFeatureLabel";
+	        this.hoveredFeatureLabel.Size = new System.Drawing.Size(33, 25);
+	        this.hoveredFeatureLabel.Text = "---";
+	        // 
+	        // mapViewPanel
+	        // 
+	        this.mapViewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+	        this.mapViewPanel.Location = new System.Drawing.Point(328, 33);
+	        this.mapViewPanel.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+	        this.mapViewPanel.Name = "mapViewPanel";
+	        this.mapViewPanel.Size = new System.Drawing.Size(848, 802);
+	        this.mapViewPanel.TabIndex = 5;
+	        // 
+	        // MainForm
+	        // 
+	        this.AllowDrop = true;
+	        this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+	        this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+	        this.ClientSize = new System.Drawing.Size(1176, 865);
+	        this.Controls.Add(this.mapViewPanel);
+	        this.Controls.Add(this.statusStrip);
+	        this.Controls.Add(this.sidebarSplitter);
+	        this.Controls.Add(this.sidebarTabs);
+	        this.Controls.Add(this.topMenu);
+	        this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+	        this.KeyPreview = true;
+	        this.MainMenuStrip = this.topMenu;
+	        this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+	        this.Name = "MainForm";
+	        this.Text = "Mappy";
+	        this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
+	        this.Load += new System.EventHandler(this.MainFormLoad);
+	        this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainFormDragDrop);
+	        this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainFormDragEnter);
+	        this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
+	        this.topMenu.ResumeLayout(false);
+	        this.topMenu.PerformLayout();
+	        this.sidebarTabs.ResumeLayout(false);
+	        this.sectionsTab.ResumeLayout(false);
+	        this.featuresTab.ResumeLayout(false);
+	        this.startPositionsTab.ResumeLayout(false);
+	        this.heightTab.ResumeLayout(false);
+	        this.heightTab.PerformLayout();
+	        ((System.ComponentModel.ISupportInitialize)(this.selectedHeightNumericUpDown)).EndInit();
+	        ((System.ComponentModel.ISupportInitialize)(this.cursorSizeNumericUpDown)).EndInit();
+	        ((System.ComponentModel.ISupportInitialize)(this.intervalNumericUpDown)).EndInit();
+	        this.voidTab.ResumeLayout(false);
+	        this.voidTab.PerformLayout();
+	        ((System.ComponentModel.ISupportInitialize)(this.voidCursorSizeNumericUpDown)).EndInit();
+	        this.attributesTab.ResumeLayout(false);
+	        this.attributesTab.PerformLayout();
+	        ((System.ComponentModel.ISupportInitialize)(this.seaLevelTrackbar)).EndInit();
+	        this.statusStrip.ResumeLayout(false);
+	        this.statusStrip.PerformLayout();
+	        this.ResumeLayout(false);
+	        this.PerformLayout();
         }
 
         #endregion
@@ -1193,7 +1081,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripMenuItem toggleMinimapMenuItem;
         private System.Windows.Forms.ToolStripMenuItem undoMenuItem;
         private System.Windows.Forms.ToolStripMenuItem redoMenuItem;
-        private SectionView sectionsView;
+        private Mappy.UI.Controls.SectionView sectionsView;
         private System.Windows.Forms.ToolStripMenuItem newMenuItem;
         private System.Windows.Forms.ToolStripMenuItem generateMinimapMenuItem;
         private System.Windows.Forms.TabControl sidebarTabs;
@@ -1255,7 +1143,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripMenuItem importHeightmapMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportMapImageMenuItem;
         private System.Windows.Forms.ToolStripMenuItem importCustomSectionMenuItem;
-        private MapViewPanel mapViewPanel;
+        private Mappy.UI.Controls.MapViewPanel mapViewPanel;
         private System.Windows.Forms.ToolStripMenuItem toggleVoidsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toggleHeightGridMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip;
@@ -1265,8 +1153,8 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripStatusLabel hoveredFeatureLabel;
         private System.Windows.Forms.ToolStripMenuItem fillMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resizeMapMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem flipVerticallyMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem flipHorizontallyMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportSectionMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem flipMenuItem;
         private System.Windows.Forms.ToolStripMenuItem infoToolStripMenuItem;
     }
 }

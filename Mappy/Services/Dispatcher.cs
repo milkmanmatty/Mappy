@@ -426,8 +426,15 @@ namespace Mappy.Services
                 });
         }
 
-        public void Flip(FlipDirection direction)
+        public void Flip()
         {
+            // Show dialog to get user preferences
+            var options = this.dialogService.AskUserForFlipOptions();
+            if (options == null || options.Cancelled)
+            {
+                return; // User cancelled
+            }
+
             this.model.Map.IfSome(
                 map =>
                 {
@@ -436,7 +443,7 @@ namespace Mappy.Services
                         return;
                     }
 
-                    ImgUtil.ValidateTemps();
+                    ImgUtil.ValidateDir(ImgUtil.TempDir);
 
                     IMapTile floatTile = map.FloatingTiles[map.SelectedTile.Value].Item;
 
@@ -450,9 +457,9 @@ namespace Mappy.Services
                         destTile.HeightGrid,
                         floatTile.HeightGrid.Width,
                         floatTile.HeightGrid.Height,
-                        direction);
+                        options.Direction);
 
-                    var prefix = direction == FlipDirection.Horizontal ? "fh" : "fv";
+                    var prefix = options.Direction == FlipDirection.Horizontal ? "fh" : "fv";
                     var graphicPath = Path.Combine(ImgUtil.TempDir, prefix + "_Result.png");
                     var heightPath = Path.Combine(ImgUtil.TempDir, prefix + "Heightmap.png");
 
@@ -460,20 +467,27 @@ namespace Mappy.Services
                     heightBitmap.Save(heightPath, ImageFormat.Png); // export before resize
 
                     Bitmap graphicBitmap = ImgUtil.GetBitmapFromTilegrid(destTile.TileGrid);
+                    Bitmap result;
 
-                    // For TA this will never be true, but check anyway just in case
-                    if (graphicBitmap.Width != heightBitmap.Width || graphicBitmap.Height != heightBitmap.Height)
+                    if (options.ApplyShadows)
                     {
-                        heightBitmap = ImageRelightingService.BicubicResize(heightBitmap, graphicBitmap);
+                        // For TA this will never be true, but check anyway just in case
+                        if (graphicBitmap.Width != heightBitmap.Width || graphicBitmap.Height != heightBitmap.Height)
+                        {
+                            heightBitmap = ImageRelightingService.BicubicResize(heightBitmap, graphicBitmap);
+                        }
+
+                        result = ImageRelightingService.FlipAndRelightBitmap(
+                            graphicBitmap,
+                            heightBitmap,
+                            options.Direction,
+                            ImgUtil.GetLightDirectionFromEnum(LightDirection.BottomLeft));
+                    }
+                    else
+                    {
+                        result = ImgUtil.FlipBitmap(graphicBitmap, options.Direction);
                     }
 
-                    var img = ImageRelightingService.FlipAndRelightBitmap(
-                        graphicBitmap,
-                        heightBitmap,
-                        direction,
-                        ImgUtil.GetLightDirectionFromEnum(LightDirection.BottomLeft));
-
-                    Bitmap result = img;
                     result.Save(graphicPath, ImageFormat.Png);
 
                     heightBitmap.Dispose();
@@ -485,14 +499,42 @@ namespace Mappy.Services
                 });
         }
 
-        public void FlipVertically()
+        public void ExportSelectedSection()
         {
-            this.model.Map.IfSome(map => { this.Flip(FlipDirection.Vertical); });
-        }
+            var options = this.dialogService.AskUserToChooseSectionExportPaths();
+            if (options == null || string.IsNullOrEmpty(options.GraphicPath) || string.IsNullOrEmpty(options.HeightmapPath))
+            {
+                return; // User cancelled
+            }
 
-        public void FlipHorizontally()
-        {
-            this.model.Map.IfSome(map => { this.Flip(FlipDirection.Horizontal); });
+            this.model.Map.IfSome(
+                map =>
+                {
+                    if (!map.SelectedTile.HasValue || !map.FloatingTiles.Any() || map.FloatingTiles[map.SelectedTile.Value].Item == null)
+                    {
+                        return;
+                    }
+
+                    ImgUtil.ValidateDir(ImgUtil.ExportDir);
+
+                    IMapTile floatTile = map.FloatingTiles[map.SelectedTile.Value].Item;
+
+                    MapTile destTile = new MapTile(floatTile.TileGrid.Width, floatTile.TileGrid.Height);
+                    GridMethods.Copy(floatTile.TileGrid, destTile.TileGrid, 0, 0, 0, 0, floatTile.TileGrid.Width, floatTile.TileGrid.Height);
+                    GridMethods.Copy(floatTile.HeightGrid, destTile.HeightGrid, 0, 0, 0, 0, floatTile.HeightGrid.Width, floatTile.HeightGrid.Height);
+
+                    var graphicPath = Path.Combine(options.GraphicPath);
+                    var heightPath = Path.Combine(options.HeightmapPath);
+
+                    Bitmap heightBitmap = ImgUtil.GetBitmapFromHeightmapGrid(destTile.HeightGrid);
+                    heightBitmap.Save(heightPath, ImageFormat.Png);
+
+                    Bitmap graphicBitmap = ImgUtil.GetBitmapFromTilegrid(destTile.TileGrid);
+                    graphicBitmap.Save(graphicPath, ImageFormat.Png);
+
+                    heightBitmap.Dispose();
+                    graphicBitmap.Dispose();
+            });
         }
 
         public void RefreshMinimap()

@@ -22,11 +22,32 @@
             "Mappy",
             "Temp");
 
-        public static void ValidateTemps()
+        public static readonly string ExportDir = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            "Mappy",
+            "Exports");
+
+        private static Dictionary<int, byte> colorToTAPaletteIndex;
+
+        public static Dictionary<int, byte> ColorToTAPaletteIndex
         {
-            if (!Directory.Exists(TempDir))
+            get
             {
-                Directory.CreateDirectory(TempDir);
+                if (colorToTAPaletteIndex == null)
+                {
+                    colorToTAPaletteIndex = SetupPaletteDict();
+                }
+
+                return colorToTAPaletteIndex;
+            }
+            private set => colorToTAPaletteIndex = value;
+        }
+
+        public static void ValidateDir(string path)
+        {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
             }
         }
 
@@ -113,13 +134,13 @@
             int width = grid.Width * 32;
             int height = grid.Height * 32;
 
-            Bitmap bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
-            bmp = ForceTaPalette(bmp);
+            Bitmap output = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
+            output = ForceTaPalette(output);
 
-            BitmapData targetData = bmp.LockBits(
+            BitmapData outData = output.LockBits(
                 new System.Drawing.Rectangle(0, 0, width, height),
                 ImageLockMode.WriteOnly,
-                PixelFormat.Format32bppArgb);
+                PixelFormat.Format8bppIndexed);
 
             try
             {
@@ -137,17 +158,37 @@
                         {
                             unsafe
                             {
-                                var src = (byte*)tileData.Scan0;
-                                byte* dst = (byte*)targetData.Scan0
-                                    + (targetData.Stride * (tileY * 32))
-                                    + (tileX * 32 * 4);
+                                byte* tilePtr = (byte*)tileData.Scan0;
+                                byte* outPtr = (byte*)outData.Scan0 + (tileY * 32 * outData.Stride) + (tileX * 32);
+
                                 for (var row = 0; row < 32; row++)
                                 {
-                                    Buffer.MemoryCopy(
-                                        src + (row * tileData.Stride),
-                                        dst + (row * targetData.Stride),
-                                        32 * 4,
-                                        32 * 4);
+                                    byte* origRow = tilePtr + (row * tileData.Stride);
+                                    byte* outRow = outPtr + (row * outData.Stride);
+
+                                    for (var col = 0; col < 32; col++)
+                                    {
+                                        // 32bpp is stored as BGRA in memory
+                                        int idx = col * 4;
+                                        byte b = origRow[idx];
+                                        byte g = origRow[idx + 1];
+                                        byte r = origRow[idx + 2];
+                                        byte a = origRow[idx + 3];
+
+                                        // Reconstruct the integer ARGB value
+                                        int argb = (a << 24) | (r << 16) | (g << 8) | b;
+
+                                        // Lookup the palette index and write it to the destination
+                                        if (ColorToTAPaletteIndex.TryGetValue(argb, out byte index))
+                                        {
+                                            outRow[col] = index;
+                                        }
+                                        else
+                                        {
+                                            // Fallback (should never happen)
+                                            outRow[col] = 0;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -160,19 +201,24 @@
             }
             finally
             {
-                bmp.UnlockBits(targetData);
+                output.UnlockBits(outData);
             }
 
-            return bmp;
+            return output;
         }
 
         // This should probably be in TAUtil.GDI/Palette
-        public static List<System.Drawing.Color> GetTaPalette()
+        public static List<Color> GetTaPalette()
         {
             string exePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
             return LoadJascPal(Path.Combine(exePath, @"Assets\TA Palette.pal"));
         }
 
+        /// <summary>
+        /// Inject the Bitmap with the correct TA Palette. This is needed for 8bpp indexed images.
+        /// </summary>
+        /// <param name="bmp">The Bitmap to inject the TA Palette into.</param>
+        /// <returns>The Bitmap with the TA Palette applied.</returns>
         public static Bitmap ForceTaPalette(Bitmap bmp)
         {
             ColorPalette taPalette = bmp.Palette;
@@ -188,10 +234,10 @@
 
         public static Bitmap Convert32bppTo8bppIndexed(Bitmap source32Img)
         {
-            Bitmap bmp = new Bitmap(source32Img.Width, source32Img.Height, PixelFormat.Format8bppIndexed);
-            bmp = ForceTaPalette(bmp);
+            Bitmap output = new Bitmap(source32Img.Width, source32Img.Height, PixelFormat.Format8bppIndexed);
+            output = ForceTaPalette(output);
 
-            BitmapData bmpData = bmp.LockBits(
+            BitmapData bmpData = output.LockBits(
                 new Rectangle(0, 0, source32Img.Width, source32Img.Height),
                 ImageLockMode.WriteOnly,
                 PixelFormat.Format32bppArgb);
@@ -213,11 +259,90 @@
                 finally
                 {
                     source32Img.UnlockBits(sourceData);
-                    bmp.UnlockBits(bmpData);
+                    output.UnlockBits(bmpData);
                 }
             }
 
-            return bmp;
+            return output;
+        }
+
+        /// <summary>
+        /// Flips an 8bpp indexed image based on a given direction.
+        /// </summary>
+        public static unsafe Bitmap FlipBitmap(Bitmap orig8bpp, FlipDirection flipDir)
+        {
+            if (orig8bpp.PixelFormat != PixelFormat.Format8bppIndexed)
+            {
+                throw new ArgumentException("Original image must be 8bpp Indexed.");
+            }
+
+            int width = orig8bpp.Width;
+            int height = orig8bpp.Height;
+
+            // Output will be 32bpp true color due to mathematical lighting calculations
+            Bitmap outputBmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
+            BitmapData origData = orig8bpp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format8bppIndexed);
+            BitmapData outData = outputBmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+
+            // Extract the color palette from the 8bpp image
+            Color[] palette = orig8bpp.Palette.Entries;
+
+            try
+            {
+                byte* origPtr = (byte*)origData.Scan0;
+                byte* outPtr = (byte*)outData.Scan0;
+
+                for (int y = 0; y < height; y++)
+                {
+                    var srcY = flipDir == FlipDirection.Vertical ? height - 1 - y : y;
+
+                    byte* outRow = outPtr + (y * outData.Stride);
+                    byte* origRow = origPtr + (srcY * origData.Stride);
+
+                    for (int x = 0; x < width; x++)
+                    {
+                        var srcX = flipDir == FlipDirection.Horizontal ? width - 1 - x : x;
+
+                        byte paletteIndex = origRow[srcX];
+                        Color origColor = palette[paletteIndex];
+
+                        // Write to Output
+                        // Strict Format32bppArgb memory ordering: Blue, Green, Red, Alpha
+                        int outIdx = x * 4;
+                        outRow[outIdx] = origColor.B;
+                        outRow[outIdx + 1] = origColor.G;
+                        outRow[outIdx + 2] = origColor.R;
+                        outRow[outIdx + 3] = origColor.A;
+                    }
+                }
+            }
+            finally
+            {
+                // Clean up memory locks
+                orig8bpp.UnlockBits(origData);
+                outputBmp.UnlockBits(outData);
+            }
+
+            return ImgUtil.Convert32bppTo8bppIndexed(outputBmp);
+        }
+
+        private static Dictionary<int, byte> SetupPaletteDict()
+        {
+            List<Color> palette = GetTaPalette();
+            Dictionary<int, byte> colorToIndex = new Dictionary<int, byte>();
+            for (int i = 0; i < palette.Count; i++)
+            {
+                int argb = palette[i].ToArgb();
+
+                // In case a palette has duplicate colors, keep the first index found
+                if (!colorToIndex.ContainsKey(argb))
+                {
+                    colorToIndex[argb] = (byte)i;
+                }
+            }
+
+            return colorToIndex;
         }
 
         // Could be public

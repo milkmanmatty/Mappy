@@ -25,7 +25,9 @@ namespace Mappy.Services
 
         string AskUserToChooseHeightmap(int width, int height);
 
-        SectionImportPaths AskUserToChooseSectionImportPaths();
+        SectionImportExportPaths AskUserToChooseSectionImportPaths();
+
+        SectionImportExportPaths AskUserToChooseSectionExportPaths();
 
         bool CapturePreferences();
 
@@ -52,5 +54,7 @@ namespace Mappy.Services
         void ShowAbout();
 
         void ShowInfo();
+
+        FlipOptions AskUserForFlipOptions();
     }
 }

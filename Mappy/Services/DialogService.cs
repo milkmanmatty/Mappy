@@ -18,7 +18,7 @@ namespace Mappy.Services
             this.owner = owner;
         }
 
-        public SectionImportPaths AskUserToChooseSectionImportPaths()
+        public SectionImportExportPaths AskUserToChooseSectionImportPaths()
         {
             var dlg = new ImportCustomSectionForm();
             var result = dlg.ShowDialog(this.owner);
@@ -27,7 +27,23 @@ namespace Mappy.Services
                 return null;
             }
 
-            return new SectionImportPaths
+            return new SectionImportExportPaths
+            {
+                GraphicPath = dlg.GraphicPath,
+                HeightmapPath = dlg.HeightmapPath,
+            };
+        }
+
+        public SectionImportExportPaths AskUserToChooseSectionExportPaths()
+        {
+            var dlg = new ExportCustomSectionForm();
+            var result = dlg.ShowDialog(this.owner);
+            if (result != DialogResult.OK)
+            {
+                return null;
+            }
+
+            return new SectionImportExportPaths
             {
                 GraphicPath = dlg.GraphicPath,
                 HeightmapPath = dlg.HeightmapPath,
@@ -267,10 +283,33 @@ namespace Mappy.Services
             f.ShowDialog(this.owner);
         }
 
-		public void ShowAbout()
+        public void ShowAbout()
         {
             var f = new AboutForm();
             f.ShowDialog(this.owner);
+        }
+
+        public FlipOptions AskUserForFlipOptions()
+        {
+            var dialog = new FlipSectionForm();
+            var result = dialog.ShowDialog(this.owner);
+
+            switch (result)
+            {
+                case DialogResult.OK:
+                    return new FlipOptions
+                    {
+                        Direction = dialog.FlipDirection,
+                        ApplyShadows = dialog.RelightShadows,
+                    };
+                case DialogResult.Cancel:
+                    return new FlipOptions
+                    {
+                        Cancelled = true,
+                    };
+                default:
+                    throw new ArgumentException(@"bad dialogresult");
+            }
         }
     }
 }
