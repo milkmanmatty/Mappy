@@ -37,7 +37,7 @@ namespace Mappy.UI.Forms
             }
 
             this.textIdent = new TextBox { Width = 200 };
-            AddRow("Ident", this.textIdent, ref y);
+            AddRow("Identifier", this.textIdent, ref y);
 
             this.numericHealth = new NumericUpDown { Minimum = 1, Maximum = 100, Width = 80 };
             AddRow("Health %", this.numericHealth, ref y);
@@ -52,7 +52,7 @@ namespace Mappy.UI.Forms
             AddRow("XPos", this.numericX, ref y);
 
             this.numericY = new NumericUpDown { Minimum = -10000000, Maximum = 10000000, Width = 100 };
-            AddRow("YPos", this.numericY, ref y);
+            AddRow("YPos (Height)", this.numericY, ref y);
 
             this.numericZ = new NumericUpDown { Minimum = -10000000, Maximum = 10000000, Width = 100 };
             AddRow("ZPos", this.numericZ, ref y);
