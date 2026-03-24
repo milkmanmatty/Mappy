@@ -923,6 +923,7 @@ namespace Mappy.Models
                 heightmap.Width,
                 heightmap.Height);
             this.undoManager.Execute(op);
+            SyncAllSchemaUnitHeightsFromHeightGrid(this.model);
         }
 
         public void SetMinimap(Bitmap minimap)
@@ -959,6 +960,63 @@ namespace Mappy.Models
         public void PasteMapTile(IMapTile tile, int x, int y)
         {
             this.PasteMapTileNoDeduplicate(tile, x, y);
+        }
+
+        private static void SyncAllSchemaUnitHeightsFromHeightGrid(ISelectionModel map)
+        {
+            var grid = map.Tile.HeightGrid;
+            for (var si = 0; si < map.Attributes.Schemas.Count; si++)
+            {
+                foreach (var u in map.Attributes.Schemas[si].Units.ToList())
+                {
+                    var hx = u.XPos / 16;
+                    var hz = u.ZPos / 16;
+                    if (hx < 0 || hz < 0 || hx >= grid.Width || hz >= grid.Height)
+                    {
+                        continue;
+                    }
+
+                    var h = grid.Get(hx, hz);
+                    if (u.YPos == h)
+                    {
+                        continue;
+                    }
+
+                    var nu = u.ClonePreservingId();
+                    nu.YPos = h;
+                    map.UpdateSchemaUnit(si, nu);
+                }
+            }
+        }
+
+        private void SyncSchemaUnitsYPosForHeightGridCell(ISelectionModel map, int hx, int hz)
+        {
+            var grid = map.Tile.HeightGrid;
+            if (hx < 0 || hz < 0 || hx >= grid.Width || hz >= grid.Height)
+            {
+                return;
+            }
+
+            var height = grid.Get(hx, hz);
+            for (var si = 0; si < map.Attributes.Schemas.Count; si++)
+            {
+                foreach (var u in map.Attributes.Schemas[si].Units.ToList())
+                {
+                    if (u.XPos / 16 != hx || u.ZPos / 16 != hz)
+                    {
+                        continue;
+                    }
+
+                    if (u.YPos == height)
+                    {
+                        continue;
+                    }
+
+                    var nu = u.ClonePreservingId();
+                    nu.YPos = height;
+                    map.UpdateSchemaUnit(si, nu);
+                }
+            }
         }
 
         private static ISelectionModel CreateResizedModel(ISelectionModel source, int newWidth, int newHeight)
@@ -1004,6 +1062,8 @@ namespace Mappy.Models
 
             var maxX = (newWidth * 32) - 1;
             var maxY = (newHeight * 32) - 1;
+            var hgW = resizedModel.Tile.HeightGrid.Width;
+            var hgH = resizedModel.Tile.HeightGrid.Height;
             for (var si = 0; si < resizedModel.Attributes.Schemas.Count; si++)
             {
                 for (var i = 0; i < 10; i++)
@@ -1022,7 +1082,18 @@ namespace Mappy.Models
                 }
 
                 var toRemove = resizedModel.Attributes.Schemas[si].Units
-                    .Where(u => u.XPos < 0 || u.ZPos < 0 || u.XPos > maxX || u.ZPos > maxY)
+                    .Where(
+                        u =>
+                        {
+                            if (u.XPos < 0 || u.ZPos < 0 || u.XPos > maxX || u.ZPos > maxY)
+                            {
+                                return true;
+                            }
+
+                            var hx = u.XPos / 16;
+                            var hz = u.ZPos / 16;
+                            return hx < 0 || hz < 0 || hx >= hgW || hz >= hgH;
+                        })
                     .Select(u => u.Id)
                     .ToList();
                 foreach (var id in toRemove)
@@ -1030,6 +1101,8 @@ namespace Mappy.Models
                     resizedModel.RemoveSchemaUnit(si, id);
                 }
             }
+
+            SyncAllSchemaUnitHeightsFromHeightGrid(resizedModel);
 
             if (source.Minimap == null)
             {
@@ -1143,6 +1216,7 @@ namespace Mappy.Models
         private void TileOnHeightGridChanged(object sender, GridEventArgs e)
         {
             this.BaseTileHeightChanged?.Invoke(this, e);
+            this.SyncSchemaUnitsYPosForHeightGridCell(this.model, e.X, e.Y);
         }
 
         private void AttributesOnStartPositionChanged(object sender, StartPositionChangedEventArgs e)
