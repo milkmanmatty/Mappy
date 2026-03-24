@@ -1,6 +1,7 @@
 namespace Mappy.UI.Forms
 {
     using System;
+    using System.Collections.Generic;
     using System.Drawing;
     using System.Windows.Forms;
 
@@ -8,6 +9,10 @@ namespace Mappy.UI.Forms
 
     public class UnitPropertiesForm : Form
     {
+        private ComboBox comboSchema;
+
+        private ComboBox comboPlayer;
+
         private TextBox textIdent;
         private NumericUpDown numericHealth;
         private NumericUpDown numericAngle;
@@ -35,6 +40,25 @@ namespace Mappy.UI.Forms
                 this.Controls.Add(c);
                 rowY += 28;
             }
+
+            this.comboSchema = new ComboBox
+            {
+                Width = 220,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+            };
+            AddRow("Schema", this.comboSchema, ref y);
+
+            this.comboPlayer = new ComboBox
+            {
+                Width = 120,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+            };
+            for (var p = 1; p <= 10; p++)
+            {
+                this.comboPlayer.Items.Add("Player " + p);
+            }
+
+            AddRow("Player", this.comboPlayer, ref y);
 
             this.textIdent = new TextBox { Width = 200 };
             AddRow("Identifier", this.textIdent, ref y);
@@ -66,8 +90,25 @@ namespace Mappy.UI.Forms
             this.ClientSize = new Size(360, y + 50);
         }
 
-        public void Bind(SchemaUnit u)
+        public int SelectedSchemaIndex => this.comboSchema.SelectedIndex;
+
+        public void Bind(SchemaUnit u, int schemaIndex, IReadOnlyList<MapSchema> schemas)
         {
+            this.comboSchema.Items.Clear();
+            for (var i = 0; i < schemas.Count; i++)
+            {
+                this.comboSchema.Items.Add("Schema " + i + ": " + schemas[i].SchemaType);
+            }
+
+            if (schemas.Count > 0)
+            {
+                var si = Math.Max(0, Math.Min(schemaIndex, schemas.Count - 1));
+                this.comboSchema.SelectedIndex = si;
+            }
+
+            var pi = Math.Max(0, Math.Min(u.Player - 1, 9));
+            this.comboPlayer.SelectedIndex = pi;
+
             this.textIdent.Text = u.Ident;
             this.numericHealth.Value = Math.Max(this.numericHealth.Minimum, Math.Min(this.numericHealth.Maximum, u.HealthPercentage));
             this.numericAngle.Value = u.Angle;
@@ -79,6 +120,7 @@ namespace Mappy.UI.Forms
 
         public void ApplyTo(SchemaUnit u)
         {
+            u.Player = this.comboPlayer.SelectedIndex >= 0 ? this.comboPlayer.SelectedIndex + 1 : 1;
             u.Ident = this.textIdent.Text ?? string.Empty;
             u.HealthPercentage = (int)this.numericHealth.Value;
             u.Angle = (int)this.numericAngle.Value;

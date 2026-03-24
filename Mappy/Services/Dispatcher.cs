@@ -865,16 +865,22 @@ namespace Mappy.Services
                         var u = m.Attributes.GetUnit(schemaIndex, unitId).ClonePreservingId();
                         using (var f = new UI.Forms.UnitPropertiesForm())
                         {
-                            f.Bind(u);
+                            f.Bind(u, schemaIndex, m.Attributes.Schemas);
                             if (f.ShowDialog() != DialogResult.OK)
                             {
                                 return;
                             }
 
                             f.ApplyTo(u);
-                        }
+                            var toSchema = f.SelectedSchemaIndex;
+                            var n = m.Attributes.Schemas.Count;
+                            if (toSchema < 0 || toSchema >= n)
+                            {
+                                toSchema = schemaIndex;
+                            }
 
-                        m.ApplySchemaUnitEdit(schemaIndex, u);
+                            m.MoveSchemaUnitBetweenSchemas(schemaIndex, toSchema, u);
+                        }
                     });
         }
 

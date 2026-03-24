@@ -827,6 +827,25 @@ namespace Mappy.Models
             this.undoManager.Execute(new UpdateSchemaUnitOperation(this.model, schemaIndex, edited));
         }
 
+        public void MoveSchemaUnitBetweenSchemas(int fromSchemaIndex, int toSchemaIndex, SchemaUnit edited)
+        {
+            if (fromSchemaIndex == toSchemaIndex)
+            {
+                this.ApplySchemaUnitEdit(fromSchemaIndex, edited);
+                return;
+            }
+
+            var removeOp = new RemoveSchemaUnitOperation(this.model, fromSchemaIndex, edited.Id);
+            var addOp = new AddSchemaUnitOperation(this.model, toSchemaIndex, edited);
+            var selectOp = new SelectUnitOperation(this.model, new MapUnitRef(toSchemaIndex, edited.Id));
+            this.undoManager.Execute(
+                new CompositeOperation(
+                    OperationFactory.CreateDeselectAndMergeOperation(this.model),
+                    removeOp,
+                    addOp,
+                    selectOp));
+        }
+
         public void LiftAndSelectArea(int x, int y, int width, int height)
         {
             if (this.currentBandboxBehaviour == this.tileBandboxBehaviour)
