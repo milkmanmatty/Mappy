@@ -1669,7 +1669,25 @@ namespace Mappy.Models
 
                 var label = u.Unitname.Length > 4 ? u.Unitname.Substring(0, 4) : u.Unitname;
                 TextRenderer.DrawText(g, label, SystemFonts.DefaultFont, new Rectangle(2, 14, W - 4, 18), Color.White, TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
-                TextRenderer.DrawText(g, u.Player.ToString(System.Globalization.CultureInfo.InvariantCulture), SystemFonts.DefaultFont, new Rectangle(W - 18, 2, 16, 14), Color.White, TextFormatFlags.Right);
+
+                var slot = PlayerSlotVisuals.ClampPlayerSlot(u.Player);
+                var playerText = u.Player.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                var badgeW = playerText.Length >= 2 ? 20 : 14;
+                const int BadgeH = 12;
+                var badgeX = W - badgeW - 2;
+                const int BadgeY = 2;
+                using (var br = new SolidBrush(PlayerSlotVisuals.BackgroundForPlayer(slot)))
+                {
+                    g.FillRectangle(br, badgeX, BadgeY, badgeW, BadgeH);
+                }
+
+                TextRenderer.DrawText(
+                    g,
+                    playerText,
+                    SystemFonts.DefaultFont,
+                    new Rectangle(badgeX, BadgeY, badgeW, BadgeH),
+                    PlayerSlotVisuals.ForegroundForPlayer(slot),
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
             }
 
             return bmp;
