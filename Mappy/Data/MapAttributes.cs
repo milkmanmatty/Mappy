@@ -312,12 +312,12 @@ namespace Mappy.Data
             r.WriteTdf(st);
         }
 
-        public MapSchema AddSchema()
+        public MapSchema AddSchema(string schemaType)
         {
             var idx = this.schemaList.Count;
             var sch = new MapSchema(idx)
             {
-                SchemaType = "Easy",
+                SchemaType = schemaType,
             };
             this.schemaList.Add(sch);
             return sch;

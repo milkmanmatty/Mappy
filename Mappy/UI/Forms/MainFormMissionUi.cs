@@ -28,6 +28,10 @@ namespace Mappy.UI.Forms
 
         private ListBox missionUnitsList;
 
+        private Button missionAddSchemaButton;
+
+        private Button missionRemoveSchemaButton;
+
         private bool missionSchemaComboProgrammaticChange;
 
         public void SetMissionServices(CoreModel core, Dispatcher dispatcher, UnitCatalogService catalog)
@@ -50,6 +54,16 @@ namespace Mappy.UI.Forms
             if (this.missionOtaToolStrip != null)
             {
                 this.missionOtaToolStrip.Visible = hasMap;
+            }
+
+            if (this.missionAddSchemaButton != null)
+            {
+                this.missionAddSchemaButton.Enabled = hasMap;
+            }
+
+            if (this.missionRemoveSchemaButton != null)
+            {
+                this.missionRemoveSchemaButton.Enabled = hasMap;
             }
         }
 
@@ -118,20 +132,20 @@ namespace Mappy.UI.Forms
             root.Controls.Add(this.missionSchemaCombo, 0, 1);
 
             var schBtns = new FlowLayoutPanel { AutoSize = true, FlowDirection = FlowDirection.LeftToRight, Margin = new Padding(0, 0, 0, 8) };
-            var addSch = new Button { Text = "Add schema", AutoSize = true };
-            addSch.Click += (_, __) =>
+            this.missionAddSchemaButton = new Button { Text = "Add schema", AutoSize = true, Enabled = false };
+            this.missionAddSchemaButton.Click += (_, __) =>
                 {
                     this.missionDispatcher?.AddMapSchema();
                     this.RefreshMissionSchemaCombo();
                 };
-            var remSch = new Button { Text = "Remove schema", AutoSize = true };
-            remSch.Click += (_, __) =>
+            this.missionRemoveSchemaButton = new Button { Text = "Remove schema", AutoSize = true, Enabled = false };
+            this.missionRemoveSchemaButton.Click += (_, __) =>
                 {
                     this.missionDispatcher?.RemoveActiveMapSchema();
                     this.RefreshMissionSchemaCombo();
                 };
-            schBtns.Controls.Add(addSch);
-            schBtns.Controls.Add(remSch);
+            schBtns.Controls.Add(this.missionAddSchemaButton);
+            schBtns.Controls.Add(this.missionRemoveSchemaButton);
             root.Controls.Add(schBtns, 0, 2);
 
             root.Controls.Add(

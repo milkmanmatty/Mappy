@@ -41,6 +41,8 @@ namespace Mappy.Services
 
         int? AskUnitPlayerNumber(IWin32Window owner, int defaultPlayer = 1);
 
+        string AskUserForNewSchemaType(string defaultSchemaType);
+
         void ShowError(string message);
 
         IProgressView CreateProgressView();

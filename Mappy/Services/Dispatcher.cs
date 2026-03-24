@@ -763,10 +763,29 @@ namespace Mappy.Services
 
         public void AddMapSchema()
         {
+            var input = this.dialogService.AskUserForNewSchemaType(string.Empty);
+            if (input == null)
+            {
+                return;
+            }
+
+            var trimmed = input.Trim();
+            if (trimmed.Length == 0)
+            {
+                this.dialogService.ShowError("Schema name cannot be empty.");
+                return;
+            }
+
             this.model.Map.IfSome(
                 m =>
                     {
-                        m.Attributes.AddSchema();
+                        if (m.Attributes.Schemas.Any(s => string.Equals(s.SchemaType, trimmed, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            this.dialogService.ShowError("A schema with that name already exists.");
+                            return;
+                        }
+
+                        m.Attributes.AddSchema(trimmed);
                         m.ActiveSchemaIndex = m.Attributes.Schemas.Count - 1;
                     });
         }

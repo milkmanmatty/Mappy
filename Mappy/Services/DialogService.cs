@@ -222,6 +222,14 @@ namespace Mappy.Services
             }
         }
 
+        public string AskUserForNewSchemaType(string defaultSchemaType)
+        {
+            using (var f = new UI.Forms.NewSchemaTypePromptForm(defaultSchemaType))
+            {
+                return f.ShowDialog(this.owner) == DialogResult.OK ? f.SchemaTypeInput : null;
+            }
+        }
+
         public void ShowError(string message)
         {
             MessageBox.Show(this.owner, message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

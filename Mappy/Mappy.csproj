@@ -386,6 +386,9 @@
     <Compile Include="UI\Forms\UnitPlayerPromptForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UI\Forms\NewSchemaTypePromptForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Forms\UnitPropertiesForm.cs">
       <SubType>Form</SubType>
     </Compile>
