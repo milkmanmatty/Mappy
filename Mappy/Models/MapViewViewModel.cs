@@ -1565,15 +1565,30 @@ namespace Mappy.Models
                 heightValue = this.mapModel.BaseTile.HeightGrid.Get(heightX, heightY);
             }
 
+            var schemaType = schemaIndex >= 0 && schemaIndex < this.mapModel.Attributes.Schemas.Count
+                ? this.mapModel.Attributes.Schemas[schemaIndex].SchemaType
+                : string.Empty;
+            var schemaInitial = SchemaTypeInitialLetter(schemaType);
+
             var baseImg = Util.GetStartImage(slotIndex + 1);
             var bmp = new Bitmap(baseImg.Width, baseImg.Height);
             using (var g = Graphics.FromImage(bmp))
             {
                 g.DrawImage(baseImg, 0, 0);
-                using (var br = new SolidBrush(SchemaVisuals.ColorForSchema(schemaIndex)))
+                const int SchemaBadgeW = 12;
+                const int SchemaBadgeH = 12;
+                using (var br = new SolidBrush(Color.FromArgb(55, 55, 72)))
                 {
-                    g.FillRectangle(br, bmp.Width - 10, bmp.Height - 10, 8, 8);
+                    g.FillRectangle(br, 0, 0, SchemaBadgeW, SchemaBadgeH);
                 }
+
+                TextRenderer.DrawText(
+                    g,
+                    schemaInitial,
+                    SystemFonts.DefaultFont,
+                    new Rectangle(0, 0, SchemaBadgeW, SchemaBadgeH),
+                    Color.White,
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
             }
 
             baseImg.Dispose();
