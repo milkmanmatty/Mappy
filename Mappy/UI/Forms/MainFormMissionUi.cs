@@ -23,9 +23,7 @@ namespace Mappy.UI.Forms
 
         private ComboBox missionSchemaCombo;
 
-        private ToolStripComboBox missionToolbarSchemaCombo;
-
-        private ToolStrip missionOtaToolStrip;
+        private Panel missionSchemaBar;
 
         private ListBox missionUnitsList;
 
@@ -54,7 +52,7 @@ namespace Mappy.UI.Forms
             this.missionCoreModel = core;
             this.missionDispatcher = dispatcher;
             this.missionUnitCatalog = catalog;
-            this.BuildMissionOtaToolStrip();
+            this.BuildMissionSchemaBar();
             this.BuildMissionTabContent();
             var mapStream = core.PropertyAsObservable(x => x.Map, nameof(core.Map));
             mapStream.Subscribe(_ => this.OnMissionMapChanged());
@@ -74,9 +72,10 @@ namespace Mappy.UI.Forms
             this.RefreshMissionSchemaCombo();
             this.AttachMissionPlacedUnitsListener();
             var hasMap = this.missionCoreModel != null && this.missionCoreModel.Map.IsSome;
-            if (this.missionOtaToolStrip != null)
+
+            if (this.missionSchemaCombo != null)
             {
-                this.missionOtaToolStrip.Visible = hasMap;
+                this.missionSchemaCombo.Enabled = hasMap;
             }
 
             if (this.missionAddSchemaButton != null)
@@ -90,36 +89,64 @@ namespace Mappy.UI.Forms
             }
         }
 
-        private void BuildMissionOtaToolStrip()
+        private void BuildMissionSchemaBar()
         {
-            if (this.missionOtaToolStrip != null)
+            if (this.missionSchemaBar != null)
             {
                 return;
             }
 
-            this.missionToolbarSchemaCombo = new ToolStripComboBox
+            this.missionSchemaCombo = new ComboBox
             {
                 DropDownStyle = ComboBoxStyle.DropDownList,
                 Width = 220,
+                Margin = new Padding(0, 4, 12, 4),
             };
-            this.missionToolbarSchemaCombo.SelectedIndexChanged += this.MissionToolbarSchemaCombo_SelectedIndexChanged;
+            this.missionSchemaCombo.SelectedIndexChanged += this.MissionSchemaCombo_SelectedIndexChanged;
 
-            this.missionOtaToolStrip = new ToolStrip
+            this.missionAddSchemaButton = new Button { Text = "Add schema", AutoSize = true, Enabled = false, Margin = new Padding(0, 2, 6, 2) };
+            this.missionAddSchemaButton.Click += (_, __) =>
+                {
+                    this.missionDispatcher?.AddMapSchema();
+                    this.RefreshMissionSchemaCombo();
+                };
+            this.missionRemoveSchemaButton = new Button { Text = "Remove schema", AutoSize = true, Enabled = false, Margin = new Padding(0, 2, 6, 2) };
+            this.missionRemoveSchemaButton.Click += (_, __) =>
+                {
+                    this.missionDispatcher?.RemoveActiveMapSchema();
+                    this.RefreshMissionSchemaCombo();
+                };
+
+            var flow = new FlowLayoutPanel
             {
-                Dock = DockStyle.Top,
-                GripStyle = ToolStripGripStyle.Hidden,
-                Stretch = false,
-                Visible = false,
+                Dock = DockStyle.Fill,
+                FlowDirection = FlowDirection.LeftToRight,
+                WrapContents = false,
                 Padding = new Padding(6, 2, 6, 2),
             };
-            this.missionOtaToolStrip.Items.Add(new ToolStripLabel("OTA schema:"));
-            this.missionOtaToolStrip.Items.Add(this.missionToolbarSchemaCombo);
+            flow.Controls.Add(
+                new Label
+                {
+                    Text = "Schema:",
+                    AutoSize = true,
+                    Margin = new Padding(0, 8, 8, 0),
+                });
+            flow.Controls.Add(this.missionSchemaCombo);
+            flow.Controls.Add(this.missionAddSchemaButton);
+            flow.Controls.Add(this.missionRemoveSchemaButton);
 
-            this.Controls.Add(this.missionOtaToolStrip);
+            this.missionSchemaBar = new Panel
+            {
+                Dock = DockStyle.Top,
+                Height = 40,
+            };
+            this.missionSchemaBar.Controls.Add(flow);
+
+            this.Controls.Add(this.missionSchemaBar);
             var menuIdx = this.Controls.IndexOf(this.topMenu);
             if (menuIdx >= 0)
             {
-                this.Controls.SetChildIndex(this.missionOtaToolStrip, menuIdx + 1);
+                this.Controls.SetChildIndex(this.missionSchemaBar, menuIdx);
             }
         }
 
@@ -135,53 +162,22 @@ namespace Mappy.UI.Forms
             {
                 Dock = DockStyle.Fill,
                 ColumnCount = 1,
-                RowCount = 7,
+                RowCount = 4,
             };
-            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             root.RowStyles.Add(new RowStyle(SizeType.Percent, 50f));
             root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             root.RowStyles.Add(new RowStyle(SizeType.Percent, 50f));
-
-            root.Controls.Add(new Label { Text = "Schema", AutoSize = true, Margin = new Padding(0, 0, 0, 4) }, 0, 0);
-
-            this.missionSchemaCombo = new ComboBox
-            {
-                Dock = DockStyle.Top,
-                DropDownStyle = ComboBoxStyle.DropDownList,
-                Margin = new Padding(0, 0, 0, 8),
-            };
-            this.missionSchemaCombo.SelectedIndexChanged += this.MissionSchemaCombo_SelectedIndexChanged;
-            root.Controls.Add(this.missionSchemaCombo, 0, 1);
-
-            var schBtns = new FlowLayoutPanel { AutoSize = true, FlowDirection = FlowDirection.LeftToRight, Margin = new Padding(0, 0, 0, 8) };
-            this.missionAddSchemaButton = new Button { Text = "Add schema", AutoSize = true, Enabled = false };
-            this.missionAddSchemaButton.Click += (_, __) =>
-                {
-                    this.missionDispatcher?.AddMapSchema();
-                    this.RefreshMissionSchemaCombo();
-                };
-            this.missionRemoveSchemaButton = new Button { Text = "Remove schema", AutoSize = true, Enabled = false };
-            this.missionRemoveSchemaButton.Click += (_, __) =>
-                {
-                    this.missionDispatcher?.RemoveActiveMapSchema();
-                    this.RefreshMissionSchemaCombo();
-                };
-            schBtns.Controls.Add(this.missionAddSchemaButton);
-            schBtns.Controls.Add(this.missionRemoveSchemaButton);
-            root.Controls.Add(schBtns, 0, 2);
 
             root.Controls.Add(
                 new Label
                     {
                         Text = "Unit types",
                         AutoSize = true,
-                        Margin = new Padding(0, 4, 0, 4),
+                        Margin = new Padding(0, 0, 0, 4),
                     },
                 0,
-                3);
+                0);
 
             this.missionUnitPickerTabs = new TabControl
             {
@@ -223,7 +219,7 @@ namespace Mappy.UI.Forms
             tabOther.Controls.Add(this.missionOtherUnitsTree);
             this.missionUnitPickerTabs.TabPages.Add(tabOther);
 
-            root.Controls.Add(this.missionUnitPickerTabs, 0, 4);
+            root.Controls.Add(this.missionUnitPickerTabs, 0, 1);
 
             root.Controls.Add(
                 new Label
@@ -233,7 +229,7 @@ namespace Mappy.UI.Forms
                         Margin = new Padding(0, 4, 0, 4),
                     },
                 0,
-                5);
+                2);
 
             this.missionPlacedUnitsTree = new TreeView
             {
@@ -242,7 +238,7 @@ namespace Mappy.UI.Forms
                 Margin = new Padding(0, 0, 0, 0),
             };
             this.missionPlacedUnitsTree.NodeMouseDoubleClick += this.MissionPlacedUnitsTree_NodeMouseDoubleClick;
-            root.Controls.Add(this.missionPlacedUnitsTree, 0, 6);
+            root.Controls.Add(this.missionPlacedUnitsTree, 0, 3);
 
             this.missionTab.Controls.Add(root);
         }
@@ -290,21 +286,6 @@ namespace Mappy.UI.Forms
             e.DrawFocusRectangle();
         }
 
-        private void MissionToolbarSchemaCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (this.missionSchemaComboProgrammaticChange)
-            {
-                return;
-            }
-
-            if (this.missionToolbarSchemaCombo.SelectedIndex < 0)
-            {
-                return;
-            }
-
-            this.ApplySchemaIndexFromUi(this.missionToolbarSchemaCombo.SelectedIndex);
-        }
-
         private void MissionSchemaCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (this.missionSchemaComboProgrammaticChange)
@@ -337,13 +318,6 @@ namespace Mappy.UI.Forms
                 {
                     this.missionSchemaCombo.SelectedIndex = index;
                 }
-
-                if (this.missionToolbarSchemaCombo != null
-                    && index >= 0
-                    && index < this.missionToolbarSchemaCombo.Items.Count)
-                {
-                    this.missionToolbarSchemaCombo.SelectedIndex = index;
-                }
             }
             finally
             {
@@ -362,10 +336,6 @@ namespace Mappy.UI.Forms
             try
             {
                 this.missionSchemaCombo.Items.Clear();
-                if (this.missionToolbarSchemaCombo != null)
-                {
-                    this.missionToolbarSchemaCombo.Items.Clear();
-                }
 
                 this.missionCoreModel?.Map.IfSome(
                     m =>
@@ -375,18 +345,12 @@ namespace Mappy.UI.Forms
                                 var sch = m.Attributes.Schemas[i];
                                 var label = $"Schema {i}: {sch.SchemaType}";
                                 this.missionSchemaCombo.Items.Add(label);
-                                this.missionToolbarSchemaCombo?.Items.Add(label);
                             }
 
                             var idx = Math.Min(Math.Max(0, m.ActiveSchemaIndex), Math.Max(0, m.Attributes.Schemas.Count - 1));
                             if (this.missionSchemaCombo.Items.Count > 0)
                             {
                                 this.missionSchemaCombo.SelectedIndex = idx;
-                            }
-
-                            if (this.missionToolbarSchemaCombo != null && this.missionToolbarSchemaCombo.Items.Count > 0)
-                            {
-                                this.missionToolbarSchemaCombo.SelectedIndex = idx;
                             }
                         });
             }
