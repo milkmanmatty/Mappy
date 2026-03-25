@@ -1,5 +1,6 @@
 namespace Mappy
 {
+    using System;
     using System.Collections.Specialized;
     using System.Drawing;
     using System.Xml.Serialization;
@@ -46,6 +47,21 @@ namespace Mappy
         public int DragAutoScrollSpeedX { get; set; } = DefaultDragAutoScrollSpeed;
 
         public int DragAutoScrollSpeedY { get; set; } = DefaultDragAutoScrollSpeed;
+
+        public int? InactiveSchemaOpacityPercent { get; set; }
+
+        public int GetInactiveSchemaOpacityPercentForDialog()
+        {
+            var p = this.InactiveSchemaOpacityPercent ?? 38;
+            return Math.Max(0, Math.Min(100, p));
+        }
+
+        public float GetInactiveSchemaOpacityOrDefault()
+        {
+            var p = this.InactiveSchemaOpacityPercent ?? 38;
+            p = Math.Max(0, Math.Min(100, p));
+            return p / 100f;
+        }
 
         public int GetDragAutoScrollSpeedXOrDefault()
         {

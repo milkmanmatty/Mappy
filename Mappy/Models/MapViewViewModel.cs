@@ -5,10 +5,12 @@ namespace Mappy.Models
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Drawing;
+    using System.Drawing.Imaging;
     using System.Linq;
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
     using System.Windows.Forms;
+    using Mappy;
     using Mappy.Collections;
     using Mappy.Data;
     using Mappy.Models.Enums;
@@ -207,6 +209,20 @@ namespace Mappy.Models
             this.dispatcher = dispatcher;
             this.featureService = featureService;
             this.unitCatalogService = unitCatalogService;
+
+            MappySettings.SettingsSaved += this.OnSettingsSaved;
+        }
+
+        private void OnSettingsSaved(object sender, EventArgs e)
+        {
+            if (this.mapModel == null)
+            {
+                return;
+            }
+
+            this.UpdateStartPositions();
+            this.UpdateAllSchemaUnits();
+            this.RefreshSelection();
         }
 
         public IObservable<Size> CanvasSize { get; }
@@ -1593,6 +1609,11 @@ namespace Mappy.Models
 
             baseImg.Dispose();
 
+            if (schemaIndex != this.mapModel.ActiveSchemaIndex)
+            {
+                bmp = ApplyInactiveSchemaOpacity(bmp, MappySettings.Settings.GetInactiveSchemaOpacityOrDefault());
+            }
+
             var dw = new DrawableBitmap(bmp);
             var i = new DrawableItem(
                 p.Value.X - (dw.Width / 2),
@@ -1641,6 +1662,11 @@ namespace Mappy.Models
                 ? this.mapModel.Attributes.Schemas[schemaIndex].SchemaType
                 : string.Empty;
             var bmp = this.BuildUnitMarkerBitmap(u, schemaType);
+            if (schemaIndex != this.mapModel.ActiveSchemaIndex)
+            {
+                bmp = ApplyInactiveSchemaOpacity(bmp, MappySettings.Settings.GetInactiveSchemaOpacityOrDefault());
+            }
+
             var dw = new DrawableBitmap(bmp);
             var depth = 2000000 + (schemaIndex * 512) + (u.Player % 512);
 
@@ -1720,6 +1746,37 @@ namespace Mappy.Models
             }
 
             return bmp;
+        }
+
+        private static Bitmap ApplyInactiveSchemaOpacity(Bitmap source, float opacity)
+        {
+            if (opacity >= 0.995f)
+            {
+                return source;
+            }
+
+            var result = new Bitmap(source.Width, source.Height, PixelFormat.Format32bppArgb);
+            using (var g = Graphics.FromImage(result))
+            {
+                g.Clear(Color.Transparent);
+                var cm = new ColorMatrix { Matrix33 = opacity };
+                using (var ia = new ImageAttributes())
+                {
+                    ia.SetColorMatrix(cm);
+                    g.DrawImage(
+                        source,
+                        new Rectangle(0, 0, source.Width, source.Height),
+                        0,
+                        0,
+                        source.Width,
+                        source.Height,
+                        GraphicsUnit.Pixel,
+                        ia);
+                }
+            }
+
+            source.Dispose();
+            return result;
         }
 
         private static string SchemaTypeInitialLetter(string schemaType)

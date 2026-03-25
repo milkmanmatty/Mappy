@@ -12,6 +12,8 @@ namespace Mappy
 
         private static Configuration defaultSettings;
 
+        public static event EventHandler SettingsSaved;
+
         public static Configuration Settings
         {
             get
@@ -25,7 +27,7 @@ namespace Mappy
             }
         }
 
-        public static void SaveSettings()
+        public static void SaveSettings(bool notifyListeners = false)
         {
             try
             {
@@ -39,6 +41,11 @@ namespace Mappy
                 {
                     var s = new XmlSerializer(typeof(Configuration));
                     s.Serialize(st, Settings);
+                }
+
+                if (notifyListeners)
+                {
+                    SettingsSaved?.Invoke(null, EventArgs.Empty);
                 }
             }
             catch (UnauthorizedAccessException)

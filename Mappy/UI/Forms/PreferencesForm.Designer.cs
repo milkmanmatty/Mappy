@@ -44,6 +44,9 @@ namespace Mappy.UI.Forms
 			this.dragScrollSpeedXNumeric = new System.Windows.Forms.NumericUpDown();
 			this.dragScrollSpeedYLabel = new System.Windows.Forms.Label();
 			this.dragScrollSpeedXLabel = new System.Windows.Forms.Label();
+			this.inactiveSchemaOpacityGroupBox = new System.Windows.Forms.GroupBox();
+			this.inactiveSchemaOpacityNumeric = new System.Windows.Forms.NumericUpDown();
+			this.inactiveSchemaOpacityLabel = new System.Windows.Forms.Label();
 			this.resourceNamesGroupBox = new System.Windows.Forms.GroupBox();
 			this.calculatedMetalDepositValueCheckBox = new System.Windows.Forms.CheckBox();
 			this.featureReclaimAmountsCheckBox = new System.Windows.Forms.CheckBox();
@@ -57,6 +60,8 @@ namespace Mappy.UI.Forms
 			this.scrollSpeedGroupBox.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedYNumeric)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).BeginInit();
+			this.inactiveSchemaOpacityGroupBox.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.inactiveSchemaOpacityNumeric)).BeginInit();
 			this.resourceNamesGroupBox.SuspendLayout();
 			this.missionUnitLabelsGroupBox.SuspendLayout();
 			this.SuspendLayout();
@@ -153,7 +158,7 @@ namespace Mappy.UI.Forms
 			this.bottomPanel.Controls.Add(this.cancelButton);
 			this.bottomPanel.Controls.Add(this.okButton);
 			this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.bottomPanel.Location = new System.Drawing.Point(0, 515);
+			this.bottomPanel.Location = new System.Drawing.Point(0, 575);
 			this.bottomPanel.Name = "bottomPanel";
 			this.bottomPanel.Size = new System.Drawing.Size(450, 30);
 			this.bottomPanel.TabIndex = 8;
@@ -260,6 +265,45 @@ namespace Mappy.UI.Forms
 			this.dragScrollSpeedXLabel.TabIndex = 0;
 			this.dragScrollSpeedXLabel.Text = "Horizontal speed:";
 			// 
+			// inactiveSchemaOpacityGroupBox
+			// 
+			this.inactiveSchemaOpacityGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.inactiveSchemaOpacityGroupBox.Controls.Add(this.inactiveSchemaOpacityNumeric);
+			this.inactiveSchemaOpacityGroupBox.Controls.Add(this.inactiveSchemaOpacityLabel);
+			this.inactiveSchemaOpacityGroupBox.Location = new System.Drawing.Point(12, 352);
+			this.inactiveSchemaOpacityGroupBox.Name = "inactiveSchemaOpacityGroupBox";
+			this.inactiveSchemaOpacityGroupBox.Size = new System.Drawing.Size(426, 52);
+			this.inactiveSchemaOpacityGroupBox.TabIndex = 14;
+			this.inactiveSchemaOpacityGroupBox.TabStop = false;
+			this.inactiveSchemaOpacityGroupBox.Text = "Inactive Schema Opacity";
+			// 
+			// inactiveSchemaOpacityNumeric
+			// 
+			this.inactiveSchemaOpacityNumeric.Location = new System.Drawing.Point(233, 20);
+			this.inactiveSchemaOpacityNumeric.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+			this.inactiveSchemaOpacityNumeric.Name = "inactiveSchemaOpacityNumeric";
+			this.inactiveSchemaOpacityNumeric.Size = new System.Drawing.Size(82, 20);
+			this.inactiveSchemaOpacityNumeric.TabIndex = 1;
+			this.inactiveSchemaOpacityNumeric.Value = new decimal(new int[] {
+            38,
+            0,
+            0,
+            0});
+			// 
+			// inactiveSchemaOpacityLabel
+			// 
+			this.inactiveSchemaOpacityLabel.AutoSize = true;
+			this.inactiveSchemaOpacityLabel.Location = new System.Drawing.Point(14, 22);
+			this.inactiveSchemaOpacityLabel.Name = "inactiveSchemaOpacityLabel";
+			this.inactiveSchemaOpacityLabel.Size = new System.Drawing.Size(99, 13);
+			this.inactiveSchemaOpacityLabel.TabIndex = 0;
+			this.inactiveSchemaOpacityLabel.Text = "Percent (0-100):";
+			// 
 			// resourceNamesGroupBox
 			// 
 			this.resourceNamesGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -267,7 +311,7 @@ namespace Mappy.UI.Forms
 			this.resourceNamesGroupBox.Controls.Add(this.calculatedMetalDepositValueCheckBox);
 			this.resourceNamesGroupBox.Controls.Add(this.featureReclaimAmountsCheckBox);
 			this.resourceNamesGroupBox.Controls.Add(this.fullResourceNamesCheckBox);
-			this.resourceNamesGroupBox.Location = new System.Drawing.Point(12, 352);
+			this.resourceNamesGroupBox.Location = new System.Drawing.Point(12, 410);
 			this.resourceNamesGroupBox.Name = "resourceNamesGroupBox";
 			this.resourceNamesGroupBox.Size = new System.Drawing.Size(426, 95);
 			this.resourceNamesGroupBox.TabIndex = 12;
@@ -309,7 +353,7 @@ namespace Mappy.UI.Forms
 			this.missionUnitLabelsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.missionUnitLabelsGroupBox.Controls.Add(this.showUnitFriendlyNameFirstCheckBox);
-			this.missionUnitLabelsGroupBox.Location = new System.Drawing.Point(12, 455);
+			this.missionUnitLabelsGroupBox.Location = new System.Drawing.Point(12, 513);
 			this.missionUnitLabelsGroupBox.Name = "missionUnitLabelsGroupBox";
 			this.missionUnitLabelsGroupBox.Size = new System.Drawing.Size(426, 52);
 			this.missionUnitLabelsGroupBox.TabIndex = 13;
@@ -330,9 +374,10 @@ namespace Mappy.UI.Forms
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(450, 550);
+			this.ClientSize = new System.Drawing.Size(450, 605);
 			this.Controls.Add(this.missionUnitLabelsGroupBox);
 			this.Controls.Add(this.resourceNamesGroupBox);
+			this.Controls.Add(this.inactiveSchemaOpacityGroupBox);
 			this.Controls.Add(this.scrollSpeedGroupBox);
 			this.Controls.Add(this.mainGroupBox);
 			this.Controls.Add(this.bottomPanel);
@@ -349,6 +394,9 @@ namespace Mappy.UI.Forms
 			this.scrollSpeedGroupBox.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedYNumeric)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).EndInit();
+			this.inactiveSchemaOpacityGroupBox.ResumeLayout(false);
+			this.inactiveSchemaOpacityGroupBox.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.inactiveSchemaOpacityNumeric)).EndInit();
 			this.resourceNamesGroupBox.ResumeLayout(false);
 			this.resourceNamesGroupBox.PerformLayout();
 			this.missionUnitLabelsGroupBox.ResumeLayout(false);
@@ -375,6 +423,9 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.Label dragScrollSpeedXLabel;
         private System.Windows.Forms.NumericUpDown dragScrollSpeedYNumeric;
         private System.Windows.Forms.NumericUpDown dragScrollSpeedXNumeric;
+        private System.Windows.Forms.GroupBox inactiveSchemaOpacityGroupBox;
+        private System.Windows.Forms.Label inactiveSchemaOpacityLabel;
+        private System.Windows.Forms.NumericUpDown inactiveSchemaOpacityNumeric;
         private System.Windows.Forms.GroupBox resourceNamesGroupBox;
         private System.Windows.Forms.CheckBox fullResourceNamesCheckBox;
         private System.Windows.Forms.CheckBox featureReclaimAmountsCheckBox;

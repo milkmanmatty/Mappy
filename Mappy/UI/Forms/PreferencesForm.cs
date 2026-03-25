@@ -3,6 +3,7 @@ namespace Mappy.UI.Forms
     using System;
     using System.Windows.Forms;
 
+    using Mappy;
     using Ookii.Dialogs;
 
     public partial class PreferencesForm : Form
@@ -29,6 +30,7 @@ namespace Mappy.UI.Forms
             this.featureReclaimAmountsCheckBox.Checked = MappySettings.Settings.ShowFeatureReclaimAmounts;
             this.calculatedMetalDepositValueCheckBox.Checked = MappySettings.Settings.ShowCalculatedMetalDepositValue;
             this.showUnitFriendlyNameFirstCheckBox.Checked = MappySettings.Settings.ShowUnitFriendlyNameFirst;
+            this.inactiveSchemaOpacityNumeric.Value = MappySettings.Settings.GetInactiveSchemaOpacityPercentForDialog();
         }
 
         private void AddButtonClick(object sender, EventArgs e)
@@ -116,7 +118,8 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.ShowFeatureReclaimAmounts = this.featureReclaimAmountsCheckBox.Checked;
             MappySettings.Settings.ShowCalculatedMetalDepositValue = this.calculatedMetalDepositValueCheckBox.Checked;
             MappySettings.Settings.ShowUnitFriendlyNameFirst = this.showUnitFriendlyNameFirstCheckBox.Checked;
-            MappySettings.SaveSettings();
+            MappySettings.Settings.InactiveSchemaOpacityPercent = (int)this.inactiveSchemaOpacityNumeric.Value;
+            MappySettings.SaveSettings(notifyListeners: true);
         }
     }
 }
