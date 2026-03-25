@@ -32,6 +32,8 @@ namespace Mappy
 
         public bool ShowUnitFriendlyNameFirst { get; set; }
 
+        public bool ShowUnitFriendlyNameOnMap { get; set; }
+
         [XmlIgnore]
         public Color GridColor
         {

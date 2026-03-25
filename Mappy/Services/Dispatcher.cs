@@ -901,7 +901,7 @@ namespace Mappy.Services
                         var u = m.Attributes.GetUnit(schemaIndex, unitId).ClonePreservingId();
                         using (var f = new UI.Forms.UnitPropertiesForm())
                         {
-                            f.Bind(u, schemaIndex, m.Attributes.Schemas);
+                            f.Bind(u, schemaIndex, m.Attributes.Schemas, this.unitCatalogService);
                             if (f.ShowDialog() != DialogResult.OK)
                             {
                                 return;

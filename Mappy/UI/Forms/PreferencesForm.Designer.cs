@@ -45,6 +45,7 @@ namespace Mappy.UI.Forms
 			this.dragScrollSpeedYLabel = new System.Windows.Forms.Label();
 			this.dragScrollSpeedXLabel = new System.Windows.Forms.Label();
 			this.missionGroupBox = new System.Windows.Forms.GroupBox();
+			this.showUnitFriendlyNameOnMapCheckBox = new System.Windows.Forms.CheckBox();
 			this.showUnitFriendlyNameFirstCheckBox = new System.Windows.Forms.CheckBox();
 			this.inactiveSchemaOpacityNumeric = new System.Windows.Forms.NumericUpDown();
 			this.inactiveSchemaOpacityLabel = new System.Windows.Forms.Label();
@@ -156,7 +157,7 @@ namespace Mappy.UI.Forms
 			this.bottomPanel.Controls.Add(this.cancelButton);
 			this.bottomPanel.Controls.Add(this.okButton);
 			this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.bottomPanel.Location = new System.Drawing.Point(0, 553);
+			this.bottomPanel.Location = new System.Drawing.Point(0, 571);
 			this.bottomPanel.Name = "bottomPanel";
 			this.bottomPanel.Size = new System.Drawing.Size(450, 30);
 			this.bottomPanel.TabIndex = 8;
@@ -267,15 +268,26 @@ namespace Mappy.UI.Forms
 			// 
 			this.missionGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.missionGroupBox.Controls.Add(this.showUnitFriendlyNameOnMapCheckBox);
 			this.missionGroupBox.Controls.Add(this.showUnitFriendlyNameFirstCheckBox);
 			this.missionGroupBox.Controls.Add(this.inactiveSchemaOpacityNumeric);
 			this.missionGroupBox.Controls.Add(this.inactiveSchemaOpacityLabel);
 			this.missionGroupBox.Location = new System.Drawing.Point(12, 352);
 			this.missionGroupBox.Name = "missionGroupBox";
-			this.missionGroupBox.Size = new System.Drawing.Size(426, 90);
+			this.missionGroupBox.Size = new System.Drawing.Size(426, 108);
 			this.missionGroupBox.TabIndex = 14;
 			this.missionGroupBox.TabStop = false;
 			this.missionGroupBox.Text = "Mission";
+			// 
+			// showUnitFriendlyNameOnMapCheckBox
+			// 
+			this.showUnitFriendlyNameOnMapCheckBox.AutoSize = true;
+			this.showUnitFriendlyNameOnMapCheckBox.Location = new System.Drawing.Point(17, 73);
+			this.showUnitFriendlyNameOnMapCheckBox.Name = "showUnitFriendlyNameOnMapCheckBox";
+			this.showUnitFriendlyNameOnMapCheckBox.Size = new System.Drawing.Size(392, 17);
+			this.showUnitFriendlyNameOnMapCheckBox.TabIndex = 3;
+			this.showUnitFriendlyNameOnMapCheckBox.Text = "Prioritise friendly name (map)";
+			this.showUnitFriendlyNameOnMapCheckBox.UseVisualStyleBackColor = true;
 			// 
 			// showUnitFriendlyNameFirstCheckBox
 			// 
@@ -284,7 +296,7 @@ namespace Mappy.UI.Forms
 			this.showUnitFriendlyNameFirstCheckBox.Name = "showUnitFriendlyNameFirstCheckBox";
 			this.showUnitFriendlyNameFirstCheckBox.Size = new System.Drawing.Size(392, 17);
 			this.showUnitFriendlyNameFirstCheckBox.TabIndex = 2;
-			this.showUnitFriendlyNameFirstCheckBox.Text = "Prioritise friendly name";
+			this.showUnitFriendlyNameFirstCheckBox.Text = "Prioritise friendly name (Tab)";
 			this.showUnitFriendlyNameFirstCheckBox.UseVisualStyleBackColor = true;
 			// 
 			// inactiveSchemaOpacityNumeric
@@ -319,7 +331,7 @@ namespace Mappy.UI.Forms
 			this.resourceNamesGroupBox.Controls.Add(this.calculatedMetalDepositValueCheckBox);
 			this.resourceNamesGroupBox.Controls.Add(this.featureReclaimAmountsCheckBox);
 			this.resourceNamesGroupBox.Controls.Add(this.fullResourceNamesCheckBox);
-			this.resourceNamesGroupBox.Location = new System.Drawing.Point(12, 448);
+			this.resourceNamesGroupBox.Location = new System.Drawing.Point(12, 466);
 			this.resourceNamesGroupBox.Name = "resourceNamesGroupBox";
 			this.resourceNamesGroupBox.Size = new System.Drawing.Size(426, 95);
 			this.resourceNamesGroupBox.TabIndex = 12;
@@ -360,7 +372,7 @@ namespace Mappy.UI.Forms
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(450, 583);
+			this.ClientSize = new System.Drawing.Size(450, 601);
 			this.Controls.Add(this.resourceNamesGroupBox);
 			this.Controls.Add(this.missionGroupBox);
 			this.Controls.Add(this.scrollSpeedGroupBox);
@@ -410,6 +422,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.Label inactiveSchemaOpacityLabel;
         private System.Windows.Forms.NumericUpDown inactiveSchemaOpacityNumeric;
         private System.Windows.Forms.CheckBox showUnitFriendlyNameFirstCheckBox;
+        private System.Windows.Forms.CheckBox showUnitFriendlyNameOnMapCheckBox;
         private System.Windows.Forms.GroupBox resourceNamesGroupBox;
         private System.Windows.Forms.CheckBox fullResourceNamesCheckBox;
         private System.Windows.Forms.CheckBox featureReclaimAmountsCheckBox;

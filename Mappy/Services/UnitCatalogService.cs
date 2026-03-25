@@ -118,6 +118,18 @@ namespace Mappy.Services
             return unitInternalName;
         }
 
+        public string GetUnitFriendlyDisplayName(string unitInternalName)
+        {
+            if (string.IsNullOrEmpty(unitInternalName))
+            {
+                return string.Empty;
+            }
+
+            return this.displayNameByUnit.TryGetValue(unitInternalName, out var dn) && !string.IsNullOrWhiteSpace(dn)
+                ? dn.Trim()
+                : string.Empty;
+        }
+
         public string GetUnitPickerSearchableText(string unitInternalName)
         {
             if (string.IsNullOrEmpty(unitInternalName))
@@ -126,6 +138,23 @@ namespace Mappy.Services
             }
 
             if (this.displayNameByUnit.TryGetValue(unitInternalName, out var dn) && !string.IsNullOrWhiteSpace(dn))
+            {
+                return dn.Trim();
+            }
+
+            return unitInternalName;
+        }
+
+        public string GetPrimaryLabelForMapMarker(string unitInternalName)
+        {
+            if (string.IsNullOrEmpty(unitInternalName))
+            {
+                return string.Empty;
+            }
+
+            if (MappySettings.Settings.ShowUnitFriendlyNameOnMap
+                && this.displayNameByUnit.TryGetValue(unitInternalName, out var dn)
+                && !string.IsNullOrWhiteSpace(dn))
             {
                 return dn.Trim();
             }

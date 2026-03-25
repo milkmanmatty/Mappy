@@ -1722,7 +1722,10 @@ namespace Mappy.Models
                     Color.White,
                     TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
 
-                var label = u.Unitname.Length > 4 ? u.Unitname.Substring(0, 4) : u.Unitname;
+                var markerSource = this.unitCatalogService != null
+                    ? this.unitCatalogService.GetPrimaryLabelForMapMarker(u.Unitname)
+                    : u.Unitname;
+                var label = markerSource.Length > 4 ? markerSource.Substring(0, 4) : markerSource;
                 TextRenderer.DrawText(g, label, SystemFonts.DefaultFont, new Rectangle(2, 14, W - 4, 18), Color.White, TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
 
                 var slot = PlayerSlotVisuals.ClampPlayerSlot(u.Player);

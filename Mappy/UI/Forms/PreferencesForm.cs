@@ -30,6 +30,7 @@ namespace Mappy.UI.Forms
             this.featureReclaimAmountsCheckBox.Checked = MappySettings.Settings.ShowFeatureReclaimAmounts;
             this.calculatedMetalDepositValueCheckBox.Checked = MappySettings.Settings.ShowCalculatedMetalDepositValue;
             this.showUnitFriendlyNameFirstCheckBox.Checked = MappySettings.Settings.ShowUnitFriendlyNameFirst;
+            this.showUnitFriendlyNameOnMapCheckBox.Checked = MappySettings.Settings.ShowUnitFriendlyNameOnMap;
             this.inactiveSchemaOpacityNumeric.Value = MappySettings.Settings.GetInactiveSchemaOpacityPercentForDialog();
         }
 
@@ -118,6 +119,7 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.ShowFeatureReclaimAmounts = this.featureReclaimAmountsCheckBox.Checked;
             MappySettings.Settings.ShowCalculatedMetalDepositValue = this.calculatedMetalDepositValueCheckBox.Checked;
             MappySettings.Settings.ShowUnitFriendlyNameFirst = this.showUnitFriendlyNameFirstCheckBox.Checked;
+            MappySettings.Settings.ShowUnitFriendlyNameOnMap = this.showUnitFriendlyNameOnMapCheckBox.Checked;
             MappySettings.Settings.InactiveSchemaOpacityPercent = (int)this.inactiveSchemaOpacityNumeric.Value;
             MappySettings.SaveSettings(notifyListeners: true);
         }

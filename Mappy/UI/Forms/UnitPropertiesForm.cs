@@ -6,10 +6,11 @@ namespace Mappy.UI.Forms
     using System.Windows.Forms;
 
     using Mappy.Data;
+    using Mappy.Services;
 
     public class UnitPropertiesForm : Form
     {
-        private const int TabAreaHeight = 300;
+        private const int TabAreaHeight = 340;
         private const int BottomBarHeight = 50;
 
         private TabControl tabControl;
@@ -17,6 +18,10 @@ namespace Mappy.UI.Forms
         private ComboBox comboSchema;
 
         private ComboBox comboPlayer;
+
+        private TextBox textUnitInternalId;
+
+        private TextBox textUnitFriendlyName;
 
         private TextBox textIdent;
         private NumericUpDown numericHealth;
@@ -60,6 +65,24 @@ namespace Mappy.UI.Forms
 
             var statsPage = new TabPage("Stats");
             int y = 12;
+
+            this.textUnitInternalId = new TextBox
+            {
+                Width = 220,
+                ReadOnly = true,
+                TabStop = false,
+                BackColor = SystemColors.Control,
+            };
+            AddLabeledRow(statsPage, "Unit ID", this.textUnitInternalId, ref y);
+
+            this.textUnitFriendlyName = new TextBox
+            {
+                Width = 220,
+                ReadOnly = true,
+                TabStop = false,
+                BackColor = SystemColors.Control,
+            };
+            AddLabeledRow(statsPage, "Friendly name", this.textUnitFriendlyName, ref y);
 
             this.comboSchema = new ComboBox
             {
@@ -160,8 +183,14 @@ namespace Mappy.UI.Forms
 
         public int SelectedSchemaIndex => this.comboSchema.SelectedIndex;
 
-        public void Bind(SchemaUnit u, int schemaIndex, IReadOnlyList<MapSchema> schemas)
+        public void Bind(SchemaUnit u, int schemaIndex, IReadOnlyList<MapSchema> schemas, UnitCatalogService catalog)
         {
+            var internalName = u.Unitname ?? string.Empty;
+            this.textUnitInternalId.Text = internalName;
+            this.textUnitFriendlyName.Text = catalog != null
+                ? catalog.GetUnitFriendlyDisplayName(internalName)
+                : string.Empty;
+
             this.comboSchema.Items.Clear();
             for (var i = 0; i < schemas.Count; i++)
             {
