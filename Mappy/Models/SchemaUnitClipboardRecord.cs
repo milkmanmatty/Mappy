@@ -27,6 +27,7 @@ namespace Mappy.Models
             this.AiPriorityTarget = u.AiPriorityTarget;
             this.MissionCriticalUnit = u.MissionCriticalUnit;
             this.AiIgnore = u.AiIgnore;
+            this.Immunity = u.Immunity;
         }
 
         public string Unitname { get; set; }
@@ -55,6 +56,8 @@ namespace Mappy.Models
 
         public bool AiIgnore { get; set; }
 
+        public bool Immunity { get; set; }
+
         public SchemaUnit ToNewSchemaUnit(Point viewportLocation, int mapWidthPx, int mapHeightPx)
         {
             var x = viewportLocation.X + this.VPOffsetX;
@@ -77,6 +80,7 @@ namespace Mappy.Models
                 AiPriorityTarget = this.AiPriorityTarget,
                 MissionCriticalUnit = this.MissionCriticalUnit,
                 AiIgnore = this.AiIgnore,
+                Immunity = this.Immunity,
             };
         }
     }

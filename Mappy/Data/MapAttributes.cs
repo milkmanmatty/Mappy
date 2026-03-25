@@ -476,6 +476,7 @@ namespace Mappy.Data
                         AiPriorityTarget = TdfConvert.ToInt32(un.Entries.GetOrDefault("AiPriorityTarget", "0")) != 0,
                         MissionCriticalUnit = TdfConvert.ToInt32(un.Entries.GetOrDefault("MissionCriticalUnit", "0")) != 0,
                         AiIgnore = TdfConvert.ToInt32(un.Entries.GetOrDefault("AiIgnore", "0")) != 0,
+                        Immunity = TdfConvert.ToInt32(un.Entries.GetOrDefault("Immunity", "0")) != 0,
                     };
                     sch.Units.Add(u);
                 }
@@ -573,6 +574,7 @@ namespace Mappy.Data
                     un.Entries["AiPriorityTarget"] = u.AiPriorityTarget ? "1" : "0";
                     un.Entries["MissionCriticalUnit"] = u.MissionCriticalUnit ? "1" : "0";
                     un.Entries["AiIgnore"] = u.AiIgnore ? "1" : "0";
+                    un.Entries["Immunity"] = u.Immunity ? "1" : "0";
                     unitsRoot.Keys[un.Name] = un;
                 }
 

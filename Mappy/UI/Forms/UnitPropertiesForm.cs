@@ -31,6 +31,7 @@ namespace Mappy.UI.Forms
         private CheckBox checkAiPriorityTarget;
         private CheckBox checkMissionCriticalUnit;
         private CheckBox checkAiIgnore;
+        private CheckBox checkImmunity;
 
         public UnitPropertiesForm()
         {
@@ -134,6 +135,15 @@ namespace Mappy.UI.Forms
                 Location = new Point(12, aiY),
             };
             aiPage.Controls.Add(this.checkAiIgnore);
+            aiY += 28;
+
+            this.checkImmunity = new CheckBox
+            {
+                Text = "Enemy Does Not Target (Immunity)",
+                AutoSize = true,
+                Location = new Point(12, aiY),
+            };
+            aiPage.Controls.Add(this.checkImmunity);
 
             this.tabControl.TabPages.Add(statsPage);
             this.tabControl.TabPages.Add(aiPage);
@@ -180,6 +190,7 @@ namespace Mappy.UI.Forms
             this.checkAiPriorityTarget.Checked = u.AiPriorityTarget;
             this.checkMissionCriticalUnit.Checked = u.MissionCriticalUnit;
             this.checkAiIgnore.Checked = u.AiIgnore;
+            this.checkImmunity.Checked = u.Immunity;
         }
 
         public void ApplyTo(SchemaUnit u)
@@ -198,6 +209,7 @@ namespace Mappy.UI.Forms
             u.AiPriorityTarget = this.checkAiPriorityTarget.Checked;
             u.MissionCriticalUnit = this.checkMissionCriticalUnit.Checked;
             u.AiIgnore = this.checkAiIgnore.Checked;
+            u.Immunity = this.checkImmunity.Checked;
         }
 
         private static decimal ClampToNumericRange(NumericUpDown n, int v)

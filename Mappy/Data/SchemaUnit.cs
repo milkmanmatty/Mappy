@@ -40,6 +40,8 @@ namespace Mappy.Data
 
         public bool AiIgnore { get; set; }
 
+        public bool Immunity { get; set; }
+
         public SchemaUnit CloneWithNewId()
         {
             var u = new SchemaUnit(Guid.NewGuid(), this.Unitname)
@@ -57,6 +59,7 @@ namespace Mappy.Data
                 AiPriorityTarget = this.AiPriorityTarget,
                 MissionCriticalUnit = this.MissionCriticalUnit,
                 AiIgnore = this.AiIgnore,
+                Immunity = this.Immunity,
             };
             return u;
         }
@@ -78,6 +81,7 @@ namespace Mappy.Data
                 AiPriorityTarget = this.AiPriorityTarget,
                 MissionCriticalUnit = this.MissionCriticalUnit,
                 AiIgnore = this.AiIgnore,
+                Immunity = this.Immunity,
             };
             return u;
         }
