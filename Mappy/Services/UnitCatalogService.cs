@@ -118,6 +118,21 @@ namespace Mappy.Services
             return unitInternalName;
         }
 
+        public string GetUnitPickerSearchableText(string unitInternalName)
+        {
+            if (string.IsNullOrEmpty(unitInternalName))
+            {
+                return string.Empty;
+            }
+
+            if (this.displayNameByUnit.TryGetValue(unitInternalName, out var dn) && !string.IsNullOrWhiteSpace(dn))
+            {
+                return dn.Trim();
+            }
+
+            return unitInternalName;
+        }
+
         public UnitSideCategory GetUnitSide(string unitName)
         {
             if (string.IsNullOrEmpty(unitName))

@@ -29,6 +29,10 @@ namespace Mappy.UI.Forms
 
         private TabControl missionUnitPickerTabs;
 
+        private TextBox missionUnitSearchTextBox;
+
+        private Button missionUnitSearchClearButton;
+
         private TreeView missionArmUnitsTree;
 
         private TreeView missionCoreUnitsTree;
@@ -162,8 +166,9 @@ namespace Mappy.UI.Forms
             {
                 Dock = DockStyle.Fill,
                 ColumnCount = 1,
-                RowCount = 4,
+                RowCount = 5,
             };
+            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             root.RowStyles.Add(new RowStyle(SizeType.Percent, 50f));
             root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
@@ -178,6 +183,42 @@ namespace Mappy.UI.Forms
                     },
                 0,
                 0);
+
+            this.missionUnitSearchTextBox = new TextBox
+            {
+                Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top,
+                Margin = new Padding(0, 0, 8, 0),
+            };
+            this.missionUnitSearchTextBox.TextChanged += (_, __) => this.RefreshMissionUnitsList();
+
+            this.missionUnitSearchClearButton = new Button
+            {
+                Text = "Clear",
+                AutoSize = true,
+                Margin = new Padding(0, 0, 0, 4),
+            };
+            this.missionUnitSearchClearButton.Click += (_, __) =>
+                {
+                    this.missionUnitSearchTextBox.Clear();
+                    this.missionUnitSearchTextBox.Focus();
+                };
+
+            var searchRow = new TableLayoutPanel
+            {
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                Dock = DockStyle.Top,
+                ColumnCount = 2,
+                RowCount = 1,
+                Margin = new Padding(0, 0, 0, 4),
+            };
+            searchRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
+            searchRow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            searchRow.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            searchRow.Controls.Add(this.missionUnitSearchTextBox, 0, 0);
+            searchRow.Controls.Add(this.missionUnitSearchClearButton, 1, 0);
+
+            root.Controls.Add(searchRow, 0, 1);
 
             this.missionUnitPickerTabs = new TabControl
             {
@@ -219,7 +260,7 @@ namespace Mappy.UI.Forms
             tabOther.Controls.Add(this.missionOtherUnitsTree);
             this.missionUnitPickerTabs.TabPages.Add(tabOther);
 
-            root.Controls.Add(this.missionUnitPickerTabs, 0, 1);
+            root.Controls.Add(this.missionUnitPickerTabs, 0, 2);
 
             root.Controls.Add(
                 new Label
@@ -229,7 +270,7 @@ namespace Mappy.UI.Forms
                         Margin = new Padding(0, 4, 0, 4),
                     },
                 0,
-                2);
+                3);
 
             this.missionPlacedUnitsTree = new TreeView
             {
@@ -238,7 +279,7 @@ namespace Mappy.UI.Forms
                 Margin = new Padding(0, 0, 0, 0),
             };
             this.missionPlacedUnitsTree.NodeMouseDoubleClick += this.MissionPlacedUnitsTree_NodeMouseDoubleClick;
-            root.Controls.Add(this.missionPlacedUnitsTree, 0, 3);
+            root.Controls.Add(this.missionPlacedUnitsTree, 0, 4);
 
             this.missionTab.Controls.Add(root);
         }
@@ -264,6 +305,11 @@ namespace Mappy.UI.Forms
                     tv.Font = font;
                     tv.ItemHeight = rowHeight;
                 }
+            }
+
+            if (this.missionUnitSearchTextBox != null)
+            {
+                this.missionUnitSearchTextBox.Font = font;
             }
         }
 
@@ -672,6 +718,28 @@ namespace Mappy.UI.Forms
             this.missionUnitsList.DoDragDrop("MAPPYUNIT|" + item.InternalName, DragDropEffects.Copy);
         }
 
+        private string MissionUnitPickerSearchQuery =>
+            this.missionUnitSearchTextBox == null || this.missionUnitSearchTextBox.IsDisposed
+                ? string.Empty
+                : (this.missionUnitSearchTextBox.Text ?? string.Empty).Trim();
+
+        private bool MissionUnitMatchesPickerSearch(string internalName)
+        {
+            var q = this.MissionUnitPickerSearchQuery;
+            if (string.IsNullOrEmpty(q))
+            {
+                return true;
+            }
+
+            if (this.missionUnitCatalog == null)
+            {
+                return false;
+            }
+
+            var haystack = this.missionUnitCatalog.GetUnitPickerSearchableText(internalName);
+            return haystack.IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
         private void RefreshMissionUnitsList()
         {
             if (this.missionUnitsList == null || this.missionUnitCatalog == null)
@@ -683,6 +751,11 @@ namespace Mappy.UI.Forms
             this.missionUnitsList.Items.Clear();
             foreach (var n in this.missionUnitCatalog.EnumerateSorted())
             {
+                if (!this.MissionUnitMatchesPickerSearch(n))
+                {
+                    continue;
+                }
+
                 this.missionUnitsList.Items.Add(new MissionUnitPickerItem(n, this.missionUnitCatalog));
             }
 
@@ -719,6 +792,11 @@ namespace Mappy.UI.Forms
                 foreach (var name in this.missionUnitCatalog.EnumerateSorted())
                 {
                     if (this.missionUnitCatalog.GetUnitSide(name) != side)
+                    {
+                        continue;
+                    }
+
+                    if (!this.MissionUnitMatchesPickerSearch(name))
                     {
                         continue;
                     }
