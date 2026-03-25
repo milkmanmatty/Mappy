@@ -1622,7 +1622,10 @@ namespace Mappy.Models
                 heightMid = hg.Get(fx, fy);
             }
 
-            var bmp = this.BuildUnitMarkerBitmap(u, schemaIndex);
+            var schemaType = schemaIndex >= 0 && schemaIndex < this.mapModel.Attributes.Schemas.Count
+                ? this.mapModel.Attributes.Schemas[schemaIndex].SchemaType
+                : string.Empty;
+            var bmp = this.BuildUnitMarkerBitmap(u, schemaType);
             var dw = new DrawableBitmap(bmp);
             var depth = 2000000 + (schemaIndex * 512) + (u.Player % 512);
 
@@ -1654,7 +1657,7 @@ namespace Mappy.Models
             this.unitItems.Remove(key);
         }
 
-        private Bitmap BuildUnitMarkerBitmap(SchemaUnit u, int schemaIndex)
+        private Bitmap BuildUnitMarkerBitmap(SchemaUnit u, string schemaType)
         {
             const int W = 48;
             const int H = 48;
@@ -1662,10 +1665,21 @@ namespace Mappy.Models
             using (var g = Graphics.FromImage(bmp))
             {
                 g.Clear(Color.FromArgb(30, 30, 45));
-                using (var br = new SolidBrush(SchemaVisuals.ColorForSchema(schemaIndex)))
+                const int SchemaBadgeW = 12;
+                const int SchemaBadgeH = 12;
+                var schemaInitial = SchemaTypeInitialLetter(schemaType);
+                using (var br = new SolidBrush(Color.FromArgb(55, 55, 72)))
                 {
-                    g.FillRectangle(br, 0, 0, 12, 12);
+                    g.FillRectangle(br, 0, 0, SchemaBadgeW, SchemaBadgeH);
                 }
+
+                TextRenderer.DrawText(
+                    g,
+                    schemaInitial,
+                    SystemFonts.DefaultFont,
+                    new Rectangle(0, 0, SchemaBadgeW, SchemaBadgeH),
+                    Color.White,
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
 
                 var label = u.Unitname.Length > 4 ? u.Unitname.Substring(0, 4) : u.Unitname;
                 TextRenderer.DrawText(g, label, SystemFonts.DefaultFont, new Rectangle(2, 14, W - 4, 18), Color.White, TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
@@ -1691,6 +1705,24 @@ namespace Mappy.Models
             }
 
             return bmp;
+        }
+
+        private static string SchemaTypeInitialLetter(string schemaType)
+        {
+            if (string.IsNullOrEmpty(schemaType))
+            {
+                return "?";
+            }
+
+            foreach (var ch in schemaType)
+            {
+                if (char.IsLetter(ch))
+                {
+                    return char.ToUpperInvariant(ch).ToString();
+                }
+            }
+
+            return "?";
         }
 
         private void TilesChanged(object sender, ListChangedEventArgs e)
