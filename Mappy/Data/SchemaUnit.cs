@@ -30,6 +30,16 @@ namespace Mappy.Data
 
         public int Kills { get; set; }
 
+        public string InitialMission { get; set; } = string.Empty;
+
+        public int BuildPriority { get; set; }
+
+        public bool AiPriorityTarget { get; set; }
+
+        public bool MissionCriticalUnit { get; set; }
+
+        public bool AiIgnore { get; set; }
+
         public SchemaUnit CloneWithNewId()
         {
             var u = new SchemaUnit(Guid.NewGuid(), this.Unitname)
@@ -42,6 +52,11 @@ namespace Mappy.Data
                 HealthPercentage = this.HealthPercentage,
                 Angle = this.Angle,
                 Kills = this.Kills,
+                InitialMission = this.InitialMission,
+                BuildPriority = this.BuildPriority,
+                AiPriorityTarget = this.AiPriorityTarget,
+                MissionCriticalUnit = this.MissionCriticalUnit,
+                AiIgnore = this.AiIgnore,
             };
             return u;
         }
@@ -58,6 +73,11 @@ namespace Mappy.Data
                 HealthPercentage = this.HealthPercentage,
                 Angle = this.Angle,
                 Kills = this.Kills,
+                InitialMission = this.InitialMission,
+                BuildPriority = this.BuildPriority,
+                AiPriorityTarget = this.AiPriorityTarget,
+                MissionCriticalUnit = this.MissionCriticalUnit,
+                AiIgnore = this.AiIgnore,
             };
             return u;
         }

@@ -9,6 +9,11 @@ namespace Mappy.UI.Forms
 
     public class UnitPropertiesForm : Form
     {
+        private const int TabAreaHeight = 300;
+        private const int BottomBarHeight = 50;
+
+        private TabControl tabControl;
+
         private ComboBox comboSchema;
 
         private ComboBox comboPlayer;
@@ -21,6 +26,12 @@ namespace Mappy.UI.Forms
         private NumericUpDown numericY;
         private NumericUpDown numericZ;
 
+        private TextBox textInitialMission;
+        private NumericUpDown numericBuildPriority;
+        private CheckBox checkAiPriorityTarget;
+        private CheckBox checkMissionCriticalUnit;
+        private CheckBox checkAiIgnore;
+
         public UnitPropertiesForm()
         {
             this.Text = "Unit properties";
@@ -29,24 +40,32 @@ namespace Mappy.UI.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
 
-            int y = 12;
             const int labelW = 100;
             const int fieldX = 120;
 
-            void AddRow(string label, Control c, ref int rowY)
+            void AddLabeledRow(Control parent, string label, Control c, ref int rowY)
             {
-                this.Controls.Add(new Label { Text = label, Location = new Point(12, rowY + 3), Width = labelW });
+                parent.Controls.Add(new Label { Text = label, Location = new Point(12, rowY + 3), Width = labelW });
                 c.Location = new Point(fieldX, rowY);
-                this.Controls.Add(c);
+                parent.Controls.Add(c);
                 rowY += 28;
             }
+
+            this.tabControl = new TabControl
+            {
+                Location = new Point(0, 0),
+                Size = new Size(360, TabAreaHeight),
+            };
+
+            var statsPage = new TabPage("Stats");
+            int y = 12;
 
             this.comboSchema = new ComboBox
             {
                 Width = 220,
                 DropDownStyle = ComboBoxStyle.DropDownList,
             };
-            AddRow("Schema", this.comboSchema, ref y);
+            AddLabeledRow(statsPage, "Schema", this.comboSchema, ref y);
 
             this.comboPlayer = new ComboBox
             {
@@ -58,36 +77,75 @@ namespace Mappy.UI.Forms
                 this.comboPlayer.Items.Add("Player " + p);
             }
 
-            AddRow("Player", this.comboPlayer, ref y);
+            AddLabeledRow(statsPage, "Player", this.comboPlayer, ref y);
 
             this.textIdent = new TextBox { Width = 200 };
-            AddRow("Identifier", this.textIdent, ref y);
+            AddLabeledRow(statsPage, "Identifier", this.textIdent, ref y);
 
             this.numericHealth = new NumericUpDown { Minimum = 1, Maximum = 100, Width = 80 };
-            AddRow("Health %", this.numericHealth, ref y);
+            AddLabeledRow(statsPage, "Health %", this.numericHealth, ref y);
 
             this.numericAngle = new NumericUpDown { Minimum = -32768, Maximum = 32767, Width = 80 };
-            AddRow("Angle", this.numericAngle, ref y);
+            AddLabeledRow(statsPage, "Angle", this.numericAngle, ref y);
 
             this.numericKills = new NumericUpDown { Minimum = 0, Maximum = 100000, Width = 80 };
-            AddRow("Kills", this.numericKills, ref y);
+            AddLabeledRow(statsPage, "Kills", this.numericKills, ref y);
 
             this.numericX = new NumericUpDown { Minimum = -10000000, Maximum = 10000000, Width = 100 };
-            AddRow("XPos", this.numericX, ref y);
+            AddLabeledRow(statsPage, "XPos", this.numericX, ref y);
 
             this.numericY = new NumericUpDown { Minimum = -10000000, Maximum = 10000000, Width = 100 };
-            AddRow("YPos (Height)", this.numericY, ref y);
+            AddLabeledRow(statsPage, "YPos (Height)", this.numericY, ref y);
 
             this.numericZ = new NumericUpDown { Minimum = -10000000, Maximum = 10000000, Width = 100 };
-            AddRow("ZPos", this.numericZ, ref y);
+            AddLabeledRow(statsPage, "ZPos", this.numericZ, ref y);
 
-            var ok = new Button { Text = "OK", DialogResult = DialogResult.OK, Location = new Point(80, y + 8) };
-            var cancel = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, Location = new Point(180, y + 8) };
+            var aiPage = new TabPage("AI");
+            int aiY = 12;
+
+            this.textInitialMission = new TextBox { Width = 200 };
+            AddLabeledRow(aiPage, "Initial Mission", this.textInitialMission, ref aiY);
+
+            this.numericBuildPriority = new NumericUpDown { Minimum = -1000000, Maximum = 1000000, Width = 100 };
+            AddLabeledRow(aiPage, "Build Priority", this.numericBuildPriority, ref aiY);
+
+            this.checkAiPriorityTarget = new CheckBox
+            {
+                Text = "Priority Target Of AI",
+                AutoSize = true,
+                Location = new Point(12, aiY),
+            };
+            aiPage.Controls.Add(this.checkAiPriorityTarget);
+            aiY += 28;
+
+            this.checkMissionCriticalUnit = new CheckBox
+            {
+                Text = "Mission Critical Unit",
+                AutoSize = true,
+                Location = new Point(12, aiY),
+            };
+            aiPage.Controls.Add(this.checkMissionCriticalUnit);
+            aiY += 28;
+
+            this.checkAiIgnore = new CheckBox
+            {
+                Text = "AI Should Ignore Unit",
+                AutoSize = true,
+                Location = new Point(12, aiY),
+            };
+            aiPage.Controls.Add(this.checkAiIgnore);
+
+            this.tabControl.TabPages.Add(statsPage);
+            this.tabControl.TabPages.Add(aiPage);
+            this.Controls.Add(this.tabControl);
+
+            var ok = new Button { Text = "OK", DialogResult = DialogResult.OK, Location = new Point(80, TabAreaHeight + 8) };
+            var cancel = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, Location = new Point(180, TabAreaHeight + 8) };
             this.AcceptButton = ok;
             this.CancelButton = cancel;
             this.Controls.Add(ok);
             this.Controls.Add(cancel);
-            this.ClientSize = new Size(360, y + 50);
+            this.ClientSize = new Size(360, TabAreaHeight + BottomBarHeight);
         }
 
         public int SelectedSchemaIndex => this.comboSchema.SelectedIndex;
@@ -116,6 +174,12 @@ namespace Mappy.UI.Forms
             this.numericX.Value = ClampToNumericRange(this.numericX, u.XPos);
             this.numericY.Value = ClampToNumericRange(this.numericY, u.YPos);
             this.numericZ.Value = ClampToNumericRange(this.numericZ, u.ZPos);
+
+            this.textInitialMission.Text = u.InitialMission ?? string.Empty;
+            this.numericBuildPriority.Value = ClampToNumericRange(this.numericBuildPriority, u.BuildPriority);
+            this.checkAiPriorityTarget.Checked = u.AiPriorityTarget;
+            this.checkMissionCriticalUnit.Checked = u.MissionCriticalUnit;
+            this.checkAiIgnore.Checked = u.AiIgnore;
         }
 
         public void ApplyTo(SchemaUnit u)
@@ -128,6 +192,12 @@ namespace Mappy.UI.Forms
             u.XPos = (int)this.numericX.Value;
             u.YPos = (int)this.numericY.Value;
             u.ZPos = (int)this.numericZ.Value;
+
+            u.InitialMission = this.textInitialMission.Text ?? string.Empty;
+            u.BuildPriority = (int)this.numericBuildPriority.Value;
+            u.AiPriorityTarget = this.checkAiPriorityTarget.Checked;
+            u.MissionCriticalUnit = this.checkMissionCriticalUnit.Checked;
+            u.AiIgnore = this.checkAiIgnore.Checked;
         }
 
         private static decimal ClampToNumericRange(NumericUpDown n, int v)

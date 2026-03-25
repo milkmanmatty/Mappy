@@ -22,6 +22,11 @@ namespace Mappy.Models
             this.HealthPercentage = u.HealthPercentage;
             this.Angle = u.Angle;
             this.Kills = u.Kills;
+            this.InitialMission = u.InitialMission ?? string.Empty;
+            this.BuildPriority = u.BuildPriority;
+            this.AiPriorityTarget = u.AiPriorityTarget;
+            this.MissionCriticalUnit = u.MissionCriticalUnit;
+            this.AiIgnore = u.AiIgnore;
         }
 
         public string Unitname { get; set; }
@@ -40,6 +45,16 @@ namespace Mappy.Models
 
         public int Kills { get; set; }
 
+        public string InitialMission { get; set; }
+
+        public int BuildPriority { get; set; }
+
+        public bool AiPriorityTarget { get; set; }
+
+        public bool MissionCriticalUnit { get; set; }
+
+        public bool AiIgnore { get; set; }
+
         public SchemaUnit ToNewSchemaUnit(Point viewportLocation, int mapWidthPx, int mapHeightPx)
         {
             var x = viewportLocation.X + this.VPOffsetX;
@@ -57,6 +72,11 @@ namespace Mappy.Models
                 Angle = this.Angle,
                 Kills = this.Kills,
                 YPos = 0,
+                InitialMission = this.InitialMission ?? string.Empty,
+                BuildPriority = this.BuildPriority,
+                AiPriorityTarget = this.AiPriorityTarget,
+                MissionCriticalUnit = this.MissionCriticalUnit,
+                AiIgnore = this.AiIgnore,
             };
         }
     }

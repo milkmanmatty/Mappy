@@ -471,6 +471,11 @@ namespace Mappy.Data
                         HealthPercentage = TdfConvert.ToInt32(un.Entries.GetOrDefault("HealthPercentage", "100")),
                         Angle = TdfConvert.ToInt32(un.Entries.GetOrDefault("Angle", "0")),
                         Kills = TdfConvert.ToInt32(un.Entries.GetOrDefault("Kills", "0")),
+                        InitialMission = un.Entries.GetOrDefault("InitialMission", string.Empty),
+                        BuildPriority = TdfConvert.ToInt32(un.Entries.GetOrDefault("BuildPriority", "0")),
+                        AiPriorityTarget = TdfConvert.ToInt32(un.Entries.GetOrDefault("AiPriorityTarget", "0")) != 0,
+                        MissionCriticalUnit = TdfConvert.ToInt32(un.Entries.GetOrDefault("MissionCriticalUnit", "0")) != 0,
+                        AiIgnore = TdfConvert.ToInt32(un.Entries.GetOrDefault("AiIgnore", "0")) != 0,
                     };
                     sch.Units.Add(u);
                 }
@@ -563,6 +568,11 @@ namespace Mappy.Data
                     un.Entries["HealthPercentage"] = TdfConvert.ToString(u.HealthPercentage);
                     un.Entries["Angle"] = TdfConvert.ToString(u.Angle);
                     un.Entries["Kills"] = TdfConvert.ToString(u.Kills);
+                    un.Entries["InitialMission"] = u.InitialMission ?? string.Empty;
+                    un.Entries["BuildPriority"] = TdfConvert.ToString(u.BuildPriority);
+                    un.Entries["AiPriorityTarget"] = u.AiPriorityTarget ? "1" : "0";
+                    un.Entries["MissionCriticalUnit"] = u.MissionCriticalUnit ? "1" : "0";
+                    un.Entries["AiIgnore"] = u.AiIgnore ? "1" : "0";
                     unitsRoot.Keys[un.Name] = un;
                 }
 
