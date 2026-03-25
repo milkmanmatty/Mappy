@@ -1,7 +1,7 @@
 namespace Mappy.UI.Forms
 {
     using System;
-    using System.Drawing;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reactive.Linq;
     using System.Windows.Forms;
@@ -499,6 +499,53 @@ namespace Mappy.UI.Forms
 
             this.CancelMissionPlacedUnitsTreeMoveDebounce();
 
+            var hadPriorTree = this.missionPlacedUnitsTree.Nodes.Count > 0;
+            MissionPlacedUnitTreeTag? priorSelection = null;
+            MissionPlacedUnitTreeTag? priorTop = null;
+            HashSet<int> priorExpandedSchemaIndices = null;
+            if (hadPriorTree)
+            {
+                if (this.missionPlacedUnitsTree.SelectedNode?.Tag is MissionPlacedUnitTreeTag selTag)
+                {
+                    priorSelection = selTag;
+                }
+
+                if (this.missionPlacedUnitsTree.TopNode?.Tag is MissionPlacedUnitTreeTag topTag)
+                {
+                    priorTop = topTag;
+                }
+
+                priorExpandedSchemaIndices = new HashSet<int>();
+                foreach (TreeNode root in this.missionPlacedUnitsTree.Nodes)
+                {
+                    if (root.Tag is MissionPlacedUnitTreeTag t && !t.UnitId.HasValue && root.IsExpanded)
+                    {
+                        priorExpandedSchemaIndices.Add(t.SchemaIndex);
+                    }
+                }
+            }
+
+            TreeNode FindPlacedUnitNode(MissionPlacedUnitTreeTag tag)
+            {
+                foreach (TreeNode root in this.missionPlacedUnitsTree.Nodes)
+                {
+                    if (root.Tag is MissionPlacedUnitTreeTag rt && rt.Equals(tag))
+                    {
+                        return root;
+                    }
+
+                    foreach (TreeNode child in root.Nodes)
+                    {
+                        if (child.Tag is MissionPlacedUnitTreeTag ct && ct.Equals(tag))
+                        {
+                            return child;
+                        }
+                    }
+                }
+
+                return null;
+            }
+
             this.missionPlacedUnitsTree.BeginUpdate();
             try
             {
@@ -527,10 +574,35 @@ namespace Mappy.UI.Forms
                                         });
                                 }
 
-                                parent.Expand();
+                                var expand = !hadPriorTree
+                                    || priorExpandedSchemaIndices == null
+                                    || priorExpandedSchemaIndices.Contains(s);
+                                if (expand)
+                                {
+                                    parent.Expand();
+                                }
+
                                 this.missionPlacedUnitsTree.Nodes.Add(parent);
                             }
                         });
+
+                if (priorSelection.HasValue)
+                {
+                    var n = FindPlacedUnitNode(priorSelection.Value);
+                    if (n != null)
+                    {
+                        this.missionPlacedUnitsTree.SelectedNode = n;
+                    }
+                }
+
+                if (priorTop.HasValue)
+                {
+                    var n = FindPlacedUnitNode(priorTop.Value);
+                    if (n != null)
+                    {
+                        this.missionPlacedUnitsTree.TopNode = n;
+                    }
+                }
             }
             finally
             {
