@@ -1,14 +1,17 @@
 namespace Mappy.UI.Forms
 {
+    using System;
     using System.Drawing;
     using System.Windows.Forms;
 
     public sealed class NewSchemaTypePromptForm : Form
     {
         private readonly TextBox typeTextBox;
+        private readonly Func<string, string> validateTrimmedName;
 
-        public NewSchemaTypePromptForm(string defaultSchemaType)
+        public NewSchemaTypePromptForm(string defaultSchemaType, Func<string, string> validateTrimmedName = null)
         {
+            this.validateTrimmedName = validateTrimmedName;
             this.Text = "New schema";
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.StartPosition = FormStartPosition.CenterParent;
@@ -27,7 +30,8 @@ namespace Mappy.UI.Forms
                 Location = new Point(12, 42),
                 Width = 320,
             };
-            var ok = new Button { Text = "OK", DialogResult = DialogResult.OK, Location = new Point(160, 78) };
+            var ok = new Button { Text = "OK", Location = new Point(160, 78) };
+            ok.Click += (_, __) => this.TryAccept();
             var cancel = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, Location = new Point(252, 78) };
             this.AcceptButton = ok;
             this.CancelButton = cancel;
@@ -39,5 +43,28 @@ namespace Mappy.UI.Forms
         }
 
         public string SchemaTypeInput => this.typeTextBox.Text;
+
+        private void TryAccept()
+        {
+            var trimmed = (this.typeTextBox.Text ?? string.Empty).Trim();
+            if (trimmed.Length == 0)
+            {
+                MessageBox.Show(this, "Schema name cannot be empty.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (this.validateTrimmedName != null)
+            {
+                var err = this.validateTrimmedName(trimmed);
+                if (!string.IsNullOrEmpty(err))
+                {
+                    MessageBox.Show(this, err, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
     }
 }

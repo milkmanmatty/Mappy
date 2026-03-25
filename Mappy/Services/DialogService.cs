@@ -238,11 +238,11 @@ namespace Mappy.Services
             }
         }
 
-        public string AskUserForNewSchemaType(string defaultSchemaType)
+        public string AskUserForNewSchemaType(string defaultSchemaType, Func<string, string> validateTrimmedName = null)
         {
-            using (var f = new UI.Forms.NewSchemaTypePromptForm(defaultSchemaType))
+            using (var f = new UI.Forms.NewSchemaTypePromptForm(defaultSchemaType, validateTrimmedName))
             {
-                return f.ShowDialog(this.owner) == DialogResult.OK ? f.SchemaTypeInput : null;
+                return f.ShowDialog(this.owner) == DialogResult.OK ? f.SchemaTypeInput.Trim() : null;
             }
         }
 
