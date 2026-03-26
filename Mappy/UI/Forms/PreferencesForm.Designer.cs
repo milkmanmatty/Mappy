@@ -296,7 +296,7 @@ namespace Mappy.UI.Forms
 			this.showUnitFriendlyNameFirstCheckBox.Name = "showUnitFriendlyNameFirstCheckBox";
 			this.showUnitFriendlyNameFirstCheckBox.Size = new System.Drawing.Size(392, 17);
 			this.showUnitFriendlyNameFirstCheckBox.TabIndex = 2;
-			this.showUnitFriendlyNameFirstCheckBox.Text = "Prioritise friendly name (Tab)";
+			this.showUnitFriendlyNameFirstCheckBox.Text = "Prioritise friendly name (tab)";
 			this.showUnitFriendlyNameFirstCheckBox.UseVisualStyleBackColor = true;
 			// 
 			// inactiveSchemaOpacityNumeric
