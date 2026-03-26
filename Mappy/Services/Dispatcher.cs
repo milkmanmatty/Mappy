@@ -81,7 +81,7 @@ namespace Mappy.Services
                     var w = (BackgroundWorker)sender;
 
                     if (!SectionLoadingUtils.LoadSections(
-                        i => w.ReportProgress((40 * i) / 100),
+                        i => w.ReportProgress((30 * i) / 100),
                         () => w.CancellationPending,
                         out var result))
                     {
@@ -90,7 +90,7 @@ namespace Mappy.Services
                     }
 
                     if (!FeatureLoadingUtils.LoadFeatures(
-                        i => w.ReportProgress(40 + ((30 * i) / 100)),
+                        i => w.ReportProgress(30 + ((20 * i) / 100)),
                         () => w.CancellationPending,
                         out var featureResult))
                     {
@@ -99,13 +99,19 @@ namespace Mappy.Services
                     }
 
                     if (!UnitLoadingUtils.LoadUnitCatalog(
-                        i => w.ReportProgress(70 + ((30 * i) / 100)),
+                        i => w.ReportProgress(50 + ((10 * i) / 100)),
                         () => w.CancellationPending,
                         out var unitResult))
                     {
                         args.Cancel = true;
                         return;
                     }
+
+                    var objectNames = unitResult.Records.Select(r => r.ObjectName).Where(n => !string.IsNullOrWhiteSpace(n)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                    ThreeDoTextured.PreloadAll(
+                        objectNames,
+                        i => w.ReportProgress(80 + ((20 * i) / 100)),
+                        () => w.CancellationPending);
 
                     args.Result = new SectionFeatureLoadResult(
                             result.Records,
@@ -162,7 +168,7 @@ namespace Mappy.Services
 
             dlg.CancelPressed += (sender, args) => worker.CancelAsync();
 
-            dlg.MessageText = "Loading sections and features ...";
+            dlg.MessageText = "Loading sections, features and units...";
             worker.RunWorkerAsync();
 
             dlg.Display();

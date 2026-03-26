@@ -1721,7 +1721,8 @@ namespace Mappy.Models
             var objectBase = this.unitCatalogService != null
                 ? this.unitCatalogService.GetThreeDoBaseName(u.Unitname)
                 : u.Unitname;
-            var wire = ThreeDoWireframe.TryGetFromSearchPaths(objectBase);
+            var unitModel = ThreeDoTextured.TryGetFromSearchPaths(objectBase, slot, u.Angle)
+                ?? ThreeDoWireframe.TryGetFromSearchPaths(objectBase);
 
             int outW;
             int outH;
@@ -1729,10 +1730,10 @@ namespace Mappy.Models
             int wireY;
             Point anchor;
 
-            if (wire?.Bitmap != null && wire.Bitmap.Width > 0 && wire.Bitmap.Height > 0)
+            if (unitModel?.Bitmap != null && unitModel.Bitmap.Width > 0 && unitModel.Bitmap.Height > 0)
             {
-                var bw = wire.Bitmap.Width;
-                var bh = wire.Bitmap.Height;
+                var bw = unitModel.Bitmap.Width;
+                var bh = unitModel.Bitmap.Height;
                 var minTopW = SchemaBadgeW + 6 + badgeW + Pad;
                 outW = Math.Max(bw + Pad * 2, minTopW);
                 wireX = (outW - bw) / 2;
@@ -1756,9 +1757,9 @@ namespace Mappy.Models
             {
                 g.Clear(Color.Transparent);
 
-                if (wire?.Bitmap != null && wire.Bitmap.Width > 0 && wire.Bitmap.Height > 0)
+                if (unitModel?.Bitmap != null && unitModel.Bitmap.Width > 0 && unitModel.Bitmap.Height > 0)
                 {
-                    g.DrawImageUnscaled(wire.Bitmap, wireX, wireY);
+                    g.DrawImageUnscaled(unitModel.Bitmap, wireX, wireY);
                 }
 
                 using (var br = new SolidBrush(Color.FromArgb(55, 55, 72)))

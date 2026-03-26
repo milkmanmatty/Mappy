@@ -706,6 +706,11 @@ namespace Mappy.Util
 
         private static Vector2D ProjectPoint(Vector3D point)
         {
+            return ProjectThreeDoVertex(point);
+        }
+
+        public static Vector2D ProjectThreeDoVertex(Vector3D point)
+        {
             point /= Math.Pow(2, 16);
 
             point.X *= -1;

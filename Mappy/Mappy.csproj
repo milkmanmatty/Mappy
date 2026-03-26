@@ -161,10 +161,12 @@
     <Compile Include="IO\FeatureRenderLoader.cs" />
     <Compile Include="IO\FeatureTdfLoader.cs" />
     <Compile Include="IO\FeatureLoadingUtils.cs" />
+    <Compile Include="IO\GafTextureLoader.cs" />
     <Compile Include="IO\UnitLoadingUtils.cs" />
     <Compile Include="IO\UnitFbiCatalogLoader.cs" />
     <Compile Include="IO\Gaf\GafEntry.cs" />
     <Compile Include="IO\Gaf\GafEntryArrayAdapter.cs" />
+    <Compile Include="IO\Gaf\GafEntryAllFramesArrayAdapter.cs" />
     <Compile Include="IO\Gaf\GafFrame.cs" />
     <Compile Include="IO\HpiErrorInfo.cs" />
     <Compile Include="IO\HpiInnerFileErrorInfo.cs" />
@@ -173,6 +175,9 @@
     <Compile Include="IO\MapModelTntAdapter.cs" />
     <Compile Include="IO\MapSaver.cs" />
     <Compile Include="IO\ModelEdgeReaderAdapter.cs" />
+    <Compile Include="IO\ModelPrimitiveCollectorAdapter.cs" />
+    <Compile Include="IO\GafTextureFrame.cs" />
+    <Compile Include="IO\ThreeDoTextured.cs" />
     <Compile Include="IO\SectionFactory.cs" />
     <Compile Include="IO\SectionLoader.cs" />
     <Compile Include="IO\SectionLoadingUtils.cs" />
@@ -387,6 +392,7 @@
     <Compile Include="Util\ImgUtil.cs" />
     <Compile Include="Util\MetalSpotDisplayFormat.cs" />
     <Compile Include="Util\PlayerSlotVisuals.cs" />
+    <Compile Include="Util\TaTeamColorRemap.cs" />
     <Compile Include="Util\Notifier.cs" />
     <Compile Include="Util\OffsetBitmap.cs" />
     <Compile Include="Util\Util.cs" />

@@ -7,7 +7,7 @@ namespace Mappy.Util
         private static readonly Color[] Backgrounds =
         {
             Color.FromArgb(0, 102, 204),
-            Color.FromArgb(220, 53, 69),
+            Color.FromArgb(226, 54, 46),
             Color.White,
             Color.FromArgb(50, 205, 50),
             Color.FromArgb(0, 51, 102),
