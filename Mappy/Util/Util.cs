@@ -477,22 +477,24 @@ namespace Mappy.Util
             var w = (int)Math.Ceiling(boundingBox.Width) + 1;
             var h = (int)Math.Ceiling(boundingBox.Height) + 1;
 
-            var b = new Bitmap(w, h);
+            var b = new Bitmap(w, h, PixelFormat.Format32bppArgb);
 
             var offset = boundingBox.MinXY;
 
-            var g = Graphics.FromImage(b);
-
-            g.TranslateTransform((float)(-offset.X), (float)(-offset.Y));
-
-            foreach (var l in projectedLines)
+            using (var g = Graphics.FromImage(b))
             {
-                g.DrawLine(
-                    Pens.Magenta,
-                    (float)l.Start.X,
-                    (float)l.Start.Y,
-                    (float)l.End.X,
-                    (float)l.End.Y);
+                g.Clear(Color.Transparent);
+                g.TranslateTransform((float)(-offset.X), (float)(-offset.Y));
+
+                foreach (var l in projectedLines)
+                {
+                    g.DrawLine(
+                        Pens.Magenta,
+                        (float)l.Start.X,
+                        (float)l.Start.Y,
+                        (float)l.End.X,
+                        (float)l.End.Y);
+                }
             }
 
             return new OffsetBitmap(

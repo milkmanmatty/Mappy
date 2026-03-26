@@ -13,6 +13,7 @@ namespace Mappy.Models
     using Mappy;
     using Mappy.Collections;
     using Mappy.Data;
+    using Mappy.IO;
     using Mappy.Models.Enums;
     using Mappy.Services;
     using Mappy.UI.Controls;
@@ -1661,7 +1662,7 @@ namespace Mappy.Models
             var schemaType = schemaIndex >= 0 && schemaIndex < this.mapModel.Attributes.Schemas.Count
                 ? this.mapModel.Attributes.Schemas[schemaIndex].SchemaType
                 : string.Empty;
-            var bmp = this.BuildUnitMarkerBitmap(u, schemaType);
+            var (bmp, markerAnchor) = this.BuildUnitMarkerBitmap(u, schemaType);
             if (schemaIndex != this.mapModel.ActiveSchemaIndex)
             {
                 bmp = ApplyInactiveSchemaOpacity(bmp, MappySettings.Settings.GetInactiveSchemaOpacityOrDefault());
@@ -1671,8 +1672,8 @@ namespace Mappy.Models
             var depth = 2000000 + (schemaIndex * 512) + (u.Player % 512);
 
             var item = new DrawableItem(
-                u.XPos - (dw.Width / 2),
-                u.ZPos - (heightMid / 2) - (dw.Height / 2),
+                u.XPos - markerAnchor.X,
+                u.ZPos - (heightMid / 2) - markerAnchor.Y,
                 depth,
                 dw);
             item.Tag = new UnitTag(schemaIndex, unitId);
@@ -1698,17 +1699,68 @@ namespace Mappy.Models
             this.unitItems.Remove(key);
         }
 
-        private Bitmap BuildUnitMarkerBitmap(SchemaUnit u, string schemaType)
+        private (Bitmap Bitmap, Point Anchor) BuildUnitMarkerBitmap(SchemaUnit u, string schemaType)
         {
-            const int W = 48;
-            const int H = 48;
-            var bmp = new Bitmap(W, H);
+            const int SchemaBadgeW = 12;
+            const int SchemaBadgeH = 12;
+            const int TopRowH = 12;
+            const int LabelH = 16;
+            const int Pad = 2;
+
+            var schemaInitial = SchemaTypeInitialLetter(schemaType);
+            var slot = PlayerSlotVisuals.ClampPlayerSlot(u.Player);
+            var playerText = u.Player.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            var badgeW = playerText.Length >= 2 ? 20 : 14;
+            const int BadgeH = 12;
+
+            var markerSource = this.unitCatalogService != null
+                ? this.unitCatalogService.GetPrimaryLabelForMapMarker(u.Unitname)
+                : u.Unitname;
+            var label = markerSource.Length > 4 ? markerSource.Substring(0, 4) : markerSource;
+
+            var objectBase = this.unitCatalogService != null
+                ? this.unitCatalogService.GetThreeDoBaseName(u.Unitname)
+                : u.Unitname;
+            var wire = ThreeDoWireframe.TryGetFromSearchPaths(objectBase);
+
+            int outW;
+            int outH;
+            int wireX;
+            int wireY;
+            Point anchor;
+
+            if (wire?.Bitmap != null && wire.Bitmap.Width > 0 && wire.Bitmap.Height > 0)
+            {
+                var bw = wire.Bitmap.Width;
+                var bh = wire.Bitmap.Height;
+                var minTopW = SchemaBadgeW + 6 + badgeW + Pad;
+                outW = Math.Max(bw + Pad * 2, minTopW);
+                wireX = (outW - bw) / 2;
+                wireY = TopRowH;
+                outH = TopRowH + bh + Pad + LabelH + Pad;
+                anchor = new Point(
+                    wireX + (bw / 2),
+                    wireY + (bh / 2));
+            }
+            else
+            {
+                outW = 48;
+                wireX = 0;
+                wireY = TopRowH;
+                outH = TopRowH + Pad + LabelH + Pad;
+                anchor = new Point(outW / 2, outH / 2);
+            }
+
+            var bmp = new Bitmap(outW, outH, PixelFormat.Format32bppArgb);
             using (var g = Graphics.FromImage(bmp))
             {
-                g.Clear(Color.FromArgb(30, 30, 45));
-                const int SchemaBadgeW = 12;
-                const int SchemaBadgeH = 12;
-                var schemaInitial = SchemaTypeInitialLetter(schemaType);
+                g.Clear(Color.Transparent);
+
+                if (wire?.Bitmap != null && wire.Bitmap.Width > 0 && wire.Bitmap.Height > 0)
+                {
+                    g.DrawImageUnscaled(wire.Bitmap, wireX, wireY);
+                }
+
                 using (var br = new SolidBrush(Color.FromArgb(55, 55, 72)))
                 {
                     g.FillRectangle(br, 0, 0, SchemaBadgeW, SchemaBadgeH);
@@ -1722,18 +1774,8 @@ namespace Mappy.Models
                     Color.White,
                     TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
 
-                var markerSource = this.unitCatalogService != null
-                    ? this.unitCatalogService.GetPrimaryLabelForMapMarker(u.Unitname)
-                    : u.Unitname;
-                var label = markerSource.Length > 4 ? markerSource.Substring(0, 4) : markerSource;
-                TextRenderer.DrawText(g, label, SystemFonts.DefaultFont, new Rectangle(2, 14, W - 4, 18), Color.White, TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
-
-                var slot = PlayerSlotVisuals.ClampPlayerSlot(u.Player);
-                var playerText = u.Player.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                var badgeW = playerText.Length >= 2 ? 20 : 14;
-                const int BadgeH = 12;
-                var badgeX = W - badgeW - 2;
-                const int BadgeY = 2;
+                var badgeX = outW - badgeW - Pad;
+                const int BadgeY = 0;
                 using (var br = new SolidBrush(PlayerSlotVisuals.BackgroundForPlayer(slot)))
                 {
                     g.FillRectangle(br, badgeX, BadgeY, badgeW, BadgeH);
@@ -1746,9 +1788,18 @@ namespace Mappy.Models
                     new Rectangle(badgeX, BadgeY, badgeW, BadgeH),
                     PlayerSlotVisuals.ForegroundForPlayer(slot),
                     TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
+
+                var labelY = outH - LabelH - Pad;
+                TextRenderer.DrawText(
+                    g,
+                    label,
+                    SystemFonts.DefaultFont,
+                    new Rectangle(Pad, labelY, outW - Pad * 2, LabelH),
+                    Color.White,
+                    TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
             }
 
-            return bmp;
+            return (bmp, anchor);
         }
 
         private static Bitmap ApplyInactiveSchemaOpacity(Bitmap source, float opacity)

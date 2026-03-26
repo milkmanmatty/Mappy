@@ -23,6 +23,7 @@ namespace Mappy.IO
 
             var side = UnitSideCategory.Other;
             string displayName = null;
+            string objectName = null;
             if (file.Size > 0 && file.Size < 10_000_000)
             {
                 try
@@ -35,6 +36,7 @@ namespace Mappy.IO
                         var root = TdfNode.LoadTdf(reader);
                         side = ClassifySideFromTdf(root);
                         displayName = FindUnitNameEntryFromTdf(root);
+                        objectName = FindObjectNameFromTdf(root);
                     }
                 }
                 catch (Exception)
@@ -42,7 +44,7 @@ namespace Mappy.IO
                 }
             }
 
-            this.Records.Add(new UnitCatalogLoadRecord(name, side, displayName));
+            this.Records.Add(new UnitCatalogLoadRecord(name, side, displayName, objectName));
         }
 
         protected override IEnumerable<HpiArchive.FileInfo> EnumerateFiles(HpiArchive r)
@@ -156,6 +158,46 @@ namespace Mappy.IO
             }
 
             return null;
+        }
+
+        private static string FindObjectNameFromTdf(TdfNode node)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+
+            if (node.Entries.TryGetValue("Objectname", out var o))
+            {
+                return NormalizeObjectName(o);
+            }
+
+            foreach (var child in node.Keys.Values)
+            {
+                var t = FindObjectNameFromTdf(child);
+                if (t != null)
+                {
+                    return t;
+                }
+            }
+
+            return null;
+        }
+
+        private static string NormalizeObjectName(string raw)
+        {
+            if (string.IsNullOrWhiteSpace(raw))
+            {
+                return null;
+            }
+
+            raw = raw.Trim();
+            if (raw.EndsWith(".3do", StringComparison.OrdinalIgnoreCase))
+            {
+                raw = raw.Substring(0, raw.Length - 4);
+            }
+
+            return raw;
         }
 
         private static UnitSideCategory ClassifySideFromTdf(TdfNode root)

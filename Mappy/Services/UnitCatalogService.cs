@@ -16,6 +16,9 @@ namespace Mappy.Services
         private readonly Dictionary<string, string> displayNameByUnit =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
+        private readonly Dictionary<string, string> objectNameByUnit =
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
         public event EventHandler NamesChanged;
 
         public event EventHandler UnitPickerLabelsChanged;
@@ -90,6 +93,16 @@ namespace Mappy.Services
                         changed = true;
                     }
                 }
+
+                if (!string.IsNullOrWhiteSpace(r.ObjectName))
+                {
+                    var on = r.ObjectName.Trim();
+                    if (!this.objectNameByUnit.TryGetValue(name, out var prevOn) || string.IsNullOrWhiteSpace(prevOn))
+                    {
+                        this.objectNameByUnit[name] = on;
+                        changed = true;
+                    }
+                }
             }
 
             if (changed)
@@ -160,6 +173,21 @@ namespace Mappy.Services
             }
 
             return unitInternalName;
+        }
+
+        public string GetThreeDoBaseName(string unitInternalName)
+        {
+            if (string.IsNullOrEmpty(unitInternalName))
+            {
+                return string.Empty;
+            }
+
+            if (this.objectNameByUnit.TryGetValue(unitInternalName, out var o) && !string.IsNullOrWhiteSpace(o))
+            {
+                return o.Trim();
+            }
+
+            return unitInternalName.Trim();
         }
 
         public UnitSideCategory GetUnitSide(string unitName)
