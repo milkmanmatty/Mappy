@@ -145,8 +145,13 @@
     <Compile Include="Data\FeatureRecord.cs" />
     <Compile Include="Data\IMapTile.cs" />
     <Compile Include="Data\MapAttributes.cs" />
+    <Compile Include="Data\MapSchema.cs" />
     <Compile Include="Data\MapTile.cs" />
+    <Compile Include="Data\SchemaUnit.cs" />
+    <Compile Include="Data\UnitCatalogLoadRecord.cs" />
+    <Compile Include="Data\UnitSideCategory.cs" />
     <Compile Include="Data\Positioned.cs" />
+    <Compile Include="Data\SchemaUnitsChangedEventArgs.cs" />
     <Compile Include="Data\Section.cs" />
     <Compile Include="Data\StartPositionChangedEventArgs.cs" />
     <Compile Include="ExtensionMethods.cs" />
@@ -156,8 +161,12 @@
     <Compile Include="IO\FeatureRenderLoader.cs" />
     <Compile Include="IO\FeatureTdfLoader.cs" />
     <Compile Include="IO\FeatureLoadingUtils.cs" />
+    <Compile Include="IO\GafTextureLoader.cs" />
+    <Compile Include="IO\UnitLoadingUtils.cs" />
+    <Compile Include="IO\UnitFbiCatalogLoader.cs" />
     <Compile Include="IO\Gaf\GafEntry.cs" />
     <Compile Include="IO\Gaf\GafEntryArrayAdapter.cs" />
+    <Compile Include="IO\Gaf\GafEntryAllFramesArrayAdapter.cs" />
     <Compile Include="IO\Gaf\GafFrame.cs" />
     <Compile Include="IO\HpiErrorInfo.cs" />
     <Compile Include="IO\HpiInnerFileErrorInfo.cs" />
@@ -166,9 +175,13 @@
     <Compile Include="IO\MapModelTntAdapter.cs" />
     <Compile Include="IO\MapSaver.cs" />
     <Compile Include="IO\ModelEdgeReaderAdapter.cs" />
+    <Compile Include="IO\ModelPrimitiveCollectorAdapter.cs" />
+    <Compile Include="IO\GafTextureFrame.cs" />
+    <Compile Include="IO\ThreeDoTextured.cs" />
     <Compile Include="IO\SectionFactory.cs" />
     <Compile Include="IO\SectionLoader.cs" />
     <Compile Include="IO\SectionLoadingUtils.cs" />
+    <Compile Include="IO\ThreeDoWireframe.cs" />
     <Compile Include="MappySettings.cs" />
     <Compile Include="Maybe.cs" />
     <Compile Include="Models\BandboxBehaviours\FreeBandboxBehaviour.cs" />
@@ -182,7 +195,9 @@
     <Compile Include="Models\Enums\GUITab.cs" />
     <Compile Include="Models\Enums\HeightEditMode.cs" />
     <Compile Include="Models\Enums\LightDirection.cs" />
+    <Compile Include="Models\Enums\UnitPlacementPlayerMenuChoice.cs" />
     <Compile Include="Models\FeatureClipboardRecord.cs" />
+    <Compile Include="Models\SchemaUnitClipboardRecord.cs" />
     <Compile Include="Models\FeatureInstance.cs" />
     <Compile Include="Models\FeatureInstanceEventArgs.cs" />
     <Compile Include="Models\FeatureViewViewModel.cs" />
@@ -198,6 +213,7 @@
     <Compile Include="Models\ListViewItem.cs" />
     <Compile Include="Models\MainFormViewModel.cs" />
     <Compile Include="Models\MapAttributesResult.cs" />
+    <Compile Include="Models\MapUnitRef.cs" />
     <Compile Include="Models\MapViewViewModel.cs" />
     <Compile Include="Models\MinimapFormViewModel.cs" />
     <Compile Include="Models\SectionFeatureLoadResult.cs" />
@@ -205,20 +221,26 @@
     <Compile Include="Models\SectionViewViewModel.cs" />
     <Compile Include="Models\UndoableMapModel.cs" />
     <Compile Include="Operations\AddFeatureOperation.cs" />
+    <Compile Include="Operations\AddSchemaUnitOperation.cs" />
     <Compile Include="Operations\ChangeAttributesOperation.cs" />
     <Compile Include="Operations\ChangeStartPositionOperation.cs" />
     <Compile Include="Operations\BatchMoveFeatureOperation.cs" />
+    <Compile Include="Operations\BatchMoveSchemaUnitsOperation.cs" />
     <Compile Include="Operations\FillAreaOperation.cs" />
     <Compile Include="Operations\HeightBrushOperation.cs" />
     <Compile Include="Operations\VoidBrushOperation.cs" />
     <Compile Include="Operations\MoveFeatureOperation.cs" />
     <Compile Include="Operations\RemoveFeatureOperation.cs" />
+    <Compile Include="Operations\RemoveSchemaUnitOperation.cs" />
     <Compile Include="Operations\RemoveStartPositionOperation.cs" />
     <Compile Include="Operations\SelectionModel\DeselectOperation.cs" />
     <Compile Include="Operations\SelectionModel\SelectFeatureOperation.cs" />
     <Compile Include="Operations\SelectionModel\SelectStartPositionOperation.cs" />
     <Compile Include="Operations\SelectionModel\SelectTileOperation.cs" />
+    <Compile Include="Operations\SelectionModel\SelectUnitOperation.cs" />
+    <Compile Include="Operations\SelectionModel\AddUnitToSelectionOperation.cs" />
     <Compile Include="Operations\SetSealevelOperation.cs" />
+    <Compile Include="Operations\UpdateSchemaUnitOperation.cs" />
     <Compile Include="Operations\TileAreaOperation.cs" />
     <Compile Include="Operations\UpdateMinimapOperation.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -235,6 +257,7 @@
     <Compile Include="Services\ImageRelightingService.cs" />
     <Compile Include="Services\MapLoadingService.cs" />
     <Compile Include="Services\SectionBitmapService.cs" />
+    <Compile Include="Services\UnitCatalogService.cs" />
     <Compile Include="Data\SectionInfo.cs" />
     <Compile Include="Services\SectionService.cs" />
     <Compile Include="UI\Controls\AbstractLayer.cs" />
@@ -360,6 +383,7 @@
     <Compile Include="UI\Tags\IMapItemTag.cs" />
     <Compile Include="UI\Tags\SectionTag.cs" />
     <Compile Include="UI\Tags\StartPositionTag.cs" />
+    <Compile Include="UI\Tags\UnitTag.cs" />
     <Compile Include="Util\ImageSampling\BilinearWrapper.cs" />
     <Compile Include="Util\ImageSampling\IPixelImage.cs" />
     <Compile Include="Util\ImageSampling\NearestNeighbourPaletteWrapper.cs" />
@@ -367,6 +391,8 @@
     <Compile Include="Util\ImageSampling\NearestNeighbourWrapper.cs" />
     <Compile Include="Util\ImgUtil.cs" />
     <Compile Include="Util\MetalSpotDisplayFormat.cs" />
+    <Compile Include="Util\PlayerSlotVisuals.cs" />
+    <Compile Include="Util\TaTeamColorRemap.cs" />
     <Compile Include="Util\Notifier.cs" />
     <Compile Include="Util\OffsetBitmap.cs" />
     <Compile Include="Util\Util.cs" />
@@ -377,6 +403,22 @@
     </Compile>
     <Compile Include="UI\Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\MainFormMissionUi.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\UnitPlayerPromptForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\NewSchemaTypePromptForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\UnitPlayerPickerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\UnitPropertiesForm.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Painters\BitmapGridPainter.cs" />
     <Compile Include="UI\Forms\MapSelectionForm.cs">

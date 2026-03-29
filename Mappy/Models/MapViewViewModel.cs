@@ -5,11 +5,15 @@ namespace Mappy.Models
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Drawing;
+    using System.Drawing.Imaging;
+    using System.Linq;
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
     using System.Windows.Forms;
+    using Mappy;
     using Mappy.Collections;
     using Mappy.Data;
+    using Mappy.IO;
     using Mappy.Models.Enums;
     using Mappy.Services;
     using Mappy.UI.Controls;
@@ -41,12 +45,20 @@ namespace Mappy.Models
             Image = Properties.Resources.nofeature,
         };
 
+        private static string StartPositionItemKey(int schemaIndex, int slotIndex) => schemaIndex + "/" + slotIndex;
+
         private readonly List<DrawableItem> tileMapping = new List<DrawableItem>();
 
         private readonly IDictionary<Guid, DrawableItem> featureMapping =
             new Dictionary<Guid, DrawableItem>();
 
-        private readonly DrawableItem[] startPositionMapping = new DrawableItem[10];
+        private readonly IDictionary<string, DrawableItem> startPositionItems =
+            new Dictionary<string, DrawableItem>(StringComparer.Ordinal);
+
+        private readonly IDictionary<string, DrawableItem> unitItems =
+            new Dictionary<string, DrawableItem>(StringComparer.Ordinal);
+
+        private readonly UnitCatalogService unitCatalogService;
 
         private readonly GridLayer grid = new GridLayer(16, Color.Black);
 
@@ -125,7 +137,7 @@ namespace Mappy.Models
 
         private ObservableCollection<Guid> selectedFeaturesCollection;
 
-        public MapViewViewModel(IReadOnlyApplicationModel model, Dispatcher dispatcher, FeatureService featureService)
+        public MapViewViewModel(IReadOnlyApplicationModel model, Dispatcher dispatcher, FeatureService featureService, UnitCatalogService unitCatalogService)
         {
             var heightmapVisible = model.PropertyAsObservable(x => x.HeightmapVisible, nameof(model.HeightmapVisible));
             var heightGridVisible = model.PropertyAsObservable(x => x.HeightGridVisible, nameof(model.HeightGridVisible));
@@ -185,6 +197,8 @@ namespace Mappy.Models
                 .Subscribe(_ => this.RefreshSelection());
             map.ObservePropertyOrDefault(x => x.SelectedStartPosition, "SelectedStartPosition", null)
                 .Subscribe(_ => this.RefreshSelection());
+            map.ObservePropertyOrDefault(x => x.SelectedStartSchemaIndex, "SelectedStartSchemaIndex", null)
+                .Subscribe(_ => this.RefreshSelection());
 
             map.Select(
                 x => x.Match<AbstractLayer>(
@@ -195,6 +209,21 @@ namespace Mappy.Models
             this.model = model;
             this.dispatcher = dispatcher;
             this.featureService = featureService;
+            this.unitCatalogService = unitCatalogService;
+
+            MappySettings.SettingsSaved += this.OnSettingsSaved;
+        }
+
+        private void OnSettingsSaved(object sender, EventArgs e)
+        {
+            if (this.mapModel == null)
+            {
+                return;
+            }
+
+            this.UpdateStartPositions();
+            this.UpdateAllSchemaUnits();
+            this.RefreshSelection();
         }
 
         public IObservable<Size> CanvasSize { get; }
@@ -213,7 +242,7 @@ namespace Mappy.Models
 
         public ILayer GuidesLayer => this.guides;
 
-        public void DragDrop(IDataObject data, Point location)
+        public void DragDrop(IDataObject data, Point location, Point screenLocation)
         {
             if (data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -233,14 +262,22 @@ namespace Mappy.Models
             else if (data.GetDataPresent(DataFormats.Text))
             {
                 var dataString = (string)data.GetData(DataFormats.Text);
-                int id;
-                if (int.TryParse(dataString, out id))
+                if (dataString != null && dataString.StartsWith("MAPPYUNIT|", StringComparison.Ordinal))
                 {
-                    this.dispatcher.DragDropSection(id, location.X, location.Y);
+                    var un = dataString.Substring("MAPPYUNIT|".Length);
+                    this.dispatcher.PlaceUnitFromSidebar(un, location.X, location.Y, screenLocation);
                 }
                 else
                 {
-                    this.dispatcher.DragDropFeature(dataString, location.X, location.Y);
+                    int id;
+                    if (int.TryParse(dataString, out id))
+                    {
+                        this.dispatcher.DragDropSection(id, location.X, location.Y);
+                    }
+                    else
+                    {
+                        this.dispatcher.DragDropFeature(dataString, location.X, location.Y);
+                    }
                 }
             }
         }
@@ -310,7 +347,21 @@ namespace Mappy.Models
             }
         }
 
-        public void MouseRightDown(Point location)
+        public void MouseDoubleClick(Point location)
+        {
+            if (this.model.SelectedGUITab != GUITab.Mission)
+            {
+                return;
+            }
+
+            var hit = this.itemsLayer.Value.HitTest(location.X, location.Y);
+            if (hit?.Tag is UnitTag ut)
+            {
+                this.dispatcher.EditSchemaUnit(ut.SchemaIndex, ut.UnitId);
+            }
+        }
+
+        public void MouseRightDown(Point location, Point screenLocation)
         {
             this.mouseDown = true;
             this.lastMousePos = location;
@@ -336,7 +387,13 @@ namespace Mappy.Models
                 return;
             }
 
-            if (!this.itemsLayer.Value.IsInSelection(location.X, location.Y) &&
+            if (!this.itemsLayer.Value.IsInSelection(location.X, location.Y)
+                && this.model.SelectedGUITab == GUITab.Mission
+                && !string.IsNullOrEmpty(this.unitCatalogService.SelectedUnitName))
+            {
+                this.dispatcher.PlaceUnitFromSidebar(this.unitCatalogService.SelectedUnitName, location.X, location.Y, screenLocation);
+            }
+            else if (!this.itemsLayer.Value.IsInSelection(location.X, location.Y) &&
                 this.featureService.SelectedFeature != null)
             {
                 this.dispatcher.DragDropFeature(
@@ -552,9 +609,34 @@ namespace Mappy.Models
 
         private void SetMapModel(Maybe<UndoableMapModel> undoModel)
         {
+            this.UnwireMapModel();
             this.mapModel = undoModel.Or(null);
             this.WireMapModel();
             this.ResetView();
+        }
+
+        private void UnwireMapModel()
+        {
+            if (this.mapModel == null)
+            {
+                return;
+            }
+
+            this.mapModel.TilesChanged -= this.TilesChanged;
+            this.mapModel.BaseTileGraphicsChanged -= this.BaseTileChanged;
+            this.mapModel.BaseTileHeightChanged -= this.BaseTileChanged;
+
+            foreach (var t in this.mapModel.FloatingTiles)
+            {
+                t.LocationChanged -= this.TileLocationChanged;
+            }
+
+            this.mapModel.FeatureInstanceChanged -= this.FeatureInstanceChanged;
+            this.mapModel.StartPositionChanged -= this.StartPositionChanged;
+            this.mapModel.Attributes.SchemaUnitsChanged -= this.SchemaUnitsChangedHandler;
+            this.mapModel.PropertyChanged -= this.MapModelPropertyChanged;
+            this.mapModel.SelectedUnits.CollectionChanged -= this.SelectedUnitsCollectionChanged;
+            this.AttachSelectedFeaturesCollection(null);
         }
 
         private void ResetView()
@@ -568,6 +650,8 @@ namespace Mappy.Models
             this.UpdateFeatures();
 
             this.UpdateStartPositions();
+
+            this.UpdateAllSchemaUnits();
         }
 
         private void UpdateItemsLayer()
@@ -589,9 +673,49 @@ namespace Mappy.Models
 
         private void UpdateStartPositions()
         {
-            for (var i = 0; i < 10; i++)
+            foreach (var item in this.startPositionItems.Values.ToList())
             {
-                this.UpdateStartPosition(i);
+                this.itemsLayer.Value.Items.Remove(item);
+                this.itemsLayer.Value.RemoveFromSelection(item);
+            }
+
+            this.startPositionItems.Clear();
+
+            if (this.mapModel == null)
+            {
+                return;
+            }
+
+            for (var s = 0; s < this.mapModel.Attributes.Schemas.Count; s++)
+            {
+                for (var i = 0; i < 10; i++)
+                {
+                    this.UpdateStartPosition(s, i);
+                }
+            }
+        }
+
+        private void UpdateAllSchemaUnits()
+        {
+            foreach (var item in this.unitItems.Values.ToList())
+            {
+                this.itemsLayer.Value.Items.Remove(item);
+                this.itemsLayer.Value.RemoveFromSelection(item);
+            }
+
+            this.unitItems.Clear();
+
+            if (this.mapModel == null)
+            {
+                return;
+            }
+
+            for (var s = 0; s < this.mapModel.Attributes.Schemas.Count; s++)
+            {
+                foreach (var u in this.mapModel.Attributes.Schemas[s].Units)
+                {
+                    this.InsertSchemaUnit(s, u.Id);
+                }
             }
         }
 
@@ -702,8 +826,34 @@ namespace Mappy.Models
 
             this.mapModel.StartPositionChanged += this.StartPositionChanged;
 
+            this.mapModel.Attributes.SchemaUnitsChanged += this.SchemaUnitsChangedHandler;
+
+            this.mapModel.SelectedUnits.CollectionChanged += this.SelectedUnitsCollectionChanged;
+
             this.mapModel.PropertyChanged += this.MapModelPropertyChanged;
             this.AttachSelectedFeaturesCollection(this.mapModel.SelectedFeatures);
+        }
+
+        private void SelectedUnitsCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            this.RefreshSelection();
+        }
+
+        private void SchemaUnitsChangedHandler(object sender, SchemaUnitsChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case SchemaUnitsChangedEventArgs.ActionKind.Add:
+                    this.InsertSchemaUnit(e.SchemaIndex, e.UnitId);
+                    break;
+                case SchemaUnitsChangedEventArgs.ActionKind.Remove:
+                    this.RemoveSchemaUnitItem(e.SchemaIndex, e.UnitId);
+                    break;
+                case SchemaUnitsChangedEventArgs.ActionKind.Move:
+                    this.RemoveSchemaUnitItem(e.SchemaIndex, e.UnitId);
+                    this.InsertSchemaUnit(e.SchemaIndex, e.UnitId);
+                    break;
+            }
         }
 
         private void SelectedFeaturesCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -787,6 +937,11 @@ namespace Mappy.Models
                     break;
                 case "SelectedFeatures":
                     this.AttachSelectedFeaturesCollection(this.mapModel?.SelectedFeatures);
+                    this.RefreshSelection();
+                    break;
+                case "ActiveSchemaIndex":
+                    this.UpdateStartPositions();
+                    this.UpdateAllSchemaUnits();
                     this.RefreshSelection();
                     break;
             }
@@ -1355,12 +1510,23 @@ namespace Mappy.Models
                     }
                 }
             }
-            else if (this.mapModel.SelectedStartPosition.HasValue)
+            else if (this.mapModel.SelectedStartPosition.HasValue && this.mapModel.SelectedStartSchemaIndex.HasValue)
             {
-                var mapping = this.startPositionMapping[this.mapModel.SelectedStartPosition.Value];
-                if (mapping != null)
+                var key = StartPositionItemKey(this.mapModel.SelectedStartSchemaIndex.Value, this.mapModel.SelectedStartPosition.Value);
+                if (this.startPositionItems.TryGetValue(key, out var mapping))
                 {
                     this.itemsLayer.Value.AddToSelection(mapping);
+                }
+            }
+            else if (this.mapModel.SelectedUnits.Count > 0)
+            {
+                foreach (var r in this.mapModel.SelectedUnits)
+                {
+                    var ukey = UnitItemKey(r.SchemaIndex, r.UnitId);
+                    if (this.unitItems.TryGetValue(ukey, out var um))
+                    {
+                        this.itemsLayer.Value.AddToSelection(um);
+                    }
                 }
             }
         }
@@ -1381,17 +1547,19 @@ namespace Mappy.Models
 
         private void StartPositionChanged(object sender, StartPositionChangedEventArgs e)
         {
-            this.UpdateStartPosition(e.Index);
+            this.UpdateStartPosition(e.SchemaIndex, e.Index);
         }
 
-        private void UpdateStartPosition(int index)
+        private static string UnitItemKey(int schemaIndex, Guid unitId) => schemaIndex + "/" + unitId.ToString("N", System.Globalization.CultureInfo.InvariantCulture);
+
+        private void UpdateStartPosition(int schemaIndex, int slotIndex)
         {
-            if (this.startPositionMapping[index] != null)
+            var key = StartPositionItemKey(schemaIndex, slotIndex);
+            if (this.startPositionItems.TryGetValue(key, out var existing))
             {
-                var mapping = this.startPositionMapping[index];
-                this.itemsLayer.Value.Items.Remove(mapping);
-                this.itemsLayer.Value.RemoveFromSelection(mapping);
-                this.startPositionMapping[index] = null;
+                this.itemsLayer.Value.Items.Remove(existing);
+                this.itemsLayer.Value.RemoveFromSelection(existing);
+                this.startPositionItems.Remove(key);
             }
 
             if (this.mapModel == null)
@@ -1399,33 +1567,289 @@ namespace Mappy.Models
                 return;
             }
 
-            var p = this.mapModel.GetStartPosition(index);
-            if (p.HasValue)
+            var p = this.mapModel.Attributes.GetStartPosition(schemaIndex, slotIndex);
+            if (!p.HasValue)
             {
-                var heightX = p.Value.X / 16;
-                var heightY = p.Value.Y / 16;
-                var heightValue = 0;
-                if (heightX >= 0 && heightX < this.mapModel.BaseTile.HeightGrid.Width
-                    && heightY >= 0 && heightY < this.mapModel.BaseTile.HeightGrid.Height)
+                return;
+            }
+
+            var heightX = p.Value.X / 16;
+            var heightY = p.Value.Y / 16;
+            var heightValue = 0;
+            if (heightX >= 0 && heightX < this.mapModel.BaseTile.HeightGrid.Width
+                && heightY >= 0 && heightY < this.mapModel.BaseTile.HeightGrid.Height)
+            {
+                heightValue = this.mapModel.BaseTile.HeightGrid.Get(heightX, heightY);
+            }
+
+            var schemaType = schemaIndex >= 0 && schemaIndex < this.mapModel.Attributes.Schemas.Count
+                ? this.mapModel.Attributes.Schemas[schemaIndex].SchemaType
+                : string.Empty;
+            var schemaInitial = SchemaTypeInitialLetter(schemaType);
+
+            var baseImg = Util.GetStartImage(slotIndex + 1);
+            var bmp = new Bitmap(baseImg.Width, baseImg.Height);
+            using (var g = Graphics.FromImage(bmp))
+            {
+                g.DrawImage(baseImg, 0, 0);
+                const int SchemaBadgeW = 12;
+                const int SchemaBadgeH = 12;
+                using (var br = new SolidBrush(Color.FromArgb(55, 55, 72)))
                 {
-                    heightValue = this.mapModel.BaseTile.HeightGrid.Get(heightX, heightY);
+                    g.FillRectangle(br, 0, 0, SchemaBadgeW, SchemaBadgeH);
                 }
 
-                var img = StartPositionImages[index];
-                var i = new DrawableItem(
-                    p.Value.X - (img.Width / 2),
-                    p.Value.Y - 58 - (heightValue / 2),
-                    int.MaxValue,
-                    img);
-                i.Tag = new StartPositionTag(index);
-                this.startPositionMapping[index] = i;
-                this.itemsLayer.Value.Items.Add(i);
+                TextRenderer.DrawText(
+                    g,
+                    schemaInitial,
+                    SystemFonts.DefaultFont,
+                    new Rectangle(0, 0, SchemaBadgeW, SchemaBadgeH),
+                    Color.White,
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
+            }
 
-                if (this.mapModel.SelectedStartPosition == index)
+            baseImg.Dispose();
+
+            if (schemaIndex != this.mapModel.ActiveSchemaIndex)
+            {
+                bmp = ApplyInactiveSchemaOpacity(bmp, MappySettings.Settings.GetInactiveSchemaOpacityOrDefault());
+            }
+
+            var dw = new DrawableBitmap(bmp);
+            var i = new DrawableItem(
+                p.Value.X - (dw.Width / 2),
+                p.Value.Y - 58 - (heightValue / 2),
+                int.MaxValue - (schemaIndex * 32) - slotIndex,
+                dw);
+            i.Tag = new StartPositionTag(schemaIndex, slotIndex);
+            this.startPositionItems[key] = i;
+            this.itemsLayer.Value.Items.Add(i);
+
+            if (this.mapModel.SelectedStartSchemaIndex == schemaIndex
+                && this.mapModel.SelectedStartPosition == slotIndex)
+            {
+                this.itemsLayer.Value.AddToSelection(i);
+            }
+        }
+
+        private void InsertSchemaUnit(int schemaIndex, Guid unitId)
+        {
+            if (this.mapModel == null)
+            {
+                return;
+            }
+
+            var u = this.mapModel.Attributes.GetUnit(schemaIndex, unitId);
+            var key = UnitItemKey(schemaIndex, unitId);
+            if (this.unitItems.ContainsKey(key))
+            {
+                this.RemoveSchemaUnitItem(schemaIndex, unitId);
+            }
+
+            var hg = this.mapModel.BaseTile.HeightGrid;
+            var fx = u.XPos / 16;
+            var fy = u.ZPos / 16;
+            var heightMid = 0;
+            if (fx >= 0 && fy >= 0 && fx < hg.Width - 1 && fy < hg.Height - 1)
+            {
+                heightMid = Util.ComputeMidpointHeight(hg, fx, fy);
+            }
+            else if (fx >= 0 && fy >= 0 && fx < hg.Width && fy < hg.Height)
+            {
+                heightMid = hg.Get(fx, fy);
+            }
+
+            var schemaType = schemaIndex >= 0 && schemaIndex < this.mapModel.Attributes.Schemas.Count
+                ? this.mapModel.Attributes.Schemas[schemaIndex].SchemaType
+                : string.Empty;
+            var (bmp, markerAnchor) = this.BuildUnitMarkerBitmap(u, schemaType);
+            if (schemaIndex != this.mapModel.ActiveSchemaIndex)
+            {
+                bmp = ApplyInactiveSchemaOpacity(bmp, MappySettings.Settings.GetInactiveSchemaOpacityOrDefault());
+            }
+
+            var dw = new DrawableBitmap(bmp);
+            var depth = 2000000 + (schemaIndex * 512) + (u.Player % 512);
+
+            var item = new DrawableItem(
+                u.XPos - markerAnchor.X,
+                u.ZPos - (heightMid / 2) - markerAnchor.Y,
+                depth,
+                dw);
+            item.Tag = new UnitTag(schemaIndex, unitId);
+            this.unitItems[key] = item;
+            this.itemsLayer.Value.Items.Add(item);
+
+            if (this.mapModel.SelectedUnits.Any(r => r.SchemaIndex == schemaIndex && r.UnitId == unitId))
+            {
+                this.itemsLayer.Value.AddToSelection(item);
+            }
+        }
+
+        private void RemoveSchemaUnitItem(int schemaIndex, Guid unitId)
+        {
+            var key = UnitItemKey(schemaIndex, unitId);
+            if (!this.unitItems.TryGetValue(key, out var item))
+            {
+                return;
+            }
+
+            this.itemsLayer.Value.Items.Remove(item);
+            this.itemsLayer.Value.RemoveFromSelection(item);
+            this.unitItems.Remove(key);
+        }
+
+        private (Bitmap Bitmap, Point Anchor) BuildUnitMarkerBitmap(SchemaUnit u, string schemaType)
+        {
+            const int SchemaBadgeW = 12;
+            const int SchemaBadgeH = 12;
+            const int TopRowH = 12;
+            const int LabelH = 16;
+            const int Pad = 2;
+
+            var schemaInitial = SchemaTypeInitialLetter(schemaType);
+            var slot = PlayerSlotVisuals.ClampPlayerSlot(u.Player);
+            var playerText = u.Player.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            var badgeW = playerText.Length >= 2 ? 20 : 14;
+            const int BadgeH = 12;
+
+            var markerSource = this.unitCatalogService != null
+                ? this.unitCatalogService.GetPrimaryLabelForMapMarker(u.Unitname)
+                : u.Unitname;
+            var label = markerSource.Length > 4 ? markerSource.Substring(0, 4) : markerSource;
+
+            var objectBase = this.unitCatalogService != null
+                ? this.unitCatalogService.GetThreeDoBaseName(u.Unitname)
+                : u.Unitname;
+            var unitModel = ThreeDoTextured.TryGetFromSearchPaths(objectBase, slot, u.Angle)
+                ?? ThreeDoWireframe.TryGetFromSearchPaths(objectBase);
+
+            int outW;
+            int outH;
+            int wireX;
+            int wireY;
+            Point anchor;
+
+            if (unitModel?.Bitmap != null && unitModel.Bitmap.Width > 0 && unitModel.Bitmap.Height > 0)
+            {
+                var bw = unitModel.Bitmap.Width;
+                var bh = unitModel.Bitmap.Height;
+                var minTopW = SchemaBadgeW + 6 + badgeW + Pad;
+                outW = Math.Max(bw + Pad * 2, minTopW);
+                wireX = (outW - bw) / 2;
+                wireY = TopRowH;
+                outH = TopRowH + bh + Pad + LabelH + Pad;
+                anchor = new Point(
+                    wireX + (bw / 2),
+                    wireY + (bh / 2));
+            }
+            else
+            {
+                outW = 48;
+                wireX = 0;
+                wireY = TopRowH;
+                outH = TopRowH + Pad + LabelH + Pad;
+                anchor = new Point(outW / 2, outH / 2);
+            }
+
+            var bmp = new Bitmap(outW, outH, PixelFormat.Format32bppArgb);
+            using (var g = Graphics.FromImage(bmp))
+            {
+                g.Clear(Color.Transparent);
+
+                if (unitModel?.Bitmap != null && unitModel.Bitmap.Width > 0 && unitModel.Bitmap.Height > 0)
                 {
-                    this.itemsLayer.Value.AddToSelection(i);
+                    g.DrawImageUnscaled(unitModel.Bitmap, wireX, wireY);
+                }
+
+                using (var br = new SolidBrush(Color.FromArgb(55, 55, 72)))
+                {
+                    g.FillRectangle(br, 0, 0, SchemaBadgeW, SchemaBadgeH);
+                }
+
+                TextRenderer.DrawText(
+                    g,
+                    schemaInitial,
+                    SystemFonts.DefaultFont,
+                    new Rectangle(0, 0, SchemaBadgeW, SchemaBadgeH),
+                    Color.White,
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
+
+                var badgeX = outW - badgeW - Pad;
+                const int BadgeY = 0;
+                using (var br = new SolidBrush(PlayerSlotVisuals.BackgroundForPlayer(slot)))
+                {
+                    g.FillRectangle(br, badgeX, BadgeY, badgeW, BadgeH);
+                }
+
+                TextRenderer.DrawText(
+                    g,
+                    playerText,
+                    SystemFonts.DefaultFont,
+                    new Rectangle(badgeX, BadgeY, badgeW, BadgeH),
+                    PlayerSlotVisuals.ForegroundForPlayer(slot),
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
+
+                var labelY = outH - LabelH - Pad;
+                TextRenderer.DrawText(
+                    g,
+                    label,
+                    SystemFonts.DefaultFont,
+                    new Rectangle(Pad, labelY, outW - Pad * 2, LabelH),
+                    Color.White,
+                    TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
+            }
+
+            return (bmp, anchor);
+        }
+
+        private static Bitmap ApplyInactiveSchemaOpacity(Bitmap source, float opacity)
+        {
+            if (opacity >= 0.995f)
+            {
+                return source;
+            }
+
+            var result = new Bitmap(source.Width, source.Height, PixelFormat.Format32bppArgb);
+            using (var g = Graphics.FromImage(result))
+            {
+                g.Clear(Color.Transparent);
+                var cm = new ColorMatrix { Matrix33 = opacity };
+                using (var ia = new ImageAttributes())
+                {
+                    ia.SetColorMatrix(cm);
+                    g.DrawImage(
+                        source,
+                        new Rectangle(0, 0, source.Width, source.Height),
+                        0,
+                        0,
+                        source.Width,
+                        source.Height,
+                        GraphicsUnit.Pixel,
+                        ia);
                 }
             }
+
+            source.Dispose();
+            return result;
+        }
+
+        private static string SchemaTypeInitialLetter(string schemaType)
+        {
+            if (string.IsNullOrEmpty(schemaType))
+            {
+                return "?";
+            }
+
+            foreach (var ch in schemaType)
+            {
+                if (char.IsLetter(ch))
+                {
+                    return char.ToUpperInvariant(ch).ToString();
+                }
+            }
+
+            return "?";
         }
 
         private void TilesChanged(object sender, ListChangedEventArgs e)

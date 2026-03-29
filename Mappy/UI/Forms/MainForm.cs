@@ -82,6 +82,22 @@ namespace Mappy.UI.Forms
             model.VoidsVisible.Subscribe(x => this.toggleVoidsMenuItem.Checked = x);
             model.FeaturesVisible.Subscribe(x => this.toggleFeaturesMenuItem.Checked = x);
 
+            model.UnitPlacementPlayerMenuChoice.Subscribe(
+                c =>
+                    {
+                        this.playerPromptMenuItem.Checked = c == UnitPlacementPlayerMenuChoice.Prompt;
+                        this.player1MenuItem.Checked = c == UnitPlacementPlayerMenuChoice.Player1;
+                        this.player2MenuItem.Checked = c == UnitPlacementPlayerMenuChoice.Player2;
+                        this.player3MenuItem.Checked = c == UnitPlacementPlayerMenuChoice.Player3;
+                        this.player4MenuItem.Checked = c == UnitPlacementPlayerMenuChoice.Player4;
+                        this.player5MenuItem.Checked = c == UnitPlacementPlayerMenuChoice.Player5;
+                        this.player6MenuItem.Checked = c == UnitPlacementPlayerMenuChoice.Player6;
+                        this.player7MenuItem.Checked = c == UnitPlacementPlayerMenuChoice.Player7;
+                        this.player8MenuItem.Checked = c == UnitPlacementPlayerMenuChoice.Player8;
+                        this.player9MenuItem.Checked = c == UnitPlacementPlayerMenuChoice.Player9;
+                        this.player10MenuItem.Checked = c == UnitPlacementPlayerMenuChoice.Player10;
+                    });
+
             // sea level widget bindings
             model.CanChangeSeaLevel.Subscribe(x => this.seaLevelLabel.Enabled = x);
             model.CanChangeSeaLevel.Subscribe(x => this.seaLevelValueLabel.Enabled = x);
@@ -213,6 +229,13 @@ namespace Mappy.UI.Forms
         private void ToggleFeaturesMenuItemClick(object sender, EventArgs e)
         {
             this.model.ToggleFeaturesMenuItemClick();
+        }
+
+        private void PlayerPlacementMenuItemClick(object sender, EventArgs e)
+        {
+            var item = (ToolStripMenuItem)sender;
+            var tag = Convert.ToInt32(item.Tag, CultureInfo.InvariantCulture);
+            this.model.UnitPlacementPlayerMenuItemClick((UnitPlacementPlayerMenuChoice)tag);
         }
 
         private void MapAttributesMenuItemClick(object sender, EventArgs e)
@@ -518,6 +541,12 @@ namespace Mappy.UI.Forms
             if (e.Control && e.KeyCode == Keys.D6)
             {
                 this.sidebarTabs.SelectedTab = this.attributesTab;
+                e.Handled = true;
+            }
+
+            if (e.Control && e.KeyCode == Keys.D7 && this.missionTab != null)
+            {
+                this.sidebarTabs.SelectedTab = this.missionTab;
                 e.Handled = true;
             }
 

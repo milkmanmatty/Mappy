@@ -1,4 +1,4 @@
-﻿namespace Mappy.Operations.SelectionModel
+namespace Mappy.Operations.SelectionModel
 {
     using Mappy.Models;
 
@@ -6,27 +6,33 @@
     {
         private readonly ISelectionModel model;
 
-        private readonly int index;
+        private readonly int schemaIndex;
 
-        private int? previousSelection;
+        private readonly int startSlotIndex;
 
-        public SelectStartPositionOperation(ISelectionModel model, int index)
+        private int? previousSchema;
+
+        private int? previousSlot;
+
+        public SelectStartPositionOperation(ISelectionModel model, int schemaIndex, int startSlotIndex)
         {
             this.model = model;
-            this.index = index;
+            this.schemaIndex = schemaIndex;
+            this.startSlotIndex = startSlotIndex;
         }
 
         public void Execute()
         {
-            this.previousSelection = this.model.SelectedStartPosition;
-            this.model.SelectStartPosition(this.index);
+            this.previousSchema = this.model.SelectedStartSchemaIndex;
+            this.previousSlot = this.model.SelectedStartPosition;
+            this.model.SelectStartPosition(this.schemaIndex, this.startSlotIndex);
         }
 
         public void Undo()
         {
-            if (this.previousSelection.HasValue)
+            if (this.previousSchema.HasValue && this.previousSlot.HasValue)
             {
-                this.model.SelectStartPosition(this.previousSelection.Value);
+                this.model.SelectStartPosition(this.previousSchema.Value, this.previousSlot.Value);
             }
             else
             {

@@ -37,6 +37,8 @@ namespace Mappy.Models
 
         private int voidEditCursorSize = 1;
 
+        private UnitPlacementPlayerMenuChoice unitPlacementPlayerMenuChoice = UnitPlacementPlayerMenuChoice.Prompt;
+
         public Maybe<UndoableMapModel> Map
         {
             get => this.map;
@@ -151,6 +153,12 @@ namespace Mappy.Models
                 ref this.voidEditCursorSize,
                 Math.Min(MaxBrushCursorSize, Math.Max(1, value)),
                 nameof(this.VoidEditCursorSize));
+        }
+
+        public UnitPlacementPlayerMenuChoice UnitPlacementPlayerMenuChoice
+        {
+            get => this.unitPlacementPlayerMenuChoice;
+            set => this.SetField(ref this.unitPlacementPlayerMenuChoice, value, nameof(this.UnitPlacementPlayerMenuChoice));
         }
 
         public void SetViewportLocation(Point location)

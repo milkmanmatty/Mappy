@@ -25,7 +25,11 @@ namespace Mappy.Models
 
         int? SelectedStartPosition { get; }
 
+        int? SelectedStartSchemaIndex { get; }
+
         ObservableCollection<Guid> SelectedFeatures { get; }
+
+        ObservableCollection<MapUnitRef> SelectedUnits { get; }
 
         Rectangle BandboxRectangle { get; }
 
@@ -44,6 +48,10 @@ namespace Mappy.Models
         int SeaLevel { get; }
 
         Point ViewportLocation { get; set; }
+
+        MapAttributes Attributes { get; }
+
+        int ActiveSchemaIndex { get; set; }
 
         FeatureInstance GetFeatureInstance(Guid id);
 

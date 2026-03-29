@@ -7,11 +7,14 @@ namespace Mappy.Data
     /// </summary>
     public class StartPositionChangedEventArgs : EventArgs
     {
-        public StartPositionChangedEventArgs(int index)
+        public StartPositionChangedEventArgs(int index, int schemaIndex = 0)
         {
             this.Index = index;
+            this.SchemaIndex = schemaIndex;
         }
 
         public int Index { get; set; }
+
+        public int SchemaIndex { get; set; }
     }
 }

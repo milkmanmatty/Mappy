@@ -1,4 +1,4 @@
-﻿namespace Mappy.Operations
+namespace Mappy.Operations
 {
     using System.Drawing;
 
@@ -8,25 +8,28 @@
     {
         private Point? oldPosition;
 
-        public RemoveStartPositionOperation(IMapModel map, int index)
+        public RemoveStartPositionOperation(IMapModel map, int schemaIndex, int startSlotIndex)
         {
             this.Map = map;
-            this.Index = index;
+            this.SchemaIndex = schemaIndex;
+            this.StartSlotIndex = startSlotIndex;
         }
 
         public IMapModel Map { get; }
 
-        public int Index { get; }
+        public int SchemaIndex { get; }
+
+        public int StartSlotIndex { get; }
 
         public void Execute()
         {
-            this.oldPosition = this.Map.Attributes.GetStartPosition(this.Index);
-            this.Map.Attributes.SetStartPosition(this.Index, null);
+            this.oldPosition = this.Map.Attributes.GetStartPosition(this.SchemaIndex, this.StartSlotIndex);
+            this.Map.Attributes.SetStartPosition(this.SchemaIndex, this.StartSlotIndex, null);
         }
 
         public void Undo()
         {
-            this.Map.Attributes.SetStartPosition(this.Index, this.oldPosition);
+            this.Map.Attributes.SetStartPosition(this.SchemaIndex, this.StartSlotIndex, this.oldPosition);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Mappy.Models
+namespace Mappy.Models
 {
     using System;
     using System.Collections.Generic;
@@ -59,5 +59,7 @@
         /// contained in this map.
         /// </returns>
         IEnumerable<FeatureInstance> EnumerateFeatureInstances();
+
+        int ActiveSchemaIndex { get; }
     }
 }

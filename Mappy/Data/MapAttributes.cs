@@ -1,8 +1,13 @@
-﻿namespace Mappy.Data
+namespace Mappy.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.Drawing;
+    using System.Globalization;
     using System.IO;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+
     using Mappy.Util;
     using TAUtil.Tdf;
 
@@ -11,7 +16,19 @@
     /// </summary>
     public class MapAttributes : Notifier
     {
-        private readonly Point?[] startPositions = new Point?[10];
+        private static readonly HashSet<string> GlobalHeaderKnownKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "missionname", "missiondescription", "planet", "missionhint", "brief", "narration", "glamour",
+            "lineofsight", "mapping", "tidalstrength", "solarstrength", "lavaworld", "killmul", "timemul",
+            "minwindspeed", "maxwindspeed", "gravity", "waterdoesdamage", "waterdamage", "numplayers",
+            "size", "memory", "useonlyunits", "SCHEMACOUNT",
+        };
+
+        private static readonly HashSet<string> SchemaKnownKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "Type", "aiprofile", "SurfaceMetal", "MohoMetal", "HumanMetal", "ComputerMetal", "HumanEnergy", "ComputerEnergy",
+            "MeteorWeapon", "MeteorRadius", "MeteorDensity", "MeteorDuration", "MeteorInterval",
+        };
 
         private string name;
         private string description;
@@ -19,10 +36,6 @@
         private int gravity;
         private string numPlayers;
         private string memory;
-        private string aiProfile;
-
-        private int surfaceMetal;
-        private int mohoMetal;
 
         private int tidalStrength;
         private int solarStrength;
@@ -35,24 +48,13 @@
         private bool waterDoesDamage;
         private int waterDamage;
 
-        private string meteorWeapon;
-        private int meteorRadius;
-        private double meteorDensity;
-        private int meteorDuration;
-        private int meteorInterval;
-
         public MapAttributes()
         {
-            // set up default values
             this.Name = "Untitled Map";
             this.Description = "A map made with Mappy";
             this.Gravity = 112;
             this.Memory = string.Empty;
             this.NumPlayers = "2";
-            this.AiProfile = "DEFAULT";
-
-            this.SurfaceMetal = 3;
-            this.MohoMetal = 30;
 
             this.TidalStrength = 20;
             this.SolarStrength = 20;
@@ -65,14 +67,20 @@
             this.WaterDoesDamage = false;
             this.WaterDamage = 0;
 
-            this.MeteorWeapon = string.Empty;
-            this.MeteorRadius = 0;
-            this.MeteorDensity = 0;
-            this.MeteorDuration = 0;
-            this.MeteorInterval = 0;
+            this.schemaList.Add(new MapSchema(0));
         }
 
+        private readonly List<MapSchema> schemaList = new List<MapSchema>();
+
         public event EventHandler<StartPositionChangedEventArgs> StartPositionChanged;
+
+        public event EventHandler<SchemaUnitsChangedEventArgs> SchemaUnitsChanged;
+
+
+        public IReadOnlyList<MapSchema> Schemas => this.schemaList;
+
+        public Dictionary<string, string> GlobalHeaderExtraEntries { get; } =
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         public string Name
         {
@@ -108,24 +116,6 @@
         {
             get => this.numPlayers;
             set => this.SetField(ref this.numPlayers, value, nameof(this.NumPlayers));
-        }
-
-        public string AiProfile
-        {
-            get => this.aiProfile;
-            set => this.SetField(ref this.aiProfile, value, nameof(this.AiProfile));
-        }
-
-        public int SurfaceMetal
-        {
-            get => this.surfaceMetal;
-            set => this.SetField(ref this.surfaceMetal, value, nameof(this.SurfaceMetal));
-        }
-
-        public int MohoMetal
-        {
-            get => this.mohoMetal;
-            set => this.SetField(ref this.mohoMetal, value, nameof(this.MohoMetal));
         }
 
         public int TidalStrength
@@ -170,108 +160,115 @@
             set => this.SetField(ref this.waterDamage, value, nameof(this.WaterDamage));
         }
 
-        public string MeteorWeapon
+        public Point? GetStartPosition(int schemaIndex, int startIndex)
         {
-            get => this.meteorWeapon;
-            set => this.SetField(ref this.meteorWeapon, value, nameof(this.MeteorWeapon));
+            return this.schemaList[schemaIndex].GetStartPosition(startIndex);
         }
 
-        public int MeteorRadius
+        public void SetStartPosition(int schemaIndex, int startIndex, Point? coordinates)
         {
-            get => this.meteorRadius;
-            set => this.SetField(ref this.meteorRadius, value, nameof(this.MeteorRadius));
+            var sch = this.schemaList[schemaIndex];
+            if (sch.GetStartPosition(startIndex) != coordinates)
+            {
+                sch.SetStartPosition(startIndex, coordinates);
+                this.OnStartPositionChanged(new StartPositionChangedEventArgs(startIndex, schemaIndex));
+            }
         }
 
-        public int MeteorDuration
+        public SchemaUnit GetUnit(int schemaIndex, Guid id)
         {
-            get => this.meteorDuration;
-            set => this.SetField(ref this.meteorDuration, value, nameof(this.MeteorDuration));
+            return this.schemaList[schemaIndex].Units.First(u => u.Id == id);
         }
 
-        public double MeteorDensity
+        public void AddUnit(int schemaIndex, SchemaUnit unit)
         {
-            get => this.meteorDensity;
-            set => this.SetField(ref this.meteorDensity, value, nameof(this.MeteorDensity));
+            this.schemaList[schemaIndex].Units.Add(unit);
+            this.OnSchemaUnitsChanged(new SchemaUnitsChangedEventArgs(schemaIndex, SchemaUnitsChangedEventArgs.ActionKind.Add, unit.Id));
         }
 
-        public int MeteorInterval
+        public void RemoveUnit(int schemaIndex, Guid id)
         {
-            get => this.meteorInterval;
-            set => this.SetField(ref this.meteorInterval, value, nameof(this.MeteorInterval));
+            var list = this.schemaList[schemaIndex].Units;
+            for (var i = 0; i < list.Count; i++)
+            {
+                if (list[i].Id == id)
+                {
+                    list.RemoveAt(i);
+                    this.OnSchemaUnitsChanged(new SchemaUnitsChangedEventArgs(schemaIndex, SchemaUnitsChangedEventArgs.ActionKind.Remove, id));
+                    return;
+                }
+            }
+        }
+
+        public void ReplaceUnit(int schemaIndex, SchemaUnit unit)
+        {
+            var list = this.schemaList[schemaIndex].Units;
+            for (var i = 0; i < list.Count; i++)
+            {
+                if (list[i].Id == unit.Id)
+                {
+                    list[i] = unit;
+                    this.OnSchemaUnitsChanged(new SchemaUnitsChangedEventArgs(schemaIndex, SchemaUnitsChangedEventArgs.ActionKind.Move, unit.Id));
+                    return;
+                }
+            }
         }
 
         public static MapAttributes Load(TdfNode n)
         {
-            var r = n.Keys["GlobalHeader"];
-
-            var schema = r.Keys["Schema 0"];
-
+            var gh = n.Keys["GlobalHeader"];
             var m = new MapAttributes();
 
-            m.Name = r.Entries.GetOrDefault("missionname", string.Empty);
-            m.Description = r.Entries.GetOrDefault("missiondescription", string.Empty);
-            m.Planet = r.Entries.GetOrDefault("planet", string.Empty);
-            m.TidalStrength = TdfConvert.ToInt32(r.Entries.GetOrDefault("tidalstrength", "0"));
-            m.SolarStrength = TdfConvert.ToInt32(r.Entries.GetOrDefault("solarstrength", "0"));
-            m.LavaWorld = TdfConvert.ToBool(r.Entries.GetOrDefault("lavaworld", "0"));
-            m.MinWindSpeed = TdfConvert.ToInt32(r.Entries.GetOrDefault("minwindspeed", "0"));
-            m.MaxWindSpeed = TdfConvert.ToInt32(r.Entries.GetOrDefault("maxwindspeed", "0"));
-            m.Gravity = TdfConvert.ToInt32(r.Entries.GetOrDefault("gravity", "0"));
-            m.WaterDoesDamage = TdfConvert.ToBool(r.Entries.GetOrDefault("waterdoesdamage", "0"));
-            m.WaterDamage = TdfConvert.ToInt32(r.Entries.GetOrDefault("waterdamage", "0"));
-            m.NumPlayers = r.Entries.GetOrDefault("numplayers", string.Empty);
-            m.Memory = r.Entries.GetOrDefault("memory", string.Empty);
-            m.AiProfile = schema.Entries.GetOrDefault("aiprofile", string.Empty);
-            m.SurfaceMetal = TdfConvert.ToInt32(schema.Entries.GetOrDefault("SurfaceMetal", "0"));
-            m.MohoMetal = TdfConvert.ToInt32(schema.Entries.GetOrDefault("MohoMetal", "0"));
-            m.MeteorWeapon = schema.Entries.GetOrDefault("MeteorWeapon", string.Empty);
-            m.MeteorRadius = TdfConvert.ToInt32(schema.Entries.GetOrDefault("MeteorRadius", "0"));
-            m.MeteorDensity = TdfConvert.ToDouble(schema.Entries.GetOrDefault("MeteorDensity", "0"));
-            m.MeteorDuration = TdfConvert.ToInt32(schema.Entries.GetOrDefault("MeteorDuration", "0"));
-            m.MeteorInterval = TdfConvert.ToInt32(schema.Entries.GetOrDefault("MeteorInterval", "0"));
+            m.Name = gh.Entries.GetOrDefault("missionname", string.Empty);
+            m.Description = gh.Entries.GetOrDefault("missiondescription", string.Empty);
+            m.Planet = gh.Entries.GetOrDefault("planet", string.Empty);
+            m.TidalStrength = TdfConvert.ToInt32(gh.Entries.GetOrDefault("tidalstrength", "0"));
+            m.SolarStrength = TdfConvert.ToInt32(gh.Entries.GetOrDefault("solarstrength", "0"));
+            m.LavaWorld = TdfConvert.ToBool(gh.Entries.GetOrDefault("lavaworld", "0"));
+            m.MinWindSpeed = TdfConvert.ToInt32(gh.Entries.GetOrDefault("minwindspeed", "0"));
+            m.MaxWindSpeed = TdfConvert.ToInt32(gh.Entries.GetOrDefault("maxwindspeed", "0"));
+            m.Gravity = TdfConvert.ToInt32(gh.Entries.GetOrDefault("gravity", "0"));
+            m.WaterDoesDamage = TdfConvert.ToBool(gh.Entries.GetOrDefault("waterdoesdamage", "0"));
+            m.WaterDamage = TdfConvert.ToInt32(gh.Entries.GetOrDefault("waterdamage", "0"));
+            m.NumPlayers = gh.Entries.GetOrDefault("numplayers", string.Empty);
+            m.Memory = gh.Entries.GetOrDefault("memory", string.Empty);
 
-            if (schema.Keys.ContainsKey("specials"))
+            foreach (var e in gh.Entries)
             {
-                var specials = schema.Keys["specials"];
-
-                foreach (var special in specials.Keys.Values)
+                if (!GlobalHeaderKnownKeys.Contains(e.Key))
                 {
-                    var type = special.Entries.GetOrDefault("specialwhat", string.Empty);
-                    if (type.Length < "StartPosX".Length || !type.StartsWith("StartPos"))
-                    {
-                        continue;
-                    }
+                    m.GlobalHeaderExtraEntries[e.Key] = e.Value;
+                }
+            }
 
-                    var id = TdfConvert.ToInt32(type.Substring(8));
-                    var x = TdfConvert.ToInt32(special.Entries.GetOrDefault("XPos", "0"));
-                    var y = TdfConvert.ToInt32(special.Entries.GetOrDefault("ZPos", "0"));
-                    m.SetStartPosition(id - 1, new Point(x, y));
+            m.schemaList.Clear();
+
+            var schemaKeyRegex = new Regex(@"^Schema\s+(\d+)$", RegexOptions.IgnoreCase);
+            var schemaEntries = gh.Keys
+                .Select(kv => new { kv.Key, Match = schemaKeyRegex.Match(kv.Key) })
+                .Where(x => x.Match.Success)
+                .Select(x => (Number: int.Parse(x.Match.Groups[1].Value, CultureInfo.InvariantCulture), Key: x.Key, Node: gh.Keys[x.Key]))
+                .OrderBy(x => x.Number)
+                .ToList();
+
+            if (schemaEntries.Count == 0)
+            {
+                m.schemaList.Add(ParseSchemaNode(new TdfNode("Schema 0"), 0));
+            }
+            else
+            {
+                foreach (var se in schemaEntries)
+                {
+                    m.schemaList.Add(ParseSchemaNode(se.Node, se.Number));
                 }
             }
 
             return m;
         }
 
-        public Point? GetStartPosition(int i)
-        {
-            return this.startPositions[i];
-        }
-
-        public void SetStartPosition(int i, Point? coordinates)
-        {
-            if (this.startPositions[i] != coordinates)
-            {
-                this.startPositions[i] = coordinates;
-                this.OnStartPositionChanged(new StartPositionChangedEventArgs(i));
-            }
-        }
-
         public void WriteOta(Stream st, int mapWidthIn512Tiles, int mapHeightIn512Tiles)
         {
             var r = new TdfNode("GlobalHeader");
-
-            var s = new TdfNode("Schema 0");
-            r.Keys["Schema 0"] = s;
 
             r.Entries["missionname"] = this.Name;
             r.Entries["missiondescription"] = this.Description;
@@ -284,7 +281,7 @@
             r.Entries["mapping"] = "0";
             r.Entries["tidalstrength"] = TdfConvert.ToString(this.TidalStrength);
             r.Entries["solarstrength"] = TdfConvert.ToString(this.SolarStrength);
-            r.Entries["lavaworld"] = TdfConvert.ToString(this.lavaWorld);
+            r.Entries["lavaworld"] = TdfConvert.ToString(this.LavaWorld);
             r.Entries["killmul"] = "50";
             r.Entries["timemul"] = "0";
             r.Entries["minwindspeed"] = TdfConvert.ToString(this.MinWindSpeed);
@@ -296,29 +293,251 @@
             r.Entries["size"] = $"{mapWidthIn512Tiles} x {mapHeightIn512Tiles}";
             r.Entries["memory"] = this.memory;
             r.Entries["useonlyunits"] = string.Empty;
-            r.Entries["SCHEMACOUNT"] = "1";
+            r.Entries["SCHEMACOUNT"] = TdfConvert.ToString(this.schemaList.Count);
 
-            s.Entries["Type"] = "Network 1";
-            s.Entries["aiprofile"] = this.AiProfile;
-            s.Entries["SurfaceMetal"] = TdfConvert.ToString(this.SurfaceMetal);
-            s.Entries["MohoMetal"] = TdfConvert.ToString(this.MohoMetal);
-            s.Entries["HumanMetal"] = "1000";
-            s.Entries["ComputerMetal"] = "1000";
-            s.Entries["HumanEnergy"] = "1000";
-            s.Entries["ComputerEnergy"] = "1000";
-            s.Entries["MeteorWeapon"] = this.MeteorWeapon;
-            s.Entries["MeteorRadius"] = TdfConvert.ToString(this.MeteorRadius);
-            s.Entries["MeteorDensity"] = TdfConvert.ToString(this.MeteorDensity);
-            s.Entries["MeteorDuration"] = TdfConvert.ToString(this.MeteorDuration);
-            s.Entries["MeteorInterval"] = TdfConvert.ToString(this.MeteorInterval);
+            foreach (var e in this.GlobalHeaderExtraEntries)
+            {
+                r.Entries[e.Key] = e.Value;
+            }
+
+            for (var i = 0; i < this.schemaList.Count; i++)
+            {
+                var sch = this.schemaList[i];
+                sch.SchemaNumber = i;
+                var nodeName = "Schema " + i;
+                var s = BuildSchemaTdfNode(sch, nodeName);
+                r.Keys[nodeName] = s;
+            }
+
+            r.WriteTdf(st);
+        }
+
+        public MapSchema AddSchema(string schemaType)
+        {
+            var idx = this.schemaList.Count;
+            var sch = new MapSchema(idx)
+            {
+                SchemaType = schemaType,
+            };
+            this.schemaList.Add(sch);
+            return sch;
+        }
+
+        public bool RemoveSchemaAt(int index)
+        {
+            if (this.schemaList.Count <= 1 || index < 0 || index >= this.schemaList.Count)
+            {
+                return false;
+            }
+
+            this.schemaList.RemoveAt(index);
+            for (var i = 0; i < this.schemaList.Count; i++)
+            {
+                this.schemaList[i].SchemaNumber = i;
+            }
+
+            return true;
+        }
+
+        public void CopyFrom(MapAttributes source)
+        {
+            this.Name = source.Name;
+            this.Description = source.Description;
+            this.Planet = source.Planet;
+            this.Gravity = source.Gravity;
+            this.Memory = source.Memory;
+            this.NumPlayers = source.NumPlayers;
+            this.TidalStrength = source.TidalStrength;
+            this.SolarStrength = source.SolarStrength;
+            this.MinWindSpeed = source.MinWindSpeed;
+            this.MaxWindSpeed = source.MaxWindSpeed;
+            this.LavaWorld = source.LavaWorld;
+            this.WaterDoesDamage = source.WaterDoesDamage;
+            this.WaterDamage = source.WaterDamage;
+
+            this.GlobalHeaderExtraEntries.Clear();
+            foreach (var e in source.GlobalHeaderExtraEntries)
+            {
+                this.GlobalHeaderExtraEntries[e.Key] = e.Value;
+            }
+
+            this.schemaList.Clear();
+            foreach (var sch in source.schemaList)
+            {
+                this.schemaList.Add(CloneSchema(sch));
+            }
+        }
+
+        private static MapSchema CloneSchema(MapSchema sch)
+        {
+            var n = new MapSchema(sch.SchemaNumber)
+            {
+                SchemaType = sch.SchemaType,
+                AiProfile = sch.AiProfile,
+                SurfaceMetal = sch.SurfaceMetal,
+                MohoMetal = sch.MohoMetal,
+                HumanMetal = sch.HumanMetal,
+                ComputerMetal = sch.ComputerMetal,
+                HumanEnergy = sch.HumanEnergy,
+                ComputerEnergy = sch.ComputerEnergy,
+                MeteorWeapon = sch.MeteorWeapon,
+                MeteorRadius = sch.MeteorRadius,
+                MeteorDensity = sch.MeteorDensity,
+                MeteorDuration = sch.MeteorDuration,
+                MeteorInterval = sch.MeteorInterval,
+            };
+            foreach (var e in sch.ExtraEntries)
+            {
+                n.ExtraEntries[e.Key] = e.Value;
+            }
+
+            foreach (var kv in sch.ExtraChildNodes)
+            {
+                n.ExtraChildNodes[kv.Key] = kv.Value;
+            }
+
+            for (var i = 0; i < 10; i++)
+            {
+                n.SetStartPosition(i, sch.GetStartPosition(i));
+            }
+
+            foreach (var u in sch.Units)
+            {
+                n.Units.Add(u.ClonePreservingId());
+            }
+
+            return n;
+        }
+
+        private static MapSchema ParseSchemaNode(TdfNode schemaNode, int schemaNumber)
+        {
+            var sch = new MapSchema(schemaNumber);
+
+            sch.SchemaType = schemaNode.Entries.GetOrDefault("Type", sch.SchemaType);
+            sch.AiProfile = schemaNode.Entries.GetOrDefault("aiprofile", sch.AiProfile);
+            sch.SurfaceMetal = TdfConvert.ToInt32(schemaNode.Entries.GetOrDefault("SurfaceMetal", TdfConvert.ToString(sch.SurfaceMetal)));
+            sch.MohoMetal = TdfConvert.ToInt32(schemaNode.Entries.GetOrDefault("MohoMetal", TdfConvert.ToString(sch.MohoMetal)));
+            sch.HumanMetal = TdfConvert.ToInt32(schemaNode.Entries.GetOrDefault("HumanMetal", TdfConvert.ToString(sch.HumanMetal)));
+            sch.ComputerMetal = TdfConvert.ToInt32(schemaNode.Entries.GetOrDefault("ComputerMetal", TdfConvert.ToString(sch.ComputerMetal)));
+            sch.HumanEnergy = TdfConvert.ToInt32(schemaNode.Entries.GetOrDefault("HumanEnergy", TdfConvert.ToString(sch.HumanEnergy)));
+            sch.ComputerEnergy = TdfConvert.ToInt32(schemaNode.Entries.GetOrDefault("ComputerEnergy", TdfConvert.ToString(sch.ComputerEnergy)));
+            sch.MeteorWeapon = schemaNode.Entries.GetOrDefault("MeteorWeapon", string.Empty);
+            sch.MeteorRadius = TdfConvert.ToInt32(schemaNode.Entries.GetOrDefault("MeteorRadius", "0"));
+            sch.MeteorDensity = TdfConvert.ToDouble(schemaNode.Entries.GetOrDefault("MeteorDensity", "0"));
+            sch.MeteorDuration = TdfConvert.ToInt32(schemaNode.Entries.GetOrDefault("MeteorDuration", "0"));
+            sch.MeteorInterval = TdfConvert.ToInt32(schemaNode.Entries.GetOrDefault("MeteorInterval", "0"));
+
+            foreach (var e in schemaNode.Entries)
+            {
+                if (!SchemaKnownKeys.Contains(e.Key))
+                {
+                    sch.ExtraEntries[e.Key] = e.Value;
+                }
+            }
+
+            if (schemaNode.Keys.ContainsKey("specials"))
+            {
+                var specials = schemaNode.Keys["specials"];
+                foreach (var special in specials.Keys.Values)
+                {
+                    var type = special.Entries.GetOrDefault("specialwhat", string.Empty);
+                    if (type.Length < "StartPosX".Length || !type.StartsWith("StartPos", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    var id = TdfConvert.ToInt32(type.Substring(8));
+                    var x = TdfConvert.ToInt32(special.Entries.GetOrDefault("XPos", "0"));
+                    var y = TdfConvert.ToInt32(special.Entries.GetOrDefault("ZPos", "0"));
+                    sch.SetStartPosition(id - 1, new Point(x, y));
+                }
+            }
+
+            if (schemaNode.Keys.ContainsKey("units"))
+            {
+                var unitsRoot = schemaNode.Keys["units"];
+                var ordered = unitsRoot.Keys.OrderBy(kv => ParseUnitKeyIndex(kv.Key)).ToList();
+                foreach (var kv in ordered)
+                {
+                    var un = kv.Value;
+                    var unitName = un.Entries.GetOrDefault("Unitname", string.Empty);
+                    var u = new SchemaUnit(Guid.NewGuid(), unitName)
+                    {
+                        Ident = un.Entries.GetOrDefault("Ident", string.Empty),
+                        XPos = TdfConvert.ToInt32(un.Entries.GetOrDefault("XPos", "0")),
+                        YPos = TdfConvert.ToInt32(un.Entries.GetOrDefault("YPos", "0")),
+                        ZPos = TdfConvert.ToInt32(un.Entries.GetOrDefault("ZPos", "0")),
+                        Player = TdfConvert.ToInt32(un.Entries.GetOrDefault("Player", "1")),
+                        HealthPercentage = TdfConvert.ToInt32(un.Entries.GetOrDefault("HealthPercentage", "100")),
+                        Angle = TdfConvert.ToInt32(un.Entries.GetOrDefault("Angle", "0")),
+                        Kills = TdfConvert.ToInt32(un.Entries.GetOrDefault("Kills", "0")),
+                        InitialMission = un.Entries.GetOrDefault("InitialMission", string.Empty),
+                        BuildPriority = TdfConvert.ToInt32(un.Entries.GetOrDefault("BuildPriority", "0")),
+                        AiPriorityTarget = TdfConvert.ToInt32(un.Entries.GetOrDefault("AiPriorityTarget", "0")) != 0,
+                        MissionCriticalUnit = TdfConvert.ToInt32(un.Entries.GetOrDefault("MissionCriticalUnit", "0")) != 0,
+                        AiIgnore = TdfConvert.ToInt32(un.Entries.GetOrDefault("AiIgnore", "0")) != 0,
+                        Immunity = TdfConvert.ToInt32(un.Entries.GetOrDefault("Immunity", "0")) != 0,
+                    };
+                    sch.Units.Add(u);
+                }
+            }
+
+            foreach (var kv in schemaNode.Keys)
+            {
+                if (string.Equals(kv.Key, "specials", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(kv.Key, "units", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                sch.ExtraChildNodes[kv.Key] = kv.Value;
+            }
+
+            return sch;
+        }
+
+        private static int ParseUnitKeyIndex(string key)
+        {
+            if (key.Length > 4 && key.StartsWith("unit", StringComparison.OrdinalIgnoreCase)
+                && int.TryParse(key.Substring(4), NumberStyles.Integer, CultureInfo.InvariantCulture, out var n))
+            {
+                return n;
+            }
+
+            return int.MaxValue;
+        }
+
+        private static TdfNode BuildSchemaTdfNode(MapSchema sch, string nodeName)
+        {
+            var s = new TdfNode(nodeName);
+
+            s.Entries["Type"] = sch.SchemaType;
+            s.Entries["aiprofile"] = sch.AiProfile;
+            s.Entries["SurfaceMetal"] = TdfConvert.ToString(sch.SurfaceMetal);
+            s.Entries["MohoMetal"] = TdfConvert.ToString(sch.MohoMetal);
+            s.Entries["HumanMetal"] = TdfConvert.ToString(sch.HumanMetal);
+            s.Entries["ComputerMetal"] = TdfConvert.ToString(sch.ComputerMetal);
+            s.Entries["HumanEnergy"] = TdfConvert.ToString(sch.HumanEnergy);
+            s.Entries["ComputerEnergy"] = TdfConvert.ToString(sch.ComputerEnergy);
+            s.Entries["MeteorWeapon"] = sch.MeteorWeapon;
+            s.Entries["MeteorRadius"] = TdfConvert.ToString(sch.MeteorRadius);
+            s.Entries["MeteorDensity"] = TdfConvert.ToString(sch.MeteorDensity);
+            s.Entries["MeteorDuration"] = TdfConvert.ToString(sch.MeteorDuration);
+            s.Entries["MeteorInterval"] = TdfConvert.ToString(sch.MeteorInterval);
+
+            foreach (var e in sch.ExtraEntries)
+            {
+                if (!SchemaKnownKeys.Contains(e.Key))
+                {
+                    s.Entries[e.Key] = e.Value;
+                }
+            }
 
             var specials = new TdfNode("specials");
-            s.Keys["specials"] = specials;
-
             var count = 0;
             for (var i = 0; i < 10; i++)
             {
-                var p = this.GetStartPosition(i);
+                var p = sch.GetStartPosition(i);
                 if (!p.HasValue)
                 {
                     continue;
@@ -328,18 +547,59 @@
                 spec.Entries["specialwhat"] = "StartPos" + (i + 1);
                 spec.Entries["XPos"] = TdfConvert.ToString(p.Value.X);
                 spec.Entries["ZPos"] = TdfConvert.ToString(p.Value.Y);
-
                 specials.Keys[spec.Name] = spec;
-
                 count++;
             }
 
-            r.WriteTdf(st);
+            s.Keys["specials"] = specials;
+
+            if (sch.Units.Count > 0)
+            {
+                var unitsRoot = new TdfNode("units");
+                for (var i = 0; i < sch.Units.Count; i++)
+                {
+                    var u = sch.Units[i];
+                    var un = new TdfNode("unit" + i);
+                    un.Entries["Unitname"] = u.Unitname;
+                    un.Entries["Ident"] = u.Ident;
+                    un.Entries["XPos"] = TdfConvert.ToString(u.XPos);
+                    un.Entries["YPos"] = TdfConvert.ToString(u.YPos);
+                    un.Entries["ZPos"] = TdfConvert.ToString(u.ZPos);
+                    un.Entries["Player"] = TdfConvert.ToString(u.Player);
+                    un.Entries["HealthPercentage"] = TdfConvert.ToString(u.HealthPercentage);
+                    un.Entries["Angle"] = TdfConvert.ToString(u.Angle);
+                    un.Entries["Kills"] = TdfConvert.ToString(u.Kills);
+                    un.Entries["InitialMission"] = u.InitialMission ?? string.Empty;
+                    un.Entries["BuildPriority"] = TdfConvert.ToString(u.BuildPriority);
+                    un.Entries["AiPriorityTarget"] = u.AiPriorityTarget ? "1" : "0";
+                    un.Entries["MissionCriticalUnit"] = u.MissionCriticalUnit ? "1" : "0";
+                    un.Entries["AiIgnore"] = u.AiIgnore ? "1" : "0";
+                    un.Entries["Immunity"] = u.Immunity ? "1" : "0";
+                    unitsRoot.Keys[un.Name] = un;
+                }
+
+                s.Keys["units"] = unitsRoot;
+            }
+
+            foreach (var kv in sch.ExtraChildNodes)
+            {
+                if (!s.Keys.ContainsKey(kv.Key))
+                {
+                    s.Keys[kv.Key] = kv.Value;
+                }
+            }
+
+            return s;
         }
 
         protected virtual void OnStartPositionChanged(StartPositionChangedEventArgs e)
         {
             this.StartPositionChanged?.Invoke(this, e);
+        }
+
+        protected virtual void OnSchemaUnitsChanged(SchemaUnitsChangedEventArgs e)
+        {
+            this.SchemaUnitsChanged?.Invoke(this, e);
         }
     }
 }

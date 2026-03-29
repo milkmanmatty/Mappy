@@ -26,7 +26,9 @@ namespace Mappy.Models
 
         void MouseLeftDown(Point location);
 
-        void MouseRightDown(Point location);
+        void MouseRightDown(Point location, Point screenLocation);
+
+        void MouseDoubleClick(Point location);
 
         void MouseMove(Point locattion);
 
@@ -38,7 +40,7 @@ namespace Mappy.Models
 
         void LeaveFocus();
 
-        void DragDrop(IDataObject item, Point location);
+        void DragDrop(IDataObject item, Point location, Point screenLocation);
 
         void ClientSizeChanged(Size size);
 

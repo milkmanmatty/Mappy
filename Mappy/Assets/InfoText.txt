@@ -1,9 +1,10 @@
-﻿Ctrl + 1 - select Sections tab
+Ctrl + 1 - select Sections tab
 Ctrl + 2 - select Features tab
 Ctrl + 3 - select Starts tab
 Ctrl + 4 - select Height tab
 Ctrl + 5 - select Void tab
 Ctrl + 6 - select Attributes tab
+Ctrl + 7 - select OTA / Units tab
 
 Main Map
 Pan - hold space, left-click and drag to pan the map

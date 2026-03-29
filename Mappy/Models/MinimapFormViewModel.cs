@@ -66,6 +66,12 @@ namespace Mappy.Models
                         Observable.Empty<Unit>))
                 .Switch();
 
+            var activeSchemaChanged = map.Select(
+                    x => x.Match(
+                        y => y.PropertyChangedObservable(nameof(y.ActiveSchemaIndex)),
+                        Observable.Empty<Unit>))
+                .Switch();
+
             var startPositionChanged = map.Select(
                 x => x.Match(
                     y => Observable
@@ -92,6 +98,7 @@ namespace Mappy.Models
             mapHeightChanged.Subscribe(_ => this.UpdateMinimapRectangle());
             mapWidthChanged.Subscribe(_ => this.UpdateStartPositions());
             mapHeightChanged.Subscribe(_ => this.UpdateStartPositions());
+            activeSchemaChanged.Subscribe(_ => this.UpdateStartPositions());
 
             startPositionChanged.Subscribe(this.UpdateStartPosition);
 

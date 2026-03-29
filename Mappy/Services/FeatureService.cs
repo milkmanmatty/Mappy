@@ -9,7 +9,6 @@ namespace Mappy.Services
     using Mappy.IO;
     using Mappy.IO.Gaf;
     using Mappy.Util;
-    using TAUtil._3do;
     using TAUtil.Gaf;
     using TAUtil.Gdi.Bitmap;
     using TAUtil.Hpi;
@@ -76,20 +75,8 @@ namespace Mappy.Services
             return this.EnumerateFeaturesInternal(world, category).OrderBy(x => x.Name, StringComparer.InvariantCultureIgnoreCase);
         }
 
-        private static OffsetBitmap LoadRenderFile(HpiArchive archive, HpiArchive.FileInfo file)
-        {
-            var fileBuffer = new byte[file.Size];
-            archive.Extract(file, fileBuffer);
-
-            using (var b = new MemoryStream(fileBuffer))
-            {
-                var adapter = new ModelEdgeReaderAdapter();
-                var reader = new ModelReader(b, adapter);
-                reader.Read();
-                var wire = Util.RenderWireframe(adapter.Edges);
-                return wire;
-            }
-        }
+        private static OffsetBitmap LoadRenderFile(HpiArchive archive, HpiArchive.FileInfo file) =>
+            ThreeDoWireframe.FromArchiveFile(archive, file);
 
         private static OffsetBitmap LoadBitmap(GafEntry[] gaf, string sequenceName)
         {

@@ -74,6 +74,8 @@ namespace Mappy.Models
 
         IObservable<int> VoidEditCursorSize { get; }
 
+        IObservable<UnitPlacementPlayerMenuChoice> UnitPlacementPlayerMenuChoice { get; }
+
         IObservable<string> TitleText { get; }
 
         IObservable<string> MousePositionText { get; }
@@ -131,6 +133,8 @@ namespace Mappy.Models
         void GridOffMenuItemClick();
 
         void GridMenuItemClick(Size s);
+
+        void UnitPlacementPlayerMenuItemClick(UnitPlacementPlayerMenuChoice choice);
 
         void SeaLevelTrackBarValueChanged(int value);
 

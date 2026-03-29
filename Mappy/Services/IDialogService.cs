@@ -1,5 +1,6 @@
 namespace Mappy.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Drawing;
     using System.Windows.Forms;
@@ -40,6 +41,12 @@ namespace Mappy.Services
         DialogResult AskUserToDiscardChanges();
 
         MapAttributesResult AskUserForMapAttributes(MapAttributesResult r);
+
+        int? AskUnitPlayerNumber(IWin32Window owner, int defaultPlayer = 1);
+
+        string AskUserForNewSchemaType(string defaultSchemaType, Func<string, string> validateTrimmedName = null);
+
+        int? PickUnitPlayerAtScreenPoint(Point screenLocation);
 
         void ShowError(string message);
 

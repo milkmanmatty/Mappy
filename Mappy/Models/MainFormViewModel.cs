@@ -46,6 +46,9 @@ namespace Mappy.Models
             this.HeightEditSetValue = model.PropertyAsObservable(x => x.HeightEditSetValue, nameof(model.HeightEditSetValue));
             this.HeightEditCursorSize = model.PropertyAsObservable(x => x.HeightEditCursorSize, nameof(model.HeightEditCursorSize));
             this.VoidEditCursorSize = model.PropertyAsObservable(x => x.VoidEditCursorSize, nameof(model.VoidEditCursorSize));
+            this.UnitPlacementPlayerMenuChoice = model.PropertyAsObservable(
+                x => x.UnitPlacementPlayerMenuChoice,
+                nameof(IReadOnlyApplicationModel.UnitPlacementPlayerMenuChoice));
 
             this.CanSaveAs = mapOpen;
             this.CanCloseMap = mapOpen;
@@ -202,6 +205,8 @@ namespace Mappy.Models
 
         public IObservable<int> VoidEditCursorSize { get; }
 
+        public IObservable<UnitPlacementPlayerMenuChoice> UnitPlacementPlayerMenuChoice { get; }
+
         public IObservable<string> MousePositionText { get; }
 
         public IObservable<string> HeightText { get; }
@@ -328,6 +333,11 @@ namespace Mappy.Models
         public void GridMenuItemClick(Size s)
         {
             this.dispatcher.EnableGridWithSize(s);
+        }
+
+        public void UnitPlacementPlayerMenuItemClick(UnitPlacementPlayerMenuChoice choice)
+        {
+            this.dispatcher.SetUnitPlacementPlayerMenuChoice(choice);
         }
 
         public void SeaLevelTrackBarValueChanged(int value)

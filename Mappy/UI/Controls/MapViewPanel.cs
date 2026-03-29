@@ -65,7 +65,7 @@ namespace Mappy.UI.Controls
         private void MapViewDragDrop(object sender, DragEventArgs e)
         {
             var loc = this.mapView.ToVirtualPoint(this.mapView.PointToClient(new Point(e.X, e.Y)));
-            this.model.DragDrop(e.Data, loc);
+            this.model.DragDrop(e.Data, loc, new Point(e.X, e.Y));
         }
 
         private void MapViewMouseDown(object sender, MouseEventArgs e)
@@ -85,8 +85,19 @@ namespace Mappy.UI.Controls
             else if (e.Button == MouseButtons.Right)
             {
                 this.StartDrag();
-                this.model.MouseRightDown(loc);
+                this.model.MouseRightDown(loc, this.mapView.PointToScreen(e.Location));
             }
+        }
+
+        private void MapViewMouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (this.spaceKeyDown)
+            {
+                return;
+            }
+
+            var loc = this.mapView.ToVirtualPoint(e.Location);
+            this.model.MouseDoubleClick(loc);
         }
 
         private void MapViewMouseMove(object sender, MouseEventArgs e)
