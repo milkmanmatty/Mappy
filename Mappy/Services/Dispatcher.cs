@@ -8,6 +8,7 @@ namespace Mappy.Services
     using System.IO;
     using System.Linq;
     using System.Windows.Forms;
+    using Mappy;
     using Mappy.Collections;
     using Mappy.Data;
     using Mappy.IO;
@@ -1288,6 +1289,11 @@ namespace Mappy.Services
                 some: map =>
                     {
                         if (map.IsMarked)
+                        {
+                            return true;
+                        }
+
+                        if (MappySettings.Settings.DoNotPromptToSaveUnsavedChanges)
                         {
                             return true;
                         }

@@ -53,6 +53,8 @@ namespace Mappy.UI.Forms
 			this.calculatedMetalDepositValueCheckBox = new System.Windows.Forms.CheckBox();
 			this.featureReclaimAmountsCheckBox = new System.Windows.Forms.CheckBox();
 			this.fullResourceNamesCheckBox = new System.Windows.Forms.CheckBox();
+			this.miscGroupBox = new System.Windows.Forms.GroupBox();
+			this.doNotPromptToSaveUnsavedChangesCheckBox = new System.Windows.Forms.CheckBox();
 			this.sidePanel.SuspendLayout();
 			this.bottomPanel.SuspendLayout();
 			this.searchPathsPanel.SuspendLayout();
@@ -63,6 +65,7 @@ namespace Mappy.UI.Forms
 			this.missionGroupBox.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.inactiveSchemaOpacityNumeric)).BeginInit();
 			this.resourceNamesGroupBox.SuspendLayout();
+			this.miscGroupBox.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// searchPathsListView
@@ -176,8 +179,7 @@ namespace Mappy.UI.Forms
 			// 
 			// mainGroupBox
 			// 
-			this.mainGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this.mainGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.mainGroupBox.Controls.Add(this.searchPathsPanel);
 			this.mainGroupBox.Location = new System.Drawing.Point(12, 12);
@@ -189,7 +191,7 @@ namespace Mappy.UI.Forms
 			// 
 			// scrollSpeedGroupBox
 			// 
-			this.scrollSpeedGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.scrollSpeedGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedYNumeric);
 			this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedXNumeric);
@@ -266,7 +268,7 @@ namespace Mappy.UI.Forms
 			// 
 			// missionGroupBox
 			// 
-			this.missionGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.missionGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.missionGroupBox.Controls.Add(this.showUnitFriendlyNameOnMapCheckBox);
 			this.missionGroupBox.Controls.Add(this.showUnitFriendlyNameFirstCheckBox);
@@ -326,7 +328,7 @@ namespace Mappy.UI.Forms
 			// 
 			// resourceNamesGroupBox
 			// 
-			this.resourceNamesGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.resourceNamesGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.resourceNamesGroupBox.Controls.Add(this.calculatedMetalDepositValueCheckBox);
 			this.resourceNamesGroupBox.Controls.Add(this.featureReclaimAmountsCheckBox);
@@ -368,11 +370,33 @@ namespace Mappy.UI.Forms
 			this.fullResourceNamesCheckBox.Text = "Full resource names";
 			this.fullResourceNamesCheckBox.UseVisualStyleBackColor = true;
 			// 
+			// miscGroupBox
+			// 
+			this.miscGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.miscGroupBox.Controls.Add(this.doNotPromptToSaveUnsavedChangesCheckBox);
+			this.miscGroupBox.Location = new System.Drawing.Point(12, 568);
+			this.miscGroupBox.Name = "miscGroupBox";
+			this.miscGroupBox.Size = new System.Drawing.Size(426, 50);
+			this.miscGroupBox.TabIndex = 15;
+			this.miscGroupBox.TabStop = false;
+			this.miscGroupBox.Text = "Misc";
+			// 
+			// doNotPromptToSaveUnsavedChangesCheckBox
+			// 
+			this.doNotPromptToSaveUnsavedChangesCheckBox.AutoSize = true;
+			this.doNotPromptToSaveUnsavedChangesCheckBox.Location = new System.Drawing.Point(17, 22);
+			this.doNotPromptToSaveUnsavedChangesCheckBox.Name = "doNotPromptToSaveUnsavedChangesCheckBox";
+			this.doNotPromptToSaveUnsavedChangesCheckBox.TabIndex = 0;
+			this.doNotPromptToSaveUnsavedChangesCheckBox.Text = "Do not prompt to save unsaved changes";
+			this.doNotPromptToSaveUnsavedChangesCheckBox.UseVisualStyleBackColor = true;
+			// 
 			// PreferencesForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(450, 601);
+			this.ClientSize = new System.Drawing.Size(450, 656);
+			this.Controls.Add(this.miscGroupBox);
 			this.Controls.Add(this.resourceNamesGroupBox);
 			this.Controls.Add(this.missionGroupBox);
 			this.Controls.Add(this.scrollSpeedGroupBox);
@@ -396,6 +420,8 @@ namespace Mappy.UI.Forms
 			((System.ComponentModel.ISupportInitialize)(this.inactiveSchemaOpacityNumeric)).EndInit();
 			this.resourceNamesGroupBox.ResumeLayout(false);
 			this.resourceNamesGroupBox.PerformLayout();
+			this.miscGroupBox.ResumeLayout(false);
+			this.miscGroupBox.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -427,5 +453,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.CheckBox fullResourceNamesCheckBox;
         private System.Windows.Forms.CheckBox featureReclaimAmountsCheckBox;
         private System.Windows.Forms.CheckBox calculatedMetalDepositValueCheckBox;
+        private System.Windows.Forms.GroupBox miscGroupBox;
+        private System.Windows.Forms.CheckBox doNotPromptToSaveUnsavedChangesCheckBox;
     }
 }

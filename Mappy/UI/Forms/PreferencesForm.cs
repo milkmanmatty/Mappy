@@ -32,6 +32,7 @@ namespace Mappy.UI.Forms
             this.showUnitFriendlyNameFirstCheckBox.Checked = MappySettings.Settings.ShowUnitFriendlyNameFirst;
             this.showUnitFriendlyNameOnMapCheckBox.Checked = MappySettings.Settings.ShowUnitFriendlyNameOnMap;
             this.inactiveSchemaOpacityNumeric.Value = MappySettings.Settings.GetInactiveSchemaOpacityPercentForDialog();
+            this.doNotPromptToSaveUnsavedChangesCheckBox.Checked = MappySettings.Settings.DoNotPromptToSaveUnsavedChanges;
         }
 
         private void AddButtonClick(object sender, EventArgs e)
@@ -121,6 +122,7 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.ShowUnitFriendlyNameFirst = this.showUnitFriendlyNameFirstCheckBox.Checked;
             MappySettings.Settings.ShowUnitFriendlyNameOnMap = this.showUnitFriendlyNameOnMapCheckBox.Checked;
             MappySettings.Settings.InactiveSchemaOpacityPercent = (int)this.inactiveSchemaOpacityNumeric.Value;
+            MappySettings.Settings.DoNotPromptToSaveUnsavedChanges = this.doNotPromptToSaveUnsavedChangesCheckBox.Checked;
             MappySettings.SaveSettings(notifyListeners: true);
         }
     }

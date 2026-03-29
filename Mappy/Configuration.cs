@@ -34,6 +34,8 @@ namespace Mappy
 
         public bool ShowUnitFriendlyNameOnMap { get; set; }
 
+        public bool DoNotPromptToSaveUnsavedChanges { get; set; }
+
         [XmlIgnore]
         public Color GridColor
         {
