@@ -408,6 +408,11 @@
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UI\Forms\ExportMapImageOptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Models\MapImageExportOptions.cs" />
+    <Compile Include="Models\Enums\FeatureExportMode.cs" />
     <Compile Include="UI\Forms\UnitPlayerPromptForm.cs">
       <SubType>Form</SubType>
     </Compile>

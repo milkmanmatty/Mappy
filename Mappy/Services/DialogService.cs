@@ -151,6 +151,31 @@ namespace Mappy.Services
             return null;
         }
 
+        public MapImageExportOptions AskUserForMapImageExportOptions()
+        {
+            using (var optionsForm = new UI.Forms.ExportMapImageOptionsForm())
+            {
+                if (optionsForm.ShowDialog(this.owner) != DialogResult.OK)
+                {
+                    return null;
+                }
+
+                var path = this.AskUserToSaveMapImage();
+                if (path == null)
+                {
+                    return null;
+                }
+
+                return new MapImageExportOptions
+                {
+                    IncludeSections = optionsForm.IncludeSections,
+                    FeatureMode = optionsForm.FeatureMode,
+                    IncludeUnits = optionsForm.IncludeUnits,
+                    FilePath = path,
+                };
+            }
+        }
+
         public string AskUserToChooseHeightmap(int width, int height)
         {
             var d = new OpenFileDialog();

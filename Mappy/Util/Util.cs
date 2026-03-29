@@ -366,6 +366,18 @@ namespace Mappy.Util
 
         public static bool WriteMapImage(Stream s, IGrid<Bitmap> map, Action<int> reportProgress, Func<bool> shouldCancel)
         {
+            return WriteMapImage(s, map, null, null, null, reportProgress, shouldCancel);
+        }
+
+        public static bool WriteMapImage(
+            Stream s,
+            IGrid<Bitmap> map,
+            IList<Positioned<IMapTile>> floatingTiles,
+            IList<FeatureOverlay> featureOverlays,
+            IList<UnitOverlay> unitOverlays,
+            Action<int> reportProgress,
+            Func<bool> shouldCancel)
+        {
             var width = map.Width * 32;
             var height = map.Height * 32;
             var totalTiles = map.Width * map.Height;
@@ -428,10 +440,62 @@ namespace Mappy.Util
                     full.UnlockBits(targetData);
                 }
 
+                using (var g = Graphics.FromImage(full))
+                {
+                    if (floatingTiles != null)
+                    {
+                        foreach (var ft in floatingTiles)
+                        {
+                            var tileGrid = ft.Item.TileGrid;
+                            for (var ty = 0; ty < tileGrid.Height; ty++)
+                            {
+                                for (var tx = 0; tx < tileGrid.Width; tx++)
+                                {
+                                    var px = (ft.Location.X + tx) * 32;
+                                    var py = (ft.Location.Y + ty) * 32;
+                                    g.DrawImageUnscaled(tileGrid.Get(tx, ty), px, py);
+                                }
+                            }
+                        }
+                    }
+
+                    if (featureOverlays != null)
+                    {
+                        foreach (var fo in featureOverlays)
+                        {
+                            g.DrawImageUnscaled(fo.Image, fo.DrawBounds.Location);
+                        }
+                    }
+
+                    if (unitOverlays != null)
+                    {
+                        foreach (var uo in unitOverlays)
+                        {
+                            g.DrawImageUnscaled(uo.Bitmap, uo.X, uo.Y);
+                        }
+                    }
+                }
+
                 full.Save(s, ImageFormat.Png);
             }
 
             return true;
+        }
+
+        public struct FeatureOverlay
+        {
+            public Bitmap Image { get; set; }
+
+            public Rectangle DrawBounds { get; set; }
+        }
+
+        public struct UnitOverlay
+        {
+            public Bitmap Bitmap { get; set; }
+
+            public int X { get; set; }
+
+            public int Y { get; set; }
         }
 
         public static GUITab MapTabNameToGUIType(string tabName)

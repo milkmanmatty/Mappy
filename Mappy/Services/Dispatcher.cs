@@ -1489,10 +1489,90 @@ namespace Mappy.Services
 
         private void ExportMapImageHelper(UndoableMapModel map)
         {
-            var loc = this.dialogService.AskUserToSaveMapImage();
-            if (loc == null)
+            var opts = this.dialogService.AskUserForMapImageExportOptions();
+            if (opts == null)
             {
                 return;
+            }
+
+            var loc = opts.FilePath;
+
+            IList<Positioned<IMapTile>> floatingTiles = null;
+            if (opts.IncludeSections && map.FloatingTiles.Count > 0)
+            {
+                floatingTiles = map.FloatingTiles;
+            }
+
+            IList<Util.FeatureOverlay> featureOverlays = null;
+            if (opts.FeatureMode != FeatureExportMode.None)
+            {
+                var hg = map.BaseTile.HeightGrid;
+                var list = new List<Util.FeatureOverlay>();
+                foreach (var f in map.EnumerateFeatureInstances())
+                {
+                    var maybeRec = this.featureService.TryGetFeature(f.FeatureName);
+                    maybeRec.IfSome(rec =>
+                    {
+                        if (opts.FeatureMode == FeatureExportMode.MetalDepositsOnly && rec.MetalSpotValue <= 0)
+                        {
+                            return;
+                        }
+
+                        list.Add(new Util.FeatureOverlay
+                        {
+                            Image = rec.Image,
+                            DrawBounds = rec.GetDrawBounds(hg, f.X, f.Y),
+                        });
+                    });
+                }
+
+                featureOverlays = list;
+            }
+
+            IList<Util.UnitOverlay> unitOverlays = null;
+            if (opts.IncludeUnits)
+            {
+                var hg = map.BaseTile.HeightGrid;
+                var overlays = new List<Util.UnitOverlay>();
+                for (var si = 0; si < map.Attributes.Schemas.Count; si++)
+                {
+                    var schema = map.Attributes.Schemas[si];
+                    foreach (var u in schema.Units)
+                    {
+                        var slot = PlayerSlotVisuals.ClampPlayerSlot(u.Player);
+                        var objectBase = this.unitCatalogService != null
+                            ? this.unitCatalogService.GetThreeDoBaseName(u.Unitname)
+                            : u.Unitname;
+                        var unitModel = ThreeDoTextured.TryGetFromSearchPaths(objectBase, slot, u.Angle)
+                            ?? ThreeDoWireframe.TryGetFromSearchPaths(objectBase);
+
+                        if (unitModel?.Bitmap != null && unitModel.Bitmap.Width > 0 && unitModel.Bitmap.Height > 0)
+                        {
+                            var fx = u.XPos / 16;
+                            var fy = u.ZPos / 16;
+                            var heightMid = 0;
+                            if (fx >= 0 && fy >= 0 && fx < hg.Width - 1 && fy < hg.Height - 1)
+                            {
+                                heightMid = Util.ComputeMidpointHeight(hg, fx, fy);
+                            }
+                            else if (fx >= 0 && fy >= 0 && fx < hg.Width && fy < hg.Height)
+                            {
+                                heightMid = hg.Get(fx, fy);
+                            }
+
+                            var bw = unitModel.Bitmap.Width;
+                            var bh = unitModel.Bitmap.Height;
+                            overlays.Add(new Util.UnitOverlay
+                            {
+                                Bitmap = unitModel.Bitmap,
+                                X = u.XPos - (bw / 2),
+                                Y = u.ZPos - (heightMid / 2) - (bh / 2),
+                            });
+                        }
+                    }
+                }
+
+                unitOverlays = overlays;
             }
 
             var pv = this.dialogService.CreateProgressView();
@@ -1510,6 +1590,9 @@ namespace Mappy.Services
                         var success = Util.WriteMapImage(
                             s,
                             map.BaseTile.TileGrid,
+                            floatingTiles,
+                            featureOverlays,
+                            unitOverlays,
                             worker.ReportProgress,
                             () => worker.CancellationPending);
                         args.Cancel = !success;
