@@ -96,6 +96,7 @@ namespace Mappy.UI.Forms
                         this.player8MenuItem.Checked = c == UnitPlacementPlayerMenuChoice.Player8;
                         this.player9MenuItem.Checked = c == UnitPlacementPlayerMenuChoice.Player9;
                         this.player10MenuItem.Checked = c == UnitPlacementPlayerMenuChoice.Player10;
+                        this.player11MenuItem.Checked = c == UnitPlacementPlayerMenuChoice.Player11;
                     });
 
             // sea level widget bindings

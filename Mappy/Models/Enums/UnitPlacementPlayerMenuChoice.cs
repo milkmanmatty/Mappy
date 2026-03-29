@@ -13,5 +13,6 @@ namespace Mappy.Models.Enums
         Player8 = 8,
         Player9 = 9,
         Player10 = 10,
+        Player11 = 11,
     }
 }

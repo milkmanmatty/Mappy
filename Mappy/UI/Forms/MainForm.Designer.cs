@@ -98,6 +98,7 @@ namespace Mappy.UI.Forms
 	        this.player8MenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.player9MenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.player10MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.player11MenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -574,7 +575,7 @@ namespace Mappy.UI.Forms
 	        // 
 	        // playerMenuItem
 	        // 
-	        this.playerMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.playerPromptMenuItem, this.player1MenuItem, this.player2MenuItem, this.player3MenuItem, this.player4MenuItem, this.player5MenuItem, this.player6MenuItem, this.player7MenuItem, this.player8MenuItem, this.player9MenuItem, this.player10MenuItem });
+	        this.playerMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.playerPromptMenuItem, this.player1MenuItem, this.player2MenuItem, this.player3MenuItem, this.player4MenuItem, this.player5MenuItem, this.player6MenuItem, this.player7MenuItem, this.player8MenuItem, this.player9MenuItem, this.player10MenuItem, this.player11MenuItem });
 	        this.playerMenuItem.Name = "playerMenuItem";
 	        this.playerMenuItem.Size = new System.Drawing.Size(67, 29);
 	        this.playerMenuItem.Text = "&Player";
@@ -668,6 +669,14 @@ namespace Mappy.UI.Forms
 	        this.player10MenuItem.Tag = 10;
 	        this.player10MenuItem.Text = "Player 10";
 	        this.player10MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
+	        // 
+	        // player11MenuItem
+	        // 
+	        this.player11MenuItem.Name = "player11MenuItem";
+	        this.player11MenuItem.Size = new System.Drawing.Size(200, 30);
+	        this.player11MenuItem.Tag = 11;
+	        this.player11MenuItem.Text = "Player 11";
+	        this.player11MenuItem.Click += new System.EventHandler(this.PlayerPlacementMenuItemClick);
 	        // 
 	        // helpMenuItem
 	        // 
@@ -1113,6 +1122,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripMenuItem player8MenuItem;
         private System.Windows.Forms.ToolStripMenuItem player9MenuItem;
         private System.Windows.Forms.ToolStripMenuItem player10MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem player11MenuItem;
         private System.Windows.Forms.ToolStripMenuItem mapAttributesMenuItem;
         private System.Windows.Forms.TabPage startPositionsTab;
         private StartPositionsView startPositionsView1;

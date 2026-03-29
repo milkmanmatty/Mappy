@@ -96,7 +96,7 @@ namespace Mappy.UI.Forms
                 Width = 120,
                 DropDownStyle = ComboBoxStyle.DropDownList,
             };
-            for (var p = 1; p <= 10; p++)
+            for (var p = 1; p <= 11; p++)
             {
                 this.comboPlayer.Items.Add("Player " + p);
             }
@@ -203,7 +203,7 @@ namespace Mappy.UI.Forms
                 this.comboSchema.SelectedIndex = si;
             }
 
-            var pi = Math.Max(0, Math.Min(u.Player - 1, 9));
+            var pi = Math.Max(0, Math.Min(u.Player - 1, 10));
             this.comboPlayer.SelectedIndex = pi;
 
             this.textIdent.Text = u.Ident;

@@ -25,11 +25,11 @@ namespace Mappy.UI.Forms
                 IntegralHeight = false,
                 ItemHeight = rowH,
                 Location = new Point(2, 2),
-                Size = new Size(136, rowH * 10),
+                Size = new Size(136, rowH * 11),
                 Font = SystemFonts.MenuFont,
             };
 
-            for (var i = 1; i <= 10; i++)
+            for (var i = 1; i <= 11; i++)
             {
                 this.listBox.Items.Add("Player " + i);
             }
@@ -40,7 +40,7 @@ namespace Mappy.UI.Forms
             this.KeyDown += this.Form_KeyDown;
 
             this.Controls.Add(this.listBox);
-            this.ClientSize = new Size(140, (rowH * 10) + 4);
+            this.ClientSize = new Size(140, (rowH * 11) + 4);
             this.MinimumSize = this.Size;
             this.MaximumSize = this.Size;
             this.Shown += (_, __) => this.listBox.Focus();

@@ -24,7 +24,7 @@ namespace Mappy.UI.Forms
             this.playerUpDown = new NumericUpDown
             {
                 Minimum = 1,
-                Maximum = 10,
+                Maximum = 11,
                 Value = defaultPlayer,
                 Location = new Point(120, 14),
                 Width = 60,

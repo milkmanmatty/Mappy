@@ -16,6 +16,7 @@ namespace Mappy.Util
             Color.Black,
             Color.FromArgb(128, 128, 128),
             Color.FromArgb(255, 200, 160),
+            Color.FromArgb(0, 120, 120),
         };
 
         private static readonly Color[] Foregrounds =
@@ -30,6 +31,7 @@ namespace Mappy.Util
             Color.White,
             Color.White,
             Color.Black,
+            Color.White,
         };
 
         public static int ClampPlayerSlot(int player)
@@ -39,9 +41,9 @@ namespace Mappy.Util
                 return 1;
             }
 
-            if (player > 10)
+            if (player > 11)
             {
-                return 10;
+                return 11;
             }
 
             return player;
