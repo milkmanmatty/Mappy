@@ -1,5 +1,6 @@
 namespace Mappy.UI.Forms
 {
+    using System.Collections.Generic;
     using System.Drawing;
     using System.Windows.Forms;
     using Mappy.Models.Enums;
@@ -8,9 +9,9 @@ namespace Mappy.UI.Forms
     {
         private readonly CheckBox includeSectionsCheckBox;
         private readonly ComboBox featuresComboBox;
-        private readonly CheckBox includeUnitsCheckBox;
+        private readonly ComboBox unitsComboBox;
 
-        public ExportMapImageOptionsForm()
+        public ExportMapImageOptionsForm(IReadOnlyList<string> schemaNames)
         {
             this.Text = "Export Map Image";
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -51,14 +52,31 @@ namespace Mappy.UI.Forms
             this.Controls.Add(this.featuresComboBox);
             y += 30;
 
-            this.includeUnitsCheckBox = new CheckBox
+            var unitsLabel = new Label
             {
-                Text = "Include units",
-                Checked = false,
+                Text = "Include units:",
                 AutoSize = true,
-                Location = new Point(14, y),
+                Location = new Point(14, y + 3),
             };
-            this.Controls.Add(this.includeUnitsCheckBox);
+            this.Controls.Add(unitsLabel);
+
+            this.unitsComboBox = new ComboBox
+            {
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Location = new Point(130, y),
+                Width = 160,
+            };
+            this.unitsComboBox.Items.Add("None");
+            if (schemaNames != null)
+            {
+                foreach (var name in schemaNames)
+                {
+                    this.unitsComboBox.Items.Add(name);
+                }
+            }
+
+            this.unitsComboBox.SelectedIndex = 0;
+            this.Controls.Add(this.unitsComboBox);
             y += 36;
 
             var ok = new Button
@@ -98,6 +116,16 @@ namespace Mappy.UI.Forms
             }
         }
 
-        public bool IncludeUnits => this.includeUnitsCheckBox.Checked;
+        /// <summary>
+        /// Returns the schema index selected for unit export, or null if "None" was chosen.
+        /// </summary>
+        public int? UnitSchemaIndex
+        {
+            get
+            {
+                var idx = this.unitsComboBox.SelectedIndex;
+                return idx > 0 ? idx - 1 : (int?)null;
+            }
+        }
     }
 }

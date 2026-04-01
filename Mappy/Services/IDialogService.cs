@@ -20,7 +20,7 @@ namespace Mappy.Services
 
         string AskUserToSaveMapImage();
 
-        Models.MapImageExportOptions AskUserForMapImageExportOptions();
+        Models.MapImageExportOptions AskUserForMapImageExportOptions(IReadOnlyList<string> schemaNames);
 
         string AskUserToChooseMinimap();
 

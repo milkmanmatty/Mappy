@@ -151,9 +151,9 @@ namespace Mappy.Services
             return null;
         }
 
-        public MapImageExportOptions AskUserForMapImageExportOptions()
+        public MapImageExportOptions AskUserForMapImageExportOptions(IReadOnlyList<string> schemaNames)
         {
-            using (var optionsForm = new UI.Forms.ExportMapImageOptionsForm())
+            using (var optionsForm = new UI.Forms.ExportMapImageOptionsForm(schemaNames))
             {
                 if (optionsForm.ShowDialog(this.owner) != DialogResult.OK)
                 {
@@ -170,7 +170,7 @@ namespace Mappy.Services
                 {
                     IncludeSections = optionsForm.IncludeSections,
                     FeatureMode = optionsForm.FeatureMode,
-                    IncludeUnits = optionsForm.IncludeUnits,
+                    UnitSchemaIndex = optionsForm.UnitSchemaIndex,
                     FilePath = path,
                 };
             }

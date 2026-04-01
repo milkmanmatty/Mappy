@@ -8,7 +8,7 @@ namespace Mappy.Models
 
         public FeatureExportMode FeatureMode { get; set; } = FeatureExportMode.None;
 
-        public bool IncludeUnits { get; set; }
+        public int? UnitSchemaIndex { get; set; }
 
         public string FilePath { get; set; }
     }
