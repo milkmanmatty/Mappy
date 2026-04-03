@@ -1,7 +1,7 @@
 Mappy
 =====
 
-[![Build status](https://ci.appveyor.com/api/projects/status/2o90in7blk4qd3g0/branch/master?svg=true)](https://ci.appveyor.com/project/MHeasell/mappy/branch/master)
+[![GitHub Actions](https://github.com/milkmanmatty/Mappy/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/milkmanmatty/Mappy/actions/workflows/build.yml?query=branch%3Amaster)
 
 Mappy is a modern map editor for Total Annihilation, seeking to replace the current community favourite, Annihilator. Annihilator is the most well-known and widely used map editor, but in many cases Mappy is better. Here's some of the benefits you'll enjoy:
 
