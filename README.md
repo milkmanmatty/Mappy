@@ -11,8 +11,10 @@ Mappy is a modern map editor for Total Annihilation, seeking to replace the curr
 * No need to "compress" maps to remove duplicate tiles. Mappy does this automatically.
 * Scroll wheel support.
 * Void editing
+* Height editing
 * Bandbox select/move/copy/paste for features and sections
 * Map resizing
+* Single player mission support
 * No known bugs that creep their way into your published maps.
   For example, when you delete a feature in Annihilator, it still leaves a reference in your map.
   This is a problem if you're trying to get rid of a third-party feature pack.
@@ -22,9 +24,7 @@ Mappy is a modern map editor for Total Annihilation, seeking to replace the curr
 How to Use Mappy
 ----------------
 
-Download and run MappySetup, then follow the on-screen instructions to install Mappy. Once Mappy is installed, run it from the start menu.
-
-Alternatively, download the zip distribution and extract it to a folder of your choice. Then double-click on Mappy.exe to launch the program.
+Download the latest [release](https://github.com/milkmanmatty/Mappy/releases/latest), unzip the archive file and run Mappy.exe
 
 When you first run Mappy, no map tilesets or features will be available. First, you should tell Mappy where they are. Go to `Edit -> Preferences` and add the folders that your tilesets and features live in to Mappy's search paths. The next time Mappy starts, it will automatically load any tilesets and features it finds in those folders.
 
