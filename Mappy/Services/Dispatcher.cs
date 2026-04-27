@@ -521,6 +521,20 @@ namespace Mappy.Services
                 });
         }
 
+        public void ReplaceFeature()
+        {
+            var options = this.dialogService.AskUserForReplaceFeatureOptions();
+            if (options == null || options.Cancelled)
+            {
+                return;
+            }
+
+            this.model.Map.IfSome(
+                map => map.ReplaceFeatureInstances(
+                    options.SourceFeatureName,
+                    options.DestinationFeatureName));
+        }
+
         public void ExportSelectedSection()
         {
             var options = this.dialogService.AskUserToChooseSectionExportPaths();

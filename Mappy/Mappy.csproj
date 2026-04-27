@@ -218,6 +218,7 @@
     <Compile Include="Models\MinimapFormViewModel.cs" />
     <Compile Include="Models\SectionFeatureLoadResult.cs" />
     <Compile Include="Models\SectionImportExportPaths.cs" />
+    <Compile Include="Models\ReplaceFeatureOptions.cs" />
     <Compile Include="Models\SectionViewViewModel.cs" />
     <Compile Include="Models\UndoableMapModel.cs" />
     <Compile Include="Operations\AddFeatureOperation.cs" />
@@ -231,6 +232,7 @@
     <Compile Include="Operations\VoidBrushOperation.cs" />
     <Compile Include="Operations\MoveFeatureOperation.cs" />
     <Compile Include="Operations\RemoveFeatureOperation.cs" />
+    <Compile Include="Operations\ReplaceFeatureOperation.cs" />
     <Compile Include="Operations\RemoveSchemaUnitOperation.cs" />
     <Compile Include="Operations\RemoveStartPositionOperation.cs" />
     <Compile Include="Operations\SelectionModel\DeselectOperation.cs" />
@@ -417,6 +419,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Forms\NewSchemaTypePromptForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\ReplaceFeatureForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Forms\UnitPlayerPickerForm.cs">

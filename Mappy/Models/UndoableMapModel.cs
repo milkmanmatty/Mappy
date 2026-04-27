@@ -591,6 +591,26 @@ namespace Mappy.Models
             return this.model.EnumerateFeatureInstances();
         }
 
+        public void ReplaceFeatureInstances(string sourceFeatureName, string destinationFeatureName)
+        {
+            if (string.Equals(sourceFeatureName, destinationFeatureName, StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            var ids = this.EnumerateFeatureInstances()
+                .Where(x => string.Equals(x.FeatureName, sourceFeatureName, StringComparison.OrdinalIgnoreCase))
+                .Select(x => x.Id)
+                .ToList();
+
+            if (ids.Count == 0)
+            {
+                return;
+            }
+
+            this.undoManager.Execute(new ReplaceFeatureOperation(this.model, ids, destinationFeatureName));
+        }
+
         public void DragDropFeature(string name, int x, int y, bool deselect = true)
         {
             var featurePos = this.ScreenToHeightIndex(x, y);

@@ -59,5 +59,7 @@ namespace Mappy.Services
         void ShowInfo();
 
         FlipOptions AskUserForFlipOptions();
+
+        ReplaceFeatureOptions AskUserForReplaceFeatureOptions();
     }
 }

@@ -336,5 +336,30 @@ namespace Mappy.Services
                     throw new ArgumentException(@"bad dialogresult");
             }
         }
+
+        public ReplaceFeatureOptions AskUserForReplaceFeatureOptions()
+        {
+            using (var dialog = new ReplaceFeatureForm())
+            {
+                var result = dialog.ShowDialog(this.owner);
+
+                switch (result)
+                {
+                    case DialogResult.OK:
+                        return new ReplaceFeatureOptions
+                        {
+                            SourceFeatureName = dialog.SourceFeatureName.Trim(),
+                            DestinationFeatureName = dialog.DestinationFeatureName.Trim(),
+                        };
+                    case DialogResult.Cancel:
+                        return new ReplaceFeatureOptions
+                        {
+                            Cancelled = true,
+                        };
+                    default:
+                        throw new ArgumentException(@"bad dialogresult");
+                }
+            }
+        }
     }
 }
