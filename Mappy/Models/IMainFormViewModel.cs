@@ -38,6 +38,8 @@ namespace Mappy.Models
 
         IObservable<bool> CanFlip { get; }
 
+        IObservable<bool> CanReplaceFeature { get; }
+
         IObservable<bool> CanGenerateMinimap { get; }
 
         IObservable<bool> CanGenerateMinimapHighQuality { get; }
@@ -161,6 +163,8 @@ namespace Mappy.Models
         void ResizeMapMenuItemClick();
 
         void FlipMenuItemClick();
+
+        void ReplaceFeatureMenuItemClick();
 
         void ExportSectionMenuItemClick();
 
