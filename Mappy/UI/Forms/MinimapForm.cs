@@ -30,6 +30,16 @@
             this.InitializeComponent();
         }
 
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+            if (this.Visible)
+            {
+                var naturalSize = this.minimapControl.BackgroundImage?.Size ?? new Size(252, 252);
+                this.ClientSize = naturalSize;
+            }
+        }
+
         public void SetModel(IMinimapFormViewModel miniFormModel)
         {
             miniFormModel.PropertyAsObservable(x => x.MinimapVisible, nameof(miniFormModel.MinimapVisible))
@@ -66,12 +76,12 @@
 
         private void MinimapControl1MouseDown(object sender, MouseEventArgs e)
         {
-            this.model.MouseDown(e.Location);
+            this.model.MouseDown(this.minimapControl.ControlToImagePoint(e.Location));
         }
 
         private void MinimapControl1MouseMove(object sender, MouseEventArgs e)
         {
-            this.model.MouseMove(e.Location);
+            this.model.MouseMove(this.minimapControl.ControlToImagePoint(e.Location));
         }
 
         private void MinimapControl1MouseUp(object sender, MouseEventArgs e)
