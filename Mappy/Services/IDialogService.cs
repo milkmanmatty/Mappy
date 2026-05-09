@@ -61,5 +61,7 @@ namespace Mappy.Services
         FlipOptions AskUserForFlipOptions();
 
         ReplaceFeatureOptions AskUserForReplaceFeatureOptions();
+
+        bool ShowTilesetsDialog(IEnumerable<string> allWorlds, IEnumerable<string> currentFilter, out ICollection<string> visibleWorlds);
     }
 }

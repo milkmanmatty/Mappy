@@ -3,6 +3,7 @@ namespace Mappy.Services
     using System;
     using System.Collections.Generic;
     using System.Drawing;
+    using System.Linq;
     using System.Windows.Forms;
 
     using Mappy.Models;
@@ -359,6 +360,30 @@ namespace Mappy.Services
                     default:
                         throw new ArgumentException(@"bad dialogresult");
                 }
+            }
+        }
+
+        public bool ShowTilesetsDialog(IEnumerable<string> allWorlds, IEnumerable<string> currentFilter, out ICollection<string> visibleWorlds)
+        {
+            visibleWorlds = null;
+
+            using (var form = new TilesetsForm(allWorlds, currentFilter))
+            {
+                if (form.ShowDialog(this.owner) != DialogResult.OK)
+                {
+                    return false;
+                }
+
+                if (form.SelectedWorldsAfterOk == null)
+                {
+                    visibleWorlds = null;
+                }
+                else
+                {
+                    visibleWorlds = form.SelectedWorldsAfterOk.ToList();
+                }
+
+                return true;
             }
         }
     }

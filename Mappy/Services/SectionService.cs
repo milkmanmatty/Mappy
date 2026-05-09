@@ -2,6 +2,7 @@ namespace Mappy.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
@@ -19,6 +20,8 @@ namespace Mappy.Services
         private readonly Dictionary<int, Section> sectionsCache = new Dictionary<int, Section>();
 
         private int nextId;
+
+        private HashSet<string> worldFilter;
 
         public event EventHandler SectionsChanged;
 
@@ -39,11 +42,32 @@ namespace Mappy.Services
             this.SectionsChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public IEnumerable<string> EnumerateWorlds() =>
-            this.sections
-                .Select(x => x.Value.World)
-                .Distinct(StringComparer.InvariantCultureIgnoreCase)
-                .OrderBy(x => x, StringComparer.InvariantCultureIgnoreCase);
+        public IEnumerable<string> EnumerateAllWorlds() => this.EnumerateWorldsUnfiltered();
+
+        public IEnumerable<string> EnumerateWorlds()
+        {
+            var worlds = this.EnumerateWorldsUnfiltered();
+            if (this.worldFilter == null)
+            {
+                return worlds;
+            }
+
+            return worlds.Where(w => this.worldFilter.Contains(w));
+        }
+
+        public void SetWorldFilter(ICollection<string> worlds)
+        {
+            if (worlds == null || worlds.Count == 0)
+            {
+                this.worldFilter = null;
+                return;
+            }
+
+            this.worldFilter = new HashSet<string>(worlds, StringComparer.InvariantCultureIgnoreCase);
+        }
+
+        public IReadOnlyCollection<string> GetWorldFilter() => this.worldFilter == null ? null : new ReadOnlyCollection<string>(this.worldFilter.ToList());
+
 
         public IEnumerable<string> EnumerateCategories(string world) =>
             this.sections
@@ -59,6 +83,12 @@ namespace Mappy.Services
                 x => x.Value.Name,
                 StringComparer.InvariantCultureIgnoreCase);
         }
+
+        private IEnumerable<string> EnumerateWorldsUnfiltered() =>
+            this.sections
+                .Select(x => x.Value.World)
+                .Distinct(StringComparer.InvariantCultureIgnoreCase)
+                .OrderBy(x => x, StringComparer.InvariantCultureIgnoreCase);
 
         private static Section LoadSection(HpiArchive archive, HpiArchive.FileInfo fileInfo)
         {

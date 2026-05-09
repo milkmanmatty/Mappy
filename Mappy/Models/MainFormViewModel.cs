@@ -413,6 +413,11 @@ namespace Mappy.Models
             this.dispatcher.ReplaceFeature();
         }
 
+        public void TilesetsMenuItemClick()
+        {
+            this.dispatcher.OpenTilesetsDialog();
+        }
+
         public void ExportSectionMenuItemClick()
         {
             this.dispatcher.ExportSelectedSection();
