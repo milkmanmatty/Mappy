@@ -345,6 +345,11 @@ namespace Mappy.UI.Forms
             this.model.ReplaceFeatureMenuItemClick();
         }
 
+        private void TilesetsMenuItemClick(object sender, EventArgs e)
+        {
+            this.model.TilesetsMenuItemClick();
+        }
+
         private void ExportSectionMenuItemClick(object sender, EventArgs e)
         {
             this.model.ExportSectionMenuItemClick();

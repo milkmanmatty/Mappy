@@ -183,6 +183,8 @@
     <Compile Include="IO\SectionLoadingUtils.cs" />
     <Compile Include="IO\ThreeDoWireframe.cs" />
     <Compile Include="MappySettings.cs" />
+    <Compile Include="TilesetFilterSettings.cs" />
+    <Compile Include="TilesetFilterStore.cs" />
     <Compile Include="Maybe.cs" />
     <Compile Include="Models\BandboxBehaviours\FreeBandboxBehaviour.cs" />
     <Compile Include="Models\BandboxBehaviours\IBandboxBehaviour.cs" />
@@ -422,6 +424,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Forms\ReplaceFeatureForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\TilesetsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Forms\UnitPlayerPickerForm.cs">

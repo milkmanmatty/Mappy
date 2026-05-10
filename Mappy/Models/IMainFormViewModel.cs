@@ -166,6 +166,8 @@ namespace Mappy.Models
 
         void ReplaceFeatureMenuItemClick();
 
+        void TilesetsMenuItemClick();
+
         void ExportSectionMenuItemClick();
 
         void ImportMinimapMenuItemClick();

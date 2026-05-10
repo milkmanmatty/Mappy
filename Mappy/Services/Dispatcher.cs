@@ -150,6 +150,8 @@ namespace Mappy.Services
 
                     this.sectionService.AddSections(sectionResult.Sections);
 
+                    this.ApplySavedTilesetWorldFilter();
+
                     this.featureService.AddFeatures(sectionResult.Features);
 
                     this.unitCatalogService.AddCatalogRecords(sectionResult.UnitCatalog);
@@ -309,6 +311,61 @@ namespace Mappy.Services
             this.sectionService.NotifySectionsChanged();
             this.featureService.NotifyFeaturesChanged();
             this.unitCatalogService.NotifyUnitPickerLabelsChanged();
+        }
+
+        public void OpenTilesetsDialog()
+        {
+            var allWorlds = this.sectionService.EnumerateAllWorlds().ToList();
+            if (allWorlds.Count == 0)
+            {
+                return;
+            }
+
+            var current = this.sectionService.GetWorldFilter();
+            if (!this.dialogService.ShowTilesetsDialog(allWorlds, current, out var visibleWorlds))
+            {
+                return;
+            }
+
+            this.sectionService.SetWorldFilter(visibleWorlds);
+
+            var settings = new TilesetFilterSettings
+            {
+                VisibleWorlds = visibleWorlds == null || visibleWorlds.Count == 0 ? null : visibleWorlds.ToArray(),
+            };
+            TilesetFilterStore.Save(settings);
+
+            this.sectionService.NotifySectionsChanged();
+        }
+
+        private void ApplySavedTilesetWorldFilter()
+        {
+            var settings = TilesetFilterStore.Load();
+            if (settings.VisibleWorlds == null || settings.VisibleWorlds.Length == 0)
+            {
+                this.sectionService.SetWorldFilter(null);
+                return;
+            }
+
+            var all = new HashSet<string>(this.sectionService.EnumerateAllWorlds(), StringComparer.InvariantCultureIgnoreCase);
+
+            var picked = settings.VisibleWorlds
+                .Where(w => !string.IsNullOrWhiteSpace(w) && all.Contains(w))
+                .ToList();
+
+            if (picked.Count == 0)
+            {
+                this.sectionService.SetWorldFilter(null);
+                return;
+            }
+
+            if (picked.Count == all.Count)
+            {
+                this.sectionService.SetWorldFilter(null);
+                return;
+            }
+
+            this.sectionService.SetWorldFilter(picked);
         }
 
         public void Close()
