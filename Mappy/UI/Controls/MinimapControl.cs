@@ -1,5 +1,6 @@
 ﻿namespace Mappy.UI.Controls
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Drawing;
@@ -18,6 +19,7 @@
         public MinimapControl()
         {
             this.DoubleBuffered = true;
+            this.ResizeRedraw = true;
         }
 
         [DefaultValue(true)]
@@ -75,16 +77,34 @@
             set
             {
                 base.BackgroundImage = value;
-                if (this.BackgroundImage != null)
-                {
-                    this.Size = base.BackgroundImage.Size;
-                }
+                this.BackgroundImageLayout = ImageLayout.None;
+                this.Invalidate();
             }
         }
 
         protected override Size DefaultSize => new Size(252, 252);
 
-        private Rectangle CoveredRect => new Rectangle(this.ViewportRect.Location, this.ViewportRect.Size + new Size(1, 1));
+        private Rectangle CoveredRect => this.ClientRectangle;
+
+        public Point ControlToImagePoint(Point p)
+        {
+            if (this.BackgroundImage == null || this.BackgroundImage.Width <= 0 || this.BackgroundImage.Height <= 0)
+            {
+                return p;
+            }
+
+            var r = this.ComputeImageRect();
+            if (r.Width <= 0 || r.Height <= 0)
+            {
+                return Point.Empty;
+            }
+
+            var x = (int)Math.Round((p.X - r.X) * this.BackgroundImage.Width / r.Width);
+            var y = (int)Math.Round((p.Y - r.Y) * this.BackgroundImage.Height / r.Height);
+            x = Math.Max(0, Math.Min(this.BackgroundImage.Width - 1, x));
+            y = Math.Max(0, Math.Min(this.BackgroundImage.Height - 1, y));
+            return new Point(x, y);
+        }
 
         public void SetMarker(int id, Point position, Color color)
         {
@@ -109,22 +129,93 @@
             this.markers.Remove(id);
         }
 
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            e.Graphics.Clear(this.BackColor);
+            if (this.BackgroundImage != null)
+            {
+                e.Graphics.DrawImage(this.BackgroundImage, this.ComputeImageRect());
+            }
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
-
-            foreach (var marker in this.markers.Select(x => x.Value))
+            if (this.BackgroundImage != null)
             {
-                DrawMarker(e.Graphics, marker.Position, marker.Color);
-            }
-
-            if (this.RectVisible)
-            {
-                using (var p = new Pen(this.RectColor, this.RectThickness))
+                foreach (var marker in this.markers.Select(x => x.Value))
                 {
-                    e.Graphics.DrawRectangle(p, this.ViewportRect);
+                    DrawMarker(e.Graphics, this.ImageToControlPoint(marker.Position), marker.Color);
+                }
+
+                if (this.RectVisible)
+                {
+                    var displayRect = this.ImageToControlRect(this.viewportRect);
+                    using (var p = new Pen(this.RectColor, this.RectThickness))
+                    {
+                        e.Graphics.DrawRectangle(p, displayRect);
+                    }
                 }
             }
+            else
+            {
+                foreach (var marker in this.markers.Select(x => x.Value))
+                {
+                    DrawMarker(e.Graphics, marker.Position, marker.Color);
+                }
+
+                if (this.RectVisible)
+                {
+                    using (var pen = new Pen(this.RectColor, this.RectThickness))
+                    {
+                        e.Graphics.DrawRectangle(pen, this.ViewportRect);
+                    }
+                }
+            }
+        }
+
+        private RectangleF ComputeImageRect()
+        {
+            if (this.BackgroundImage == null)
+            {
+                return new RectangleF(PointF.Empty, this.ClientSize);
+            }
+
+            float sx = this.Width / (float)this.BackgroundImage.Width;
+            float sy = this.Height / (float)this.BackgroundImage.Height;
+            float scale = Math.Min(sx, sy);
+            float w = this.BackgroundImage.Width * scale;
+            float h = this.BackgroundImage.Height * scale;
+            return new RectangleF((this.Width - w) / 2f, (this.Height - h) / 2f, w, h);
+        }
+
+        private Point ImageToControlPoint(Point p)
+        {
+            if (this.BackgroundImage == null)
+            {
+                return p;
+            }
+
+            var r = this.ComputeImageRect();
+            return new Point(
+                (int)Math.Round(r.X + (p.X * r.Width / this.BackgroundImage.Width)),
+                (int)Math.Round(r.Y + (p.Y * r.Height / this.BackgroundImage.Height)));
+        }
+
+        private Rectangle ImageToControlRect(Rectangle r)
+        {
+            if (this.BackgroundImage == null)
+            {
+                return r;
+            }
+
+            var ir = this.ComputeImageRect();
+            float sx = ir.Width / this.BackgroundImage.Width;
+            float sy = ir.Height / this.BackgroundImage.Height;
+            return new Rectangle(
+                (int)Math.Round(ir.X + (r.X * sx)),
+                (int)Math.Round(ir.Y + (r.Y * sy)),
+                (int)Math.Round(r.Width * sx),
+                (int)Math.Round(r.Height * sy));
         }
 
         private static void DrawMarker(Graphics g, Point position, Color color)
@@ -145,9 +236,16 @@
                 3);
         }
 
-        private void InvalidateMarker(Point position)
+        private void InvalidateMarker(Point imagePosition)
         {
-            this.Invalidate(GetMarkerBounds(position));
+            if (this.BackgroundImage == null)
+            {
+                this.Invalidate();
+                return;
+            }
+
+            var controlPoint = this.ImageToControlPoint(imagePosition);
+            this.Invalidate(GetMarkerBounds(controlPoint));
         }
 
         private struct MarkerInfo
