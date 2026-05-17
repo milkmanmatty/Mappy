@@ -51,9 +51,9 @@ namespace Mappy.Services
             };
         }
 
-        public string AskUserToChooseMap(IList<string> maps)
+        public string AskUserToChooseMap(IList<string> maps, Func<string, Bitmap> previewLoader)
         {
-            var f = new MapSelectionForm();
+            var f = new MapSelectionForm(previewLoader);
             foreach (var n in maps)
             {
                 f.Items.Add(n);

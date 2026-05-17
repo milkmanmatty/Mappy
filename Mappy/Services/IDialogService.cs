@@ -10,7 +10,7 @@ namespace Mappy.Services
 
     public interface IDialogService
     {
-        string AskUserToChooseMap(IList<string> maps);
+        string AskUserToChooseMap(IList<string> maps, Func<string, Bitmap> previewLoader);
 
         string AskUserToOpenFile();
 

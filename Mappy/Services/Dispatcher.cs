@@ -17,6 +17,7 @@ namespace Mappy.Services
     using Mappy.Util;
     using Mappy.Util.ImageSampling;
     using TAUtil;
+    using TAUtil.Gdi.Bitmap;
     using TAUtil.Gdi.Palette;
     using TAUtil.Hpi;
     using TAUtil.Tnt;
@@ -1329,7 +1330,23 @@ namespace Mappy.Services
                     break;
                 default:
                     maps.Sort();
-                    mapName = this.dialogService.AskUserToChooseMap(maps);
+                    mapName = this.dialogService.AskUserToChooseMap(
+                        maps,
+                        name =>
+                        {
+                            var findtntPath = HpiPath.Combine("maps", name + ".tnt");
+                            using (var hpi = new HpiArchive(filename))
+                            {
+                                var info = hpi.FindFile(findtntPath);
+                                var buf = new byte[info.Size];
+                                hpi.Extract(info, buf);
+                                using (var tnt = new TntReader(new MemoryStream(buf)))
+                                {
+                                    var mm = tnt.GetMinimap();
+                                    return BitmapConvert.ToBitmap(mm.Data, mm.Width, mm.Height);
+                                }
+                            }
+                        });
                     readOnly = true;
                     break;
             }
