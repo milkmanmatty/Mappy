@@ -363,6 +363,17 @@ namespace Mappy.Services
             }
         }
 
+        public bool ConfirmClearAllFeatures()
+        {
+            var result = MessageBox.Show(
+                this.owner,
+                "This will clear all the features from your map. Do you want to continue?",
+                "Clear All Features",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+            return result == DialogResult.Yes;
+        }
+
         public bool ShowTilesetsDialog(IEnumerable<string> allWorlds, IEnumerable<string> currentFilter, out ICollection<string> visibleWorlds)
         {
             visibleWorlds = null;

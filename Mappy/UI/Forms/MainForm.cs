@@ -70,6 +70,7 @@ namespace Mappy.UI.Forms
             });
             model.CanResizeMap.Subscribe(x => this.resizeMapMenuItem.Enabled = x);
             model.CanReplaceFeature.Subscribe(x => this.replaceFeatureMenuItem.Enabled = x);
+            model.CanClearAllFeatures.Subscribe(x => this.clearAllFeaturesMenuItem.Enabled = x);
 
             model.CanGenerateMinimap.Subscribe(x => this.generateMinimapMenuItem.Enabled = x);
             model.CanGenerateMinimapHighQuality.Subscribe(x => this.generateMinimapHighQualityMenuItem.Enabled = x);
@@ -343,6 +344,11 @@ namespace Mappy.UI.Forms
         private void ReplaceFeatureMenuItemClick(object sender, EventArgs e)
         {
             this.model.ReplaceFeatureMenuItemClick();
+        }
+
+        private void ClearAllFeaturesMenuItemClick(object sender, EventArgs e)
+        {
+            this.model.ClearAllFeaturesMenuItemClick();
         }
 
         private void TilesetsMenuItemClick(object sender, EventArgs e)

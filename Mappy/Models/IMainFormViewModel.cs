@@ -40,6 +40,8 @@ namespace Mappy.Models
 
         IObservable<bool> CanReplaceFeature { get; }
 
+        IObservable<bool> CanClearAllFeatures { get; }
+
         IObservable<bool> CanGenerateMinimap { get; }
 
         IObservable<bool> CanGenerateMinimapHighQuality { get; }
@@ -165,6 +167,8 @@ namespace Mappy.Models
         void FlipMenuItemClick();
 
         void ReplaceFeatureMenuItemClick();
+
+        void ClearAllFeaturesMenuItemClick();
 
         void TilesetsMenuItemClick();
 

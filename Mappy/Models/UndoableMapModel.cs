@@ -591,6 +591,17 @@ namespace Mappy.Models
             return this.model.EnumerateFeatureInstances();
         }
 
+        public void ClearAllFeatures()
+        {
+            var ids = this.EnumerateFeatureInstances().Select(x => x.Id).ToList();
+            if (ids.Count == 0)
+            {
+                return;
+            }
+
+            this.undoManager.Execute(new ClearAllFeaturesOperation(this.model));
+        }
+
         public void ReplaceFeatureInstances(string sourceFeatureName, string destinationFeatureName)
         {
             if (string.Equals(sourceFeatureName, destinationFeatureName, StringComparison.OrdinalIgnoreCase))

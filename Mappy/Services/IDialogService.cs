@@ -62,6 +62,8 @@ namespace Mappy.Services
 
         ReplaceFeatureOptions AskUserForReplaceFeatureOptions();
 
+        bool ConfirmClearAllFeatures();
+
         bool ShowTilesetsDialog(IEnumerable<string> allWorlds, IEnumerable<string> currentFilter, out ICollection<string> visibleWorlds);
     }
 }

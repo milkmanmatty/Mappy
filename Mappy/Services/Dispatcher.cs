@@ -593,6 +593,16 @@ namespace Mappy.Services
                     options.DestinationFeatureName));
         }
 
+        public void ClearAllFeatures()
+        {
+            if (!this.dialogService.ConfirmClearAllFeatures())
+            {
+                return;
+            }
+
+            this.model.Map.IfSome(map => map.ClearAllFeatures());
+        }
+
         public void ExportSelectedSection()
         {
             var options = this.dialogService.AskUserToChooseSectionExportPaths();
