@@ -41,6 +41,7 @@ namespace Mappy.UI.Forms
 	        System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
 	        System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
 	        System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+	        System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
 	        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 	        this.topMenu = new System.Windows.Forms.MenuStrip();
 	        this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,6 +70,19 @@ namespace Mappy.UI.Forms
 	        this.replaceFeatureMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.featuresMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.clearAllFeaturesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.featureDensityMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.featureDensity10MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.featureDensity20MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.featureDensity30MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.featureDensity40MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.featureDensity50MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.featureDensity60MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.featureDensity70MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.featureDensity80MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.featureDensity90MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.featureDensity100MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.fillFeaturesOptionsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.fillSelectionMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.tilesetsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.mapAttributesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.generateMinimapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -148,6 +162,7 @@ namespace Mappy.UI.Forms
 	        toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 	        toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 	        toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+	        toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
 	        this.topMenu.SuspendLayout();
 	        this.sidebarTabs.SuspendLayout();
 	        this.sectionsTab.SuspendLayout();
@@ -428,7 +443,7 @@ namespace Mappy.UI.Forms
 	        // 
 	        // featuresMenuItem
 	        // 
-	        this.featuresMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.replaceFeatureMenuItem, this.clearAllFeaturesMenuItem });
+	        this.featuresMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.replaceFeatureMenuItem, this.clearAllFeaturesMenuItem, toolStripSeparator12, this.featureDensityMenuItem, this.fillFeaturesOptionsMenuItem, this.fillSelectionMenuItem });
 	        this.featuresMenuItem.Name = "featuresMenuItem";
 	        this.featuresMenuItem.Size = new System.Drawing.Size(78, 29);
 	        this.featuresMenuItem.Text = "F&eatures";
@@ -440,6 +455,115 @@ namespace Mappy.UI.Forms
 	        this.clearAllFeaturesMenuItem.Size = new System.Drawing.Size(200, 30);
 	        this.clearAllFeaturesMenuItem.Text = "Clear All";
 	        this.clearAllFeaturesMenuItem.Click += new System.EventHandler(this.ClearAllFeaturesMenuItemClick);
+	        // 
+	        // toolStripSeparator12
+	        // 
+	        toolStripSeparator12.Name = "toolStripSeparator12";
+	        toolStripSeparator12.Size = new System.Drawing.Size(197, 6);
+	        // 
+	        // featureDensityMenuItem
+	        // 
+	        this.featureDensityMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.featureDensity10MenuItem, this.featureDensity20MenuItem, this.featureDensity30MenuItem, this.featureDensity40MenuItem, this.featureDensity50MenuItem, this.featureDensity60MenuItem, this.featureDensity70MenuItem, this.featureDensity80MenuItem, this.featureDensity90MenuItem, this.featureDensity100MenuItem });
+	        this.featureDensityMenuItem.Name = "featureDensityMenuItem";
+	        this.featureDensityMenuItem.Size = new System.Drawing.Size(200, 30);
+	        this.featureDensityMenuItem.Text = "Feature Density";
+	        // 
+	        // featureDensity10MenuItem
+	        // 
+	        this.featureDensity10MenuItem.Name = "featureDensity10MenuItem";
+	        this.featureDensity10MenuItem.Size = new System.Drawing.Size(120, 30);
+	        this.featureDensity10MenuItem.Tag = 10;
+	        this.featureDensity10MenuItem.Text = "10%";
+	        this.featureDensity10MenuItem.Click += new System.EventHandler(this.FeatureDensityMenuItemClick);
+	        // 
+	        // featureDensity20MenuItem
+	        // 
+	        this.featureDensity20MenuItem.Name = "featureDensity20MenuItem";
+	        this.featureDensity20MenuItem.Size = new System.Drawing.Size(120, 30);
+	        this.featureDensity20MenuItem.Tag = 20;
+	        this.featureDensity20MenuItem.Text = "20%";
+	        this.featureDensity20MenuItem.Click += new System.EventHandler(this.FeatureDensityMenuItemClick);
+	        // 
+	        // featureDensity30MenuItem
+	        // 
+	        this.featureDensity30MenuItem.Name = "featureDensity30MenuItem";
+	        this.featureDensity30MenuItem.Size = new System.Drawing.Size(120, 30);
+	        this.featureDensity30MenuItem.Tag = 30;
+	        this.featureDensity30MenuItem.Text = "30%";
+	        this.featureDensity30MenuItem.Click += new System.EventHandler(this.FeatureDensityMenuItemClick);
+	        // 
+	        // featureDensity40MenuItem
+	        // 
+	        this.featureDensity40MenuItem.Name = "featureDensity40MenuItem";
+	        this.featureDensity40MenuItem.Size = new System.Drawing.Size(120, 30);
+	        this.featureDensity40MenuItem.Tag = 40;
+	        this.featureDensity40MenuItem.Text = "40%";
+	        this.featureDensity40MenuItem.Click += new System.EventHandler(this.FeatureDensityMenuItemClick);
+	        // 
+	        // featureDensity50MenuItem
+	        // 
+	        this.featureDensity50MenuItem.Checked = true;
+	        this.featureDensity50MenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+	        this.featureDensity50MenuItem.Name = "featureDensity50MenuItem";
+	        this.featureDensity50MenuItem.Size = new System.Drawing.Size(120, 30);
+	        this.featureDensity50MenuItem.Tag = 50;
+	        this.featureDensity50MenuItem.Text = "50%";
+	        this.featureDensity50MenuItem.Click += new System.EventHandler(this.FeatureDensityMenuItemClick);
+	        // 
+	        // featureDensity60MenuItem
+	        // 
+	        this.featureDensity60MenuItem.Name = "featureDensity60MenuItem";
+	        this.featureDensity60MenuItem.Size = new System.Drawing.Size(120, 30);
+	        this.featureDensity60MenuItem.Tag = 60;
+	        this.featureDensity60MenuItem.Text = "60%";
+	        this.featureDensity60MenuItem.Click += new System.EventHandler(this.FeatureDensityMenuItemClick);
+	        // 
+	        // featureDensity70MenuItem
+	        // 
+	        this.featureDensity70MenuItem.Name = "featureDensity70MenuItem";
+	        this.featureDensity70MenuItem.Size = new System.Drawing.Size(120, 30);
+	        this.featureDensity70MenuItem.Tag = 70;
+	        this.featureDensity70MenuItem.Text = "70%";
+	        this.featureDensity70MenuItem.Click += new System.EventHandler(this.FeatureDensityMenuItemClick);
+	        // 
+	        // featureDensity80MenuItem
+	        // 
+	        this.featureDensity80MenuItem.Name = "featureDensity80MenuItem";
+	        this.featureDensity80MenuItem.Size = new System.Drawing.Size(120, 30);
+	        this.featureDensity80MenuItem.Tag = 80;
+	        this.featureDensity80MenuItem.Text = "80%";
+	        this.featureDensity80MenuItem.Click += new System.EventHandler(this.FeatureDensityMenuItemClick);
+	        // 
+	        // featureDensity90MenuItem
+	        // 
+	        this.featureDensity90MenuItem.Name = "featureDensity90MenuItem";
+	        this.featureDensity90MenuItem.Size = new System.Drawing.Size(120, 30);
+	        this.featureDensity90MenuItem.Tag = 90;
+	        this.featureDensity90MenuItem.Text = "90%";
+	        this.featureDensity90MenuItem.Click += new System.EventHandler(this.FeatureDensityMenuItemClick);
+	        // 
+	        // featureDensity100MenuItem
+	        // 
+	        this.featureDensity100MenuItem.Name = "featureDensity100MenuItem";
+	        this.featureDensity100MenuItem.Size = new System.Drawing.Size(120, 30);
+	        this.featureDensity100MenuItem.Tag = 100;
+	        this.featureDensity100MenuItem.Text = "100%";
+	        this.featureDensity100MenuItem.Click += new System.EventHandler(this.FeatureDensityMenuItemClick);
+	        // 
+	        // fillFeaturesOptionsMenuItem
+	        // 
+	        this.fillFeaturesOptionsMenuItem.Name = "fillFeaturesOptionsMenuItem";
+	        this.fillFeaturesOptionsMenuItem.Size = new System.Drawing.Size(200, 30);
+	        this.fillFeaturesOptionsMenuItem.Text = "Fill Options...";
+	        this.fillFeaturesOptionsMenuItem.Click += new System.EventHandler(this.FillFeaturesOptionsMenuItemClick);
+	        // 
+	        // fillSelectionMenuItem
+	        // 
+	        this.fillSelectionMenuItem.Enabled = false;
+	        this.fillSelectionMenuItem.Name = "fillSelectionMenuItem";
+	        this.fillSelectionMenuItem.Size = new System.Drawing.Size(200, 30);
+	        this.fillSelectionMenuItem.Text = "Fill Selection";
+	        this.fillSelectionMenuItem.Click += new System.EventHandler(this.FillSelectionMenuItemClick);
 	        // 
 	        // tilesetsMenuItem
 	        // 
@@ -1202,6 +1326,19 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripMenuItem replaceFeatureMenuItem;
         private System.Windows.Forms.ToolStripMenuItem featuresMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearAllFeaturesMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem featureDensityMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem featureDensity10MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem featureDensity20MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem featureDensity30MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem featureDensity40MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem featureDensity50MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem featureDensity60MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem featureDensity70MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem featureDensity80MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem featureDensity90MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem featureDensity100MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fillFeaturesOptionsMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fillSelectionMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tilesetsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem infoToolStripMenuItem;
     }

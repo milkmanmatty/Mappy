@@ -71,6 +71,20 @@ namespace Mappy.UI.Forms
             model.CanResizeMap.Subscribe(x => this.resizeMapMenuItem.Enabled = x);
             model.CanReplaceFeature.Subscribe(x => this.replaceFeatureMenuItem.Enabled = x);
             model.CanClearAllFeatures.Subscribe(x => this.clearAllFeaturesMenuItem.Enabled = x);
+            model.CanFillFeatures.Subscribe(x => this.fillSelectionMenuItem.Enabled = x);
+            model.FeatureDensity.Subscribe(d =>
+            {
+                this.featureDensity10MenuItem.Checked = d == 10;
+                this.featureDensity20MenuItem.Checked = d == 20;
+                this.featureDensity30MenuItem.Checked = d == 30;
+                this.featureDensity40MenuItem.Checked = d == 40;
+                this.featureDensity50MenuItem.Checked = d == 50;
+                this.featureDensity60MenuItem.Checked = d == 60;
+                this.featureDensity70MenuItem.Checked = d == 70;
+                this.featureDensity80MenuItem.Checked = d == 80;
+                this.featureDensity90MenuItem.Checked = d == 90;
+                this.featureDensity100MenuItem.Checked = d == 100;
+            });
 
             model.CanGenerateMinimap.Subscribe(x => this.generateMinimapMenuItem.Enabled = x);
             model.CanGenerateMinimapHighQuality.Subscribe(x => this.generateMinimapHighQualityMenuItem.Enabled = x);
@@ -349,6 +363,23 @@ namespace Mappy.UI.Forms
         private void ClearAllFeaturesMenuItemClick(object sender, EventArgs e)
         {
             this.model.ClearAllFeaturesMenuItemClick();
+        }
+
+        private void FeatureDensityMenuItemClick(object sender, EventArgs e)
+        {
+            var item = (ToolStripMenuItem)sender;
+            var density = Convert.ToInt32(item.Tag, System.Globalization.CultureInfo.InvariantCulture);
+            this.model.FeatureDensityMenuItemClick(density);
+        }
+
+        private void FillFeaturesOptionsMenuItemClick(object sender, EventArgs e)
+        {
+            this.model.FillFeaturesOptionsMenuItemClick();
+        }
+
+        private void FillSelectionMenuItemClick(object sender, EventArgs e)
+        {
+            this.model.FillSelectionMenuItemClick();
         }
 
         private void TilesetsMenuItemClick(object sender, EventArgs e)

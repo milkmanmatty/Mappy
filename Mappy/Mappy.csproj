@@ -203,6 +203,7 @@
     <Compile Include="Models\FeatureInstance.cs" />
     <Compile Include="Models\FeatureInstanceEventArgs.cs" />
     <Compile Include="Models\FeatureViewViewModel.cs" />
+    <Compile Include="Models\FillFeaturesOptions.cs" />
     <Compile Include="Models\FlipOptions.cs" />
     <Compile Include="Models\IMainFormViewModel.cs" />
     <Compile Include="Models\IMainModel.cs" />
@@ -225,6 +226,7 @@
     <Compile Include="Models\UndoableMapModel.cs" />
     <Compile Include="Operations\AddFeatureOperation.cs" />
     <Compile Include="Operations\ClearAllFeaturesOperation.cs" />
+    <Compile Include="Operations\FillFeaturesOperation.cs" />
     <Compile Include="Operations\AddSchemaUnitOperation.cs" />
     <Compile Include="Operations\ChangeAttributesOperation.cs" />
     <Compile Include="Operations\ChangeStartPositionOperation.cs" />
@@ -422,6 +424,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Forms\NewSchemaTypePromptForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\FillFeaturesOptionsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Forms\ReplaceFeatureForm.cs">

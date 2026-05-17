@@ -363,6 +363,24 @@ namespace Mappy.Services
             }
         }
 
+        public FillFeaturesOptions ShowFillFeaturesOptionsDialog(FillFeaturesOptions current, int seaLevel)
+        {
+            using (var form = new FillFeaturesOptionsForm(current, seaLevel))
+            {
+                if (form.ShowDialog(this.owner) != DialogResult.OK)
+                {
+                    return null;
+                }
+
+                return new FillFeaturesOptions
+                {
+                    MinHeight = form.MinHeight,
+                    MaxHeight = form.MaxHeight,
+                    Padding = form.Padding,
+                };
+            }
+        }
+
         public bool ConfirmClearAllFeatures()
         {
             var result = MessageBox.Show(
