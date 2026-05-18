@@ -591,7 +591,7 @@ namespace Mappy.Models
             return this.model.EnumerateFeatureInstances();
         }
 
-        public void FillFeatures(string featureName, int densityPercent, FillFeaturesOptions options)
+        public void FillFeatures(string featureName, FillFeaturesOptions options)
         {
             int areaMinX, areaMinY, areaMaxX, areaMaxY;
             IGrid<int> heightSource;
@@ -695,7 +695,15 @@ namespace Mappy.Models
             var rng = new Random();
             FillFeaturesShuffleList(candidates, rng);
 
-            var targetCount = Math.Max(1, (int)Math.Round(candidates.Count * densityPercent / 100.0));
+            int targetCount;
+            if (options.CountMode == FillFeaturesCountMode.FixedCount)
+            {
+                targetCount = Math.Min(options.FixedCount, candidates.Count);
+            }
+            else
+            {
+                targetCount = Math.Max(1, (int)Math.Round(candidates.Count * options.DensityPercent / 100.0));
+            }
             var paddingSq = (double)options.Padding * options.Padding;
             var paddingRadiusCells = (int)Math.Ceiling(options.Padding / 16.0);
 

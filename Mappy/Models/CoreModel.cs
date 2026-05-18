@@ -39,8 +39,6 @@ namespace Mappy.Models
 
         private UnitPlacementPlayerMenuChoice unitPlacementPlayerMenuChoice = UnitPlacementPlayerMenuChoice.Prompt;
 
-        private int featureDensity = 50;
-
         public Maybe<UndoableMapModel> Map
         {
             get => this.map;
@@ -161,12 +159,6 @@ namespace Mappy.Models
         {
             get => this.unitPlacementPlayerMenuChoice;
             set => this.SetField(ref this.unitPlacementPlayerMenuChoice, value, nameof(this.UnitPlacementPlayerMenuChoice));
-        }
-
-        public int FeatureDensity
-        {
-            get => this.featureDensity;
-            set => this.SetField(ref this.featureDensity, value, nameof(this.FeatureDensity));
         }
 
         public void SetViewportLocation(Point location)

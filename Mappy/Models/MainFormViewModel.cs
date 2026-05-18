@@ -35,7 +35,6 @@ namespace Mappy.Models
             this.CanFlip = map.ObservePropertyOrDefault(x => x.CanFlip, nameof(UndoableMapModel.CanFlip), false);
             this.CanReplaceFeature = mapOpen;
             this.CanClearAllFeatures = mapOpen;
-            this.FeatureDensity = model.PropertyAsObservable(x => x.FeatureDensity, nameof(IReadOnlyApplicationModel.FeatureDensity));
             this.CanFillFeatures = mapOpen;
             this.GridVisible = model.PropertyAsObservable(x => x.GridVisible, nameof(model.GridVisible));
             this.GridSize = model.PropertyAsObservable(x => x.GridSize, nameof(model.GridSize));
@@ -186,8 +185,6 @@ namespace Mappy.Models
         public IObservable<bool> CanReplaceFeature { get; }
 
         public IObservable<bool> CanClearAllFeatures { get; }
-
-        public IObservable<int> FeatureDensity { get; }
 
         public IObservable<bool> CanFillFeatures { get; }
 
@@ -425,11 +422,6 @@ namespace Mappy.Models
         public void ClearAllFeaturesMenuItemClick()
         {
             this.dispatcher.ClearAllFeatures();
-        }
-
-        public void FeatureDensityMenuItemClick(int density)
-        {
-            this.dispatcher.SetFeatureDensity(density);
         }
 
         public void FillFeaturesOptionsMenuItemClick()

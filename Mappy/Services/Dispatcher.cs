@@ -605,11 +605,6 @@ namespace Mappy.Services
             this.model.Map.IfSome(map => map.ClearAllFeatures());
         }
 
-        public void SetFeatureDensity(int density)
-        {
-            this.model.FeatureDensity = density;
-        }
-
         public void ShowFillFeaturesOptions()
         {
             var seaLevel = this.model.Map.Match(m => m.SeaLevel, () => 0);
@@ -628,8 +623,7 @@ namespace Mappy.Services
                 return;
             }
 
-            this.model.Map.IfSome(
-                map => map.FillFeatures(selectedFeature.Name, this.model.FeatureDensity, this.fillFeaturesOptions));
+            this.model.Map.IfSome(map => map.FillFeatures(selectedFeature.Name, this.fillFeaturesOptions));
         }
 
         public void ExportSelectedSection()

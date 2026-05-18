@@ -41,7 +41,5 @@ namespace Mappy.Models
         int VoidEditCursorSize { get; }
 
         UnitPlacementPlayerMenuChoice UnitPlacementPlayerMenuChoice { get; }
-
-        int FeatureDensity { get; }
     }
 }

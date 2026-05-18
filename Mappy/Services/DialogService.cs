@@ -377,6 +377,9 @@ namespace Mappy.Services
                     MinHeight = form.MinHeight,
                     MaxHeight = form.MaxHeight,
                     Padding = form.Padding,
+                    CountMode = form.CountMode,
+                    DensityPercent = form.DensityPercent,
+                    FixedCount = form.FixedCount,
                 };
             }
         }

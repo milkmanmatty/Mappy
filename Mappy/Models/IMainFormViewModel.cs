@@ -42,8 +42,6 @@ namespace Mappy.Models
 
         IObservable<bool> CanClearAllFeatures { get; }
 
-        IObservable<int> FeatureDensity { get; }
-
         IObservable<bool> CanFillFeatures { get; }
 
         IObservable<bool> CanGenerateMinimap { get; }
@@ -173,8 +171,6 @@ namespace Mappy.Models
         void ReplaceFeatureMenuItemClick();
 
         void ClearAllFeaturesMenuItemClick();
-
-        void FeatureDensityMenuItemClick(int density);
 
         void FillFeaturesOptionsMenuItemClick();
 

@@ -10,6 +10,10 @@ namespace Mappy.UI.Forms
         private readonly NumericUpDown minHeightUpDown;
         private readonly NumericUpDown maxHeightUpDown;
         private readonly NumericUpDown paddingUpDown;
+        private readonly RadioButton percentageRadioButton;
+        private readonly RadioButton fixedCountRadioButton;
+        private readonly NumericUpDown densityPercentUpDown;
+        private readonly NumericUpDown fixedCountUpDown;
 
         public FillFeaturesOptionsForm(FillFeaturesOptions current, int seaLevel)
         {
@@ -81,18 +85,72 @@ namespace Mappy.UI.Forms
                 ForeColor = SystemColors.GrayText,
             };
 
+            var fillCountGroupBox = new GroupBox
+            {
+                Text = "Fill count",
+                Location = new Point(12, 18 + rowHeight * 4),
+                Size = new Size(260, 88),
+            };
+
+            this.percentageRadioButton = new RadioButton
+            {
+                Text = "Percentage:",
+                Location = new Point(12, 24),
+                AutoSize = true,
+                Checked = current.CountMode == FillFeaturesCountMode.Percentage,
+            };
+            this.densityPercentUpDown = new NumericUpDown
+            {
+                Location = new Point(128, 22),
+                Width = 55,
+                Minimum = 1,
+                Maximum = 100,
+                Value = current.DensityPercent,
+            };
+            var percentLabel = new Label
+            {
+                Text = "%",
+                Location = new Point(188, 25),
+                AutoSize = true,
+            };
+
+            this.fixedCountRadioButton = new RadioButton
+            {
+                Text = "Fixed amount:",
+                Location = new Point(12, 52),
+                AutoSize = true,
+                Checked = current.CountMode == FillFeaturesCountMode.FixedCount,
+            };
+            this.fixedCountUpDown = new NumericUpDown
+            {
+                Location = new Point(128, 50),
+                Width = 70,
+                Minimum = 1,
+                Maximum = 100000,
+                Value = current.FixedCount,
+            };
+
+            this.percentageRadioButton.CheckedChanged += (_, __) => this.UpdateFillCountControls();
+            this.fixedCountRadioButton.CheckedChanged += (_, __) => this.UpdateFillCountControls();
+
+            fillCountGroupBox.Controls.Add(this.percentageRadioButton);
+            fillCountGroupBox.Controls.Add(this.densityPercentUpDown);
+            fillCountGroupBox.Controls.Add(percentLabel);
+            fillCountGroupBox.Controls.Add(this.fixedCountRadioButton);
+            fillCountGroupBox.Controls.Add(this.fixedCountUpDown);
+
             var okButton = new Button
             {
                 Text = "OK",
                 DialogResult = DialogResult.OK,
-                Location = new Point(100, 18 + rowHeight * 4),
+                Location = new Point(100, fillCountGroupBox.Bottom + 12),
             };
 
             var cancelButton = new Button
             {
                 Text = "Cancel",
                 DialogResult = DialogResult.Cancel,
-                Location = new Point(186, 18 + rowHeight * 4),
+                Location = new Point(186, fillCountGroupBox.Bottom + 12),
             };
 
             this.AcceptButton = okButton;
@@ -106,10 +164,12 @@ namespace Mappy.UI.Forms
             this.Controls.Add(this.paddingUpDown);
             this.Controls.Add(paddingPixelsLabel);
             this.Controls.Add(seaLevelLabel);
+            this.Controls.Add(fillCountGroupBox);
             this.Controls.Add(okButton);
             this.Controls.Add(cancelButton);
 
-            this.ClientSize = new Size(285, 18 + rowHeight * 5 + 10);
+            this.ClientSize = new Size(285, cancelButton.Bottom + 12);
+            this.UpdateFillCountControls();
         }
 
         public int MinHeight => (int)this.minHeightUpDown.Value;
@@ -117,5 +177,19 @@ namespace Mappy.UI.Forms
         public int MaxHeight => (int)this.maxHeightUpDown.Value;
 
         public new int Padding => (int)this.paddingUpDown.Value;
+
+        public FillFeaturesCountMode CountMode =>
+            this.percentageRadioButton.Checked ? FillFeaturesCountMode.Percentage : FillFeaturesCountMode.FixedCount;
+
+        public int DensityPercent => (int)this.densityPercentUpDown.Value;
+
+        public int FixedCount => (int)this.fixedCountUpDown.Value;
+
+        private void UpdateFillCountControls()
+        {
+            var usePercentage = this.percentageRadioButton.Checked;
+            this.densityPercentUpDown.Enabled = usePercentage;
+            this.fixedCountUpDown.Enabled = !usePercentage;
+        }
     }
 }
