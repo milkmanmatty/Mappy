@@ -363,6 +363,38 @@ namespace Mappy.Services
             }
         }
 
+        public FillFeaturesOptions ShowFillFeaturesOptionsDialog(FillFeaturesOptions current, int seaLevel)
+        {
+            using (var form = new FillFeaturesOptionsForm(current, seaLevel))
+            {
+                if (form.ShowDialog(this.owner) != DialogResult.OK)
+                {
+                    return null;
+                }
+
+                return new FillFeaturesOptions
+                {
+                    MinHeight = form.MinHeight,
+                    MaxHeight = form.MaxHeight,
+                    Padding = form.Padding,
+                    CountMode = form.CountMode,
+                    DensityPercent = form.DensityPercent,
+                    FixedCount = form.FixedCount,
+                };
+            }
+        }
+
+        public bool ConfirmClearAllFeatures()
+        {
+            var result = MessageBox.Show(
+                this.owner,
+                "This will clear all the features from your map. Do you want to continue?",
+                "Clear All Features",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+            return result == DialogResult.Yes;
+        }
+
         public bool ShowTilesetsDialog(IEnumerable<string> allWorlds, IEnumerable<string> currentFilter, out ICollection<string> visibleWorlds)
         {
             visibleWorlds = null;

@@ -62,6 +62,10 @@ namespace Mappy.Services
 
         ReplaceFeatureOptions AskUserForReplaceFeatureOptions();
 
+        bool ConfirmClearAllFeatures();
+
+        FillFeaturesOptions ShowFillFeaturesOptionsDialog(FillFeaturesOptions current, int seaLevel);
+
         bool ShowTilesetsDialog(IEnumerable<string> allWorlds, IEnumerable<string> currentFilter, out ICollection<string> visibleWorlds);
     }
 }

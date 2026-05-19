@@ -591,6 +591,159 @@ namespace Mappy.Models
             return this.model.EnumerateFeatureInstances();
         }
 
+        public void FillFeatures(string featureName, FillFeaturesOptions options)
+        {
+            int areaMinX, areaMinY, areaMaxX, areaMaxY;
+            IGrid<int> heightSource;
+            int heightSourceOriginX = 0, heightSourceOriginY = 0;
+
+            if (this.SelectedTile.HasValue)
+            {
+                var tile = this.FloatingTiles[this.SelectedTile.Value];
+                areaMinX = tile.Location.X * 2;
+                areaMinY = tile.Location.Y * 2;
+                areaMaxX = ((tile.Location.X + tile.Item.TileGrid.Width) * 2) - 1;
+                areaMaxY = ((tile.Location.Y + tile.Item.TileGrid.Height) * 2) - 1;
+
+                // Band-boxing a selection sets the height within the area to 0, so read the height directly
+                heightSource = tile.Item.HeightGrid;
+                heightSourceOriginX = areaMinX;
+                heightSourceOriginY = areaMinY;
+            }
+            else if (this.SelectedFeatures.Count > 0)
+            {
+                areaMinX = int.MaxValue;
+                areaMinY = int.MaxValue;
+                areaMaxX = int.MinValue;
+                areaMaxY = int.MinValue;
+                foreach (var id in this.SelectedFeatures)
+                {
+                    var inst = this.GetFeatureInstance(id);
+                    if (inst.X < areaMinX)
+                    {
+                        areaMinX = inst.X;
+                    }
+
+                    if (inst.Y < areaMinY)
+                    {
+                        areaMinY = inst.Y;
+                    }
+
+                    if (inst.X > areaMaxX)
+                    {
+                        areaMaxX = inst.X;
+                    }
+
+                    if (inst.Y > areaMaxY)
+                    {
+                        areaMaxY = inst.Y;
+                    }
+                }
+
+                heightSource = this.model.Tile.HeightGrid;
+            }
+            else
+            {
+                areaMinX = 0;
+                areaMinY = 0;
+                areaMaxX = this.model.Tile.HeightGrid.Width - 1;
+                areaMaxY = this.model.Tile.HeightGrid.Height - 1;
+                heightSource = this.model.Tile.HeightGrid;
+            }
+
+            areaMinX = Math.Max(0, areaMinX);
+            areaMinY = Math.Max(0, areaMinY);
+            areaMaxX = Math.Min(this.model.Tile.HeightGrid.Width - 1, areaMaxX);
+            areaMaxY = Math.Min(this.model.Tile.HeightGrid.Height - 1, areaMaxY);
+
+            var seaLevel = this.SeaLevel;
+            var heightSourceWidth = heightSource.Width;
+            var voidsWidth = this.model.Voids.Width;
+
+            var candidates = new List<Point>();
+            for (var hy = areaMinY; hy <= areaMaxY; hy++)
+            {
+                for (var hx = areaMinX; hx <= areaMaxX; hx++)
+                {
+                    if (this.HasFeatureInstanceAt(hx, hy))
+                    {
+                        continue;
+                    }
+
+                    if (this.model.Voids[(hy * voidsWidth) + hx])
+                    {
+                        continue;
+                    }
+
+                    var localX = hx - heightSourceOriginX;
+                    var localY = hy - heightSourceOriginY;
+                    var height = heightSource[(localY * heightSourceWidth) + localX];
+                    if (height < seaLevel || height < options.MinHeight || height > options.MaxHeight)
+                    {
+                        continue;
+                    }
+
+                    candidates.Add(new Point(hx, hy));
+                }
+            }
+
+            if (candidates.Count == 0)
+            {
+                return;
+            }
+
+            var rng = new Random();
+            FillFeaturesShuffleList(candidates, rng);
+
+            int targetCount;
+            if (options.CountMode == FillFeaturesCountMode.FixedCount)
+            {
+                targetCount = Math.Min(options.FixedCount, candidates.Count);
+            }
+            else
+            {
+                targetCount = Math.Max(1, (int)Math.Round(candidates.Count * options.DensityPercent / 100.0));
+            }
+            var paddingSq = (double)options.Padding * options.Padding;
+            var paddingRadiusCells = (int)Math.Ceiling(options.Padding / 16.0);
+
+            var existingFeatures = this.EnumerateFeatureInstances().ToList();
+            var placed = new List<FeatureInstance>();
+
+            foreach (var pos in candidates)
+            {
+                if (placed.Count >= targetCount)
+                {
+                    break;
+                }
+
+                if (options.Padding > 0 && IsTooCloseToAny(pos, paddingSq, paddingRadiusCells, existingFeatures, placed))
+                {
+                    continue;
+                }
+
+                placed.Add(new FeatureInstance(Guid.NewGuid(), featureName, pos.X, pos.Y));
+            }
+
+            if (placed.Count == 0)
+            {
+                return;
+            }
+
+            this.undoManager.Execute(new FillFeaturesOperation(this.model, placed));
+        }
+
+        public void ClearAllFeatures()
+        {
+            var ids = this.EnumerateFeatureInstances().Select(x => x.Id).ToList();
+            if (ids.Count == 0)
+            {
+                return;
+            }
+
+            this.undoManager.Execute(new ClearAllFeaturesOperation(this.model));
+        }
+
         public void ReplaceFeatureInstances(string sourceFeatureName, string destinationFeatureName)
         {
             if (string.Equals(sourceFeatureName, destinationFeatureName, StringComparison.OrdinalIgnoreCase))
@@ -1615,6 +1768,61 @@ namespace Mappy.Models
         private void ModelOnFeatureInstanceChanged(object sender, FeatureInstanceEventArgs e)
         {
             this.FeatureInstanceChanged?.Invoke(this, e);
+        }
+
+        private static void FillFeaturesShuffleList<T>(IList<T> list, Random rng)
+        {
+            for (var i = list.Count - 1; i > 0; i--)
+            {
+                var j = rng.Next(i + 1);
+                var temp = list[i];
+                list[i] = list[j];
+                list[j] = temp;
+            }
+        }
+
+        private static bool IsTooCloseToAny(
+            Point pos,
+            double paddingSq,
+            int paddingRadiusCells,
+            IEnumerable<FeatureInstance> existing,
+            IEnumerable<FeatureInstance> placed)
+        {
+            foreach (var other in existing)
+            {
+                var dx = pos.X - other.X;
+                var dy = pos.Y - other.Y;
+                if (Math.Abs(dx) > paddingRadiusCells && Math.Abs(dy) > paddingRadiusCells)
+                {
+                    continue;
+                }
+
+                var dxPx = dx * 16.0;
+                var dyPx = dy * 16.0;
+                if ((dxPx * dxPx) + (dyPx * dyPx) < paddingSq)
+                {
+                    return true;
+                }
+            }
+
+            foreach (var other in placed)
+            {
+                var dx = pos.X - other.X;
+                var dy = pos.Y - other.Y;
+                if (Math.Abs(dx) > paddingRadiusCells && Math.Abs(dy) > paddingRadiusCells)
+                {
+                    continue;
+                }
+
+                var dxPx = dx * 16.0;
+                var dyPx = dy * 16.0;
+                if ((dxPx * dxPx) + (dyPx * dyPx) < paddingSq)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private sealed class ResizeMapOperation : IReplayableOperation

@@ -44,6 +44,8 @@ namespace Mappy.Services
 
         private readonly Random rng = new Random();
 
+        private FillFeaturesOptions fillFeaturesOptions = new FillFeaturesOptions();
+
         private readonly int[] startPositionViewCycle = new int[10];
 
         public Dispatcher(
@@ -591,6 +593,37 @@ namespace Mappy.Services
                 map => map.ReplaceFeatureInstances(
                     options.SourceFeatureName,
                     options.DestinationFeatureName));
+        }
+
+        public void ClearAllFeatures()
+        {
+            if (!this.dialogService.ConfirmClearAllFeatures())
+            {
+                return;
+            }
+
+            this.model.Map.IfSome(map => map.ClearAllFeatures());
+        }
+
+        public void ShowFillFeaturesOptions()
+        {
+            var seaLevel = this.model.Map.Match(m => m.SeaLevel, () => 0);
+            var result = this.dialogService.ShowFillFeaturesOptionsDialog(this.fillFeaturesOptions, seaLevel);
+            if (result != null)
+            {
+                this.fillFeaturesOptions = result;
+            }
+        }
+
+        public void FillFeatures()
+        {
+            var selectedFeature = this.featureService.SelectedFeature;
+            if (selectedFeature == null)
+            {
+                return;
+            }
+
+            this.model.Map.IfSome(map => map.FillFeatures(selectedFeature.Name, this.fillFeaturesOptions));
         }
 
         public void ExportSelectedSection()
