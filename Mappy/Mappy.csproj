@@ -293,6 +293,12 @@
     <Compile Include="UI\Controls\MinimapControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UI\Controls\StepNumericUpDown.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\StepTrackBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\Controls\SectionView.cs">
       <SubType>UserControl</SubType>
     </Compile>

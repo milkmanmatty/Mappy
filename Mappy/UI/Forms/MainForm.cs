@@ -19,6 +19,23 @@ namespace Mappy.UI.Forms
         public MainForm()
         {
             this.InitializeComponent();
+            MappySettings.SettingsSaved += this.OnSettingsSaved;
+            this.ApplyAdjustmentWheelSteps();
+        }
+
+        private void OnSettingsSaved(object sender, EventArgs e)
+        {
+            this.ApplyAdjustmentWheelSteps();
+        }
+
+        private void ApplyAdjustmentWheelSteps()
+        {
+            var settings = MappySettings.Settings;
+            this.selectedHeightNumericUpDown.MouseWheelStep = settings.GetHeightSelectedHeightWheelStepOrDefault();
+            this.intervalNumericUpDown.MouseWheelStep = settings.GetHeightIntervalWheelStepOrDefault();
+            this.cursorSizeNumericUpDown.MouseWheelStep = settings.GetHeightCursorSizeWheelStepOrDefault();
+            this.voidCursorSizeNumericUpDown.MouseWheelStep = settings.GetVoidCursorSizeWheelStepOrDefault();
+            this.seaLevelTrackbar.MouseWheelStep = settings.GetSeaLevelWheelStepOrDefault();
         }
 
         public MapViewPanel MapViewPanel => this.mapViewPanel;
