@@ -33,6 +33,13 @@ namespace Mappy.UI.Forms
             this.showUnitFriendlyNameOnMapCheckBox.Checked = MappySettings.Settings.ShowUnitFriendlyNameOnMap;
             this.inactiveSchemaOpacityNumeric.Value = MappySettings.Settings.GetInactiveSchemaOpacityPercentForDialog();
             this.doNotPromptToSaveUnsavedChangesCheckBox.Checked = MappySettings.Settings.DoNotPromptToSaveUnsavedChanges;
+
+            var settings = MappySettings.Settings;
+            this.heightSelectedHeightWheelStepNumeric.Value = settings.GetHeightSelectedHeightWheelStepOrDefault();
+            this.heightIntervalWheelStepNumeric.Value = settings.GetHeightIntervalWheelStepOrDefault();
+            this.heightCursorSizeWheelStepNumeric.Value = settings.GetHeightCursorSizeWheelStepOrDefault();
+            this.voidCursorSizeWheelStepNumeric.Value = settings.GetVoidCursorSizeWheelStepOrDefault();
+            this.seaLevelWheelStepNumeric.Value = settings.GetSeaLevelWheelStepOrDefault();
         }
 
         private void AddButtonClick(object sender, EventArgs e)
@@ -57,8 +64,6 @@ namespace Mappy.UI.Forms
                 var i = selectedIndices[0];
                 this.searchPathsListView.Items.RemoveAt(i);
 
-                // select the item before the one we removed,
-                // as long as there are items remaining in the list.
                 if (this.searchPathsListView.Items.Count > 0)
                 {
                     this.searchPathsListView.Items[Math.Max(i - 1, 0)].Selected = true;
@@ -123,6 +128,11 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.ShowUnitFriendlyNameOnMap = this.showUnitFriendlyNameOnMapCheckBox.Checked;
             MappySettings.Settings.InactiveSchemaOpacityPercent = (int)this.inactiveSchemaOpacityNumeric.Value;
             MappySettings.Settings.DoNotPromptToSaveUnsavedChanges = this.doNotPromptToSaveUnsavedChangesCheckBox.Checked;
+            MappySettings.Settings.HeightSelectedHeightWheelStep = (int)this.heightSelectedHeightWheelStepNumeric.Value;
+            MappySettings.Settings.HeightIntervalWheelStep = (int)this.heightIntervalWheelStepNumeric.Value;
+            MappySettings.Settings.HeightCursorSizeWheelStep = (int)this.heightCursorSizeWheelStepNumeric.Value;
+            MappySettings.Settings.VoidCursorSizeWheelStep = (int)this.voidCursorSizeWheelStepNumeric.Value;
+            MappySettings.Settings.SeaLevelWheelStep = (int)this.seaLevelWheelStepNumeric.Value;
             MappySettings.SaveSettings(notifyListeners: true);
         }
     }

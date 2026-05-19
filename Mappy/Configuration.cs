@@ -9,6 +9,8 @@ namespace Mappy
     {
         private const int DefaultDragAutoScrollSpeed = 16;
 
+        private const int DefaultWheelStep = 1;
+
         /// <summary>
         /// Gets or sets the main window state: 0 = Normal, 1 = Minimized, 2 = Maximized.
         /// </summary>
@@ -54,6 +56,26 @@ namespace Mappy
 
         public int? InactiveSchemaOpacityPercent { get; set; }
 
+        public int HeightSelectedHeightWheelStep { get; set; } = DefaultWheelStep;
+
+        public int HeightIntervalWheelStep { get; set; } = DefaultWheelStep;
+
+        public int HeightCursorSizeWheelStep { get; set; } = DefaultWheelStep;
+
+        public int VoidCursorSizeWheelStep { get; set; } = DefaultWheelStep;
+
+        public int SeaLevelWheelStep { get; set; } = DefaultWheelStep;
+
+        public int GetHeightSelectedHeightWheelStepOrDefault() => GetWheelStepOrDefault(this.HeightSelectedHeightWheelStep);
+
+        public int GetHeightIntervalWheelStepOrDefault() => GetWheelStepOrDefault(this.HeightIntervalWheelStep);
+
+        public int GetHeightCursorSizeWheelStepOrDefault() => GetWheelStepOrDefault(this.HeightCursorSizeWheelStep);
+
+        public int GetVoidCursorSizeWheelStepOrDefault() => GetWheelStepOrDefault(this.VoidCursorSizeWheelStep);
+
+        public int GetSeaLevelWheelStepOrDefault() => GetWheelStepOrDefault(this.SeaLevelWheelStep);
+
         public int GetInactiveSchemaOpacityPercentForDialog()
         {
             var p = this.InactiveSchemaOpacityPercent ?? 38;
@@ -75,6 +97,11 @@ namespace Mappy
         public int GetDragAutoScrollSpeedYOrDefault()
         {
             return this.DragAutoScrollSpeedY > 0 ? this.DragAutoScrollSpeedY : DefaultDragAutoScrollSpeed;
+        }
+
+        private static int GetWheelStepOrDefault(int value)
+        {
+            return value > 0 ? value : DefaultWheelStep;
         }
     }
 }
