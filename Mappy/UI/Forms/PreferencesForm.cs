@@ -1,6 +1,7 @@
 namespace Mappy.UI.Forms
 {
     using System;
+    using System.Drawing;
     using System.Windows.Forms;
 
     using Mappy;
@@ -8,6 +9,9 @@ namespace Mappy.UI.Forms
 
     public partial class PreferencesForm : Form
     {
+        private Color blobFeatureBaseColor = Configuration.DefaultBlobFeatureBaseColor;
+
+        private bool blobFeatureBaseColorCustomized;
         public PreferencesForm()
         {
             this.InitializeComponent();
@@ -41,6 +45,25 @@ namespace Mappy.UI.Forms
             this.voidCursorSizeWheelStepNumeric.Value = settings.GetVoidCursorSizeWheelStepOrDefault();
             this.seaLevelWheelStepNumeric.Value = settings.GetSeaLevelWheelStepOrDefault();
             this.stickyClipboardCheckBox.Checked = settings.StickyClipboard;
+            this.blobFeatureBaseCheckBox.Checked = settings.BlobFeatureBase;
+            this.blobFeatureBaseColor = settings.GetBlobFeatureBaseColorOrDefault();
+            this.blobFeatureBaseColorCustomized = settings.BlobFeatureBaseColorArgb.HasValue;
+        }
+
+        private void BlobFeatureBaseCustomizeButtonClick(object sender, EventArgs e)
+        {
+            using (var colorDialog = new ColorDialog())
+            {
+                colorDialog.Color = this.blobFeatureBaseColor;
+                colorDialog.FullOpen = true;
+                if (colorDialog.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                this.blobFeatureBaseColor = colorDialog.Color;
+                this.blobFeatureBaseColorCustomized = true;
+            }
         }
 
         private void AddButtonClick(object sender, EventArgs e)
@@ -135,6 +158,10 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.VoidCursorSizeWheelStep = (int)this.voidCursorSizeWheelStepNumeric.Value;
             MappySettings.Settings.SeaLevelWheelStep = (int)this.seaLevelWheelStepNumeric.Value;
             MappySettings.Settings.StickyClipboard = this.stickyClipboardCheckBox.Checked;
+            MappySettings.Settings.BlobFeatureBase = this.blobFeatureBaseCheckBox.Checked;
+            MappySettings.Settings.BlobFeatureBaseColorArgb = this.blobFeatureBaseColorCustomized
+                ? (int?)this.blobFeatureBaseColor.ToArgb()
+                : null;
             MappySettings.SaveSettings(notifyListeners: true);
         }
     }

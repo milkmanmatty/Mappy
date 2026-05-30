@@ -23,6 +23,8 @@ namespace Mappy.Models
 
     public class MapViewViewModel : IMapViewViewModel
     {
+        private const int FeatureBaseBlobDiameter = 12;
+
         private const int BandboxDepth = 100000000;
 
         private const int HeightCursorDepth = BandboxDepth + 1;
@@ -50,6 +52,9 @@ namespace Mappy.Models
         private readonly List<DrawableItem> tileMapping = new List<DrawableItem>();
 
         private readonly IDictionary<Guid, DrawableItem> featureMapping =
+            new Dictionary<Guid, DrawableItem>();
+
+        private readonly IDictionary<Guid, DrawableItem> featureBaseBlobMapping =
             new Dictionary<Guid, DrawableItem>();
 
         private readonly IDictionary<string, DrawableItem> startPositionItems =
@@ -223,6 +228,7 @@ namespace Mappy.Models
 
             this.UpdateStartPositions();
             this.UpdateAllSchemaUnits();
+            this.RefreshFeatureBaseBlobs();
             this.RefreshSelection();
         }
 
@@ -728,6 +734,13 @@ namespace Mappy.Models
 
             this.featureMapping.Clear();
 
+            foreach (var blob in this.featureBaseBlobMapping.Values)
+            {
+                this.itemsLayer.Value.Items.Remove(blob);
+            }
+
+            this.featureBaseBlobMapping.Clear();
+
             if (this.mapModel == null)
             {
                 return;
@@ -736,6 +749,24 @@ namespace Mappy.Models
             foreach (var f in this.mapModel.EnumerateFeatureInstances())
             {
                 this.InsertFeature(f.Id);
+            }
+        }
+
+        private void RefreshFeatureBaseBlobs()
+        {
+            foreach (var id in this.featureBaseBlobMapping.Keys.ToList())
+            {
+                this.RemoveFeatureBaseBlob(id);
+            }
+
+            if (this.mapModel == null || !MappySettings.Settings.BlobFeatureBase)
+            {
+                return;
+            }
+
+            foreach (var f in this.mapModel.EnumerateFeatureInstances())
+            {
+                this.InsertFeatureBaseBlob(f.Id);
             }
         }
 
@@ -1978,6 +2009,48 @@ namespace Mappy.Models
             {
                 this.itemsLayer.Value.AddToSelection(i);
             }
+
+            this.InsertFeatureBaseBlob(f.Id);
+        }
+
+        private void InsertFeatureBaseBlob(Guid id)
+        {
+            if (!MappySettings.Settings.BlobFeatureBase || this.featureBaseBlobMapping.ContainsKey(id))
+            {
+                return;
+            }
+
+            var f = this.mapModel.GetFeatureInstance(id);
+            var coords = f.Location;
+            var index = this.ToFeatureIndex(coords);
+            var featureRecord = this.featureService.TryGetFeature(f.FeatureName).Or(DefaultFeatureRecord);
+            var basePoint = featureRecord.GetBasePoint(this.mapModel.BaseTile.HeightGrid, coords.X, coords.Y);
+            var blobDiameter = Math.Max(
+                FeatureBaseBlobDiameter,
+                Math.Min(featureRecord.Footprint.Width, featureRecord.Footprint.Height) * 10);
+            var blobOffset = blobDiameter / 2;
+            MappySettings.Settings.GetFeatureBaseBlobFillAndBorderColors(out var fillColor, out var borderColor);
+            var blob = new DrawableItem(
+                basePoint.X - blobOffset,
+                basePoint.Y - blobOffset,
+                index + 999,
+                DrawableFilledEllipse.CreateSimple(
+                    new Size(blobDiameter, blobDiameter),
+                    fillColor,
+                    borderColor));
+            blob.Locked = true;
+            blob.Visible = this.featuresVisible;
+            this.featureBaseBlobMapping[id] = blob;
+            this.itemsLayer.Value.Items.Add(blob);
+        }
+
+        private void RemoveFeatureBaseBlob(Guid id)
+        {
+            if (this.featureBaseBlobMapping.TryGetValue(id, out var blob))
+            {
+                this.itemsLayer.Value.Items.Remove(blob);
+                this.featureBaseBlobMapping.Remove(id);
+            }
         }
 
         private void UpdateFeature(Guid id)
@@ -1988,6 +2061,8 @@ namespace Mappy.Models
 
         private void RemoveFeature(Guid id)
         {
+            this.RemoveFeatureBaseBlob(id);
+
             if (this.featureMapping.ContainsKey(id))
             {
                 var item = this.featureMapping[id];
