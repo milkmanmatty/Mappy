@@ -48,6 +48,8 @@ namespace Mappy.Services
 
         private readonly int[] startPositionViewCycle = new int[10];
 
+        private object stickyPasteBuffer;
+
         public Dispatcher(
             CoreModel model,
             IDialogService dialogService,
@@ -420,62 +422,15 @@ namespace Mappy.Services
             this.model.Map.IfSome(
                 map =>
                     {
-                        object data = Clipboard.GetData(DataFormats.Serializable);
+                        object data = this.GetClipboardDataForPaste();
                         if (data == null)
                         {
                             return;
                         }
 
-                        Point loc = map.ViewportLocation;
-                        loc.X += this.model.ViewportWidth / 2;
-                        loc.Y += this.model.ViewportHeight / 2;
-
-                        IMapTile tile = data as IMapTile;
-                        if (tile != null)
+                        if (this.TryPasteClipboardData(map, data))
                         {
-                            this.DeduplicateTiles(tile.TileGrid);
-                            map.PasteMapTile(tile, loc.X, loc.Y);
-                        }
-                        else
-                        {
-                            if (data is FeatureClipboardRecord featureRecord)
-                            {
-                                map.DragDropFeature(featureRecord.FeatureName, loc.X, loc.Y);
-                                return;
-                            }
-
-                            var featureList = data as List<FeatureClipboardRecord>;
-                            if (featureList != null)
-                            {
-                                map.ClearSelection();
-                                foreach (var feature in featureList)
-                                {
-                                    // Split these up so they can be debugged better
-                                    // force locs between 0 and MapWidth/Height
-                                    int xLocUnsafe = map.ViewportLocation.X + feature.VPOffsetX;
-                                    int xLoc = Math.Min(map.MapWidth * 32, Math.Max(0, xLocUnsafe));
-
-                                    int yLocUnsafe = map.ViewportLocation.Y + feature.VPOffsetY;
-                                    int yLoc = Math.Min(map.MapHeight * 32, Math.Max(0, yLocUnsafe));
-
-                                    map.DragDropFeature(feature.FeatureName, xLoc, yLoc, false);
-                                }
-
-                                return;
-                            }
-
-                            if (data is SchemaUnitClipboardRecord unitRecord)
-                            {
-                                this.PasteSchemaUnitsFromClipboardRecords(map, new[] { unitRecord });
-                                return;
-                            }
-
-                            var unitList = data as List<SchemaUnitClipboardRecord>;
-                            if (unitList != null)
-                            {
-                                this.PasteSchemaUnitsFromClipboardRecords(map, unitList);
-                                return;
-                            }
+                            this.ClearClipboardAfterPasteIfNeeded();
                         }
                     });
         }
@@ -1151,7 +1106,7 @@ namespace Mappy.Services
             map.MarkSaved(filename);
         }
 
-        private static bool TryCopyToClipboard(UndoableMapModel map)
+        private bool TryCopyToClipboard(UndoableMapModel map)
         {
             if (map.SelectedFeatures.Count > 0)
             {
@@ -1160,7 +1115,7 @@ namespace Mappy.Services
                     var id = map.SelectedFeatures.First();
                     var inst = map.GetFeatureInstance(id);
                     var rec = new FeatureClipboardRecord(inst.FeatureName);
-                    Clipboard.SetData(DataFormats.Serializable, rec);
+                    this.SetClipboardData(rec);
                     return true;
                 }
 
@@ -1174,7 +1129,7 @@ namespace Mappy.Services
                     features.Add(new FeatureClipboardRecord(ins.FeatureName, (ins.X * 16) - loc.X, (ins.Y * 16) - loc.Y));
                 }
 
-                Clipboard.SetData(DataFormats.Serializable, features);
+                this.SetClipboardData(features);
                 return true;
             }
 
@@ -1190,11 +1145,11 @@ namespace Mappy.Services
 
                 if (records.Count == 1)
                 {
-                    Clipboard.SetData(DataFormats.Serializable, records[0]);
+                    this.SetClipboardData(records[0]);
                 }
                 else
                 {
-                    Clipboard.SetData(DataFormats.Serializable, records);
+                    this.SetClipboardData(records);
                 }
 
                 return true;
@@ -1203,11 +1158,166 @@ namespace Mappy.Services
             if (map.SelectedTile.HasValue)
             {
                 var tile = map.FloatingTiles[map.SelectedTile.Value].Item;
-                Clipboard.SetData(DataFormats.Serializable, tile);
+                this.SetClipboardData(tile);
                 return true;
             }
 
             return false;
+        }
+
+        private void SetClipboardData(object data)
+        {
+            Clipboard.SetData(DataFormats.Serializable, data);
+            this.stickyPasteBuffer = CloneClipboardData(data);
+        }
+
+        private object GetClipboardDataForPaste()
+        {
+            if (MappySettings.Settings.StickyClipboard && this.stickyPasteBuffer != null)
+            {
+                return CloneClipboardData(this.stickyPasteBuffer);
+            }
+
+            return Clipboard.GetData(DataFormats.Serializable);
+        }
+
+        private static object CloneClipboardData(object data)
+        {
+            if (data is FeatureClipboardRecord feature)
+            {
+                return new FeatureClipboardRecord(feature.FeatureName, feature.VPOffsetX, feature.VPOffsetY);
+            }
+
+            var featureList = data as List<FeatureClipboardRecord>;
+            if (featureList != null)
+            {
+                var clone = new List<FeatureClipboardRecord>(featureList.Count);
+                foreach (var featureRecord in featureList)
+                {
+                    clone.Add(new FeatureClipboardRecord(featureRecord.FeatureName, featureRecord.VPOffsetX, featureRecord.VPOffsetY));
+                }
+
+                return clone;
+            }
+
+            if (data is SchemaUnitClipboardRecord unit)
+            {
+                return CloneSchemaUnitClipboardRecord(unit);
+            }
+
+            var unitList = data as List<SchemaUnitClipboardRecord>;
+            if (unitList != null)
+            {
+                var clone = new List<SchemaUnitClipboardRecord>(unitList.Count);
+                foreach (var unitRecord in unitList)
+                {
+                    clone.Add(CloneSchemaUnitClipboardRecord(unitRecord));
+                }
+
+                return clone;
+            }
+
+            var tile = data as IMapTile;
+            if (tile != null)
+            {
+                return CloneMapTile(tile);
+            }
+
+            return null;
+        }
+
+        private static SchemaUnitClipboardRecord CloneSchemaUnitClipboardRecord(SchemaUnitClipboardRecord source)
+        {
+            return new SchemaUnitClipboardRecord
+            {
+                Unitname = source.Unitname,
+                Ident = source.Ident,
+                VPOffsetX = source.VPOffsetX,
+                VPOffsetY = source.VPOffsetY,
+                Player = source.Player,
+                HealthPercentage = source.HealthPercentage,
+                Angle = source.Angle,
+                Kills = source.Kills,
+                InitialMission = source.InitialMission,
+                BuildPriority = source.BuildPriority,
+                AiPriorityTarget = source.AiPriorityTarget,
+                MissionCriticalUnit = source.MissionCriticalUnit,
+                AiIgnore = source.AiIgnore,
+                Immunity = source.Immunity,
+            };
+        }
+
+        private static MapTile CloneMapTile(IMapTile tile)
+        {
+            var clone = new MapTile(tile.TileGrid.Width, tile.TileGrid.Height);
+            GridMethods.Copy(tile.TileGrid, clone.TileGrid, 0, 0, 0, 0, tile.TileGrid.Width, tile.TileGrid.Height);
+            GridMethods.Copy(tile.HeightGrid, clone.HeightGrid, 0, 0, 0, 0, tile.HeightGrid.Width, tile.HeightGrid.Height);
+            return clone;
+        }
+
+        private bool TryPasteClipboardData(UndoableMapModel map, object data)
+        {
+            Point loc = map.ViewportLocation;
+            loc.X += this.model.ViewportWidth / 2;
+            loc.Y += this.model.ViewportHeight / 2;
+
+            IMapTile tile = data as IMapTile;
+            if (tile != null)
+            {
+                this.DeduplicateTiles(tile.TileGrid);
+                map.PasteMapTile(tile, loc.X, loc.Y);
+                return true;
+            }
+
+            if (data is FeatureClipboardRecord featureRecord)
+            {
+                map.DragDropFeature(featureRecord.FeatureName, loc.X, loc.Y);
+                return true;
+            }
+
+            var featureList = data as List<FeatureClipboardRecord>;
+            if (featureList != null)
+            {
+                map.ClearSelection();
+                foreach (var feature in featureList)
+                {
+                    // Split these up so they can be debugged better
+                    // force locs between 0 and MapWidth/Height
+                    int xLocUnsafe = map.ViewportLocation.X + feature.VPOffsetX;
+                    int xLoc = Math.Min(map.MapWidth * 32, Math.Max(0, xLocUnsafe));
+
+                    int yLocUnsafe = map.ViewportLocation.Y + feature.VPOffsetY;
+                    int yLoc = Math.Min(map.MapHeight * 32, Math.Max(0, yLocUnsafe));
+
+                    map.DragDropFeature(feature.FeatureName, xLoc, yLoc, false);
+                }
+
+                return true;
+            }
+
+            if (data is SchemaUnitClipboardRecord unitRecord)
+            {
+                this.PasteSchemaUnitsFromClipboardRecords(map, new[] { unitRecord });
+                return true;
+            }
+
+            var unitList = data as List<SchemaUnitClipboardRecord>;
+            if (unitList != null)
+            {
+                this.PasteSchemaUnitsFromClipboardRecords(map, unitList);
+                return true;
+            }
+
+            return false;
+        }
+
+        private void ClearClipboardAfterPasteIfNeeded()
+        {
+            if (!MappySettings.Settings.StickyClipboard)
+            {
+                this.stickyPasteBuffer = null;
+                Clipboard.Clear();
+            }
         }
 
         private void PasteSchemaUnitsFromClipboardRecords(UndoableMapModel map, IList<SchemaUnitClipboardRecord> records)

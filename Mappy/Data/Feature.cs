@@ -33,17 +33,22 @@ namespace Mappy.Data
 
         public Rectangle GetDrawBounds(IGrid<int> heightmap, int posX, int posY)
         {
+            var basePoint = this.GetBasePoint(heightmap, posX, posY);
+            var pos = new Point(basePoint.X - this.Offset.X, basePoint.Y - this.Offset.Y);
+            return new Rectangle(pos, this.Image.Size);
+        }
+
+        public Point GetBasePoint(IGrid<int> heightmap, int posX, int posY)
+        {
             var height = 0;
             if (posX >= 0 && posX < heightmap.Width - 1 && posY >= 0 && posY < heightmap.Height - 1)
             {
                 height = Util.ComputeMidpointHeight(heightmap, posX, posY);
             }
 
-            var projectedPosX = (posX * 16) + (this.Footprint.Width * 8);
-            var projectedPosY = (posY * 16) + (this.Footprint.Height * 8) - (height / 2);
-
-            var pos = new Point(projectedPosX - this.Offset.X, projectedPosY - this.Offset.Y);
-            return new Rectangle(pos, this.Image.Size);
+            return new Point(
+                (posX * 16) + (this.Footprint.Width * 8),
+                (posY * 16) + (this.Footprint.Height * 8) - (height / 2));
         }
 
         public struct ReclaimInfoStruct

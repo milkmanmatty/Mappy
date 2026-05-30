@@ -38,6 +38,39 @@ namespace Mappy
 
         public bool DoNotPromptToSaveUnsavedChanges { get; set; }
 
+        public bool StickyClipboard { get; set; }
+
+        public bool BlobFeatureBase { get; set; }
+
+        public int? BlobFeatureBaseColorArgb { get; set; }
+
+        public static Color DefaultBlobFeatureBaseColor { get; } = Color.FromArgb(255, 220, 80);
+
+        [XmlIgnore]
+        public Color BlobFeatureBaseColor
+        {
+            get => this.GetBlobFeatureBaseColorOrDefault();
+            set => this.BlobFeatureBaseColorArgb = value.ToArgb();
+        }
+
+        public Color GetBlobFeatureBaseColorOrDefault()
+        {
+            return this.BlobFeatureBaseColorArgb.HasValue
+                ? Color.FromArgb(this.BlobFeatureBaseColorArgb.Value)
+                : DefaultBlobFeatureBaseColor;
+        }
+
+        public void GetFeatureBaseBlobFillAndBorderColors(out Color fill, out Color border)
+        {
+            var baseColor = this.GetBlobFeatureBaseColorOrDefault();
+            fill = Color.FromArgb(160, baseColor.R, baseColor.G, baseColor.B);
+            border = Color.FromArgb(
+                220,
+                Math.Max(0, (int)(baseColor.R * 0.7)),
+                Math.Max(0, (int)(baseColor.G * 0.7)),
+                Math.Max(0, (int)(baseColor.B * 0.7)));
+        }
+
         [XmlIgnore]
         public Color GridColor
         {

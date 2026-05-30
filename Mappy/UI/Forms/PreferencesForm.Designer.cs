@@ -59,6 +59,10 @@ namespace Mappy.UI.Forms
             this.miscTabPage = new System.Windows.Forms.TabPage();
             this.missionTabPage = new System.Windows.Forms.TabPage();
             this.adjustmentsTabPage = new System.Windows.Forms.TabPage();
+            this.adjustmentsMiscGroupBox = new System.Windows.Forms.GroupBox();
+            this.blobFeatureBaseCustomizeButton = new System.Windows.Forms.Button();
+            this.blobFeatureBaseCheckBox = new System.Windows.Forms.CheckBox();
+            this.stickyClipboardCheckBox = new System.Windows.Forms.CheckBox();
             this.wheelStepGroupBox = new System.Windows.Forms.GroupBox();
             this.seaLevelWheelStepNumeric = new System.Windows.Forms.NumericUpDown();
             this.seaLevelWheelStepLabel = new System.Windows.Forms.Label();
@@ -85,6 +89,7 @@ namespace Mappy.UI.Forms
             this.miscTabPage.SuspendLayout();
             this.missionTabPage.SuspendLayout();
             this.adjustmentsTabPage.SuspendLayout();
+            this.adjustmentsMiscGroupBox.SuspendLayout();
             this.wheelStepGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.seaLevelWheelStepNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.voidCursorSizeWheelStepNumeric)).BeginInit();
@@ -185,7 +190,7 @@ namespace Mappy.UI.Forms
             this.bottomPanel.Controls.Add(this.cancelButton);
             this.bottomPanel.Controls.Add(this.okButton);
             this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.bottomPanel.Location = new System.Drawing.Point(0, 426);
+            this.bottomPanel.Location = new System.Drawing.Point(0, 437);
             this.bottomPanel.Name = "bottomPanel";
             this.bottomPanel.Size = new System.Drawing.Size(450, 30);
             this.bottomPanel.TabIndex = 8;
@@ -224,14 +229,14 @@ namespace Mappy.UI.Forms
             this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedXLabel);
             this.scrollSpeedGroupBox.Location = new System.Drawing.Point(12, 211);
             this.scrollSpeedGroupBox.Name = "scrollSpeedGroupBox";
-            this.scrollSpeedGroupBox.Size = new System.Drawing.Size(426, 114);
+            this.scrollSpeedGroupBox.Size = new System.Drawing.Size(426, 92);
             this.scrollSpeedGroupBox.TabIndex = 1;
             this.scrollSpeedGroupBox.TabStop = false;
             this.scrollSpeedGroupBox.Text = "Viewport Drag Auto-Scroll";
             // 
             // dragScrollSpeedYNumeric
             // 
-            this.dragScrollSpeedYNumeric.Location = new System.Drawing.Point(233, 71);
+            this.dragScrollSpeedYNumeric.Location = new System.Drawing.Point(233, 52);
             this.dragScrollSpeedYNumeric.Maximum = new decimal(new int[] {
             256,
             0,
@@ -253,7 +258,7 @@ namespace Mappy.UI.Forms
             // 
             // dragScrollSpeedXNumeric
             // 
-            this.dragScrollSpeedXNumeric.Location = new System.Drawing.Point(233, 34);
+            this.dragScrollSpeedXNumeric.Location = new System.Drawing.Point(233, 23);
             this.dragScrollSpeedXNumeric.Maximum = new decimal(new int[] {
             256,
             0,
@@ -276,7 +281,7 @@ namespace Mappy.UI.Forms
             // dragScrollSpeedYLabel
             // 
             this.dragScrollSpeedYLabel.AutoSize = true;
-            this.dragScrollSpeedYLabel.Location = new System.Drawing.Point(14, 73);
+            this.dragScrollSpeedYLabel.Location = new System.Drawing.Point(14, 54);
             this.dragScrollSpeedYLabel.Name = "dragScrollSpeedYLabel";
             this.dragScrollSpeedYLabel.Size = new System.Drawing.Size(77, 13);
             this.dragScrollSpeedYLabel.TabIndex = 2;
@@ -285,7 +290,7 @@ namespace Mappy.UI.Forms
             // dragScrollSpeedXLabel
             // 
             this.dragScrollSpeedXLabel.AutoSize = true;
-            this.dragScrollSpeedXLabel.Location = new System.Drawing.Point(14, 36);
+            this.dragScrollSpeedXLabel.Location = new System.Drawing.Point(14, 25);
             this.dragScrollSpeedXLabel.Name = "dragScrollSpeedXLabel";
             this.dragScrollSpeedXLabel.Size = new System.Drawing.Size(89, 13);
             this.dragScrollSpeedXLabel.TabIndex = 0;
@@ -422,7 +427,7 @@ namespace Mappy.UI.Forms
             this.preferencesTabControl.Location = new System.Drawing.Point(0, 0);
             this.preferencesTabControl.Name = "preferencesTabControl";
             this.preferencesTabControl.SelectedIndex = 0;
-            this.preferencesTabControl.Size = new System.Drawing.Size(450, 426);
+            this.preferencesTabControl.Size = new System.Drawing.Size(450, 437);
             this.preferencesTabControl.TabIndex = 0;
             // 
             // miscTabPage
@@ -434,7 +439,7 @@ namespace Mappy.UI.Forms
             this.miscTabPage.Location = new System.Drawing.Point(4, 22);
             this.miscTabPage.Name = "miscTabPage";
             this.miscTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.miscTabPage.Size = new System.Drawing.Size(442, 400);
+            this.miscTabPage.Size = new System.Drawing.Size(442, 411);
             this.miscTabPage.TabIndex = 0;
             this.miscTabPage.Text = "Misc";
             this.miscTabPage.UseVisualStyleBackColor = true;
@@ -446,7 +451,7 @@ namespace Mappy.UI.Forms
             this.missionTabPage.Location = new System.Drawing.Point(4, 22);
             this.missionTabPage.Name = "missionTabPage";
             this.missionTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.missionTabPage.Size = new System.Drawing.Size(442, 400);
+            this.missionTabPage.Size = new System.Drawing.Size(442, 411);
             this.missionTabPage.TabIndex = 1;
             this.missionTabPage.Text = "Mission";
             this.missionTabPage.UseVisualStyleBackColor = true;
@@ -454,15 +459,60 @@ namespace Mappy.UI.Forms
             // adjustmentsTabPage
             // 
             this.adjustmentsTabPage.AutoScroll = true;
+            this.adjustmentsTabPage.Controls.Add(this.adjustmentsMiscGroupBox);
             this.adjustmentsTabPage.Controls.Add(this.scrollSpeedGroupBox);
             this.adjustmentsTabPage.Controls.Add(this.wheelStepGroupBox);
             this.adjustmentsTabPage.Location = new System.Drawing.Point(4, 22);
             this.adjustmentsTabPage.Name = "adjustmentsTabPage";
             this.adjustmentsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.adjustmentsTabPage.Size = new System.Drawing.Size(442, 400);
+            this.adjustmentsTabPage.Size = new System.Drawing.Size(442, 411);
             this.adjustmentsTabPage.TabIndex = 2;
             this.adjustmentsTabPage.Text = "Adjustments";
             this.adjustmentsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // adjustmentsMiscGroupBox
+            // 
+            this.adjustmentsMiscGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.adjustmentsMiscGroupBox.Controls.Add(this.blobFeatureBaseCustomizeButton);
+            this.adjustmentsMiscGroupBox.Controls.Add(this.blobFeatureBaseCheckBox);
+            this.adjustmentsMiscGroupBox.Controls.Add(this.stickyClipboardCheckBox);
+            this.adjustmentsMiscGroupBox.Location = new System.Drawing.Point(12, 309);
+            this.adjustmentsMiscGroupBox.Name = "adjustmentsMiscGroupBox";
+            this.adjustmentsMiscGroupBox.Size = new System.Drawing.Size(426, 95);
+            this.adjustmentsMiscGroupBox.TabIndex = 2;
+            this.adjustmentsMiscGroupBox.TabStop = false;
+            this.adjustmentsMiscGroupBox.Text = "Misc";
+            // 
+            // blobFeatureBaseCheckBox
+            // 
+            this.blobFeatureBaseCheckBox.AutoSize = true;
+            this.blobFeatureBaseCheckBox.Location = new System.Drawing.Point(17, 45);
+            this.blobFeatureBaseCheckBox.Name = "blobFeatureBaseCheckBox";
+            this.blobFeatureBaseCheckBox.Size = new System.Drawing.Size(109, 17);
+            this.blobFeatureBaseCheckBox.TabIndex = 1;
+            this.blobFeatureBaseCheckBox.Text = "Blob feature base";
+            this.blobFeatureBaseCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // blobFeatureBaseCustomizeButton
+            // 
+            this.blobFeatureBaseCustomizeButton.Location = new System.Drawing.Point(132, 41);
+            this.blobFeatureBaseCustomizeButton.Name = "blobFeatureBaseCustomizeButton";
+            this.blobFeatureBaseCustomizeButton.Size = new System.Drawing.Size(85, 23);
+            this.blobFeatureBaseCustomizeButton.TabIndex = 2;
+            this.blobFeatureBaseCustomizeButton.Text = "Customize...";
+            this.blobFeatureBaseCustomizeButton.UseVisualStyleBackColor = true;
+            this.blobFeatureBaseCustomizeButton.Click += new System.EventHandler(this.BlobFeatureBaseCustomizeButtonClick);
+            // 
+            // stickyClipboardCheckBox
+            // 
+            this.stickyClipboardCheckBox.AutoSize = true;
+            this.stickyClipboardCheckBox.Location = new System.Drawing.Point(17, 22);
+            this.stickyClipboardCheckBox.Name = "stickyClipboardCheckBox";
+            this.stickyClipboardCheckBox.Size = new System.Drawing.Size(101, 17);
+            this.stickyClipboardCheckBox.TabIndex = 0;
+            this.stickyClipboardCheckBox.Text = "Sticky clipboard";
+            this.stickyClipboardCheckBox.UseVisualStyleBackColor = true;
             // 
             // wheelStepGroupBox
             // 
@@ -646,7 +696,7 @@ namespace Mappy.UI.Forms
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(450, 456);
+            this.ClientSize = new System.Drawing.Size(450, 467);
             this.Controls.Add(this.preferencesTabControl);
             this.Controls.Add(this.bottomPanel);
             this.Name = "PreferencesForm";
@@ -673,6 +723,8 @@ namespace Mappy.UI.Forms
             this.miscTabPage.ResumeLayout(false);
             this.missionTabPage.ResumeLayout(false);
             this.adjustmentsTabPage.ResumeLayout(false);
+            this.adjustmentsMiscGroupBox.ResumeLayout(false);
+            this.adjustmentsMiscGroupBox.PerformLayout();
             this.wheelStepGroupBox.ResumeLayout(false);
             this.wheelStepGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.seaLevelWheelStepNumeric)).EndInit();
@@ -728,5 +780,9 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.NumericUpDown voidCursorSizeWheelStepNumeric;
         private System.Windows.Forms.Label seaLevelWheelStepLabel;
         private System.Windows.Forms.NumericUpDown seaLevelWheelStepNumeric;
+        private System.Windows.Forms.GroupBox adjustmentsMiscGroupBox;
+        private System.Windows.Forms.Button blobFeatureBaseCustomizeButton;
+        private System.Windows.Forms.CheckBox blobFeatureBaseCheckBox;
+        private System.Windows.Forms.CheckBox stickyClipboardCheckBox;
     }
 }

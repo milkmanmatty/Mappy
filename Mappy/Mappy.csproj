@@ -319,6 +319,7 @@
     <Compile Include="UI\Controls\VoidLayer.cs" />
     <Compile Include="UI\Drawables\AbstractDrawable.cs" />
     <Compile Include="UI\Drawables\DrawableBandbox.cs" />
+    <Compile Include="UI\Drawables\DrawableFilledEllipse.cs" />
     <Compile Include="UI\Drawables\DrawableBitmap.cs" />
     <Compile Include="UI\Drawables\DrawablePolyline.cs" />
     <Compile Include="UI\Drawables\DrawableTile.cs" />
