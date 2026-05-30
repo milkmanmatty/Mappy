@@ -40,6 +40,7 @@ namespace Mappy.UI.Forms
             this.heightCursorSizeWheelStepNumeric.Value = settings.GetHeightCursorSizeWheelStepOrDefault();
             this.voidCursorSizeWheelStepNumeric.Value = settings.GetVoidCursorSizeWheelStepOrDefault();
             this.seaLevelWheelStepNumeric.Value = settings.GetSeaLevelWheelStepOrDefault();
+            this.stickyClipboardCheckBox.Checked = settings.StickyClipboard;
         }
 
         private void AddButtonClick(object sender, EventArgs e)
@@ -133,6 +134,7 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.HeightCursorSizeWheelStep = (int)this.heightCursorSizeWheelStepNumeric.Value;
             MappySettings.Settings.VoidCursorSizeWheelStep = (int)this.voidCursorSizeWheelStepNumeric.Value;
             MappySettings.Settings.SeaLevelWheelStep = (int)this.seaLevelWheelStepNumeric.Value;
+            MappySettings.Settings.StickyClipboard = this.stickyClipboardCheckBox.Checked;
             MappySettings.SaveSettings(notifyListeners: true);
         }
     }

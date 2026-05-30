@@ -38,6 +38,8 @@ namespace Mappy
 
         public bool DoNotPromptToSaveUnsavedChanges { get; set; }
 
+        public bool StickyClipboard { get; set; }
+
         [XmlIgnore]
         public Color GridColor
         {
