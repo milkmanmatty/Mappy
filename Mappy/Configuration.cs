@@ -99,6 +99,40 @@ namespace Mappy
 
         public int SeaLevelWheelStep { get; set; } = DefaultWheelStep;
 
+        public bool? DefaultHeightmapVisible { get; set; }
+
+        public bool? DefaultHeightGridVisible { get; set; }
+
+        public bool? DefaultMinimapVisible { get; set; }
+
+        public bool? DefaultVoidsVisible { get; set; }
+
+        public bool? DefaultFeaturesVisible { get; set; }
+
+        public bool? DefaultGridVisible { get; set; }
+
+        public bool GetDefaultHeightmapVisibleOrDefault() => this.DefaultHeightmapVisible ?? false;
+
+        public bool GetDefaultHeightGridVisibleOrDefault() => this.DefaultHeightGridVisible ?? false;
+
+        public bool GetDefaultMinimapVisibleOrDefault() => this.DefaultMinimapVisible ?? false;
+
+        public bool GetDefaultVoidsVisibleOrDefault() => this.DefaultVoidsVisible ?? false;
+
+        public bool GetDefaultFeaturesVisibleOrDefault() => this.DefaultFeaturesVisible ?? true;
+
+        public bool GetDefaultGridVisibleOrDefault() => this.DefaultGridVisible ?? false;
+
+        public void ApplyViewDefaults(Models.CoreModel model)
+        {
+            model.HeightmapVisible = this.GetDefaultHeightmapVisibleOrDefault();
+            model.HeightGridVisible = this.GetDefaultHeightGridVisibleOrDefault();
+            model.MinimapVisible = this.GetDefaultMinimapVisibleOrDefault();
+            model.VoidsVisible = this.GetDefaultVoidsVisibleOrDefault();
+            model.FeaturesVisible = this.GetDefaultFeaturesVisibleOrDefault();
+            model.GridVisible = this.GetDefaultGridVisibleOrDefault();
+        }
+
         public int GetHeightSelectedHeightWheelStepOrDefault() => GetWheelStepOrDefault(this.HeightSelectedHeightWheelStep);
 
         public int GetHeightIntervalWheelStepOrDefault() => GetWheelStepOrDefault(this.HeightIntervalWheelStep);
