@@ -74,6 +74,14 @@ namespace Mappy.UI.Forms
             this.heightIntervalWheelStepLabel = new System.Windows.Forms.Label();
             this.heightSelectedHeightWheelStepNumeric = new System.Windows.Forms.NumericUpDown();
             this.heightSelectedHeightWheelStepLabel = new System.Windows.Forms.Label();
+            this.defaultsTabPage = new System.Windows.Forms.TabPage();
+            this.viewDefaultsGroupBox = new System.Windows.Forms.GroupBox();
+            this.defaultFeaturesVisibleCheckBox = new System.Windows.Forms.CheckBox();
+            this.defaultGridVisibleCheckBox = new System.Windows.Forms.CheckBox();
+            this.defaultVoidsVisibleCheckBox = new System.Windows.Forms.CheckBox();
+            this.defaultMinimapVisibleCheckBox = new System.Windows.Forms.CheckBox();
+            this.defaultHeightGridVisibleCheckBox = new System.Windows.Forms.CheckBox();
+            this.defaultHeightmapVisibleCheckBox = new System.Windows.Forms.CheckBox();
             this.sidePanel.SuspendLayout();
             this.bottomPanel.SuspendLayout();
             this.searchPathsPanel.SuspendLayout();
@@ -91,6 +99,8 @@ namespace Mappy.UI.Forms
             this.adjustmentsTabPage.SuspendLayout();
             this.adjustmentsMiscGroupBox.SuspendLayout();
             this.wheelStepGroupBox.SuspendLayout();
+            this.defaultsTabPage.SuspendLayout();
+            this.viewDefaultsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.seaLevelWheelStepNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.voidCursorSizeWheelStepNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightCursorSizeWheelStepNumeric)).BeginInit();
@@ -423,6 +433,7 @@ namespace Mappy.UI.Forms
             this.preferencesTabControl.Controls.Add(this.miscTabPage);
             this.preferencesTabControl.Controls.Add(this.missionTabPage);
             this.preferencesTabControl.Controls.Add(this.adjustmentsTabPage);
+            this.preferencesTabControl.Controls.Add(this.defaultsTabPage);
             this.preferencesTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.preferencesTabControl.Location = new System.Drawing.Point(0, 0);
             this.preferencesTabControl.Name = "preferencesTabControl";
@@ -469,6 +480,97 @@ namespace Mappy.UI.Forms
             this.adjustmentsTabPage.TabIndex = 2;
             this.adjustmentsTabPage.Text = "Adjustments";
             this.adjustmentsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // defaultsTabPage
+            // 
+            this.defaultsTabPage.AutoScroll = true;
+            this.defaultsTabPage.Controls.Add(this.viewDefaultsGroupBox);
+            this.defaultsTabPage.Location = new System.Drawing.Point(4, 22);
+            this.defaultsTabPage.Name = "defaultsTabPage";
+            this.defaultsTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.defaultsTabPage.Size = new System.Drawing.Size(442, 411);
+            this.defaultsTabPage.TabIndex = 3;
+            this.defaultsTabPage.Text = "Defaults";
+            this.defaultsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // viewDefaultsGroupBox
+            // 
+            this.viewDefaultsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.viewDefaultsGroupBox.Controls.Add(this.defaultFeaturesVisibleCheckBox);
+            this.viewDefaultsGroupBox.Controls.Add(this.defaultGridVisibleCheckBox);
+            this.viewDefaultsGroupBox.Controls.Add(this.defaultVoidsVisibleCheckBox);
+            this.viewDefaultsGroupBox.Controls.Add(this.defaultMinimapVisibleCheckBox);
+            this.viewDefaultsGroupBox.Controls.Add(this.defaultHeightGridVisibleCheckBox);
+            this.viewDefaultsGroupBox.Controls.Add(this.defaultHeightmapVisibleCheckBox);
+            this.viewDefaultsGroupBox.Location = new System.Drawing.Point(12, 12);
+            this.viewDefaultsGroupBox.Name = "viewDefaultsGroupBox";
+            this.viewDefaultsGroupBox.Size = new System.Drawing.Size(426, 178);
+            this.viewDefaultsGroupBox.TabIndex = 0;
+            this.viewDefaultsGroupBox.TabStop = false;
+            this.viewDefaultsGroupBox.Text = "View menu items visible at startup";
+            // 
+            // defaultHeightmapVisibleCheckBox
+            // 
+            this.defaultHeightmapVisibleCheckBox.AutoSize = true;
+            this.defaultHeightmapVisibleCheckBox.Location = new System.Drawing.Point(17, 22);
+            this.defaultHeightmapVisibleCheckBox.Name = "defaultHeightmapVisibleCheckBox";
+            this.defaultHeightmapVisibleCheckBox.Size = new System.Drawing.Size(118, 17);
+            this.defaultHeightmapVisibleCheckBox.TabIndex = 0;
+            this.defaultHeightmapVisibleCheckBox.Text = "Heightmap Contours";
+            this.defaultHeightmapVisibleCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // defaultHeightGridVisibleCheckBox
+            // 
+            this.defaultHeightGridVisibleCheckBox.AutoSize = true;
+            this.defaultHeightGridVisibleCheckBox.Location = new System.Drawing.Point(17, 45);
+            this.defaultHeightGridVisibleCheckBox.Name = "defaultHeightGridVisibleCheckBox";
+            this.defaultHeightGridVisibleCheckBox.Size = new System.Drawing.Size(96, 17);
+            this.defaultHeightGridVisibleCheckBox.TabIndex = 1;
+            this.defaultHeightGridVisibleCheckBox.Text = "Heightmap Grid";
+            this.defaultHeightGridVisibleCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // defaultMinimapVisibleCheckBox
+            // 
+            this.defaultMinimapVisibleCheckBox.AutoSize = true;
+            this.defaultMinimapVisibleCheckBox.Location = new System.Drawing.Point(17, 68);
+            this.defaultMinimapVisibleCheckBox.Name = "defaultMinimapVisibleCheckBox";
+            this.defaultMinimapVisibleCheckBox.Size = new System.Drawing.Size(63, 17);
+            this.defaultMinimapVisibleCheckBox.TabIndex = 2;
+            this.defaultMinimapVisibleCheckBox.Text = "Minimap";
+            this.defaultMinimapVisibleCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // defaultVoidsVisibleCheckBox
+            // 
+            this.defaultVoidsVisibleCheckBox.AutoSize = true;
+            this.defaultVoidsVisibleCheckBox.Location = new System.Drawing.Point(17, 91);
+            this.defaultVoidsVisibleCheckBox.Name = "defaultVoidsVisibleCheckBox";
+            this.defaultVoidsVisibleCheckBox.Size = new System.Drawing.Size(52, 17);
+            this.defaultVoidsVisibleCheckBox.TabIndex = 3;
+            this.defaultVoidsVisibleCheckBox.Text = "Voids";
+            this.defaultVoidsVisibleCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // defaultGridVisibleCheckBox
+            // 
+            this.defaultGridVisibleCheckBox.AutoSize = true;
+            this.defaultGridVisibleCheckBox.Location = new System.Drawing.Point(17, 114);
+            this.defaultGridVisibleCheckBox.Name = "defaultGridVisibleCheckBox";
+            this.defaultGridVisibleCheckBox.Size = new System.Drawing.Size(45, 17);
+            this.defaultGridVisibleCheckBox.TabIndex = 4;
+            this.defaultGridVisibleCheckBox.Text = "Grid";
+            this.defaultGridVisibleCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // defaultFeaturesVisibleCheckBox
+            // 
+            this.defaultFeaturesVisibleCheckBox.AutoSize = true;
+            this.defaultFeaturesVisibleCheckBox.Checked = true;
+            this.defaultFeaturesVisibleCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.defaultFeaturesVisibleCheckBox.Location = new System.Drawing.Point(17, 137);
+            this.defaultFeaturesVisibleCheckBox.Name = "defaultFeaturesVisibleCheckBox";
+            this.defaultFeaturesVisibleCheckBox.Size = new System.Drawing.Size(68, 17);
+            this.defaultFeaturesVisibleCheckBox.TabIndex = 5;
+            this.defaultFeaturesVisibleCheckBox.Text = "Features";
+            this.defaultFeaturesVisibleCheckBox.UseVisualStyleBackColor = true;
             // 
             // adjustmentsMiscGroupBox
             // 
@@ -727,6 +829,9 @@ namespace Mappy.UI.Forms
             this.adjustmentsMiscGroupBox.PerformLayout();
             this.wheelStepGroupBox.ResumeLayout(false);
             this.wheelStepGroupBox.PerformLayout();
+            this.defaultsTabPage.ResumeLayout(false);
+            this.viewDefaultsGroupBox.ResumeLayout(false);
+            this.viewDefaultsGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.seaLevelWheelStepNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.voidCursorSizeWheelStepNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightCursorSizeWheelStepNumeric)).EndInit();
@@ -784,5 +889,13 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.Button blobFeatureBaseCustomizeButton;
         private System.Windows.Forms.CheckBox blobFeatureBaseCheckBox;
         private System.Windows.Forms.CheckBox stickyClipboardCheckBox;
+        private System.Windows.Forms.TabPage defaultsTabPage;
+        private System.Windows.Forms.GroupBox viewDefaultsGroupBox;
+        private System.Windows.Forms.CheckBox defaultHeightmapVisibleCheckBox;
+        private System.Windows.Forms.CheckBox defaultHeightGridVisibleCheckBox;
+        private System.Windows.Forms.CheckBox defaultMinimapVisibleCheckBox;
+        private System.Windows.Forms.CheckBox defaultVoidsVisibleCheckBox;
+        private System.Windows.Forms.CheckBox defaultGridVisibleCheckBox;
+        private System.Windows.Forms.CheckBox defaultFeaturesVisibleCheckBox;
     }
 }

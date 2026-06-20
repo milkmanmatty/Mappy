@@ -66,6 +66,7 @@ namespace Mappy
             var mapLoadingService = new MapLoadingService(sectionFactory, mapModelFactory);
             var imageImportingService = new ImageImportService(tileCache);
             var model = new CoreModel();
+            MappySettings.Settings.ApplyViewDefaults(model);
             var dispatcher = new Dispatcher(
                 model,
                 dialogService,

@@ -48,6 +48,13 @@ namespace Mappy.UI.Forms
             this.blobFeatureBaseCheckBox.Checked = settings.BlobFeatureBase;
             this.blobFeatureBaseColor = settings.GetBlobFeatureBaseColorOrDefault();
             this.blobFeatureBaseColorCustomized = settings.BlobFeatureBaseColorArgb.HasValue;
+
+            this.defaultHeightmapVisibleCheckBox.Checked = settings.GetDefaultHeightmapVisibleOrDefault();
+            this.defaultHeightGridVisibleCheckBox.Checked = settings.GetDefaultHeightGridVisibleOrDefault();
+            this.defaultMinimapVisibleCheckBox.Checked = settings.GetDefaultMinimapVisibleOrDefault();
+            this.defaultVoidsVisibleCheckBox.Checked = settings.GetDefaultVoidsVisibleOrDefault();
+            this.defaultGridVisibleCheckBox.Checked = settings.GetDefaultGridVisibleOrDefault();
+            this.defaultFeaturesVisibleCheckBox.Checked = settings.GetDefaultFeaturesVisibleOrDefault();
         }
 
         private void BlobFeatureBaseCustomizeButtonClick(object sender, EventArgs e)
@@ -162,6 +169,12 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.BlobFeatureBaseColorArgb = this.blobFeatureBaseColorCustomized
                 ? (int?)this.blobFeatureBaseColor.ToArgb()
                 : null;
+            MappySettings.Settings.DefaultHeightmapVisible = this.defaultHeightmapVisibleCheckBox.Checked;
+            MappySettings.Settings.DefaultHeightGridVisible = this.defaultHeightGridVisibleCheckBox.Checked;
+            MappySettings.Settings.DefaultMinimapVisible = this.defaultMinimapVisibleCheckBox.Checked;
+            MappySettings.Settings.DefaultVoidsVisible = this.defaultVoidsVisibleCheckBox.Checked;
+            MappySettings.Settings.DefaultGridVisible = this.defaultGridVisibleCheckBox.Checked;
+            MappySettings.Settings.DefaultFeaturesVisible = this.defaultFeaturesVisibleCheckBox.Checked;
             MappySettings.SaveSettings(notifyListeners: true);
         }
     }
