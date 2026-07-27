@@ -399,6 +399,7 @@
     <Compile Include="UI\Tags\StartPositionTag.cs" />
     <Compile Include="UI\Tags\UnitTag.cs" />
     <Compile Include="Util\ImageSampling\BilinearWrapper.cs" />
+    <Compile Include="Util\ImageSampling\ErrorDiffusionPaletteQuantizer.cs" />
     <Compile Include="Util\ImageSampling\IPixelImage.cs" />
     <Compile Include="Util\ImageSampling\NearestNeighbourPaletteWrapper.cs" />
     <Compile Include="Util\ImageSampling\MapPixelImageAdapter.cs" />

@@ -76,6 +76,7 @@ namespace Mappy.UI.Forms
 	        this.mapAttributesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.generateMinimapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.generateMinimapHighQualityMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.generateMinimapEnhancedColoursMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.preferencesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.viewMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.toggleHeightmapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -229,6 +230,7 @@ namespace Mappy.UI.Forms
 	        this.topMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.fileMenuItem, this.editMenuItem, this.featuresMenuItem, this.viewMenuItem, this.playerMenuItem, this.helpMenuItem });
 	        this.topMenu.Location = new System.Drawing.Point(0, 0);
 	        this.topMenu.Name = "topMenu";
+	        this.topMenu.ShowItemToolTips = true;
 	        this.topMenu.Size = new System.Drawing.Size(1176, 33);
 	        this.topMenu.TabIndex = 1;
 	        this.topMenu.Text = "menuStrip1";
@@ -339,7 +341,8 @@ namespace Mappy.UI.Forms
 	        // 
 	        // editMenuItem
 	        // 
-	        this.editMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.undoMenuItem, this.redoMenuItem, toolStripSeparator7, this.cutMenuItem, this.copyMenuItem, this.pasteMenuItem, this.fillMenuItem, this.resizeMapMenuItem, this.exportSectionMenuItem, this.flipMenuItem, this.tilesetsMenuItem, toolStripSeparator9, this.mapAttributesMenuItem, toolStripSeparator3, this.generateMinimapMenuItem, this.generateMinimapHighQualityMenuItem, toolStripSeparator4, this.preferencesMenuItem });
+	        this.editMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.undoMenuItem, this.redoMenuItem, toolStripSeparator7, this.cutMenuItem, this.copyMenuItem, this.pasteMenuItem, this.fillMenuItem, this.resizeMapMenuItem, this.exportSectionMenuItem, this.flipMenuItem, this.tilesetsMenuItem, toolStripSeparator9, this.mapAttributesMenuItem, toolStripSeparator3, this.generateMinimapMenuItem, this.generateMinimapHighQualityMenuItem, this.generateMinimapEnhancedColoursMenuItem, toolStripSeparator4, this.preferencesMenuItem });
+	        this.editMenuItem.DropDown.ShowItemToolTips = true;
 	        this.editMenuItem.Name = "editMenuItem";
 	        this.editMenuItem.Size = new System.Drawing.Size(54, 29);
 	        this.editMenuItem.Text = "&Edit";
@@ -486,7 +489,8 @@ namespace Mappy.UI.Forms
 	        this.generateMinimapMenuItem.Name = "generateMinimapMenuItem";
 	        this.generateMinimapMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
 	        this.generateMinimapMenuItem.Size = new System.Drawing.Size(343, 30);
-	        this.generateMinimapMenuItem.Text = "&Generate Minimap";
+	        this.generateMinimapMenuItem.Text = "&Generate Minimap (Low Quality)";
+	        this.generateMinimapMenuItem.ToolTipText = "Quickly generates a minimap using low-quality rendering.";
 	        this.generateMinimapMenuItem.Click += new System.EventHandler(this.GenerateMinimapMenuItemClick);
 	        // 
 	        // generateMinimapHighQualityMenuItem
@@ -495,8 +499,18 @@ namespace Mappy.UI.Forms
 	        this.generateMinimapHighQualityMenuItem.Name = "generateMinimapHighQualityMenuItem";
 	        this.generateMinimapHighQualityMenuItem.Size = new System.Drawing.Size(343, 30);
 	        this.generateMinimapHighQualityMenuItem.Text = "Generate Minimap (High Quality)";
+	        this.generateMinimapHighQualityMenuItem.ToolTipText = "Generates a high-quality minimap that closely matches TAE's rendering logic.";
 	        this.generateMinimapHighQualityMenuItem.Click += new System.EventHandler(this.GenerateMinimapHighQualityMenuItemClick);
-	        // 
+	        //
+	        // generateMinimapEnhancedColoursMenuItem
+	        //
+	        this.generateMinimapEnhancedColoursMenuItem.Enabled = false;
+	        this.generateMinimapEnhancedColoursMenuItem.Name = "generateMinimapEnhancedColoursMenuItem";
+	        this.generateMinimapEnhancedColoursMenuItem.Size = new System.Drawing.Size(343, 30);
+	        this.generateMinimapEnhancedColoursMenuItem.Text = "Generate Minimap (Enhanced Colours)";
+	        this.generateMinimapEnhancedColoursMenuItem.ToolTipText = "Uses perceptual palette matching and dithering to preserve colours such as greens, but results vary by map and can occasionally look worse. TA's built-in minimap displays enhanced colours correctly only with a TADR version that includes enhanced-colour minimap support; older versions may shift colours.";
+	        this.generateMinimapEnhancedColoursMenuItem.Click += new System.EventHandler(this.GenerateMinimapEnhancedColoursMenuItemClick);
+	        //
 	        // preferencesMenuItem
 	        // 
 	        this.preferencesMenuItem.Name = "preferencesMenuItem";
@@ -1202,6 +1216,7 @@ namespace Mappy.UI.Forms
         private StepTrackBar seaLevelTrackbar;
         private System.Windows.Forms.ToolStripMenuItem closeMenuItem;
         private System.Windows.Forms.ToolStripMenuItem generateMinimapHighQualityMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem generateMinimapEnhancedColoursMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pasteMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cutMenuItem;

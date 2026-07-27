@@ -63,6 +63,7 @@ namespace Mappy.Models
             this.CanExportMapImage = mapOpen;
             this.CanGenerateMinimap = mapOpen;
             this.CanGenerateMinimapHighQuality = mapOpen;
+            this.CanGenerateMinimapEnhancedColours = mapOpen;
             this.CanOpenAttributes = mapOpen;
             this.CanResizeMap = mapOpen;
             this.CanChangeSeaLevel = mapOpen;
@@ -159,6 +160,8 @@ namespace Mappy.Models
         public IObservable<bool> CanGenerateMinimap { get; }
 
         public IObservable<bool> CanGenerateMinimapHighQuality { get; }
+
+        public IObservable<bool> CanGenerateMinimapEnhancedColours { get; }
 
         public IObservable<bool> CanOpenAttributes { get; }
 
@@ -332,6 +335,11 @@ namespace Mappy.Models
         public void GenerateMinimapHighQualityMenuItemClick()
         {
             this.dispatcher.RefreshMinimapHighQualityWithProgress();
+        }
+
+        public void GenerateMinimapEnhancedColoursMenuItemClick()
+        {
+            this.dispatcher.RefreshMinimapEnhancedColoursWithProgress();
         }
 
         public void GridOffMenuItemClick()

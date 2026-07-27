@@ -639,6 +639,11 @@ namespace Mappy.Services
             this.model.Map.IfSome(this.RefreshMinimapHighQualityWithProgressHelper);
         }
 
+        public void RefreshMinimapEnhancedColoursWithProgress()
+        {
+            this.model.Map.IfSome(this.RefreshMinimapEnhancedColoursWithProgressHelper);
+        }
+
         public void ExportHeightmap()
         {
             this.model.Map.IfSome(this.ExportHeightmapHelper);
@@ -1645,11 +1650,28 @@ namespace Mappy.Services
 
         private void RefreshMinimapHighQualityWithProgressHelper(UndoableMapModel map)
         {
-            var worker = Util.RenderMinimapWorker();
+            this.RefreshMinimapWithProgress(
+                map,
+                Util.RenderMinimapWorker(),
+                "Generating high quality minimap...");
+        }
 
+        private void RefreshMinimapEnhancedColoursWithProgressHelper(UndoableMapModel map)
+        {
+            this.RefreshMinimapWithProgress(
+                map,
+                Util.RenderEnhancedColoursMinimapWorker(),
+                "Generating minimap with enhanced colours...");
+        }
+
+        private void RefreshMinimapWithProgress(
+            UndoableMapModel map,
+            BackgroundWorker worker,
+            string message)
+        {
             var dlg = this.dialogService.CreateProgressView();
             dlg.Title = "Generating Minimap";
-            dlg.MessageText = "Generating high quality minimap...";
+            dlg.MessageText = message;
 
             dlg.CancelPressed += (o, args) => worker.CancelAsync();
             worker.ProgressChanged += (o, args) => dlg.Progress = args.ProgressPercentage;
