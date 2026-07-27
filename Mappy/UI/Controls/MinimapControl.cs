@@ -4,11 +4,16 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Drawing;
+    using System.Drawing.Drawing2D;
+    using System.Drawing.Imaging;
     using System.Linq;
     using System.Windows.Forms;
 
     public sealed class MinimapControl : Control
     {
+        private const float AspectRatioRoundingTolerance = 1.0f;
+        private const int DefaultMarkerSize = 3;
+
         private readonly Dictionary<int, MarkerInfo> markers = new Dictionary<int, MarkerInfo>();
 
         private bool rectVisible = true;
@@ -134,7 +139,27 @@
             e.Graphics.Clear(this.BackColor);
             if (this.BackgroundImage != null)
             {
-                e.Graphics.DrawImage(this.BackgroundImage, this.ComputeImageRect());
+                var imageRect = this.ComputeImageRect();
+                if (imageRect == new RectangleF(PointF.Empty, this.ClientSize))
+                {
+                    using (var imageAttributes = new ImageAttributes())
+                    {
+                        imageAttributes.SetWrapMode(WrapMode.TileFlipXY);
+                        e.Graphics.DrawImage(
+                            this.BackgroundImage,
+                            this.ClientRectangle,
+                            0,
+                            0,
+                            this.BackgroundImage.Width,
+                            this.BackgroundImage.Height,
+                            GraphicsUnit.Pixel,
+                            imageAttributes);
+                    }
+                }
+                else
+                {
+                    e.Graphics.DrawImage(this.BackgroundImage, imageRect);
+                }
             }
         }
 
@@ -144,7 +169,7 @@
             {
                 foreach (var marker in this.markers.Select(x => x.Value))
                 {
-                    DrawMarker(e.Graphics, this.ImageToControlPoint(marker.Position), marker.Color);
+                    this.DrawMarker(e.Graphics, this.ImageToControlPoint(marker.Position), marker.Color);
                 }
 
                 if (this.RectVisible)
@@ -160,7 +185,7 @@
             {
                 foreach (var marker in this.markers.Select(x => x.Value))
                 {
-                    DrawMarker(e.Graphics, marker.Position, marker.Color);
+                    this.DrawMarker(e.Graphics, marker.Position, marker.Color);
                 }
 
                 if (this.RectVisible)
@@ -185,6 +210,12 @@
             float scale = Math.Min(sx, sy);
             float w = this.BackgroundImage.Width * scale;
             float h = this.BackgroundImage.Height * scale;
+            if (Math.Abs(this.Width - w) <= AspectRatioRoundingTolerance &&
+                Math.Abs(this.Height - h) <= AspectRatioRoundingTolerance)
+            {
+                return new RectangleF(PointF.Empty, this.ClientSize);
+            }
+
             return new RectangleF((this.Width - w) / 2f, (this.Height - h) / 2f, w, h);
         }
 
@@ -218,22 +249,39 @@
                 (int)Math.Round(r.Height * sy));
         }
 
-        private static void DrawMarker(Graphics g, Point position, Color color)
+        private void DrawMarker(Graphics g, Point position, Color color)
         {
-            var bounds = GetMarkerBounds(position);
+            var bounds = this.GetMarkerBounds(position);
             using (Brush b = new SolidBrush(color))
             {
                 g.FillRectangle(b, bounds);
             }
         }
 
-        private static Rectangle GetMarkerBounds(Point position)
+        private Rectangle GetMarkerBounds(Point position)
         {
+            var markerSize = this.GetMarkerSize();
             return new Rectangle(
-                position.X - 1,
-                position.Y - 1,
-                3,
-                3);
+                position.X - (markerSize / 2),
+                position.Y - (markerSize / 2),
+                markerSize,
+                markerSize);
+        }
+
+        private int GetMarkerSize()
+        {
+            if (this.BackgroundImage == null ||
+                this.BackgroundImage.Width <= 0 ||
+                this.BackgroundImage.Height <= 0)
+            {
+                return DefaultMarkerSize;
+            }
+
+            var imageRect = this.ComputeImageRect();
+            var scale = Math.Min(
+                imageRect.Width / this.BackgroundImage.Width,
+                imageRect.Height / this.BackgroundImage.Height);
+            return Math.Max(DefaultMarkerSize, (int)Math.Round(DefaultMarkerSize * scale));
         }
 
         private void InvalidateMarker(Point imagePosition)
@@ -245,7 +293,7 @@
             }
 
             var controlPoint = this.ImageToControlPoint(imagePosition);
-            this.Invalidate(GetMarkerBounds(controlPoint));
+            this.Invalidate(this.GetMarkerBounds(controlPoint));
         }
 
         private struct MarkerInfo

@@ -48,7 +48,7 @@
 
             miniFormModel.PropertyAsObservable(x => x.MinimapImage, nameof(miniFormModel.MinimapImage))
                 .Select(x => x.Or(null))
-                .Subscribe(x => this.minimapControl.BackgroundImage = x);
+                .Subscribe(this.SetMinimapImage);
 
             miniFormModel.PropertyAsObservable(x => x.MinimapRect, nameof(miniFormModel.MinimapRect))
                 .Subscribe(x => this.minimapControl.ViewportRect = x);
@@ -97,6 +97,15 @@
             }
         }
 
+        private void SetMinimapImage(Image image)
+        {
+            this.minimapControl.BackgroundImage = image;
+            if (this.Visible && image != null && image.Width > 0 && image.Height > 0)
+            {
+                this.ClientSize = image.Size;
+            }
+        }
+
         private void MinimapControl1MouseDown(object sender, MouseEventArgs e)
         {
             this.model.MouseDown(this.minimapControl.ControlToImagePoint(e.Location));
@@ -125,47 +134,65 @@
 
             var clientWidth = rc.Right - rc.Left - borderSize.Width;
             var clientHeight = rc.Bottom - rc.Top - borderSize.Height;
+            var resizeFromLeft =
+                edge == WmszLeft ||
+                edge == WmszTopLeft ||
+                edge == WmszBottomLeft;
+            var resizeFromTop =
+                edge == WmszTop ||
+                edge == WmszTopLeft ||
+                edge == WmszTopRight;
+            var widthDriven =
+                edge != WmszTop &&
+                edge != WmszBottom;
 
-            switch (edge)
+            var proposedBounds = Rectangle.FromLTRB(rc.Left, rc.Top, rc.Right, rc.Bottom);
+            var workingArea = Screen.FromRectangle(proposedBounds).WorkingArea;
+            var maximumWindowWidth = resizeFromLeft
+                ? rc.Right - workingArea.Left
+                : workingArea.Right - rc.Left;
+            var maximumWindowHeight = resizeFromTop
+                ? rc.Bottom - workingArea.Top
+                : workingArea.Bottom - rc.Top;
+            var maximumClientWidth = Math.Max(1, maximumWindowWidth - borderSize.Width);
+            var maximumClientHeight = Math.Max(1, maximumWindowHeight - borderSize.Height);
+
+            if (widthDriven)
             {
-                case WmszLeft:
-                case WmszRight:
-                case WmszTopLeft:
-                case WmszTopRight:
-                case WmszBottomLeft:
-                case WmszBottomRight:
-                    clientHeight = (int)Math.Round(clientWidth / aspectRatio);
-                    break;
-                default:
-                    clientWidth = (int)Math.Round(clientHeight * aspectRatio);
-                    break;
+                clientWidth = Math.Max(1, Math.Min(clientWidth, maximumClientWidth));
+                clientWidth = Math.Min(
+                    clientWidth,
+                    Math.Max(1, (int)Math.Floor(maximumClientHeight * aspectRatio)));
+                clientHeight = Math.Max(1, (int)Math.Round(clientWidth / aspectRatio));
+            }
+            else
+            {
+                clientHeight = Math.Max(1, Math.Min(clientHeight, maximumClientHeight));
+                clientHeight = Math.Min(
+                    clientHeight,
+                    Math.Max(1, (int)Math.Floor(maximumClientWidth / aspectRatio)));
+                clientWidth = Math.Max(1, (int)Math.Round(clientHeight * aspectRatio));
             }
 
             var windowWidth = clientWidth + borderSize.Width;
             var windowHeight = clientHeight + borderSize.Height;
 
-            switch (edge)
+            if (resizeFromLeft)
             {
-                case WmszLeft:
-                case WmszTopLeft:
-                case WmszBottomLeft:
-                    rc.Left = rc.Right - windowWidth;
-                    break;
-                default:
-                    rc.Right = rc.Left + windowWidth;
-                    break;
+                rc.Left = rc.Right - windowWidth;
+            }
+            else
+            {
+                rc.Right = rc.Left + windowWidth;
             }
 
-            switch (edge)
+            if (resizeFromTop)
             {
-                case WmszTop:
-                case WmszTopLeft:
-                case WmszTopRight:
-                    rc.Top = rc.Bottom - windowHeight;
-                    break;
-                default:
-                    rc.Bottom = rc.Top + windowHeight;
-                    break;
+                rc.Top = rc.Bottom - windowHeight;
+            }
+            else
+            {
+                rc.Bottom = rc.Top + windowHeight;
             }
         }
 
