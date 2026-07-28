@@ -499,7 +499,7 @@ namespace Mappy.UI.Forms
 	        this.generateMinimapHighQualityMenuItem.Name = "generateMinimapHighQualityMenuItem";
 	        this.generateMinimapHighQualityMenuItem.Size = new System.Drawing.Size(343, 30);
 	        this.generateMinimapHighQualityMenuItem.Text = "Generate Minimap (High Quality)";
-	        this.generateMinimapHighQualityMenuItem.ToolTipText = "Generates a high-quality minimap that closely matches TAE's rendering logic.";
+	        this.generateMinimapHighQualityMenuItem.ToolTipText = "Generates a high-quality minimap that closely matches\r\nTAE's rendering logic.";
 	        this.generateMinimapHighQualityMenuItem.Click += new System.EventHandler(this.GenerateMinimapHighQualityMenuItemClick);
 	        //
 	        // generateMinimapEnhancedColoursMenuItem
@@ -508,7 +508,7 @@ namespace Mappy.UI.Forms
 	        this.generateMinimapEnhancedColoursMenuItem.Name = "generateMinimapEnhancedColoursMenuItem";
 	        this.generateMinimapEnhancedColoursMenuItem.Size = new System.Drawing.Size(343, 30);
 	        this.generateMinimapEnhancedColoursMenuItem.Text = "Generate Minimap (Enhanced Colours)";
-	        this.generateMinimapEnhancedColoursMenuItem.ToolTipText = "Uses perceptual palette matching and dithering to preserve colours such as greens, but results vary by map and can occasionally look worse. TA's built-in minimap displays enhanced colours correctly only with a TADR version that includes enhanced-colour minimap support; older versions may shift colours.";
+	        this.generateMinimapEnhancedColoursMenuItem.ToolTipText = "Uses perceptual palette matching and dithering to preserve colours such as greens.\r\nResults vary by map and can occasionally look worse.\r\nRequires TADR enhanced-colour minimap support; older versions may shift colours.";
 	        this.generateMinimapEnhancedColoursMenuItem.Click += new System.EventHandler(this.GenerateMinimapEnhancedColoursMenuItemClick);
 	        //
 	        // preferencesMenuItem
