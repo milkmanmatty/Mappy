@@ -31,7 +31,24 @@
         public int Progress
         {
             get => this.progressBar1.Value;
-            set => this.progressBar1.Value = value;
+            set
+            {
+                var progress = Math.Max(
+                    this.progressBar1.Minimum,
+                    Math.Min(this.progressBar1.Maximum, value));
+
+                // The native Windows progress bar animates towards a new value.
+                // Briefly setting the next value makes rapid background-worker
+                // updates visible immediately instead of leaving the bar at a
+                // phase boundary until the operation has nearly completed.
+                if (progress > this.progressBar1.Value
+                    && progress < this.progressBar1.Maximum)
+                {
+                    this.progressBar1.Value = progress + 1;
+                }
+
+                this.progressBar1.Value = progress;
+            }
         }
 
         public bool ShowProgress

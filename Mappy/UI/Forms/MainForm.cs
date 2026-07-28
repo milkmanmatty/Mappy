@@ -14,13 +14,78 @@ namespace Mappy.UI.Forms
 
     public partial class MainForm : Form
     {
+        private const int MinimapModeToolTipDurationMilliseconds = 20000;
+
+        private readonly ToolTip minimapModeToolTip;
         private IMainFormViewModel model;
 
         public MainForm()
         {
             this.InitializeComponent();
+            if (this.components == null)
+            {
+                this.components = new System.ComponentModel.Container();
+            }
+
+            this.minimapModeToolTip = new ToolTip(this.components)
+            {
+                ShowAlways = true,
+            };
+            this.ConfigureMinimapModeToolTips();
             MappySettings.SettingsSaved += this.OnSettingsSaved;
             this.ApplyAdjustmentWheelSteps();
+        }
+
+        private void ConfigureMinimapModeToolTips()
+        {
+            this.editMenuItem.DropDown.ShowItemToolTips = false;
+
+            var minimapModeItems = new[]
+            {
+                this.generateMinimapMenuItem,
+                this.generateMinimapHighQualityMenuItem,
+                this.generateMinimapEnhancedColoursMenuItem,
+            };
+
+            foreach (var item in minimapModeItems)
+            {
+                item.MouseEnter += this.MinimapModeMenuItemMouseEnter;
+                item.MouseLeave += this.MinimapModeMenuItemMouseLeave;
+            }
+
+            this.editMenuItem.DropDown.Closed += this.EditMenuDropDownClosed;
+        }
+
+        private void MinimapModeMenuItemMouseEnter(object sender, EventArgs e)
+        {
+            var item = sender as ToolStripItem;
+            var owner = item?.Owner as ToolStripDropDown;
+            if (item == null || owner == null || string.IsNullOrEmpty(item.ToolTipText))
+            {
+                return;
+            }
+
+            var location = new Point(item.Bounds.Right, item.Bounds.Top);
+            this.minimapModeToolTip.Show(
+                item.ToolTipText,
+                owner,
+                location,
+                MinimapModeToolTipDurationMilliseconds);
+        }
+
+        private void MinimapModeMenuItemMouseLeave(object sender, EventArgs e)
+        {
+            var item = sender as ToolStripItem;
+            var owner = item?.Owner as ToolStripDropDown;
+            if (owner != null)
+            {
+                this.minimapModeToolTip.Hide(owner);
+            }
+        }
+
+        private void EditMenuDropDownClosed(object sender, ToolStripDropDownClosedEventArgs e)
+        {
+            this.minimapModeToolTip.Hide(this.editMenuItem.DropDown);
         }
 
         private void OnSettingsSaved(object sender, EventArgs e)
@@ -92,6 +157,7 @@ namespace Mappy.UI.Forms
 
             model.CanGenerateMinimap.Subscribe(x => this.generateMinimapMenuItem.Enabled = x);
             model.CanGenerateMinimapHighQuality.Subscribe(x => this.generateMinimapHighQualityMenuItem.Enabled = x);
+            model.CanGenerateMinimapEnhancedColours.Subscribe(x => this.generateMinimapEnhancedColoursMenuItem.Enabled = x);
 
             model.CanOpenAttributes.Subscribe(x => this.mapAttributesMenuItem.Enabled = x);
 
@@ -277,6 +343,11 @@ namespace Mappy.UI.Forms
         private void GenerateMinimapHighQualityMenuItemClick(object sender, EventArgs e)
         {
             this.model.GenerateMinimapHighQualityMenuItemClick();
+        }
+
+        private void GenerateMinimapEnhancedColoursMenuItemClick(object sender, EventArgs e)
+        {
+            this.model.GenerateMinimapEnhancedColoursMenuItemClick();
         }
 
         private void SeaLevelTrackBarMouseUp(object sender, MouseEventArgs e)

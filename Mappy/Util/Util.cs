@@ -173,6 +173,19 @@ namespace Mappy.Util
             return worker;
         }
 
+        public static BackgroundWorker RenderEnhancedColoursMinimapWorker()
+        {
+            var worker = new BackgroundWorker();
+            worker.WorkerReportsProgress = true;
+            worker.WorkerSupportsCancellation = true;
+            worker.DoWork += (sender, args) =>
+                {
+                    var w = (BackgroundWorker)sender;
+                    RenderEnhancedColoursMinimap(w, args);
+                };
+            return worker;
+        }
+
         public static IEnumerable<TU> Choose<T, TU>(this IEnumerable<T> coll, Func<T, Maybe<TU>> f)
         {
             return coll.SelectMany(item => f(item).Match(x => new[] { x }, () => new TU[] { }));
@@ -296,38 +309,12 @@ namespace Mappy.Util
 
         public static void RenderHighQualityMinimap(BackgroundWorker w, DoWorkEventArgs workArgs)
         {
-            var args = (RenderMinimapArgs)workArgs.Argument;
+            RenderMinimap(w, workArgs, false);
+        }
 
-            var tileGrid = args.MapModel.Tile.TileGrid;
-            var mapWidth = (tileGrid.Width * 32) - 32;
-            var mapHeight = (tileGrid.Height * 32) - 128;
-
-            int width, height;
-
-            if (mapWidth > mapHeight)
-            {
-                width = 252;
-                height = (int)Math.Round(252 * (mapHeight / (float)mapWidth));
-            }
-            else
-            {
-                height = 252;
-                width = (int)Math.Round(252 * (mapWidth / (float)mapHeight));
-            }
-
-            var mapPixels = EnumerateBigMinimapImage(args).Select(Color3fFromColor);
-            var minimapPixels = Resize(mapPixels, mapWidth, mapHeight, width, height);
-            var minimapBitmapResult = BitmapFromColorEnumerable(minimapPixels.Select(ColorFromColor3f), width, height, () => w.CancellationPending, x => w.ReportProgress(x));
-            minimapBitmapResult.Do(
-                minimapBitmap =>
-                {
-                    Quantization.ToTAPalette(minimapBitmap);
-                    workArgs.Result = minimapBitmap;
-                },
-                () =>
-                {
-                    workArgs.Cancel = true;
-                });
+        public static void RenderEnhancedColoursMinimap(BackgroundWorker w, DoWorkEventArgs workArgs)
+        {
+            RenderMinimap(w, workArgs, true);
         }
 
         public static Bitmap ToBitmap(IPixelImage map)
@@ -640,6 +627,76 @@ namespace Mappy.Util
             }
         }
 
+        private static void RenderMinimap(
+            BackgroundWorker w,
+            DoWorkEventArgs workArgs,
+            bool enhancedColours)
+        {
+            var args = (RenderMinimapArgs)workArgs.Argument;
+
+            var tileGrid = args.MapModel.Tile.TileGrid;
+            var mapWidth = (tileGrid.Width * 32) - 32;
+            var mapHeight = (tileGrid.Height * 32) - 128;
+
+            int width, height;
+
+            if (mapWidth > mapHeight)
+            {
+                width = 252;
+                height = (int)Math.Round(252 * (mapHeight / (float)mapWidth));
+            }
+            else
+            {
+                height = 252;
+                width = (int)Math.Round(252 * (mapWidth / (float)mapHeight));
+            }
+
+            var mapPixels = EnumerateBigMinimapImage(args).Select(Color3fFromColor);
+            var minimapPixels = Resize(mapPixels, mapWidth, mapHeight, width, height);
+            var minimapBitmapResult = BitmapFromColorEnumerable(
+                minimapPixels.Select(ColorFromColor3f),
+                width,
+                height,
+                () => w.CancellationPending,
+                x => w.ReportProgress(enhancedColours ? (x * 75) / 100 : x));
+            minimapBitmapResult.Do(
+                minimapBitmap =>
+                {
+                    if (enhancedColours)
+                    {
+                        var paletteSources = GetUsedTiles(args.MapModel.Tile)
+                            .Concat(
+                                args.MapModel.EnumerateFeatureInstances()
+                                    .Choose(f => args.FeatureService.TryGetFeature(f.FeatureName))
+                                    .Where(x => x.Permanent)
+                                    .Select(x => x.Image));
+
+                        var completed = ErrorDiffusionPaletteQuantizer.ToPalette(
+                            minimapBitmap,
+                            PaletteFactory.TAPalette,
+                            paletteSources,
+                            () => w.CancellationPending,
+                            x => w.ReportProgress(75 + ((x * 25) / 100)));
+                        if (!completed)
+                        {
+                            minimapBitmap.Dispose();
+                            workArgs.Cancel = true;
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        Quantization.ToTAPalette(minimapBitmap);
+                    }
+
+                    workArgs.Result = minimapBitmap;
+                },
+                () =>
+                {
+                    workArgs.Cancel = true;
+                });
+        }
+
         private static Color3f CombineAverage(Color3f acc, Color3f val, int n)
         {
             return new Color3f
@@ -675,6 +732,7 @@ namespace Mappy.Util
                 {
                     var ptr = (int*)data.Scan0;
                     var i = 0;
+                    var lastProgress = -1;
                     foreach (var c in input)
                     {
                         if (shouldCancel())
@@ -683,7 +741,12 @@ namespace Mappy.Util
                         }
 
                         ptr[i++] = c.ToArgb();
-                        reportProgress((i * 100) / (width * height));
+                        var progress = (i * 100) / (width * height);
+                        if (progress > lastProgress)
+                        {
+                            reportProgress(progress);
+                            lastProgress = progress;
+                        }
                     }
                 }
             }

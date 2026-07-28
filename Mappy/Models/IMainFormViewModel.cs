@@ -48,6 +48,8 @@ namespace Mappy.Models
 
         IObservable<bool> CanGenerateMinimapHighQuality { get; }
 
+        IObservable<bool> CanGenerateMinimapEnhancedColours { get; }
+
         IObservable<bool> CanOpenAttributes { get; }
 
         IObservable<bool> CanResizeMap { get; }
@@ -135,6 +137,8 @@ namespace Mappy.Models
         void GenerateMinimapMenuItemClick();
 
         void GenerateMinimapHighQualityMenuItemClick();
+
+        void GenerateMinimapEnhancedColoursMenuItemClick();
 
         void GridOffMenuItemClick();
 
