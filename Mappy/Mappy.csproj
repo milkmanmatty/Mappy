@@ -139,6 +139,8 @@
     <Compile Include="Collections\SparseGrid.cs" />
     <Compile Include="Collections\SparseGridEventArgs.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="RecentFiles.cs" />
+    <Compile Include="RecentMapEntry.cs" />
     <Compile Include="Data\BindingMapTile.cs" />
     <Compile Include="Data\Feature.cs" />
     <Compile Include="Data\FeatureInfo.cs" />

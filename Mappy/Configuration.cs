@@ -83,6 +83,8 @@ namespace Mappy
 
         public StringCollection SearchPaths { get; set; }
 
+        public RecentMapEntry[] RecentMaps { get; set; }
+
         public int DragAutoScrollSpeedX { get; set; } = DefaultDragAutoScrollSpeed;
 
         public int DragAutoScrollSpeedY { get; set; } = DefaultDragAutoScrollSpeed;

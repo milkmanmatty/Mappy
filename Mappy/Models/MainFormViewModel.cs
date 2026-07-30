@@ -287,6 +287,11 @@ namespace Mappy.Models
             this.dispatcher.Open();
         }
 
+        public void OpenRecentMenuItemClick(RecentMapEntry entry)
+        {
+            this.dispatcher.OpenRecent(entry);
+        }
+
         public void DragDropFile(string filename)
         {
             this.dispatcher.OpenFromDragDrop(filename);

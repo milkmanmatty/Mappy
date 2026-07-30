@@ -195,6 +195,17 @@ namespace Mappy.Services
             return MessageBox.Show(@"There are unsaved changes. Save before closing?", @"Save", MessageBoxButtons.YesNoCancel);
         }
 
+        public bool AskUserToRemoveMissingRecentFile()
+        {
+            var result = MessageBox.Show(
+                this.owner,
+                "The file no longer exists, do you want to remove it from the recent file list",
+                "Recent Files",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+            return result == DialogResult.Yes;
+        }
+
         public Size AskUserNewMapSize()
         {
             var dialog = new NewMapForm();

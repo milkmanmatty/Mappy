@@ -225,6 +225,45 @@ namespace Mappy.UI.Forms
             this.model.OpenMenuItemClick();
         }
 
+        private void RecentMenuItemDropDownOpening(object sender, EventArgs e)
+        {
+            this.recentMenuItem.DropDownItems.Clear();
+
+            var entries = RecentFiles.GetEntries();
+            if (entries.Count == 0)
+            {
+                var emptyItem = new ToolStripMenuItem("(Empty)")
+                {
+                    Enabled = false,
+                };
+                this.recentMenuItem.DropDownItems.Add(emptyItem);
+                return;
+            }
+
+            for (var i = 0; i < entries.Count; i++)
+            {
+                var entry = entries[i];
+                var item = new ToolStripMenuItem(entry.DisplayText)
+                {
+                    Tag = entry,
+                };
+                item.Click += this.RecentMapMenuItemClick;
+                this.recentMenuItem.DropDownItems.Add(item);
+            }
+        }
+
+        private void RecentMapMenuItemClick(object sender, EventArgs e)
+        {
+            var item = sender as ToolStripMenuItem;
+            var entry = item?.Tag as RecentMapEntry;
+            if (entry == null)
+            {
+                return;
+            }
+
+            this.model.OpenRecentMenuItemClick(entry);
+        }
+
         private void ToggleHeightmapMenuItemClick(object sender, EventArgs e)
         {
             this.model.ToggleHeightMapMenuItemClick();
