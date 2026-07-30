@@ -508,7 +508,7 @@ namespace Mappy.UI.Forms
 	        this.generateMinimapEnhancedColoursMenuItem.Name = "generateMinimapEnhancedColoursMenuItem";
 	        this.generateMinimapEnhancedColoursMenuItem.Size = new System.Drawing.Size(343, 30);
 	        this.generateMinimapEnhancedColoursMenuItem.Text = "Generate Minimap (Enhanced Colours)";
-	        this.generateMinimapEnhancedColoursMenuItem.ToolTipText = "Uses perceptual palette matching and dithering to preserve colours such as greens, but results vary by map and can occasionally look worse. TA's built-in minimap displays enhanced colours correctly only with a TADR version that includes enhanced-colour minimap support; older versions may shift colours.";
+	        this.generateMinimapEnhancedColoursMenuItem.ToolTipText = "Uses perceptual palette matching and dithering to preserve colours such as greens, \nbut results vary by map and can occasionally look worse. TA's built-in minimap \ndisplays enhanced colours correctly only with a TADR version that includes \nenhanced-colour minimap support; older versions may shift colours.";
 	        this.generateMinimapEnhancedColoursMenuItem.Click += new System.EventHandler(this.GenerateMinimapEnhancedColoursMenuItemClick);
 	        //
 	        // preferencesMenuItem
