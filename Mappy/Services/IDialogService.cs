@@ -42,6 +42,8 @@ namespace Mappy.Services
 
         DialogResult AskUserToDiscardChanges();
 
+        bool AskUserToRemoveMissingRecentFile();
+
         MapAttributesResult AskUserForMapAttributes(MapAttributesResult r);
 
         int? AskUnitPlayerNumber(IWin32Window owner, int defaultPlayer = 1);

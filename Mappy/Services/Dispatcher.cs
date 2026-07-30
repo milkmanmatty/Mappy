@@ -264,6 +264,63 @@ namespace Mappy.Services
             this.OpenMap(filename);
         }
 
+        public void OpenRecent(RecentMapEntry entry)
+        {
+            if (entry == null || string.IsNullOrWhiteSpace(entry.FilePath))
+            {
+                return;
+            }
+
+            if (!this.RecentEntryExists(entry))
+            {
+                if (this.dialogService.AskUserToRemoveMissingRecentFile())
+                {
+                    RecentFiles.Remove(entry);
+                }
+
+                return;
+            }
+
+            if (!this.CheckOkayDiscard())
+            {
+                return;
+            }
+
+            try
+            {
+                var ext = Path.GetExtension(entry.FilePath) ?? string.Empty;
+                ext = ext.ToUpperInvariant();
+
+                switch (ext)
+                {
+                    case ".HPI":
+                    case ".UFO":
+                    case ".CCX":
+                    case ".GPF":
+                    case ".GP3":
+                        this.OpenFromHapi(entry.FilePath, entry.MapName);
+                        return;
+                    case ".TNT":
+                        this.OpenTnt(entry.FilePath);
+                        return;
+                    case ".SCT":
+                        this.OpenSct(entry.FilePath);
+                        return;
+                    default:
+                        this.dialogService.ShowError($"Mappy doesn't know how to open {ext} files");
+                        return;
+                }
+            }
+            catch (IOException e)
+            {
+                this.dialogService.ShowError("IO error opening map: " + e.Message);
+            }
+            catch (ParseException e)
+            {
+                this.dialogService.ShowError("Cannot open map: " + e.Message);
+            }
+        }
+
         public void OpenFromDragDrop(string filename)
         {
             if (!this.CheckOkayDiscard())
@@ -1504,11 +1561,57 @@ namespace Mappy.Services
                 return;
             }
 
+            this.OpenFromHapi(filename, mapName, readOnly);
+        }
+
+        private void OpenFromHapi(string filename, string mapName)
+        {
+            List<string> maps;
+            using (var h = new HpiArchive(filename))
+            {
+                maps = GetMapNames(h).ToList();
+            }
+
+            if (maps.Count == 0)
+            {
+                this.dialogService.ShowError("No maps found in " + filename);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(mapName))
+            {
+                if (maps.Count == 1)
+                {
+                    mapName = maps.First();
+                }
+                else
+                {
+                    this.OpenFromHapi(filename);
+                    return;
+                }
+            }
+            else if (!maps.Any(m => string.Equals(m, mapName, StringComparison.OrdinalIgnoreCase)))
+            {
+                this.dialogService.ShowError($"Map '{mapName}' was not found in {filename}");
+                return;
+            }
+            else
+            {
+                mapName = maps.First(m => string.Equals(m, mapName, StringComparison.OrdinalIgnoreCase));
+            }
+
+            var readOnly = maps.Count > 1;
+            this.OpenFromHapi(filename, mapName, readOnly);
+        }
+
+        private void OpenFromHapi(string filename, string mapName, bool readOnly)
+        {
             var tntPath = HpiPath.Combine("maps", mapName + ".tnt");
             var mapModel = this.mapLoadingService.CreateFromHpi(filename, tntPath, readOnly);
             this.model.Map = Maybe.Some(mapModel);
             this.IngestOtaUnitNames(mapModel);
             this.SetSelectedGUITabForMap();
+            RecentFiles.Add(filename, mapName);
         }
 
         private void OpenTnt(string filename)
@@ -1517,6 +1620,51 @@ namespace Mappy.Services
             this.model.Map = Maybe.Some(mapModel);
             this.IngestOtaUnitNames(mapModel);
             this.SetSelectedGUITabForMap();
+            RecentFiles.Add(filename);
+        }
+
+        private bool RecentEntryExists(RecentMapEntry entry)
+        {
+            if (!File.Exists(entry.FilePath))
+            {
+                return false;
+            }
+
+            var ext = Path.GetExtension(entry.FilePath) ?? string.Empty;
+            ext = ext.ToUpperInvariant();
+
+            switch (ext)
+            {
+                case ".HPI":
+                case ".UFO":
+                case ".CCX":
+                case ".GPF":
+                case ".GP3":
+                    if (string.IsNullOrWhiteSpace(entry.MapName))
+                    {
+                        return true;
+                    }
+
+                    try
+                    {
+                        using (var h = new HpiArchive(entry.FilePath))
+                        {
+                            return GetMapNames(h).Any(
+                                m => string.Equals(m, entry.MapName, StringComparison.OrdinalIgnoreCase));
+                        }
+                    }
+                    catch (IOException)
+                    {
+                        return false;
+                    }
+                    catch (ParseException)
+                    {
+                        return false;
+                    }
+
+                default:
+                    return true;
+            }
         }
 
         private bool CheckOkayDiscard()
@@ -1563,6 +1711,7 @@ namespace Mappy.Services
             var mapModel = this.mapLoadingService.CreateFromSct(filename);
             this.model.Map = Maybe.Some(mapModel);
             this.IngestOtaUnitNames(mapModel);
+            RecentFiles.Add(filename);
         }
 
         /// <summary>

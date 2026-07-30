@@ -118,6 +118,8 @@ namespace Mappy.Models
 
         void OpenMenuItemClick();
 
+        void OpenRecentMenuItemClick(Mappy.RecentMapEntry entry);
+
         void DragDropFile(string filename);
 
         void SaveMenuItemClick();

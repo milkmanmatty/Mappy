@@ -47,6 +47,7 @@ namespace Mappy.UI.Forms
 	        this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.newMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.openMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.recentMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.saveMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.saveAsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.closeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -237,7 +238,7 @@ namespace Mappy.UI.Forms
 	        // 
 	        // fileMenuItem
 	        // 
-	        this.fileMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.newMenuItem, this.openMenuItem, toolStripSeparator1, this.saveMenuItem, this.saveAsMenuItem, toolStripSeparator2, this.closeMenuItem, toolStripSeparator8, this.importMinimapMenuItem, this.importHeightmapMenuItem, this.importCustomSectionMenuItem, toolStripSeparator11, this.exportMinimapMenuItem, this.exportHeightmapMenuItem, this.exportMapImageMenuItem, toolStripSeparator10, this.exitMenuItem });
+	        this.fileMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.newMenuItem, this.openMenuItem, this.recentMenuItem, toolStripSeparator1, this.saveMenuItem, this.saveAsMenuItem, toolStripSeparator2, this.closeMenuItem, toolStripSeparator8, this.importMinimapMenuItem, this.importHeightmapMenuItem, this.importCustomSectionMenuItem, toolStripSeparator11, this.exportMinimapMenuItem, this.exportHeightmapMenuItem, this.exportMapImageMenuItem, toolStripSeparator10, this.exitMenuItem });
 	        this.fileMenuItem.Name = "fileMenuItem";
 	        this.fileMenuItem.Size = new System.Drawing.Size(50, 29);
 	        this.fileMenuItem.Text = "&File";
@@ -257,6 +258,13 @@ namespace Mappy.UI.Forms
 	        this.openMenuItem.Size = new System.Drawing.Size(281, 30);
 	        this.openMenuItem.Text = "&Open...";
 	        this.openMenuItem.Click += new System.EventHandler(this.OpenMenuItemClick);
+	        // 
+	        // recentMenuItem
+	        // 
+	        this.recentMenuItem.Name = "recentMenuItem";
+	        this.recentMenuItem.Size = new System.Drawing.Size(281, 30);
+	        this.recentMenuItem.Text = "&Recent";
+	        this.recentMenuItem.DropDownOpening += new System.EventHandler(this.RecentMenuItemDropDownOpening);
 	        // 
 	        // saveMenuItem
 	        // 
@@ -1152,6 +1160,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripMenuItem helpMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem recentMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toggleHeightmapMenuItem;
