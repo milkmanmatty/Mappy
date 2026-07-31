@@ -36,6 +36,8 @@
 
         private IMinimapFormViewModel model;
 
+        private Size? userClientSize;
+
         public MinimapForm()
         {
             this.InitializeComponent();
@@ -70,9 +72,14 @@
             base.OnVisibleChanged(e);
             if (this.Visible)
             {
-                var naturalSize = this.minimapControl.BackgroundImage?.Size ?? new Size(252, 252);
-                this.ClientSize = naturalSize;
+                this.ApplyClientSizeForImage(this.minimapControl.BackgroundImage?.Size ?? new Size(252, 252));
             }
+        }
+
+        protected override void OnResizeEnd(EventArgs e)
+        {
+            base.OnResizeEnd(e);
+            this.userClientSize = this.ClientSize;
         }
 
         protected override void WndProc(ref Message m)
@@ -102,7 +109,28 @@
             this.minimapControl.BackgroundImage = image;
             if (this.Visible && image != null && image.Width > 0 && image.Height > 0)
             {
-                this.ClientSize = image.Size;
+                this.ApplyClientSizeForImage(image.Size);
+            }
+        }
+
+        private void ApplyClientSizeForImage(Size imageSize)
+        {
+            if (imageSize.Width <= 0 || imageSize.Height <= 0)
+            {
+                return;
+            }
+
+            if (this.userClientSize.HasValue)
+            {
+                var aspectRatio = (double)imageSize.Width / imageSize.Height;
+                var width = Math.Max(1, this.userClientSize.Value.Width);
+                var height = Math.Max(1, (int)Math.Round(width / aspectRatio));
+                this.ClientSize = new Size(width, height);
+                this.userClientSize = this.ClientSize;
+            }
+            else
+            {
+                this.ClientSize = imageSize;
             }
         }
 
