@@ -76,6 +76,8 @@ namespace Mappy.UI.Forms
             this.heightSelectedHeightWheelStepLabel = new System.Windows.Forms.Label();
             this.defaultsTabPage = new System.Windows.Forms.TabPage();
             this.viewDefaultsGroupBox = new System.Windows.Forms.GroupBox();
+            this.defaultGridSizeComboBox = new System.Windows.Forms.ComboBox();
+            this.defaultGridSizeLabel = new System.Windows.Forms.Label();
             this.defaultFeaturesVisibleCheckBox = new System.Windows.Forms.CheckBox();
             this.defaultGridVisibleCheckBox = new System.Windows.Forms.CheckBox();
             this.defaultVoidsVisibleCheckBox = new System.Windows.Forms.CheckBox();
@@ -497,6 +499,8 @@ namespace Mappy.UI.Forms
             // 
             this.viewDefaultsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.viewDefaultsGroupBox.Controls.Add(this.defaultGridSizeComboBox);
+            this.viewDefaultsGroupBox.Controls.Add(this.defaultGridSizeLabel);
             this.viewDefaultsGroupBox.Controls.Add(this.defaultFeaturesVisibleCheckBox);
             this.viewDefaultsGroupBox.Controls.Add(this.defaultGridVisibleCheckBox);
             this.viewDefaultsGroupBox.Controls.Add(this.defaultVoidsVisibleCheckBox);
@@ -560,6 +564,32 @@ namespace Mappy.UI.Forms
             this.defaultGridVisibleCheckBox.Text = "Grid";
             this.defaultGridVisibleCheckBox.UseVisualStyleBackColor = true;
             // 
+            // defaultGridSizeLabel
+            // 
+            this.defaultGridSizeLabel.AutoSize = true;
+            this.defaultGridSizeLabel.Location = new System.Drawing.Point(68, 115);
+            this.defaultGridSizeLabel.Name = "defaultGridSizeLabel";
+            this.defaultGridSizeLabel.Size = new System.Drawing.Size(30, 13);
+            this.defaultGridSizeLabel.TabIndex = 5;
+            this.defaultGridSizeLabel.Text = "Size:";
+            // 
+            // defaultGridSizeComboBox
+            // 
+            this.defaultGridSizeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.defaultGridSizeComboBox.FormattingEnabled = true;
+            this.defaultGridSizeComboBox.Items.AddRange(new object[] {
+            "16x16",
+            "32x32",
+            "64x64",
+            "128x128",
+            "256x256",
+            "512x512",
+            "1024x1024"});
+            this.defaultGridSizeComboBox.Location = new System.Drawing.Point(104, 112);
+            this.defaultGridSizeComboBox.Name = "defaultGridSizeComboBox";
+            this.defaultGridSizeComboBox.Size = new System.Drawing.Size(90, 21);
+            this.defaultGridSizeComboBox.TabIndex = 6;
+            // 
             // defaultFeaturesVisibleCheckBox
             // 
             this.defaultFeaturesVisibleCheckBox.AutoSize = true;
@@ -568,7 +598,7 @@ namespace Mappy.UI.Forms
             this.defaultFeaturesVisibleCheckBox.Location = new System.Drawing.Point(17, 137);
             this.defaultFeaturesVisibleCheckBox.Name = "defaultFeaturesVisibleCheckBox";
             this.defaultFeaturesVisibleCheckBox.Size = new System.Drawing.Size(68, 17);
-            this.defaultFeaturesVisibleCheckBox.TabIndex = 5;
+            this.defaultFeaturesVisibleCheckBox.TabIndex = 7;
             this.defaultFeaturesVisibleCheckBox.Text = "Features";
             this.defaultFeaturesVisibleCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -896,6 +926,8 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.CheckBox defaultMinimapVisibleCheckBox;
         private System.Windows.Forms.CheckBox defaultVoidsVisibleCheckBox;
         private System.Windows.Forms.CheckBox defaultGridVisibleCheckBox;
+        private System.Windows.Forms.Label defaultGridSizeLabel;
+        private System.Windows.Forms.ComboBox defaultGridSizeComboBox;
         private System.Windows.Forms.CheckBox defaultFeaturesVisibleCheckBox;
     }
 }
