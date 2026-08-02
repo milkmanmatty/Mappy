@@ -11,6 +11,8 @@ namespace Mappy
 
         private const int DefaultWheelStep = 1;
 
+        private const int DefaultGridSizeValue = 16;
+
         /// <summary>
         /// Gets or sets the main window state: 0 = Normal, 1 = Minimized, 2 = Maximized.
         /// </summary>
@@ -113,6 +115,8 @@ namespace Mappy
 
         public bool? DefaultGridVisible { get; set; }
 
+        public int? DefaultGridSize { get; set; }
+
         public bool GetDefaultHeightmapVisibleOrDefault() => this.DefaultHeightmapVisible ?? false;
 
         public bool GetDefaultHeightGridVisibleOrDefault() => this.DefaultHeightGridVisible ?? false;
@@ -125,6 +129,12 @@ namespace Mappy
 
         public bool GetDefaultGridVisibleOrDefault() => this.DefaultGridVisible ?? false;
 
+        public int GetDefaultGridSizeOrDefault()
+        {
+            var size = this.DefaultGridSize ?? DefaultGridSizeValue;
+            return size > 0 ? size : DefaultGridSizeValue;
+        }
+
         public void ApplyViewDefaults(Models.CoreModel model)
         {
             model.HeightmapVisible = this.GetDefaultHeightmapVisibleOrDefault();
@@ -133,6 +143,8 @@ namespace Mappy
             model.VoidsVisible = this.GetDefaultVoidsVisibleOrDefault();
             model.FeaturesVisible = this.GetDefaultFeaturesVisibleOrDefault();
             model.GridVisible = this.GetDefaultGridVisibleOrDefault();
+            var gridSize = this.GetDefaultGridSizeOrDefault();
+            model.GridSize = new Size(gridSize, gridSize);
         }
 
         public int GetHeightSelectedHeightWheelStepOrDefault() => GetWheelStepOrDefault(this.HeightSelectedHeightWheelStep);

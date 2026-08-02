@@ -55,6 +55,11 @@ namespace Mappy.UI.Forms
             this.defaultVoidsVisibleCheckBox.Checked = settings.GetDefaultVoidsVisibleOrDefault();
             this.defaultGridVisibleCheckBox.Checked = settings.GetDefaultGridVisibleOrDefault();
             this.defaultFeaturesVisibleCheckBox.Checked = settings.GetDefaultFeaturesVisibleOrDefault();
+
+            var gridSize = settings.GetDefaultGridSizeOrDefault();
+            var gridSizeText = gridSize + "x" + gridSize;
+            var gridSizeIndex = this.defaultGridSizeComboBox.Items.IndexOf(gridSizeText);
+            this.defaultGridSizeComboBox.SelectedIndex = gridSizeIndex >= 0 ? gridSizeIndex : 0;
         }
 
         private void BlobFeatureBaseCustomizeButtonClick(object sender, EventArgs e)
@@ -175,7 +180,20 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.DefaultVoidsVisible = this.defaultVoidsVisibleCheckBox.Checked;
             MappySettings.Settings.DefaultGridVisible = this.defaultGridVisibleCheckBox.Checked;
             MappySettings.Settings.DefaultFeaturesVisible = this.defaultFeaturesVisibleCheckBox.Checked;
+            MappySettings.Settings.DefaultGridSize = this.ParseGridSizeComboSelection();
             MappySettings.SaveSettings(notifyListeners: true);
+        }
+
+        private int ParseGridSizeComboSelection()
+        {
+            var selected = this.defaultGridSizeComboBox.SelectedItem?.ToString() ?? "16x16";
+            var separatorIndex = selected.IndexOf('x');
+            if (separatorIndex > 0 && int.TryParse(selected.Substring(0, separatorIndex), out var size) && size > 0)
+            {
+                return size;
+            }
+
+            return 16;
         }
     }
 }
