@@ -151,7 +151,7 @@
     <Compile Include="Data\MapTile.cs" />
     <Compile Include="Data\SchemaUnit.cs" />
     <Compile Include="Data\UnitCatalogLoadRecord.cs" />
-    <Compile Include="Data\UnitSideCategory.cs" />
+    <Compile Include="Data\UnitCatalogSide.cs" />
     <Compile Include="Data\Positioned.cs" />
     <Compile Include="Data\SchemaUnitsChangedEventArgs.cs" />
     <Compile Include="Data\Section.cs" />

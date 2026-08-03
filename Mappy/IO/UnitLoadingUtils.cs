@@ -36,7 +36,7 @@ namespace Mappy.IO
                 else
                 {
                     var side = existing.Side;
-                    if (existing.Side == UnitSideCategory.Other && r.Side != UnitSideCategory.Other)
+                    if (string.IsNullOrEmpty(existing.Side) && !string.IsNullOrEmpty(r.Side))
                     {
                         side = r.Side;
                     }
