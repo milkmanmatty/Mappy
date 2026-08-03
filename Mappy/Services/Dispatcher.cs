@@ -105,19 +105,13 @@ namespace Mappy.Services
                     }
 
                     if (!UnitLoadingUtils.LoadUnitCatalog(
-                        i => w.ReportProgress(50 + ((10 * i) / 100)),
+                        i => w.ReportProgress(50 + ((50 * i) / 100)),
                         () => w.CancellationPending,
                         out var unitResult))
                     {
                         args.Cancel = true;
                         return;
                     }
-
-                    var objectNames = unitResult.Records.Select(r => r.ObjectName).Where(n => !string.IsNullOrWhiteSpace(n)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
-                    ThreeDoTextured.PreloadAll(
-                        objectNames,
-                        i => w.ReportProgress(80 + ((20 * i) / 100)),
-                        () => w.CancellationPending);
 
                     args.Result = new SectionFeatureLoadResult(
                             result.Records,

@@ -13,6 +13,8 @@ namespace Mappy.IO
 
     public class UnitFbiCatalogLoader : AbstractHpiLoader<UnitCatalogLoadRecord>
     {
+        private static readonly HashSet<string> UnitFolderNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "units", "ZUnits" };
+
         protected override void LoadFile(HpiArchive archive, HpiArchive.FileInfo file)
         {
             var name = Path.GetFileNameWithoutExtension(file.Name);
@@ -21,7 +23,7 @@ namespace Mappy.IO
                 return;
             }
 
-            var side = UnitSideCategory.Other;
+            var side = UnitCatalogSide.Unknown;
             string displayName = null;
             string objectName = null;
             if (file.Size > 0 && file.Size < 10_000_000)
@@ -34,7 +36,7 @@ namespace Mappy.IO
                     using (var reader = new StreamReader(ms, Encoding.Default))
                     {
                         var root = TdfNode.LoadTdf(reader);
-                        side = ClassifySideFromTdf(root);
+                        side = UnitCatalogSide.Normalize(FindSideRaw(root));
                         displayName = FindUnitNameEntryFromTdf(root);
                         objectName = FindObjectNameFromTdf(root);
                     }
@@ -50,7 +52,7 @@ namespace Mappy.IO
         protected override IEnumerable<HpiArchive.FileInfo> EnumerateFiles(HpiArchive r)
         {
             var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            foreach (var f in EnumerateFbisUnderDirectoriesNamed(r.GetRoot(), "units"))
+            foreach (var f in EnumerateUnitFbis(r.GetRoot()))
             {
                 if (TryAddUnique(seen, f))
                 {
@@ -67,23 +69,21 @@ namespace Mappy.IO
             return seen.Add(key);
         }
 
-        private static IEnumerable<HpiArchive.FileInfo> EnumerateFbisUnderDirectoriesNamed(
-            HpiArchive.DirectoryInfo dir,
-            string folderName)
+        private static IEnumerable<HpiArchive.FileInfo> EnumerateUnitFbis(HpiArchive.DirectoryInfo dir)
         {
             foreach (var entry in dir.Entries)
             {
                 if (entry is HpiArchive.DirectoryInfo sub)
                 {
-                    if (sub.Name.Equals(folderName, StringComparison.OrdinalIgnoreCase))
+                    if (UnitFolderNames.Contains(sub.Name))
                     {
-                        foreach (var f in GetAllFbisRecursive(sub))
+                        foreach (var f in GetUnitFbisRecursive(sub))
                         {
                             yield return f;
                         }
                     }
 
-                    foreach (var f in EnumerateFbisUnderDirectoriesNamed(sub, folderName))
+                    foreach (var f in EnumerateUnitFbis(sub))
                     {
                         yield return f;
                     }
@@ -91,25 +91,34 @@ namespace Mappy.IO
             }
         }
 
-        private static IEnumerable<HpiArchive.FileInfo> GetAllFbisRecursive(HpiArchive.DirectoryInfo dir)
+        private static IEnumerable<HpiArchive.FileInfo> GetUnitFbisRecursive(HpiArchive.DirectoryInfo dir)
         {
             foreach (var entry in dir.Entries)
             {
                 if (entry is HpiArchive.FileInfo fi)
                 {
-                    if (fi.Name.EndsWith(".fbi", StringComparison.OrdinalIgnoreCase))
+                    if (IsMissionUnitFbi(fi.Name))
                     {
                         yield return fi;
                     }
                 }
                 else if (entry is HpiArchive.DirectoryInfo di)
                 {
-                    foreach (var f in GetAllFbisRecursive(di))
+                    foreach (var f in GetUnitFbisRecursive(di))
                     {
                         yield return f;
                     }
                 }
             }
+        }
+
+        private static bool IsMissionUnitFbi(string fileName)
+        {
+            if (!fileName.EndsWith(".fbi", StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+            return true;
         }
 
         private static string FindSideRaw(TdfNode node)
@@ -198,28 +207,6 @@ namespace Mappy.IO
             }
 
             return raw;
-        }
-
-        private static UnitSideCategory ClassifySideFromTdf(TdfNode root)
-        {
-            var raw = FindSideRaw(root);
-            if (string.IsNullOrWhiteSpace(raw))
-            {
-                return UnitSideCategory.Other;
-            }
-
-            raw = raw.Trim();
-            if (raw.Equals("ARM", StringComparison.OrdinalIgnoreCase))
-            {
-                return UnitSideCategory.Arm;
-            }
-
-            if (raw.Equals("CORE", StringComparison.OrdinalIgnoreCase))
-            {
-                return UnitSideCategory.Core;
-            }
-
-            return UnitSideCategory.Other;
         }
     }
 }

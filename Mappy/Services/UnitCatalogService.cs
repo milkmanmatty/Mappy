@@ -10,8 +10,8 @@ namespace Mappy.Services
     {
         private readonly SortedSet<string> names = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        private readonly Dictionary<string, UnitSideCategory> sideByName =
-            new Dictionary<string, UnitSideCategory>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, string> sideByName =
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         private readonly Dictionary<string, string> displayNameByUnit =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -73,7 +73,7 @@ namespace Mappy.Services
                 {
                     updateSide = true;
                 }
-                else if (prev == UnitSideCategory.Other && r.Side != UnitSideCategory.Other)
+                else if (string.IsNullOrEmpty(prev) && !string.IsNullOrEmpty(r.Side))
                 {
                     updateSide = true;
                 }
@@ -190,16 +190,40 @@ namespace Mappy.Services
             return unitInternalName.Trim();
         }
 
-        public UnitSideCategory GetUnitSide(string unitName)
+        public string GetUnitSide(string unitName)
         {
             if (string.IsNullOrEmpty(unitName))
             {
-                return UnitSideCategory.Other;
+                return UnitCatalogSide.Unknown;
             }
 
-            return this.sideByName.TryGetValue(unitName, out var s) ? s : UnitSideCategory.Other;
+            return this.sideByName.TryGetValue(unitName, out var s)
+                ? UnitCatalogSide.Normalize(s)
+                : UnitCatalogSide.Unknown;
         }
 
-        public IReadOnlyList<string> EnumerateSorted() => this.names.ToList();
+        public IReadOnlyList<string> EnumerateDistinctSides()
+        {
+            var sides = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var name in this.names)
+            {
+                sides.Add(this.GetUnitSide(name));
+            }
+
+            return sides.OrderBy(s => s, SideTabOrderComparer.Instance).ToList();
+        }
+
+        public IReadOnlyList<string> EnumerateSorted() =>
+            this.names
+                .OrderBy(n => this.GetUnitPickerSearchableText(n), StringComparer.OrdinalIgnoreCase)
+                .ThenBy(n => n, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+        private sealed class SideTabOrderComparer : IComparer<string>
+        {
+            internal static readonly SideTabOrderComparer Instance = new SideTabOrderComparer();
+
+            public int Compare(string x, string y) => UnitCatalogSide.CompareTabOrder(x, y);
+        }
     }
 }

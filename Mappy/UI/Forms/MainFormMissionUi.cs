@@ -33,11 +33,8 @@ namespace Mappy.UI.Forms
 
         private Button missionUnitSearchClearButton;
 
-        private TreeView missionArmUnitsTree;
-
-        private TreeView missionCoreUnitsTree;
-
-        private TreeView missionOtherUnitsTree;
+        private readonly Dictionary<string, TreeView> missionSideUnitTrees =
+            new Dictionary<string, TreeView>(StringComparer.OrdinalIgnoreCase);
 
         private TreeView missionPlacedUnitsTree;
 
@@ -243,22 +240,9 @@ namespace Mappy.UI.Forms
             this.missionUnitsList.DrawItem += this.MissionUnitsList_DrawItem;
             tabAll.Controls.Add(this.missionUnitsList);
 
-            this.missionArmUnitsTree = this.CreateMissionSideUnitTree();
-            this.missionCoreUnitsTree = this.CreateMissionSideUnitTree();
-            this.missionOtherUnitsTree = this.CreateMissionSideUnitTree();
-
             this.ApplyMissionUnitPickerRowMetrics();
 
             this.missionUnitPickerTabs.TabPages.Add(tabAll);
-            var tabArm = new TabPage("ARM");
-            tabArm.Controls.Add(this.missionArmUnitsTree);
-            this.missionUnitPickerTabs.TabPages.Add(tabArm);
-            var tabCore = new TabPage("CORE");
-            tabCore.Controls.Add(this.missionCoreUnitsTree);
-            this.missionUnitPickerTabs.TabPages.Add(tabCore);
-            var tabOther = new TabPage("Other");
-            tabOther.Controls.Add(this.missionOtherUnitsTree);
-            this.missionUnitPickerTabs.TabPages.Add(tabOther);
 
             root.Controls.Add(this.missionUnitPickerTabs, 0, 2);
 
@@ -298,9 +282,9 @@ namespace Mappy.UI.Forms
             this.missionUnitsList.DrawMode = DrawMode.OwnerDrawFixed;
             this.missionUnitsList.ItemHeight = rowHeight;
 
-            foreach (var tv in new[] { this.missionArmUnitsTree, this.missionCoreUnitsTree, this.missionOtherUnitsTree })
+            foreach (var tv in this.missionSideUnitTrees.Values)
             {
-                if (tv != null)
+                if (tv != null && !tv.IsDisposed)
                 {
                     tv.Font = font;
                     tv.ItemHeight = rowHeight;
@@ -773,12 +757,62 @@ namespace Mappy.UI.Forms
 
         private void RefreshMissionSideUnitTrees(string preferredSelection)
         {
-            this.FillSideUnitTree(this.missionArmUnitsTree, UnitSideCategory.Arm, preferredSelection);
-            this.FillSideUnitTree(this.missionCoreUnitsTree, UnitSideCategory.Core, preferredSelection);
-            this.FillSideUnitTree(this.missionOtherUnitsTree, UnitSideCategory.Other, preferredSelection);
+            if (this.missionUnitPickerTabs == null || this.missionUnitCatalog == null)
+            {
+                return;
+            }
+
+            var sides = this.missionUnitCatalog.EnumerateDistinctSides();
+            this.EnsureMissionSideTabs(sides);
+
+            foreach (var kvp in this.missionSideUnitTrees)
+            {
+                this.FillSideUnitTree(kvp.Value, kvp.Key, preferredSelection);
+            }
         }
 
-        private void FillSideUnitTree(TreeView tv, UnitSideCategory side, string preferredSelection)
+        private void EnsureMissionSideTabs(IReadOnlyList<string> sides)
+        {
+            var currentSides = this.missionSideUnitTrees.Keys.ToList();
+            if (currentSides.SequenceEqual(sides, StringComparer.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            var selectedTabIndex = this.missionUnitPickerTabs.SelectedIndex;
+
+            while (this.missionUnitPickerTabs.TabPages.Count > 1)
+            {
+                var page = this.missionUnitPickerTabs.TabPages[this.missionUnitPickerTabs.TabPages.Count - 1];
+                this.missionUnitPickerTabs.TabPages.Remove(page);
+                page.Dispose();
+            }
+
+            this.missionSideUnitTrees.Clear();
+
+            var rowHeight = Math.Max(this.Font.Height + 4, 19);
+            foreach (var side in sides)
+            {
+                var tv = this.CreateMissionSideUnitTree();
+                tv.Font = this.Font;
+                tv.ItemHeight = rowHeight;
+
+                var tab = new TabPage(UnitCatalogSide.FormatTabLabel(side))
+                {
+                    Tag = side,
+                };
+                tab.Controls.Add(tv);
+                this.missionUnitPickerTabs.TabPages.Add(tab);
+                this.missionSideUnitTrees[side] = tv;
+            }
+
+            if (selectedTabIndex >= 0 && selectedTabIndex < this.missionUnitPickerTabs.TabPages.Count)
+            {
+                this.missionUnitPickerTabs.SelectedIndex = selectedTabIndex;
+            }
+        }
+
+        private void FillSideUnitTree(TreeView tv, string side, string preferredSelection)
         {
             if (tv == null || tv.IsDisposed || this.missionUnitCatalog == null)
             {
@@ -791,7 +825,7 @@ namespace Mappy.UI.Forms
                 tv.Nodes.Clear();
                 foreach (var name in this.missionUnitCatalog.EnumerateSorted())
                 {
-                    if (this.missionUnitCatalog.GetUnitSide(name) != side)
+                    if (!string.Equals(this.missionUnitCatalog.GetUnitSide(name), side, StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
                     }
@@ -806,7 +840,7 @@ namespace Mappy.UI.Forms
                 }
 
                 if (!string.IsNullOrEmpty(preferredSelection)
-                    && this.missionUnitCatalog.GetUnitSide(preferredSelection) == side)
+                    && string.Equals(this.missionUnitCatalog.GetUnitSide(preferredSelection), side, StringComparison.OrdinalIgnoreCase))
                 {
                     foreach (TreeNode n in tv.Nodes)
                     {
