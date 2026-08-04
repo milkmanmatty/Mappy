@@ -6,6 +6,7 @@
     using System.Runtime.InteropServices;
     using System.Windows.Forms;
 
+    using Mappy;
     using Mappy.Models;
 
     public partial class MinimapForm : Form
@@ -34,13 +35,18 @@
                 Color.FromArgb(255, 180, 140),
             };
 
+
         private IMinimapFormViewModel model;
 
         private Size? userClientSize;
 
+        private bool hasBeenShown;
+
         public MinimapForm()
         {
             this.InitializeComponent();
+            this.RestoreLocation();
+            this.FormClosed += this.MinimapFormFormClosed;
         }
 
         public void SetModel(IMinimapFormViewModel miniFormModel)
@@ -72,6 +78,7 @@
             base.OnVisibleChanged(e);
             if (this.Visible)
             {
+                this.hasBeenShown = true;
                 this.ApplyClientSizeForImage(this.minimapControl.BackgroundImage?.Size ?? new Size(252, 252));
             }
         }
@@ -94,6 +101,19 @@
             base.WndProc(ref m);
         }
 
+        private static bool IsBoundsOnAnyScreen(Rectangle bounds)
+        {
+            foreach (Screen screen in Screen.AllScreens)
+            {
+                if (screen.WorkingArea.IntersectsWith(bounds))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private void MinimapFormFormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
@@ -102,6 +122,48 @@
 
                 this.model.FormCloseButtonClick();
             }
+        }
+
+        private void MinimapFormFormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.SaveLocation();
+        }
+
+        private void RestoreLocation()
+        {
+            var settings = MappySettings.Settings;
+            if (!settings.HasMinimapLocation)
+            {
+                return;
+            }
+
+            var savedBounds = new Rectangle(
+                settings.MinimapLocationX,
+                settings.MinimapLocationY,
+                this.Width,
+                this.Height);
+
+            if (!IsBoundsOnAnyScreen(savedBounds))
+            {
+                return;
+            }
+
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = new Point(settings.MinimapLocationX, settings.MinimapLocationY);
+        }
+
+        private void SaveLocation()
+        {
+            if (!this.hasBeenShown)
+            {
+                return;
+            }
+
+            var settings = MappySettings.Settings;
+            settings.MinimapLocationX = this.Location.X;
+            settings.MinimapLocationY = this.Location.Y;
+            settings.HasMinimapLocation = true;
+            MappySettings.SaveSettings();
         }
 
         private void SetMinimapImage(Image image)
