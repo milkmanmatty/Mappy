@@ -16,12 +16,40 @@ namespace Mappy.Data
     /// </summary>
     public class MapAttributes : Notifier
     {
+        public static readonly string[] VictoryConditionKeys =
+        {
+            "AllUnitsKilled",
+            "AllUnitsKilledOfType",
+            "AnyUnitPassesX",
+            "AnyUnitPassesZ",
+            "BuildUnitType",
+            "CaptureUnitType",
+            "CommanderKilled",
+            "DeathTimerRunsOut",
+            "DestroyAllUnits",
+            "KillAllMobileUnits",
+            "KillAllOfType",
+            "KillEnemyCommander",
+            "KillUnitType",
+            "MoveUnitToRadius",
+            "UnitTypeKilled",
+            "UnitTypePassesX",
+            "UnitTypePassesZ",
+            "VictoryTimerRunsOut",
+        };
+
         private static readonly HashSet<string> GlobalHeaderKnownKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "missionname", "missiondescription", "planet", "missionhint", "brief", "narration", "glamour",
+            "glamoursound", "nomovie",
             "lineofsight", "mapping", "tidalstrength", "solarstrength", "lavaworld", "killmul", "timemul",
             "minwindspeed", "maxwindspeed", "gravity", "waterdoesdamage", "waterdamage", "numplayers",
             "size", "memory", "useonlyunits", "SCHEMACOUNT",
+            "AllUnitsKilled", "AllUnitsKilledOfType", "AnyUnitPassesX", "AnyUnitPassesZ",
+            "BuildUnitType", "CaptureUnitType", "CommanderKilled", "DeathTimerRunsOut",
+            "DestroyAllUnits", "KillAllMobileUnits", "KillAllOfType", "KillEnemyCommander",
+            "KillUnitType", "MoveUnitToRadius", "UnitTypeKilled", "UnitTypePassesX",
+            "UnitTypePassesZ", "VictoryTimerRunsOut",
         };
 
         private static readonly HashSet<string> SchemaKnownKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -36,6 +64,14 @@ namespace Mappy.Data
         private int gravity;
         private string numPlayers;
         private string memory;
+
+        private string missionHint;
+        private string brief;
+        private string narration;
+        private string glamour;
+        private string glamourSound;
+        private string useOnlyUnits;
+        private bool noMovie;
 
         private int tidalStrength;
         private int solarStrength;
@@ -55,6 +91,14 @@ namespace Mappy.Data
             this.Gravity = 112;
             this.Memory = string.Empty;
             this.NumPlayers = "2";
+
+            this.MissionHint = string.Empty;
+            this.Brief = string.Empty;
+            this.Narration = string.Empty;
+            this.Glamour = string.Empty;
+            this.GlamourSound = string.Empty;
+            this.UseOnlyUnits = string.Empty;
+            this.NoMovie = false;
 
             this.TidalStrength = 20;
             this.SolarStrength = 20;
@@ -80,6 +124,10 @@ namespace Mappy.Data
         public IReadOnlyList<MapSchema> Schemas => this.schemaList;
 
         public Dictionary<string, string> GlobalHeaderExtraEntries { get; } =
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        // Presence of a key means the condition is enabled and should be written to the OTA.
+        public Dictionary<string, string> VictoryConditions { get; } =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         public string Name
@@ -110,6 +158,48 @@ namespace Mappy.Data
         {
             get => this.memory;
             set => this.SetField(ref this.memory, value, nameof(this.Memory));
+        }
+
+        public string MissionHint
+        {
+            get => this.missionHint;
+            set => this.SetField(ref this.missionHint, value, nameof(this.MissionHint));
+        }
+
+        public string Brief
+        {
+            get => this.brief;
+            set => this.SetField(ref this.brief, value, nameof(this.Brief));
+        }
+
+        public string Narration
+        {
+            get => this.narration;
+            set => this.SetField(ref this.narration, value, nameof(this.Narration));
+        }
+
+        public string Glamour
+        {
+            get => this.glamour;
+            set => this.SetField(ref this.glamour, value, nameof(this.Glamour));
+        }
+
+        public string GlamourSound
+        {
+            get => this.glamourSound;
+            set => this.SetField(ref this.glamourSound, value, nameof(this.GlamourSound));
+        }
+
+        public string UseOnlyUnits
+        {
+            get => this.useOnlyUnits;
+            set => this.SetField(ref this.useOnlyUnits, value, nameof(this.UseOnlyUnits));
+        }
+
+        public bool NoMovie
+        {
+            get => this.noMovie;
+            set => this.SetField(ref this.noMovie, value, nameof(this.NoMovie));
         }
 
         public string NumPlayers
@@ -232,6 +322,21 @@ namespace Mappy.Data
             m.WaterDamage = TdfConvert.ToInt32(gh.Entries.GetOrDefault("waterdamage", "0"));
             m.NumPlayers = gh.Entries.GetOrDefault("numplayers", string.Empty);
             m.Memory = gh.Entries.GetOrDefault("memory", string.Empty);
+            m.MissionHint = gh.Entries.GetOrDefault("missionhint", string.Empty);
+            m.Brief = gh.Entries.GetOrDefault("brief", string.Empty);
+            m.Narration = gh.Entries.GetOrDefault("narration", string.Empty);
+            m.Glamour = gh.Entries.GetOrDefault("glamour", string.Empty);
+            m.GlamourSound = gh.Entries.GetOrDefault("glamoursound", string.Empty);
+            m.UseOnlyUnits = gh.Entries.GetOrDefault("useonlyunits", string.Empty);
+            m.NoMovie = TdfConvert.ToBool(gh.Entries.GetOrDefault("nomovie", "0"));
+
+            foreach (var key in VictoryConditionKeys)
+            {
+                if (gh.Entries.TryGetValue(key, out var victoryValue))
+                {
+                    m.VictoryConditions[key] = victoryValue;
+                }
+            }
 
             foreach (var e in gh.Entries)
             {
@@ -273,10 +378,12 @@ namespace Mappy.Data
             r.Entries["missionname"] = this.Name;
             r.Entries["missiondescription"] = this.Description;
             r.Entries["planet"] = this.Planet;
-            r.Entries["missionhint"] = string.Empty;
-            r.Entries["brief"] = string.Empty;
-            r.Entries["narration"] = string.Empty;
-            r.Entries["glamour"] = string.Empty;
+            r.Entries["missionhint"] = this.MissionHint;
+            r.Entries["brief"] = this.Brief;
+            r.Entries["narration"] = this.Narration;
+            r.Entries["glamour"] = this.Glamour;
+            r.Entries["glamoursound"] = this.GlamourSound;
+            r.Entries["nomovie"] = TdfConvert.ToString(this.NoMovie);
             r.Entries["lineofsight"] = "0";
             r.Entries["mapping"] = "0";
             r.Entries["tidalstrength"] = TdfConvert.ToString(this.TidalStrength);
@@ -292,12 +399,23 @@ namespace Mappy.Data
             r.Entries["numplayers"] = this.numPlayers;
             r.Entries["size"] = $"{mapWidthIn512Tiles} x {mapHeightIn512Tiles}";
             r.Entries["memory"] = this.memory;
-            r.Entries["useonlyunits"] = string.Empty;
+            r.Entries["useonlyunits"] = this.UseOnlyUnits;
             r.Entries["SCHEMACOUNT"] = TdfConvert.ToString(this.schemaList.Count);
+
+            foreach (var key in VictoryConditionKeys)
+            {
+                if (this.VictoryConditions.TryGetValue(key, out var victoryValue))
+                {
+                    r.Entries[key] = victoryValue;
+                }
+            }
 
             foreach (var e in this.GlobalHeaderExtraEntries)
             {
-                r.Entries[e.Key] = e.Value;
+                if (!GlobalHeaderKnownKeys.Contains(e.Key))
+                {
+                    r.Entries[e.Key] = e.Value;
+                }
             }
 
             for (var i = 0; i < this.schemaList.Count; i++)
@@ -346,6 +464,13 @@ namespace Mappy.Data
             this.Planet = source.Planet;
             this.Gravity = source.Gravity;
             this.Memory = source.Memory;
+            this.MissionHint = source.MissionHint;
+            this.Brief = source.Brief;
+            this.Narration = source.Narration;
+            this.Glamour = source.Glamour;
+            this.GlamourSound = source.GlamourSound;
+            this.UseOnlyUnits = source.UseOnlyUnits;
+            this.NoMovie = source.NoMovie;
             this.NumPlayers = source.NumPlayers;
             this.TidalStrength = source.TidalStrength;
             this.SolarStrength = source.SolarStrength;
@@ -359,6 +484,12 @@ namespace Mappy.Data
             foreach (var e in source.GlobalHeaderExtraEntries)
             {
                 this.GlobalHeaderExtraEntries[e.Key] = e.Value;
+            }
+
+            this.VictoryConditions.Clear();
+            foreach (var e in source.VictoryConditions)
+            {
+                this.VictoryConditions[e.Key] = e.Value;
             }
 
             this.schemaList.Clear();

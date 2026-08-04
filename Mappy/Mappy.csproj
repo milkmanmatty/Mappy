@@ -218,6 +218,7 @@
     <Compile Include="Models\ListViewItem.cs" />
     <Compile Include="Models\MainFormViewModel.cs" />
     <Compile Include="Models\MapAttributesResult.cs" />
+    <Compile Include="Models\OptionalStringAttribute.cs" />
     <Compile Include="Models\MapUnitRef.cs" />
     <Compile Include="Models\MapViewViewModel.cs" />
     <Compile Include="Models\MinimapFormViewModel.cs" />
