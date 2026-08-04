@@ -16,6 +16,28 @@ namespace Mappy.Data
     /// </summary>
     public class MapAttributes : Notifier
     {
+        public static readonly string[] VictoryConditionKeys =
+        {
+            "AllUnitsKilled",
+            "AllUnitsKilledOfType",
+            "AnyUnitPassesX",
+            "AnyUnitPassesZ",
+            "BuildUnitType",
+            "CaptureUnitType",
+            "CommanderKilled",
+            "DeathTimerRunsOut",
+            "DestroyAllUnits",
+            "KillAllMobileUnits",
+            "KillAllOfType",
+            "KillEnemyCommander",
+            "KillUnitType",
+            "MoveUnitToRadius",
+            "UnitTypeKilled",
+            "UnitTypePassesX",
+            "UnitTypePassesZ",
+            "VictoryTimerRunsOut",
+        };
+
         private static readonly HashSet<string> GlobalHeaderKnownKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "missionname", "missiondescription", "planet", "missionhint", "brief", "narration", "glamour",
@@ -23,6 +45,11 @@ namespace Mappy.Data
             "lineofsight", "mapping", "tidalstrength", "solarstrength", "lavaworld", "killmul", "timemul",
             "minwindspeed", "maxwindspeed", "gravity", "waterdoesdamage", "waterdamage", "numplayers",
             "size", "memory", "useonlyunits", "SCHEMACOUNT",
+            "AllUnitsKilled", "AllUnitsKilledOfType", "AnyUnitPassesX", "AnyUnitPassesZ",
+            "BuildUnitType", "CaptureUnitType", "CommanderKilled", "DeathTimerRunsOut",
+            "DestroyAllUnits", "KillAllMobileUnits", "KillAllOfType", "KillEnemyCommander",
+            "KillUnitType", "MoveUnitToRadius", "UnitTypeKilled", "UnitTypePassesX",
+            "UnitTypePassesZ", "VictoryTimerRunsOut",
         };
 
         private static readonly HashSet<string> SchemaKnownKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -97,6 +124,10 @@ namespace Mappy.Data
         public IReadOnlyList<MapSchema> Schemas => this.schemaList;
 
         public Dictionary<string, string> GlobalHeaderExtraEntries { get; } =
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        // Presence of a key means the condition is enabled and should be written to the OTA.
+        public Dictionary<string, string> VictoryConditions { get; } =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         public string Name
@@ -299,6 +330,14 @@ namespace Mappy.Data
             m.UseOnlyUnits = gh.Entries.GetOrDefault("useonlyunits", string.Empty);
             m.NoMovie = TdfConvert.ToBool(gh.Entries.GetOrDefault("nomovie", "0"));
 
+            foreach (var key in VictoryConditionKeys)
+            {
+                if (gh.Entries.TryGetValue(key, out var victoryValue))
+                {
+                    m.VictoryConditions[key] = victoryValue;
+                }
+            }
+
             foreach (var e in gh.Entries)
             {
                 if (!GlobalHeaderKnownKeys.Contains(e.Key))
@@ -363,9 +402,20 @@ namespace Mappy.Data
             r.Entries["useonlyunits"] = this.UseOnlyUnits;
             r.Entries["SCHEMACOUNT"] = TdfConvert.ToString(this.schemaList.Count);
 
+            foreach (var key in VictoryConditionKeys)
+            {
+                if (this.VictoryConditions.TryGetValue(key, out var victoryValue))
+                {
+                    r.Entries[key] = victoryValue;
+                }
+            }
+
             foreach (var e in this.GlobalHeaderExtraEntries)
             {
-                r.Entries[e.Key] = e.Value;
+                if (!GlobalHeaderKnownKeys.Contains(e.Key))
+                {
+                    r.Entries[e.Key] = e.Value;
+                }
             }
 
             for (var i = 0; i < this.schemaList.Count; i++)
@@ -434,6 +484,12 @@ namespace Mappy.Data
             foreach (var e in source.GlobalHeaderExtraEntries)
             {
                 this.GlobalHeaderExtraEntries[e.Key] = e.Value;
+            }
+
+            this.VictoryConditions.Clear();
+            foreach (var e in source.VictoryConditions)
+            {
+                this.VictoryConditions[e.Key] = e.Value;
             }
 
             this.schemaList.Clear();

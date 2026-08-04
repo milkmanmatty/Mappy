@@ -1,4 +1,4 @@
-﻿namespace Mappy.UI.Forms
+namespace Mappy.UI.Forms
 {
     using Mappy.UI.Controls;
 
@@ -92,6 +92,61 @@
             this.textBoxBrief = new System.Windows.Forms.TextBox();
             this.labelMissionHint = new System.Windows.Forms.Label();
             this.textBoxMissionHint = new System.Windows.Forms.TextBox();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.labelVictoryAllUnitsKilled = new System.Windows.Forms.Label();
+            this.checkBoxVictoryAllUnitsKilled = new System.Windows.Forms.CheckBox();
+            this.textBoxVictoryAllUnitsKilled = new System.Windows.Forms.TextBox();
+            this.labelVictoryAllUnitsKilledOfType = new System.Windows.Forms.Label();
+            this.checkBoxVictoryAllUnitsKilledOfType = new System.Windows.Forms.CheckBox();
+            this.textBoxVictoryAllUnitsKilledOfType = new System.Windows.Forms.TextBox();
+            this.labelVictoryAnyUnitPassesX = new System.Windows.Forms.Label();
+            this.checkBoxVictoryAnyUnitPassesX = new System.Windows.Forms.CheckBox();
+            this.textBoxVictoryAnyUnitPassesX = new System.Windows.Forms.TextBox();
+            this.labelVictoryAnyUnitPassesZ = new System.Windows.Forms.Label();
+            this.checkBoxVictoryAnyUnitPassesZ = new System.Windows.Forms.CheckBox();
+            this.textBoxVictoryAnyUnitPassesZ = new System.Windows.Forms.TextBox();
+            this.labelVictoryBuildUnitType = new System.Windows.Forms.Label();
+            this.checkBoxVictoryBuildUnitType = new System.Windows.Forms.CheckBox();
+            this.textBoxVictoryBuildUnitType = new System.Windows.Forms.TextBox();
+            this.labelVictoryCaptureUnitType = new System.Windows.Forms.Label();
+            this.checkBoxVictoryCaptureUnitType = new System.Windows.Forms.CheckBox();
+            this.textBoxVictoryCaptureUnitType = new System.Windows.Forms.TextBox();
+            this.labelVictoryCommanderKilled = new System.Windows.Forms.Label();
+            this.checkBoxVictoryCommanderKilled = new System.Windows.Forms.CheckBox();
+            this.textBoxVictoryCommanderKilled = new System.Windows.Forms.TextBox();
+            this.labelVictoryDeathTimerRunsOut = new System.Windows.Forms.Label();
+            this.checkBoxVictoryDeathTimerRunsOut = new System.Windows.Forms.CheckBox();
+            this.textBoxVictoryDeathTimerRunsOut = new System.Windows.Forms.TextBox();
+            this.labelVictoryDestroyAllUnits = new System.Windows.Forms.Label();
+            this.checkBoxVictoryDestroyAllUnits = new System.Windows.Forms.CheckBox();
+            this.textBoxVictoryDestroyAllUnits = new System.Windows.Forms.TextBox();
+            this.labelVictoryKillAllMobileUnits = new System.Windows.Forms.Label();
+            this.checkBoxVictoryKillAllMobileUnits = new System.Windows.Forms.CheckBox();
+            this.textBoxVictoryKillAllMobileUnits = new System.Windows.Forms.TextBox();
+            this.labelVictoryKillAllOfType = new System.Windows.Forms.Label();
+            this.checkBoxVictoryKillAllOfType = new System.Windows.Forms.CheckBox();
+            this.textBoxVictoryKillAllOfType = new System.Windows.Forms.TextBox();
+            this.labelVictoryKillEnemyCommander = new System.Windows.Forms.Label();
+            this.checkBoxVictoryKillEnemyCommander = new System.Windows.Forms.CheckBox();
+            this.textBoxVictoryKillEnemyCommander = new System.Windows.Forms.TextBox();
+            this.labelVictoryKillUnitType = new System.Windows.Forms.Label();
+            this.checkBoxVictoryKillUnitType = new System.Windows.Forms.CheckBox();
+            this.textBoxVictoryKillUnitType = new System.Windows.Forms.TextBox();
+            this.labelVictoryMoveUnitToRadius = new System.Windows.Forms.Label();
+            this.checkBoxVictoryMoveUnitToRadius = new System.Windows.Forms.CheckBox();
+            this.textBoxVictoryMoveUnitToRadius = new System.Windows.Forms.TextBox();
+            this.labelVictoryUnitTypeKilled = new System.Windows.Forms.Label();
+            this.checkBoxVictoryUnitTypeKilled = new System.Windows.Forms.CheckBox();
+            this.textBoxVictoryUnitTypeKilled = new System.Windows.Forms.TextBox();
+            this.labelVictoryUnitTypePassesX = new System.Windows.Forms.Label();
+            this.checkBoxVictoryUnitTypePassesX = new System.Windows.Forms.CheckBox();
+            this.textBoxVictoryUnitTypePassesX = new System.Windows.Forms.TextBox();
+            this.labelVictoryUnitTypePassesZ = new System.Windows.Forms.Label();
+            this.checkBoxVictoryUnitTypePassesZ = new System.Windows.Forms.CheckBox();
+            this.textBoxVictoryUnitTypePassesZ = new System.Windows.Forms.TextBox();
+            this.labelVictoryVictoryTimerRunsOut = new System.Windows.Forms.Label();
+            this.checkBoxVictoryVictoryTimerRunsOut = new System.Windows.Forms.CheckBox();
+            this.textBoxVictoryVictoryTimerRunsOut = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
@@ -113,6 +168,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown9)).BeginInit();
             this.tabPage4.SuspendLayout();
+            this.tabPage5.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -124,10 +180,11 @@
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(424, 151);
+            this.tabControl1.Size = new System.Drawing.Size(424, 276);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -147,7 +204,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(416, 125);
+            this.tabPage1.Size = new System.Drawing.Size(416, 250);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Map";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -279,7 +336,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(416, 125);
+            this.tabPage2.Size = new System.Drawing.Size(416, 250);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -479,7 +536,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(416, 125);
+            this.tabPage3.Size = new System.Drawing.Size(416, 250);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Special";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -652,7 +709,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(416, 125);
+            this.tabPage4.Size = new System.Drawing.Size(416, 250);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Mission";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -770,11 +827,472 @@
             this.textBoxMissionHint.Size = new System.Drawing.Size(124, 20);
             this.textBoxMissionHint.TabIndex = 0;
             // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.textBoxVictoryVictoryTimerRunsOut);
+            this.tabPage5.Controls.Add(this.checkBoxVictoryVictoryTimerRunsOut);
+            this.tabPage5.Controls.Add(this.labelVictoryVictoryTimerRunsOut);
+            this.tabPage5.Controls.Add(this.textBoxVictoryUnitTypePassesZ);
+            this.tabPage5.Controls.Add(this.checkBoxVictoryUnitTypePassesZ);
+            this.tabPage5.Controls.Add(this.labelVictoryUnitTypePassesZ);
+            this.tabPage5.Controls.Add(this.textBoxVictoryUnitTypePassesX);
+            this.tabPage5.Controls.Add(this.checkBoxVictoryUnitTypePassesX);
+            this.tabPage5.Controls.Add(this.labelVictoryUnitTypePassesX);
+            this.tabPage5.Controls.Add(this.textBoxVictoryUnitTypeKilled);
+            this.tabPage5.Controls.Add(this.checkBoxVictoryUnitTypeKilled);
+            this.tabPage5.Controls.Add(this.labelVictoryUnitTypeKilled);
+            this.tabPage5.Controls.Add(this.textBoxVictoryMoveUnitToRadius);
+            this.tabPage5.Controls.Add(this.checkBoxVictoryMoveUnitToRadius);
+            this.tabPage5.Controls.Add(this.labelVictoryMoveUnitToRadius);
+            this.tabPage5.Controls.Add(this.textBoxVictoryKillUnitType);
+            this.tabPage5.Controls.Add(this.checkBoxVictoryKillUnitType);
+            this.tabPage5.Controls.Add(this.labelVictoryKillUnitType);
+            this.tabPage5.Controls.Add(this.textBoxVictoryKillEnemyCommander);
+            this.tabPage5.Controls.Add(this.checkBoxVictoryKillEnemyCommander);
+            this.tabPage5.Controls.Add(this.labelVictoryKillEnemyCommander);
+            this.tabPage5.Controls.Add(this.textBoxVictoryKillAllOfType);
+            this.tabPage5.Controls.Add(this.checkBoxVictoryKillAllOfType);
+            this.tabPage5.Controls.Add(this.labelVictoryKillAllOfType);
+            this.tabPage5.Controls.Add(this.textBoxVictoryKillAllMobileUnits);
+            this.tabPage5.Controls.Add(this.checkBoxVictoryKillAllMobileUnits);
+            this.tabPage5.Controls.Add(this.labelVictoryKillAllMobileUnits);
+            this.tabPage5.Controls.Add(this.textBoxVictoryDestroyAllUnits);
+            this.tabPage5.Controls.Add(this.checkBoxVictoryDestroyAllUnits);
+            this.tabPage5.Controls.Add(this.labelVictoryDestroyAllUnits);
+            this.tabPage5.Controls.Add(this.textBoxVictoryDeathTimerRunsOut);
+            this.tabPage5.Controls.Add(this.checkBoxVictoryDeathTimerRunsOut);
+            this.tabPage5.Controls.Add(this.labelVictoryDeathTimerRunsOut);
+            this.tabPage5.Controls.Add(this.textBoxVictoryCommanderKilled);
+            this.tabPage5.Controls.Add(this.checkBoxVictoryCommanderKilled);
+            this.tabPage5.Controls.Add(this.labelVictoryCommanderKilled);
+            this.tabPage5.Controls.Add(this.textBoxVictoryCaptureUnitType);
+            this.tabPage5.Controls.Add(this.checkBoxVictoryCaptureUnitType);
+            this.tabPage5.Controls.Add(this.labelVictoryCaptureUnitType);
+            this.tabPage5.Controls.Add(this.textBoxVictoryBuildUnitType);
+            this.tabPage5.Controls.Add(this.checkBoxVictoryBuildUnitType);
+            this.tabPage5.Controls.Add(this.labelVictoryBuildUnitType);
+            this.tabPage5.Controls.Add(this.textBoxVictoryAnyUnitPassesZ);
+            this.tabPage5.Controls.Add(this.checkBoxVictoryAnyUnitPassesZ);
+            this.tabPage5.Controls.Add(this.labelVictoryAnyUnitPassesZ);
+            this.tabPage5.Controls.Add(this.textBoxVictoryAnyUnitPassesX);
+            this.tabPage5.Controls.Add(this.checkBoxVictoryAnyUnitPassesX);
+            this.tabPage5.Controls.Add(this.labelVictoryAnyUnitPassesX);
+            this.tabPage5.Controls.Add(this.textBoxVictoryAllUnitsKilledOfType);
+            this.tabPage5.Controls.Add(this.checkBoxVictoryAllUnitsKilledOfType);
+            this.tabPage5.Controls.Add(this.labelVictoryAllUnitsKilledOfType);
+            this.tabPage5.Controls.Add(this.textBoxVictoryAllUnitsKilled);
+            this.tabPage5.Controls.Add(this.checkBoxVictoryAllUnitsKilled);
+            this.tabPage5.Controls.Add(this.labelVictoryAllUnitsKilled);
+            this.tabPage5.AutoScroll = true;
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(416, 250);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "Victory";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxVictoryAllUnitsKilled
+            // 
+            this.checkBoxVictoryAllUnitsKilled.AutoSize = true;
+            this.checkBoxVictoryAllUnitsKilled.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "AllUnitsKilled.Enabled", true));
+            this.checkBoxVictoryAllUnitsKilled.Location = new System.Drawing.Point(6, 8);
+            this.checkBoxVictoryAllUnitsKilled.Name = "checkBoxVictoryAllUnitsKilled";
+            this.checkBoxVictoryAllUnitsKilled.Size = new System.Drawing.Size(15, 14);
+            // 
+            // labelVictoryAllUnitsKilled
+            // 
+            this.labelVictoryAllUnitsKilled.AutoSize = true;
+            this.labelVictoryAllUnitsKilled.Location = new System.Drawing.Point(27, 9);
+            this.labelVictoryAllUnitsKilled.Name = "labelVictoryAllUnitsKilled";
+            this.labelVictoryAllUnitsKilled.Text = "AllUnitsKilled";
+            // 
+            // textBoxVictoryAllUnitsKilled
+            // 
+            this.textBoxVictoryAllUnitsKilled.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "AllUnitsKilled.Value", true));
+            this.textBoxVictoryAllUnitsKilled.Location = new System.Drawing.Point(200, 6);
+            this.textBoxVictoryAllUnitsKilled.Name = "textBoxVictoryAllUnitsKilled";
+            this.textBoxVictoryAllUnitsKilled.Size = new System.Drawing.Size(190, 20);
+            // 
+            // checkBoxVictoryAllUnitsKilledOfType
+            // 
+            this.checkBoxVictoryAllUnitsKilledOfType.AutoSize = true;
+            this.checkBoxVictoryAllUnitsKilledOfType.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "AllUnitsKilledOfType.Enabled", true));
+            this.checkBoxVictoryAllUnitsKilledOfType.Location = new System.Drawing.Point(6, 34);
+            this.checkBoxVictoryAllUnitsKilledOfType.Name = "checkBoxVictoryAllUnitsKilledOfType";
+            this.checkBoxVictoryAllUnitsKilledOfType.Size = new System.Drawing.Size(15, 14);
+            // 
+            // labelVictoryAllUnitsKilledOfType
+            // 
+            this.labelVictoryAllUnitsKilledOfType.AutoSize = true;
+            this.labelVictoryAllUnitsKilledOfType.Location = new System.Drawing.Point(27, 35);
+            this.labelVictoryAllUnitsKilledOfType.Name = "labelVictoryAllUnitsKilledOfType";
+            this.labelVictoryAllUnitsKilledOfType.Text = "AllUnitsKilledOfType";
+            // 
+            // textBoxVictoryAllUnitsKilledOfType
+            // 
+            this.textBoxVictoryAllUnitsKilledOfType.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "AllUnitsKilledOfType.Value", true));
+            this.textBoxVictoryAllUnitsKilledOfType.Location = new System.Drawing.Point(200, 32);
+            this.textBoxVictoryAllUnitsKilledOfType.Name = "textBoxVictoryAllUnitsKilledOfType";
+            this.textBoxVictoryAllUnitsKilledOfType.Size = new System.Drawing.Size(190, 20);
+            // 
+            // checkBoxVictoryAnyUnitPassesX
+            // 
+            this.checkBoxVictoryAnyUnitPassesX.AutoSize = true;
+            this.checkBoxVictoryAnyUnitPassesX.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "AnyUnitPassesX.Enabled", true));
+            this.checkBoxVictoryAnyUnitPassesX.Location = new System.Drawing.Point(6, 60);
+            this.checkBoxVictoryAnyUnitPassesX.Name = "checkBoxVictoryAnyUnitPassesX";
+            this.checkBoxVictoryAnyUnitPassesX.Size = new System.Drawing.Size(15, 14);
+            // 
+            // labelVictoryAnyUnitPassesX
+            // 
+            this.labelVictoryAnyUnitPassesX.AutoSize = true;
+            this.labelVictoryAnyUnitPassesX.Location = new System.Drawing.Point(27, 61);
+            this.labelVictoryAnyUnitPassesX.Name = "labelVictoryAnyUnitPassesX";
+            this.labelVictoryAnyUnitPassesX.Text = "AnyUnitPassesX";
+            // 
+            // textBoxVictoryAnyUnitPassesX
+            // 
+            this.textBoxVictoryAnyUnitPassesX.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "AnyUnitPassesX.Value", true));
+            this.textBoxVictoryAnyUnitPassesX.Location = new System.Drawing.Point(200, 58);
+            this.textBoxVictoryAnyUnitPassesX.Name = "textBoxVictoryAnyUnitPassesX";
+            this.textBoxVictoryAnyUnitPassesX.Size = new System.Drawing.Size(190, 20);
+            // 
+            // checkBoxVictoryAnyUnitPassesZ
+            // 
+            this.checkBoxVictoryAnyUnitPassesZ.AutoSize = true;
+            this.checkBoxVictoryAnyUnitPassesZ.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "AnyUnitPassesZ.Enabled", true));
+            this.checkBoxVictoryAnyUnitPassesZ.Location = new System.Drawing.Point(6, 86);
+            this.checkBoxVictoryAnyUnitPassesZ.Name = "checkBoxVictoryAnyUnitPassesZ";
+            this.checkBoxVictoryAnyUnitPassesZ.Size = new System.Drawing.Size(15, 14);
+            // 
+            // labelVictoryAnyUnitPassesZ
+            // 
+            this.labelVictoryAnyUnitPassesZ.AutoSize = true;
+            this.labelVictoryAnyUnitPassesZ.Location = new System.Drawing.Point(27, 87);
+            this.labelVictoryAnyUnitPassesZ.Name = "labelVictoryAnyUnitPassesZ";
+            this.labelVictoryAnyUnitPassesZ.Text = "AnyUnitPassesZ";
+            // 
+            // textBoxVictoryAnyUnitPassesZ
+            // 
+            this.textBoxVictoryAnyUnitPassesZ.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "AnyUnitPassesZ.Value", true));
+            this.textBoxVictoryAnyUnitPassesZ.Location = new System.Drawing.Point(200, 84);
+            this.textBoxVictoryAnyUnitPassesZ.Name = "textBoxVictoryAnyUnitPassesZ";
+            this.textBoxVictoryAnyUnitPassesZ.Size = new System.Drawing.Size(190, 20);
+            // 
+            // checkBoxVictoryBuildUnitType
+            // 
+            this.checkBoxVictoryBuildUnitType.AutoSize = true;
+            this.checkBoxVictoryBuildUnitType.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "BuildUnitType.Enabled", true));
+            this.checkBoxVictoryBuildUnitType.Location = new System.Drawing.Point(6, 112);
+            this.checkBoxVictoryBuildUnitType.Name = "checkBoxVictoryBuildUnitType";
+            this.checkBoxVictoryBuildUnitType.Size = new System.Drawing.Size(15, 14);
+            // 
+            // labelVictoryBuildUnitType
+            // 
+            this.labelVictoryBuildUnitType.AutoSize = true;
+            this.labelVictoryBuildUnitType.Location = new System.Drawing.Point(27, 113);
+            this.labelVictoryBuildUnitType.Name = "labelVictoryBuildUnitType";
+            this.labelVictoryBuildUnitType.Text = "BuildUnitType";
+            // 
+            // textBoxVictoryBuildUnitType
+            // 
+            this.textBoxVictoryBuildUnitType.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "BuildUnitType.Value", true));
+            this.textBoxVictoryBuildUnitType.Location = new System.Drawing.Point(200, 110);
+            this.textBoxVictoryBuildUnitType.Name = "textBoxVictoryBuildUnitType";
+            this.textBoxVictoryBuildUnitType.Size = new System.Drawing.Size(190, 20);
+            // 
+            // checkBoxVictoryCaptureUnitType
+            // 
+            this.checkBoxVictoryCaptureUnitType.AutoSize = true;
+            this.checkBoxVictoryCaptureUnitType.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "CaptureUnitType.Enabled", true));
+            this.checkBoxVictoryCaptureUnitType.Location = new System.Drawing.Point(6, 138);
+            this.checkBoxVictoryCaptureUnitType.Name = "checkBoxVictoryCaptureUnitType";
+            this.checkBoxVictoryCaptureUnitType.Size = new System.Drawing.Size(15, 14);
+            // 
+            // labelVictoryCaptureUnitType
+            // 
+            this.labelVictoryCaptureUnitType.AutoSize = true;
+            this.labelVictoryCaptureUnitType.Location = new System.Drawing.Point(27, 139);
+            this.labelVictoryCaptureUnitType.Name = "labelVictoryCaptureUnitType";
+            this.labelVictoryCaptureUnitType.Text = "CaptureUnitType";
+            // 
+            // textBoxVictoryCaptureUnitType
+            // 
+            this.textBoxVictoryCaptureUnitType.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "CaptureUnitType.Value", true));
+            this.textBoxVictoryCaptureUnitType.Location = new System.Drawing.Point(200, 136);
+            this.textBoxVictoryCaptureUnitType.Name = "textBoxVictoryCaptureUnitType";
+            this.textBoxVictoryCaptureUnitType.Size = new System.Drawing.Size(190, 20);
+            // 
+            // checkBoxVictoryCommanderKilled
+            // 
+            this.checkBoxVictoryCommanderKilled.AutoSize = true;
+            this.checkBoxVictoryCommanderKilled.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "CommanderKilled.Enabled", true));
+            this.checkBoxVictoryCommanderKilled.Location = new System.Drawing.Point(6, 164);
+            this.checkBoxVictoryCommanderKilled.Name = "checkBoxVictoryCommanderKilled";
+            this.checkBoxVictoryCommanderKilled.Size = new System.Drawing.Size(15, 14);
+            // 
+            // labelVictoryCommanderKilled
+            // 
+            this.labelVictoryCommanderKilled.AutoSize = true;
+            this.labelVictoryCommanderKilled.Location = new System.Drawing.Point(27, 165);
+            this.labelVictoryCommanderKilled.Name = "labelVictoryCommanderKilled";
+            this.labelVictoryCommanderKilled.Text = "CommanderKilled";
+            // 
+            // textBoxVictoryCommanderKilled
+            // 
+            this.textBoxVictoryCommanderKilled.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "CommanderKilled.Value", true));
+            this.textBoxVictoryCommanderKilled.Location = new System.Drawing.Point(200, 162);
+            this.textBoxVictoryCommanderKilled.Name = "textBoxVictoryCommanderKilled";
+            this.textBoxVictoryCommanderKilled.Size = new System.Drawing.Size(190, 20);
+            // 
+            // checkBoxVictoryDeathTimerRunsOut
+            // 
+            this.checkBoxVictoryDeathTimerRunsOut.AutoSize = true;
+            this.checkBoxVictoryDeathTimerRunsOut.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "DeathTimerRunsOut.Enabled", true));
+            this.checkBoxVictoryDeathTimerRunsOut.Location = new System.Drawing.Point(6, 190);
+            this.checkBoxVictoryDeathTimerRunsOut.Name = "checkBoxVictoryDeathTimerRunsOut";
+            this.checkBoxVictoryDeathTimerRunsOut.Size = new System.Drawing.Size(15, 14);
+            // 
+            // labelVictoryDeathTimerRunsOut
+            // 
+            this.labelVictoryDeathTimerRunsOut.AutoSize = true;
+            this.labelVictoryDeathTimerRunsOut.Location = new System.Drawing.Point(27, 191);
+            this.labelVictoryDeathTimerRunsOut.Name = "labelVictoryDeathTimerRunsOut";
+            this.labelVictoryDeathTimerRunsOut.Text = "DeathTimerRunsOut";
+            // 
+            // textBoxVictoryDeathTimerRunsOut
+            // 
+            this.textBoxVictoryDeathTimerRunsOut.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "DeathTimerRunsOut.Value", true));
+            this.textBoxVictoryDeathTimerRunsOut.Location = new System.Drawing.Point(200, 188);
+            this.textBoxVictoryDeathTimerRunsOut.Name = "textBoxVictoryDeathTimerRunsOut";
+            this.textBoxVictoryDeathTimerRunsOut.Size = new System.Drawing.Size(190, 20);
+            // 
+            // checkBoxVictoryDestroyAllUnits
+            // 
+            this.checkBoxVictoryDestroyAllUnits.AutoSize = true;
+            this.checkBoxVictoryDestroyAllUnits.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "DestroyAllUnits.Enabled", true));
+            this.checkBoxVictoryDestroyAllUnits.Location = new System.Drawing.Point(6, 216);
+            this.checkBoxVictoryDestroyAllUnits.Name = "checkBoxVictoryDestroyAllUnits";
+            this.checkBoxVictoryDestroyAllUnits.Size = new System.Drawing.Size(15, 14);
+            // 
+            // labelVictoryDestroyAllUnits
+            // 
+            this.labelVictoryDestroyAllUnits.AutoSize = true;
+            this.labelVictoryDestroyAllUnits.Location = new System.Drawing.Point(27, 217);
+            this.labelVictoryDestroyAllUnits.Name = "labelVictoryDestroyAllUnits";
+            this.labelVictoryDestroyAllUnits.Text = "DestroyAllUnits";
+            // 
+            // textBoxVictoryDestroyAllUnits
+            // 
+            this.textBoxVictoryDestroyAllUnits.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "DestroyAllUnits.Value", true));
+            this.textBoxVictoryDestroyAllUnits.Location = new System.Drawing.Point(200, 214);
+            this.textBoxVictoryDestroyAllUnits.Name = "textBoxVictoryDestroyAllUnits";
+            this.textBoxVictoryDestroyAllUnits.Size = new System.Drawing.Size(190, 20);
+            // 
+            // checkBoxVictoryKillAllMobileUnits
+            // 
+            this.checkBoxVictoryKillAllMobileUnits.AutoSize = true;
+            this.checkBoxVictoryKillAllMobileUnits.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "KillAllMobileUnits.Enabled", true));
+            this.checkBoxVictoryKillAllMobileUnits.Location = new System.Drawing.Point(6, 242);
+            this.checkBoxVictoryKillAllMobileUnits.Name = "checkBoxVictoryKillAllMobileUnits";
+            this.checkBoxVictoryKillAllMobileUnits.Size = new System.Drawing.Size(15, 14);
+            // 
+            // labelVictoryKillAllMobileUnits
+            // 
+            this.labelVictoryKillAllMobileUnits.AutoSize = true;
+            this.labelVictoryKillAllMobileUnits.Location = new System.Drawing.Point(27, 243);
+            this.labelVictoryKillAllMobileUnits.Name = "labelVictoryKillAllMobileUnits";
+            this.labelVictoryKillAllMobileUnits.Text = "KillAllMobileUnits";
+            // 
+            // textBoxVictoryKillAllMobileUnits
+            // 
+            this.textBoxVictoryKillAllMobileUnits.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "KillAllMobileUnits.Value", true));
+            this.textBoxVictoryKillAllMobileUnits.Location = new System.Drawing.Point(200, 240);
+            this.textBoxVictoryKillAllMobileUnits.Name = "textBoxVictoryKillAllMobileUnits";
+            this.textBoxVictoryKillAllMobileUnits.Size = new System.Drawing.Size(190, 20);
+            // 
+            // checkBoxVictoryKillAllOfType
+            // 
+            this.checkBoxVictoryKillAllOfType.AutoSize = true;
+            this.checkBoxVictoryKillAllOfType.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "KillAllOfType.Enabled", true));
+            this.checkBoxVictoryKillAllOfType.Location = new System.Drawing.Point(6, 268);
+            this.checkBoxVictoryKillAllOfType.Name = "checkBoxVictoryKillAllOfType";
+            this.checkBoxVictoryKillAllOfType.Size = new System.Drawing.Size(15, 14);
+            // 
+            // labelVictoryKillAllOfType
+            // 
+            this.labelVictoryKillAllOfType.AutoSize = true;
+            this.labelVictoryKillAllOfType.Location = new System.Drawing.Point(27, 269);
+            this.labelVictoryKillAllOfType.Name = "labelVictoryKillAllOfType";
+            this.labelVictoryKillAllOfType.Text = "KillAllOfType";
+            // 
+            // textBoxVictoryKillAllOfType
+            // 
+            this.textBoxVictoryKillAllOfType.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "KillAllOfType.Value", true));
+            this.textBoxVictoryKillAllOfType.Location = new System.Drawing.Point(200, 266);
+            this.textBoxVictoryKillAllOfType.Name = "textBoxVictoryKillAllOfType";
+            this.textBoxVictoryKillAllOfType.Size = new System.Drawing.Size(190, 20);
+            // 
+            // checkBoxVictoryKillEnemyCommander
+            // 
+            this.checkBoxVictoryKillEnemyCommander.AutoSize = true;
+            this.checkBoxVictoryKillEnemyCommander.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "KillEnemyCommander.Enabled", true));
+            this.checkBoxVictoryKillEnemyCommander.Location = new System.Drawing.Point(6, 294);
+            this.checkBoxVictoryKillEnemyCommander.Name = "checkBoxVictoryKillEnemyCommander";
+            this.checkBoxVictoryKillEnemyCommander.Size = new System.Drawing.Size(15, 14);
+            // 
+            // labelVictoryKillEnemyCommander
+            // 
+            this.labelVictoryKillEnemyCommander.AutoSize = true;
+            this.labelVictoryKillEnemyCommander.Location = new System.Drawing.Point(27, 295);
+            this.labelVictoryKillEnemyCommander.Name = "labelVictoryKillEnemyCommander";
+            this.labelVictoryKillEnemyCommander.Text = "KillEnemyCommander";
+            // 
+            // textBoxVictoryKillEnemyCommander
+            // 
+            this.textBoxVictoryKillEnemyCommander.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "KillEnemyCommander.Value", true));
+            this.textBoxVictoryKillEnemyCommander.Location = new System.Drawing.Point(200, 292);
+            this.textBoxVictoryKillEnemyCommander.Name = "textBoxVictoryKillEnemyCommander";
+            this.textBoxVictoryKillEnemyCommander.Size = new System.Drawing.Size(190, 20);
+            // 
+            // checkBoxVictoryKillUnitType
+            // 
+            this.checkBoxVictoryKillUnitType.AutoSize = true;
+            this.checkBoxVictoryKillUnitType.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "KillUnitType.Enabled", true));
+            this.checkBoxVictoryKillUnitType.Location = new System.Drawing.Point(6, 320);
+            this.checkBoxVictoryKillUnitType.Name = "checkBoxVictoryKillUnitType";
+            this.checkBoxVictoryKillUnitType.Size = new System.Drawing.Size(15, 14);
+            // 
+            // labelVictoryKillUnitType
+            // 
+            this.labelVictoryKillUnitType.AutoSize = true;
+            this.labelVictoryKillUnitType.Location = new System.Drawing.Point(27, 321);
+            this.labelVictoryKillUnitType.Name = "labelVictoryKillUnitType";
+            this.labelVictoryKillUnitType.Text = "KillUnitType";
+            // 
+            // textBoxVictoryKillUnitType
+            // 
+            this.textBoxVictoryKillUnitType.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "KillUnitType.Value", true));
+            this.textBoxVictoryKillUnitType.Location = new System.Drawing.Point(200, 318);
+            this.textBoxVictoryKillUnitType.Name = "textBoxVictoryKillUnitType";
+            this.textBoxVictoryKillUnitType.Size = new System.Drawing.Size(190, 20);
+            // 
+            // checkBoxVictoryMoveUnitToRadius
+            // 
+            this.checkBoxVictoryMoveUnitToRadius.AutoSize = true;
+            this.checkBoxVictoryMoveUnitToRadius.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "MoveUnitToRadius.Enabled", true));
+            this.checkBoxVictoryMoveUnitToRadius.Location = new System.Drawing.Point(6, 346);
+            this.checkBoxVictoryMoveUnitToRadius.Name = "checkBoxVictoryMoveUnitToRadius";
+            this.checkBoxVictoryMoveUnitToRadius.Size = new System.Drawing.Size(15, 14);
+            // 
+            // labelVictoryMoveUnitToRadius
+            // 
+            this.labelVictoryMoveUnitToRadius.AutoSize = true;
+            this.labelVictoryMoveUnitToRadius.Location = new System.Drawing.Point(27, 347);
+            this.labelVictoryMoveUnitToRadius.Name = "labelVictoryMoveUnitToRadius";
+            this.labelVictoryMoveUnitToRadius.Text = "MoveUnitToRadius";
+            // 
+            // textBoxVictoryMoveUnitToRadius
+            // 
+            this.textBoxVictoryMoveUnitToRadius.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "MoveUnitToRadius.Value", true));
+            this.textBoxVictoryMoveUnitToRadius.Location = new System.Drawing.Point(200, 344);
+            this.textBoxVictoryMoveUnitToRadius.Name = "textBoxVictoryMoveUnitToRadius";
+            this.textBoxVictoryMoveUnitToRadius.Size = new System.Drawing.Size(190, 20);
+            // 
+            // checkBoxVictoryUnitTypeKilled
+            // 
+            this.checkBoxVictoryUnitTypeKilled.AutoSize = true;
+            this.checkBoxVictoryUnitTypeKilled.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "UnitTypeKilled.Enabled", true));
+            this.checkBoxVictoryUnitTypeKilled.Location = new System.Drawing.Point(6, 372);
+            this.checkBoxVictoryUnitTypeKilled.Name = "checkBoxVictoryUnitTypeKilled";
+            this.checkBoxVictoryUnitTypeKilled.Size = new System.Drawing.Size(15, 14);
+            // 
+            // labelVictoryUnitTypeKilled
+            // 
+            this.labelVictoryUnitTypeKilled.AutoSize = true;
+            this.labelVictoryUnitTypeKilled.Location = new System.Drawing.Point(27, 373);
+            this.labelVictoryUnitTypeKilled.Name = "labelVictoryUnitTypeKilled";
+            this.labelVictoryUnitTypeKilled.Text = "UnitTypeKilled";
+            // 
+            // textBoxVictoryUnitTypeKilled
+            // 
+            this.textBoxVictoryUnitTypeKilled.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "UnitTypeKilled.Value", true));
+            this.textBoxVictoryUnitTypeKilled.Location = new System.Drawing.Point(200, 370);
+            this.textBoxVictoryUnitTypeKilled.Name = "textBoxVictoryUnitTypeKilled";
+            this.textBoxVictoryUnitTypeKilled.Size = new System.Drawing.Size(190, 20);
+            // 
+            // checkBoxVictoryUnitTypePassesX
+            // 
+            this.checkBoxVictoryUnitTypePassesX.AutoSize = true;
+            this.checkBoxVictoryUnitTypePassesX.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "UnitTypePassesX.Enabled", true));
+            this.checkBoxVictoryUnitTypePassesX.Location = new System.Drawing.Point(6, 398);
+            this.checkBoxVictoryUnitTypePassesX.Name = "checkBoxVictoryUnitTypePassesX";
+            this.checkBoxVictoryUnitTypePassesX.Size = new System.Drawing.Size(15, 14);
+            // 
+            // labelVictoryUnitTypePassesX
+            // 
+            this.labelVictoryUnitTypePassesX.AutoSize = true;
+            this.labelVictoryUnitTypePassesX.Location = new System.Drawing.Point(27, 399);
+            this.labelVictoryUnitTypePassesX.Name = "labelVictoryUnitTypePassesX";
+            this.labelVictoryUnitTypePassesX.Text = "UnitTypePassesX";
+            // 
+            // textBoxVictoryUnitTypePassesX
+            // 
+            this.textBoxVictoryUnitTypePassesX.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "UnitTypePassesX.Value", true));
+            this.textBoxVictoryUnitTypePassesX.Location = new System.Drawing.Point(200, 396);
+            this.textBoxVictoryUnitTypePassesX.Name = "textBoxVictoryUnitTypePassesX";
+            this.textBoxVictoryUnitTypePassesX.Size = new System.Drawing.Size(190, 20);
+            // 
+            // checkBoxVictoryUnitTypePassesZ
+            // 
+            this.checkBoxVictoryUnitTypePassesZ.AutoSize = true;
+            this.checkBoxVictoryUnitTypePassesZ.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "UnitTypePassesZ.Enabled", true));
+            this.checkBoxVictoryUnitTypePassesZ.Location = new System.Drawing.Point(6, 424);
+            this.checkBoxVictoryUnitTypePassesZ.Name = "checkBoxVictoryUnitTypePassesZ";
+            this.checkBoxVictoryUnitTypePassesZ.Size = new System.Drawing.Size(15, 14);
+            // 
+            // labelVictoryUnitTypePassesZ
+            // 
+            this.labelVictoryUnitTypePassesZ.AutoSize = true;
+            this.labelVictoryUnitTypePassesZ.Location = new System.Drawing.Point(27, 425);
+            this.labelVictoryUnitTypePassesZ.Name = "labelVictoryUnitTypePassesZ";
+            this.labelVictoryUnitTypePassesZ.Text = "UnitTypePassesZ";
+            // 
+            // textBoxVictoryUnitTypePassesZ
+            // 
+            this.textBoxVictoryUnitTypePassesZ.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "UnitTypePassesZ.Value", true));
+            this.textBoxVictoryUnitTypePassesZ.Location = new System.Drawing.Point(200, 422);
+            this.textBoxVictoryUnitTypePassesZ.Name = "textBoxVictoryUnitTypePassesZ";
+            this.textBoxVictoryUnitTypePassesZ.Size = new System.Drawing.Size(190, 20);
+            // 
+            // checkBoxVictoryVictoryTimerRunsOut
+            // 
+            this.checkBoxVictoryVictoryTimerRunsOut.AutoSize = true;
+            this.checkBoxVictoryVictoryTimerRunsOut.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "VictoryTimerRunsOut.Enabled", true));
+            this.checkBoxVictoryVictoryTimerRunsOut.Location = new System.Drawing.Point(6, 450);
+            this.checkBoxVictoryVictoryTimerRunsOut.Name = "checkBoxVictoryVictoryTimerRunsOut";
+            this.checkBoxVictoryVictoryTimerRunsOut.Size = new System.Drawing.Size(15, 14);
+            // 
+            // labelVictoryVictoryTimerRunsOut
+            // 
+            this.labelVictoryVictoryTimerRunsOut.AutoSize = true;
+            this.labelVictoryVictoryTimerRunsOut.Location = new System.Drawing.Point(27, 451);
+            this.labelVictoryVictoryTimerRunsOut.Name = "labelVictoryVictoryTimerRunsOut";
+            this.labelVictoryVictoryTimerRunsOut.Text = "VictoryTimerRunsOut";
+            // 
+            // textBoxVictoryVictoryTimerRunsOut
+            // 
+            this.textBoxVictoryVictoryTimerRunsOut.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "VictoryTimerRunsOut.Value", true));
+            this.textBoxVictoryVictoryTimerRunsOut.Location = new System.Drawing.Point(200, 448);
+            this.textBoxVictoryVictoryTimerRunsOut.Name = "textBoxVictoryVictoryTimerRunsOut";
+            this.textBoxVictoryVictoryTimerRunsOut.Size = new System.Drawing.Size(190, 20);
+            // 
             // button2
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point(361, 169);
+            this.button2.Location = new System.Drawing.Point(361, 294);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 1;
@@ -785,7 +1303,7 @@
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(280, 169);
+            this.button1.Location = new System.Drawing.Point(280, 294);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -796,7 +1314,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(448, 204);
+            this.ClientSize = new System.Drawing.Size(448, 329);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.button1);
@@ -827,6 +1345,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown9)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
+            this.tabPage5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -895,6 +1415,61 @@
         private System.Windows.Forms.TextBox textBoxBrief;
         private System.Windows.Forms.Label labelMissionHint;
         private System.Windows.Forms.TextBox textBoxMissionHint;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.Label labelVictoryAllUnitsKilled;
+        private System.Windows.Forms.CheckBox checkBoxVictoryAllUnitsKilled;
+        private System.Windows.Forms.TextBox textBoxVictoryAllUnitsKilled;
+        private System.Windows.Forms.Label labelVictoryAllUnitsKilledOfType;
+        private System.Windows.Forms.CheckBox checkBoxVictoryAllUnitsKilledOfType;
+        private System.Windows.Forms.TextBox textBoxVictoryAllUnitsKilledOfType;
+        private System.Windows.Forms.Label labelVictoryAnyUnitPassesX;
+        private System.Windows.Forms.CheckBox checkBoxVictoryAnyUnitPassesX;
+        private System.Windows.Forms.TextBox textBoxVictoryAnyUnitPassesX;
+        private System.Windows.Forms.Label labelVictoryAnyUnitPassesZ;
+        private System.Windows.Forms.CheckBox checkBoxVictoryAnyUnitPassesZ;
+        private System.Windows.Forms.TextBox textBoxVictoryAnyUnitPassesZ;
+        private System.Windows.Forms.Label labelVictoryBuildUnitType;
+        private System.Windows.Forms.CheckBox checkBoxVictoryBuildUnitType;
+        private System.Windows.Forms.TextBox textBoxVictoryBuildUnitType;
+        private System.Windows.Forms.Label labelVictoryCaptureUnitType;
+        private System.Windows.Forms.CheckBox checkBoxVictoryCaptureUnitType;
+        private System.Windows.Forms.TextBox textBoxVictoryCaptureUnitType;
+        private System.Windows.Forms.Label labelVictoryCommanderKilled;
+        private System.Windows.Forms.CheckBox checkBoxVictoryCommanderKilled;
+        private System.Windows.Forms.TextBox textBoxVictoryCommanderKilled;
+        private System.Windows.Forms.Label labelVictoryDeathTimerRunsOut;
+        private System.Windows.Forms.CheckBox checkBoxVictoryDeathTimerRunsOut;
+        private System.Windows.Forms.TextBox textBoxVictoryDeathTimerRunsOut;
+        private System.Windows.Forms.Label labelVictoryDestroyAllUnits;
+        private System.Windows.Forms.CheckBox checkBoxVictoryDestroyAllUnits;
+        private System.Windows.Forms.TextBox textBoxVictoryDestroyAllUnits;
+        private System.Windows.Forms.Label labelVictoryKillAllMobileUnits;
+        private System.Windows.Forms.CheckBox checkBoxVictoryKillAllMobileUnits;
+        private System.Windows.Forms.TextBox textBoxVictoryKillAllMobileUnits;
+        private System.Windows.Forms.Label labelVictoryKillAllOfType;
+        private System.Windows.Forms.CheckBox checkBoxVictoryKillAllOfType;
+        private System.Windows.Forms.TextBox textBoxVictoryKillAllOfType;
+        private System.Windows.Forms.Label labelVictoryKillEnemyCommander;
+        private System.Windows.Forms.CheckBox checkBoxVictoryKillEnemyCommander;
+        private System.Windows.Forms.TextBox textBoxVictoryKillEnemyCommander;
+        private System.Windows.Forms.Label labelVictoryKillUnitType;
+        private System.Windows.Forms.CheckBox checkBoxVictoryKillUnitType;
+        private System.Windows.Forms.TextBox textBoxVictoryKillUnitType;
+        private System.Windows.Forms.Label labelVictoryMoveUnitToRadius;
+        private System.Windows.Forms.CheckBox checkBoxVictoryMoveUnitToRadius;
+        private System.Windows.Forms.TextBox textBoxVictoryMoveUnitToRadius;
+        private System.Windows.Forms.Label labelVictoryUnitTypeKilled;
+        private System.Windows.Forms.CheckBox checkBoxVictoryUnitTypeKilled;
+        private System.Windows.Forms.TextBox textBoxVictoryUnitTypeKilled;
+        private System.Windows.Forms.Label labelVictoryUnitTypePassesX;
+        private System.Windows.Forms.CheckBox checkBoxVictoryUnitTypePassesX;
+        private System.Windows.Forms.TextBox textBoxVictoryUnitTypePassesX;
+        private System.Windows.Forms.Label labelVictoryUnitTypePassesZ;
+        private System.Windows.Forms.CheckBox checkBoxVictoryUnitTypePassesZ;
+        private System.Windows.Forms.TextBox textBoxVictoryUnitTypePassesZ;
+        private System.Windows.Forms.Label labelVictoryVictoryTimerRunsOut;
+        private System.Windows.Forms.CheckBox checkBoxVictoryVictoryTimerRunsOut;
+        private System.Windows.Forms.TextBox textBoxVictoryVictoryTimerRunsOut;
         public System.Windows.Forms.BindingSource mapAttributesResultBindingSource;
     }
 }
