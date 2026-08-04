@@ -8,6 +8,20 @@ namespace Mappy.Models
 
         public string Memory { get; set; }
 
+        public string MissionHint { get; set; }
+
+        public string Brief { get; set; }
+
+        public string Narration { get; set; }
+
+        public string Glamour { get; set; }
+
+        public string GlamourSound { get; set; }
+
+        public string UseOnlyUnits { get; set; }
+
+        public bool NoMovie { get; set; }
+
         public string AiProfile { get; set; }
 
         public string SchemaType { get; set; }
@@ -75,6 +89,13 @@ namespace Mappy.Models
                     ImpassibleWater = attrs.LavaWorld,
                     MaxWindSpeed = attrs.MaxWindSpeed,
                     Memory = attrs.Memory,
+                    MissionHint = attrs.MissionHint,
+                    Brief = attrs.Brief,
+                    Narration = attrs.Narration,
+                    Glamour = attrs.Glamour,
+                    GlamourSound = attrs.GlamourSound,
+                    UseOnlyUnits = attrs.UseOnlyUnits,
+                    NoMovie = attrs.NoMovie,
                     MeteorDensity = sch.MeteorDensity,
                     MeteorDuration = sch.MeteorDuration,
                     MeteorInterval = sch.MeteorInterval,
@@ -114,6 +135,13 @@ namespace Mappy.Models
             attrs.LavaWorld = this.ImpassibleWater;
             attrs.MaxWindSpeed = this.MaxWindSpeed;
             attrs.Memory = this.Memory;
+            attrs.MissionHint = this.MissionHint ?? string.Empty;
+            attrs.Brief = this.Brief ?? string.Empty;
+            attrs.Narration = this.Narration ?? string.Empty;
+            attrs.Glamour = this.Glamour ?? string.Empty;
+            attrs.GlamourSound = this.GlamourSound ?? string.Empty;
+            attrs.UseOnlyUnits = this.UseOnlyUnits ?? string.Empty;
+            attrs.NoMovie = this.NoMovie;
             attrs.MinWindSpeed = this.MinWindSpeed;
             attrs.Name = this.Name;
             attrs.Planet = this.Planet;
