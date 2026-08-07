@@ -74,41 +74,43 @@ namespace Mappy.Models
 
         public bool WaterDoesDamage { get; set; }
 
-        public OptionalStringAttribute AllUnitsKilled { get; set; } = new OptionalStringAttribute();
+        // Victory (flag conditions write "1" when enabled)
+        public bool KillEnemyCommander { get; set; }
 
-        public OptionalStringAttribute AllUnitsKilledOfType { get; set; } = new OptionalStringAttribute();
+        public bool DestroyAllUnits { get; set; }
 
-        public OptionalStringAttribute AnyUnitPassesX { get; set; } = new OptionalStringAttribute();
+        public string BuildUnitType { get; set; } = string.Empty;
 
-        public OptionalStringAttribute AnyUnitPassesZ { get; set; } = new OptionalStringAttribute();
+        public string KillUnitType { get; set; } = string.Empty;
 
-        public OptionalStringAttribute BuildUnitType { get; set; } = new OptionalStringAttribute();
+        public string MoveUnitToRadius { get; set; } = string.Empty;
 
-        public OptionalStringAttribute CaptureUnitType { get; set; } = new OptionalStringAttribute();
+        public string CaptureUnitType { get; set; } = string.Empty;
 
-        public OptionalStringAttribute CommanderKilled { get; set; } = new OptionalStringAttribute();
+        public bool KillAllMobileUnits { get; set; }
 
-        public OptionalStringAttribute DeathTimerRunsOut { get; set; } = new OptionalStringAttribute();
+        public string KillAllOfType { get; set; } = string.Empty;
 
-        public OptionalStringAttribute DestroyAllUnits { get; set; } = new OptionalStringAttribute();
+        public string UnitTypePassesX { get; set; } = string.Empty;
 
-        public OptionalStringAttribute KillAllMobileUnits { get; set; } = new OptionalStringAttribute();
+        public string UnitTypePassesZ { get; set; } = string.Empty;
 
-        public OptionalStringAttribute KillAllOfType { get; set; } = new OptionalStringAttribute();
+        public string VictoryTimerRunsOut { get; set; } = string.Empty;
 
-        public OptionalStringAttribute KillEnemyCommander { get; set; } = new OptionalStringAttribute();
+        // Defeat
+        public bool CommanderKilled { get; set; }
 
-        public OptionalStringAttribute KillUnitType { get; set; } = new OptionalStringAttribute();
+        public bool AllUnitsKilled { get; set; }
 
-        public OptionalStringAttribute MoveUnitToRadius { get; set; } = new OptionalStringAttribute();
+        public string UnitTypeKilled { get; set; } = string.Empty;
 
-        public OptionalStringAttribute UnitTypeKilled { get; set; } = new OptionalStringAttribute();
+        public string DeathTimerRunsOut { get; set; } = string.Empty;
 
-        public OptionalStringAttribute UnitTypePassesX { get; set; } = new OptionalStringAttribute();
+        public string AllUnitsKilledOfType { get; set; } = string.Empty;
 
-        public OptionalStringAttribute UnitTypePassesZ { get; set; } = new OptionalStringAttribute();
+        public string AnyUnitPassesX { get; set; } = string.Empty;
 
-        public OptionalStringAttribute VictoryTimerRunsOut { get; set; } = new OptionalStringAttribute();
+        public string AnyUnitPassesZ { get; set; } = string.Empty;
 
         public static MapAttributesResult FromModel(IMapModel map)
         {
@@ -120,6 +122,7 @@ namespace Mappy.Models
             }
 
             var sch = attrs.Schemas[si];
+            var conditions = attrs.VictoryConditions;
             return new MapAttributesResult
                 {
                     AiProfile = sch.AiProfile,
@@ -156,24 +159,24 @@ namespace Mappy.Models
                     TidalStrength = attrs.TidalStrength,
                     WaterDamage = attrs.WaterDamage,
                     WaterDoesDamage = attrs.WaterDoesDamage,
-                    AllUnitsKilled = FromVictory(attrs.VictoryConditions, "AllUnitsKilled"),
-                    AllUnitsKilledOfType = FromVictory(attrs.VictoryConditions, "AllUnitsKilledOfType"),
-                    AnyUnitPassesX = FromVictory(attrs.VictoryConditions, "AnyUnitPassesX"),
-                    AnyUnitPassesZ = FromVictory(attrs.VictoryConditions, "AnyUnitPassesZ"),
-                    BuildUnitType = FromVictory(attrs.VictoryConditions, "BuildUnitType"),
-                    CaptureUnitType = FromVictory(attrs.VictoryConditions, "CaptureUnitType"),
-                    CommanderKilled = FromVictory(attrs.VictoryConditions, "CommanderKilled"),
-                    DeathTimerRunsOut = FromVictory(attrs.VictoryConditions, "DeathTimerRunsOut"),
-                    DestroyAllUnits = FromVictory(attrs.VictoryConditions, "DestroyAllUnits"),
-                    KillAllMobileUnits = FromVictory(attrs.VictoryConditions, "KillAllMobileUnits"),
-                    KillAllOfType = FromVictory(attrs.VictoryConditions, "KillAllOfType"),
-                    KillEnemyCommander = FromVictory(attrs.VictoryConditions, "KillEnemyCommander"),
-                    KillUnitType = FromVictory(attrs.VictoryConditions, "KillUnitType"),
-                    MoveUnitToRadius = FromVictory(attrs.VictoryConditions, "MoveUnitToRadius"),
-                    UnitTypeKilled = FromVictory(attrs.VictoryConditions, "UnitTypeKilled"),
-                    UnitTypePassesX = FromVictory(attrs.VictoryConditions, "UnitTypePassesX"),
-                    UnitTypePassesZ = FromVictory(attrs.VictoryConditions, "UnitTypePassesZ"),
-                    VictoryTimerRunsOut = FromVictory(attrs.VictoryConditions, "VictoryTimerRunsOut"),
+                    KillEnemyCommander = HasFlag(conditions, "KillEnemyCommander"),
+                    DestroyAllUnits = HasFlag(conditions, "DestroyAllUnits"),
+                    BuildUnitType = GetValue(conditions, "BuildUnitType"),
+                    KillUnitType = GetValue(conditions, "KillUnitType"),
+                    MoveUnitToRadius = GetValue(conditions, "MoveUnitToRadius"),
+                    CaptureUnitType = GetValue(conditions, "CaptureUnitType"),
+                    KillAllMobileUnits = HasFlag(conditions, "KillAllMobileUnits"),
+                    KillAllOfType = GetValue(conditions, "KillAllOfType"),
+                    UnitTypePassesX = GetValue(conditions, "UnitTypePassesX"),
+                    UnitTypePassesZ = GetValue(conditions, "UnitTypePassesZ"),
+                    VictoryTimerRunsOut = GetValue(conditions, "VictoryTimerRunsOut"),
+                    CommanderKilled = HasFlag(conditions, "CommanderKilled"),
+                    AllUnitsKilled = HasFlag(conditions, "AllUnitsKilled"),
+                    UnitTypeKilled = GetValue(conditions, "UnitTypeKilled"),
+                    DeathTimerRunsOut = GetValue(conditions, "DeathTimerRunsOut"),
+                    AllUnitsKilledOfType = GetValue(conditions, "AllUnitsKilledOfType"),
+                    AnyUnitPassesX = GetValue(conditions, "AnyUnitPassesX"),
+                    AnyUnitPassesZ = GetValue(conditions, "AnyUnitPassesZ"),
                 };
         }
 
@@ -224,41 +227,54 @@ namespace Mappy.Models
             sch.MeteorDuration = this.MeteorDuration;
             sch.MeteorInterval = this.MeteorInterval;
 
-            MergeVictory(attrs.VictoryConditions, "AllUnitsKilled", this.AllUnitsKilled);
-            MergeVictory(attrs.VictoryConditions, "AllUnitsKilledOfType", this.AllUnitsKilledOfType);
-            MergeVictory(attrs.VictoryConditions, "AnyUnitPassesX", this.AnyUnitPassesX);
-            MergeVictory(attrs.VictoryConditions, "AnyUnitPassesZ", this.AnyUnitPassesZ);
-            MergeVictory(attrs.VictoryConditions, "BuildUnitType", this.BuildUnitType);
-            MergeVictory(attrs.VictoryConditions, "CaptureUnitType", this.CaptureUnitType);
-            MergeVictory(attrs.VictoryConditions, "CommanderKilled", this.CommanderKilled);
-            MergeVictory(attrs.VictoryConditions, "DeathTimerRunsOut", this.DeathTimerRunsOut);
-            MergeVictory(attrs.VictoryConditions, "DestroyAllUnits", this.DestroyAllUnits);
-            MergeVictory(attrs.VictoryConditions, "KillAllMobileUnits", this.KillAllMobileUnits);
-            MergeVictory(attrs.VictoryConditions, "KillAllOfType", this.KillAllOfType);
-            MergeVictory(attrs.VictoryConditions, "KillEnemyCommander", this.KillEnemyCommander);
-            MergeVictory(attrs.VictoryConditions, "KillUnitType", this.KillUnitType);
-            MergeVictory(attrs.VictoryConditions, "MoveUnitToRadius", this.MoveUnitToRadius);
-            MergeVictory(attrs.VictoryConditions, "UnitTypeKilled", this.UnitTypeKilled);
-            MergeVictory(attrs.VictoryConditions, "UnitTypePassesX", this.UnitTypePassesX);
-            MergeVictory(attrs.VictoryConditions, "UnitTypePassesZ", this.UnitTypePassesZ);
-            MergeVictory(attrs.VictoryConditions, "VictoryTimerRunsOut", this.VictoryTimerRunsOut);
+            var conditions = attrs.VictoryConditions;
+            MergeFlag(conditions, "KillEnemyCommander", this.KillEnemyCommander);
+            MergeFlag(conditions, "DestroyAllUnits", this.DestroyAllUnits);
+            MergeValue(conditions, "BuildUnitType", this.BuildUnitType);
+            MergeValue(conditions, "KillUnitType", this.KillUnitType);
+            MergeValue(conditions, "MoveUnitToRadius", this.MoveUnitToRadius);
+            MergeValue(conditions, "CaptureUnitType", this.CaptureUnitType);
+            MergeFlag(conditions, "KillAllMobileUnits", this.KillAllMobileUnits);
+            MergeValue(conditions, "KillAllOfType", this.KillAllOfType);
+            MergeValue(conditions, "UnitTypePassesX", this.UnitTypePassesX);
+            MergeValue(conditions, "UnitTypePassesZ", this.UnitTypePassesZ);
+            MergeValue(conditions, "VictoryTimerRunsOut", this.VictoryTimerRunsOut);
+            MergeFlag(conditions, "CommanderKilled", this.CommanderKilled);
+            MergeFlag(conditions, "AllUnitsKilled", this.AllUnitsKilled);
+            MergeValue(conditions, "UnitTypeKilled", this.UnitTypeKilled);
+            MergeValue(conditions, "DeathTimerRunsOut", this.DeathTimerRunsOut);
+            MergeValue(conditions, "AllUnitsKilledOfType", this.AllUnitsKilledOfType);
+            MergeValue(conditions, "AnyUnitPassesX", this.AnyUnitPassesX);
+            MergeValue(conditions, "AnyUnitPassesZ", this.AnyUnitPassesZ);
         }
 
-        private static OptionalStringAttribute FromVictory(IDictionary<string, string> conditions, string key)
+        private static bool HasFlag(IDictionary<string, string> conditions, string key)
         {
-            if (conditions.TryGetValue(key, out var value))
+            return conditions.ContainsKey(key);
+        }
+
+        private static string GetValue(IDictionary<string, string> conditions, string key)
+        {
+            return conditions.TryGetValue(key, out var value) ? value : string.Empty;
+        }
+
+        private static void MergeFlag(IDictionary<string, string> conditions, string key, bool enabled)
+        {
+            if (enabled)
             {
-                return new OptionalStringAttribute { Enabled = true, Value = value };
+                conditions[key] = "1";
             }
-
-            return new OptionalStringAttribute { Enabled = false, Value = string.Empty };
+            else
+            {
+                conditions.Remove(key);
+            }
         }
 
-        private static void MergeVictory(IDictionary<string, string> conditions, string key, OptionalStringAttribute entry)
+        private static void MergeValue(IDictionary<string, string> conditions, string key, string value)
         {
-            if (entry != null && entry.Enabled)
+            if (!string.IsNullOrWhiteSpace(value))
             {
-                conditions[key] = entry.Value ?? string.Empty;
+                conditions[key] = value;
             }
             else
             {
