@@ -368,6 +368,12 @@
     <Compile Include="UI\Forms\MinimapForm.Designer.cs">
       <DependentUpon>MinimapForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Forms\PaletteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\PaletteForm.Designer.cs">
+      <DependentUpon>PaletteForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Forms\NewMapForm.cs">
       <SubType>Form</SubType>
     </Compile>

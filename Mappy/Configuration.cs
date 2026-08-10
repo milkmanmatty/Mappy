@@ -28,6 +28,18 @@ namespace Mappy
 
         public int SidebarTabsWidth { get; set; }
 
+        public bool SidebarFloating { get; set; }
+
+        public int SidebarFloatLocationX { get; set; }
+
+        public int SidebarFloatLocationY { get; set; }
+
+        public int SidebarFloatSizeWidth { get; set; }
+
+        public int SidebarFloatSizeHeight { get; set; }
+
+        public bool HasSidebarFloatBounds { get; set; }
+
         public int MinimapLocationX { get; set; }
 
         public int MinimapLocationY { get; set; }
