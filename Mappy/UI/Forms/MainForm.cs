@@ -18,6 +18,9 @@ namespace Mappy.UI.Forms
 
         private readonly ToolTip minimapModeToolTip;
         private IMainFormViewModel model;
+        private PaletteForm paletteForm;
+        private int dockedSidebarWidth;
+        private bool isPaletteFloating;
 
         public MainForm()
         {
@@ -34,6 +37,7 @@ namespace Mappy.UI.Forms
             this.ConfigureMinimapModeToolTips();
             MappySettings.SettingsSaved += this.OnSettingsSaved;
             this.ApplyAdjustmentWheelSteps();
+            this.dockedSidebarWidth = this.sidebarTabs.Width;
         }
 
         private void ConfigureMinimapModeToolTips()
@@ -504,6 +508,11 @@ namespace Mappy.UI.Forms
             this.RestoreWindowState();
             this.FormClosed += this.MainFormFormClosed;
             this.model.Load();
+
+            if (MappySettings.Settings.SidebarFloating)
+            {
+                this.FloatPalette();
+            }
         }
 
         private void RestoreWindowState()
@@ -543,6 +552,13 @@ namespace Mappy.UI.Forms
                 return;
             }
 
+            this.dockedSidebarWidth = settings.SidebarTabsWidth;
+
+            if (this.isPaletteFloating)
+            {
+                return;
+            }
+
             var minWidth = this.sidebarSplitter.MinSize;
             var maxWidth = this.ClientSize.Width - this.sidebarSplitter.MinExtra;
             if (maxWidth < minWidth)
@@ -551,6 +567,7 @@ namespace Mappy.UI.Forms
             }
 
             this.sidebarTabs.Width = Math.Max(minWidth, Math.Min(maxWidth, settings.SidebarTabsWidth));
+            this.dockedSidebarWidth = this.sidebarTabs.Width;
         }
 
         private bool IsBoundsOnAnyScreen(Rectangle bounds)
@@ -582,7 +599,121 @@ namespace Mappy.UI.Forms
             settings.WindowLocationY = bounds.Y;
             settings.WindowSizeWidth = bounds.Width;
             settings.WindowSizeHeight = bounds.Height;
-            settings.SidebarTabsWidth = this.sidebarTabs.Width;
+            settings.SidebarFloating = this.isPaletteFloating;
+            if (this.isPaletteFloating)
+            {
+                settings.SidebarTabsWidth = this.dockedSidebarWidth;
+                this.paletteForm?.SaveBoundsToSettings();
+            }
+            else
+            {
+                settings.SidebarTabsWidth = this.sidebarTabs.Width;
+            }
+
+            MappySettings.SaveSettings();
+        }
+
+        private void EnsurePaletteForm()
+        {
+            if (this.paletteForm != null)
+            {
+                return;
+            }
+
+            this.paletteForm = new PaletteForm
+            {
+                Owner = this,
+                Icon = this.Icon,
+            };
+            this.paletteForm.DockRequested += (s, e) => this.DockPalette();
+            this.paletteForm.PaletteKeyDown += this.PaletteForm_KeyDown;
+        }
+
+        internal bool ProcessPaletteCmdKey(ref Message msg, Keys keyData)
+        {
+            return this.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void FloatPaletteMenuItemClick(object sender, EventArgs e)
+        {
+            if (this.isPaletteFloating)
+            {
+                this.DockPalette();
+            }
+            else
+            {
+                this.FloatPalette();
+            }
+        }
+
+        private void FloatPalette()
+        {
+            if (this.isPaletteFloating)
+            {
+                return;
+            }
+
+            this.EnsurePaletteForm();
+            this.dockedSidebarWidth = this.sidebarTabs.Width > 0
+                ? this.sidebarTabs.Width
+                : this.dockedSidebarWidth;
+
+            this.Controls.Remove(this.sidebarTabs);
+            this.sidebarSplitter.Visible = false;
+
+            this.sidebarTabs.Dock = DockStyle.Fill;
+            this.paletteForm.Controls.Add(this.sidebarTabs);
+
+            var settings = MappySettings.Settings;
+            if (!this.paletteForm.TryRestoreBoundsFromSettings())
+            {
+                this.paletteForm.PlaceNearOwner(this, this.dockedSidebarWidth);
+            }
+
+            this.isPaletteFloating = true;
+            this.floatPaletteMenuItem.Checked = true;
+            settings.SidebarFloating = true;
+            this.paletteForm.Show();
+            MappySettings.SaveSettings();
+        }
+
+        private void DockPalette()
+        {
+            if (!this.isPaletteFloating)
+            {
+                return;
+            }
+
+            this.paletteForm?.SaveBoundsToSettings();
+            this.paletteForm.Hide();
+            this.paletteForm.Controls.Remove(this.sidebarTabs);
+
+            this.sidebarTabs.Dock = DockStyle.Left;
+            this.Controls.Add(this.sidebarTabs);
+            this.Controls.SetChildIndex(
+                this.sidebarTabs,
+                this.Controls.GetChildIndex(this.sidebarSplitter) + 1);
+
+            this.sidebarSplitter.Visible = true;
+            var width = this.dockedSidebarWidth > 0
+                ? this.dockedSidebarWidth
+                : MappySettings.Settings.SidebarTabsWidth;
+            if (width > 0)
+            {
+                var minWidth = this.sidebarSplitter.MinSize;
+                var maxWidth = this.ClientSize.Width - this.sidebarSplitter.MinExtra;
+                if (maxWidth < minWidth)
+                {
+                    maxWidth = minWidth;
+                }
+
+                this.sidebarTabs.Width = Math.Max(minWidth, Math.Min(maxWidth, width));
+                this.dockedSidebarWidth = this.sidebarTabs.Width;
+            }
+
+            this.isPaletteFloating = false;
+            this.floatPaletteMenuItem.Checked = false;
+            MappySettings.Settings.SidebarFloating = false;
             MappySettings.SaveSettings();
         }
 
@@ -662,48 +793,16 @@ namespace Mappy.UI.Forms
             this.model.ChangeSelectedTabType(Util.MapTabNameToGUIType(this.sidebarTabs.SelectedTab.Name));
         }
 
+        private void PaletteForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            this.TryHandlePaletteTabShortcut(e);
+        }
+
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Control && e.KeyCode == Keys.D1)
+            if (this.TryHandlePaletteTabShortcut(e))
             {
-                this.sidebarTabs.SelectedTab = this.sectionsTab;
-                e.Handled = true;
-            }
-
-            if (e.Control && e.KeyCode == Keys.D2)
-            {
-                this.sidebarTabs.SelectedTab = this.featuresTab;
-                e.Handled = true;
-            }
-
-            if (e.Control && e.KeyCode == Keys.D3)
-            {
-                this.sidebarTabs.SelectedTab = this.startPositionsTab;
-                e.Handled = true;
-            }
-
-            if (e.Control && e.KeyCode == Keys.D4)
-            {
-                this.sidebarTabs.SelectedTab = this.heightTab;
-                e.Handled = true;
-            }
-
-            if (e.Control && e.KeyCode == Keys.D5)
-            {
-                this.sidebarTabs.SelectedTab = this.voidTab;
-                e.Handled = true;
-            }
-
-            if (e.Control && e.KeyCode == Keys.D6)
-            {
-                this.sidebarTabs.SelectedTab = this.attributesTab;
-                e.Handled = true;
-            }
-
-            if (e.Control && e.KeyCode == Keys.D7 && this.missionTab != null)
-            {
-                this.sidebarTabs.SelectedTab = this.missionTab;
-                e.Handled = true;
+                return;
             }
 
             if (e.Shift && e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
@@ -712,6 +811,53 @@ namespace Mappy.UI.Forms
                 this.model.CenterViewOnStartPosition(playerIndex);
                 e.Handled = true;
             }
+        }
+
+        private bool TryHandlePaletteTabShortcut(KeyEventArgs e)
+        {
+            if (!e.Control)
+            {
+                return false;
+            }
+
+            TabPage target = null;
+            if (e.KeyCode == Keys.D1)
+            {
+                target = this.sectionsTab;
+            }
+            else if (e.KeyCode == Keys.D2)
+            {
+                target = this.featuresTab;
+            }
+            else if (e.KeyCode == Keys.D3)
+            {
+                target = this.startPositionsTab;
+            }
+            else if (e.KeyCode == Keys.D4)
+            {
+                target = this.heightTab;
+            }
+            else if (e.KeyCode == Keys.D5)
+            {
+                target = this.voidTab;
+            }
+            else if (e.KeyCode == Keys.D6)
+            {
+                target = this.attributesTab;
+            }
+            else if (e.KeyCode == Keys.D7 && this.missionTab != null)
+            {
+                target = this.missionTab;
+            }
+
+            if (target == null)
+            {
+                return false;
+            }
+
+            this.sidebarTabs.SelectedTab = target;
+            e.Handled = true;
+            return true;
         }
     }
 }

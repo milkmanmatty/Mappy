@@ -83,6 +83,7 @@ namespace Mappy.UI.Forms
 	        this.toggleHeightmapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.toggleHeightGridMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.toggleMinimapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.floatPaletteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.toggleVoidsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.gridMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.gridOffMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -529,7 +530,7 @@ namespace Mappy.UI.Forms
 	        // 
 	        // viewMenuItem
 	        // 
-	        this.viewMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.toggleHeightmapMenuItem, this.toggleHeightGridMenuItem, this.toggleMinimapMenuItem, this.toggleVoidsMenuItem, this.gridMenuItem, this.toggleFeaturesMenuItem });
+	        this.viewMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.toggleHeightmapMenuItem, this.toggleHeightGridMenuItem, this.toggleMinimapMenuItem, this.floatPaletteMenuItem, this.toggleVoidsMenuItem, this.gridMenuItem, this.toggleFeaturesMenuItem });
 	        this.viewMenuItem.Name = "viewMenuItem";
 	        this.viewMenuItem.Size = new System.Drawing.Size(61, 29);
 	        this.viewMenuItem.Text = "&View";
@@ -556,6 +557,13 @@ namespace Mappy.UI.Forms
 	        this.toggleMinimapMenuItem.Size = new System.Drawing.Size(315, 30);
 	        this.toggleMinimapMenuItem.Text = "&Minimap";
 	        this.toggleMinimapMenuItem.Click += new System.EventHandler(this.ToggleMinimapMenuItemClick);
+	        // 
+	        // floatPaletteMenuItem
+	        // 
+	        this.floatPaletteMenuItem.Name = "floatPaletteMenuItem";
+	        this.floatPaletteMenuItem.Size = new System.Drawing.Size(315, 30);
+	        this.floatPaletteMenuItem.Text = "Float &Palette";
+	        this.floatPaletteMenuItem.Click += new System.EventHandler(this.FloatPaletteMenuItemClick);
 	        // 
 	        // toggleVoidsMenuItem
 	        // 
@@ -1169,6 +1177,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripMenuItem saveAsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toggleMinimapMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem floatPaletteMenuItem;
         private System.Windows.Forms.ToolStripMenuItem undoMenuItem;
         private System.Windows.Forms.ToolStripMenuItem redoMenuItem;
         private Mappy.UI.Controls.SectionView sectionsView;
