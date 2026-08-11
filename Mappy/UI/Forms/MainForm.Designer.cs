@@ -142,6 +142,9 @@ namespace Mappy.UI.Forms
 	        this.heightLabel = new System.Windows.Forms.ToolStripStatusLabel();
 	        this.voidLabel = new System.Windows.Forms.ToolStripStatusLabel();
 	        this.hoveredFeatureLabel = new System.Windows.Forms.ToolStripStatusLabel();
+	        this.zoomTrackBar = new Mappy.UI.Controls.StepTrackBar();
+	        this.zoomTrackBarHost = new System.Windows.Forms.ToolStripControlHost(this.zoomTrackBar);
+	        this.zoomValueLabel = new System.Windows.Forms.ToolStripStatusLabel();
 	        this.mapViewPanel = new Mappy.UI.Controls.MapViewPanel();
 	        toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 	        toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -168,6 +171,7 @@ namespace Mappy.UI.Forms
 	        ((System.ComponentModel.ISupportInitialize)(this.voidCursorSizeNumericUpDown)).BeginInit();
 	        this.attributesTab.SuspendLayout();
 	        ((System.ComponentModel.ISupportInitialize)(this.seaLevelTrackbar)).BeginInit();
+	        ((System.ComponentModel.ISupportInitialize)(this.zoomTrackBar)).BeginInit();
 	        this.statusStrip.SuspendLayout();
 	        this.SuspendLayout();
 	        // 
@@ -1075,7 +1079,7 @@ namespace Mappy.UI.Forms
 	        // statusStrip
 	        // 
 	        this.statusStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
-	        this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.mousePositionLabel, this.heightLabel, this.voidLabel, this.hoveredFeatureLabel });
+	        this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.mousePositionLabel, this.heightLabel, this.voidLabel, this.hoveredFeatureLabel, this.zoomTrackBarHost, this.zoomValueLabel });
 	        this.statusStrip.Location = new System.Drawing.Point(328, 835);
 	        this.statusStrip.Name = "statusStrip";
 	        this.statusStrip.Padding = new System.Windows.Forms.Padding(2, 0, 21, 0);
@@ -1105,7 +1109,32 @@ namespace Mappy.UI.Forms
 	        // 
 	        this.hoveredFeatureLabel.Name = "hoveredFeatureLabel";
 	        this.hoveredFeatureLabel.Size = new System.Drawing.Size(33, 25);
+	        this.hoveredFeatureLabel.Spring = true;
 	        this.hoveredFeatureLabel.Text = "---";
+	        this.hoveredFeatureLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+	        // 
+	        // zoomTrackBar
+	        // 
+	        this.zoomTrackBar.AutoSize = false;
+	        this.zoomTrackBar.BackColor = System.Drawing.SystemColors.Control;
+	        this.zoomTrackBar.Name = "zoomTrackBar";
+	        this.zoomTrackBar.Size = new System.Drawing.Size(120, 24);
+	        this.zoomTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
+	        this.zoomTrackBar.ValueChanged += new System.EventHandler(this.ZoomTrackBarValueChanged);
+	        // 
+	        // zoomTrackBarHost
+	        // 
+	        this.zoomTrackBarHost.AutoSize = false;
+	        this.zoomTrackBarHost.Name = "zoomTrackBarHost";
+	        this.zoomTrackBarHost.Size = new System.Drawing.Size(120, 24);
+	        // 
+	        // zoomValueLabel
+	        // 
+	        this.zoomValueLabel.AutoSize = false;
+	        this.zoomValueLabel.Name = "zoomValueLabel";
+	        this.zoomValueLabel.Size = new System.Drawing.Size(56, 25);
+	        this.zoomValueLabel.Text = "100%";
+	        this.zoomValueLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 	        // 
 	        // mapViewPanel
 	        // 
@@ -1155,6 +1184,7 @@ namespace Mappy.UI.Forms
 	        this.attributesTab.ResumeLayout(false);
 	        this.attributesTab.PerformLayout();
 	        ((System.ComponentModel.ISupportInitialize)(this.seaLevelTrackbar)).EndInit();
+	        ((System.ComponentModel.ISupportInitialize)(this.zoomTrackBar)).EndInit();
 	        this.statusStrip.ResumeLayout(false);
 	        this.statusStrip.PerformLayout();
 	        this.ResumeLayout(false);
@@ -1252,6 +1282,9 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripStatusLabel heightLabel;
         private System.Windows.Forms.ToolStripStatusLabel voidLabel;
         private System.Windows.Forms.ToolStripStatusLabel hoveredFeatureLabel;
+        private Mappy.UI.Controls.StepTrackBar zoomTrackBar;
+        private System.Windows.Forms.ToolStripControlHost zoomTrackBarHost;
+        private System.Windows.Forms.ToolStripStatusLabel zoomValueLabel;
         private System.Windows.Forms.ToolStripMenuItem fillMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resizeMapMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportSectionMenuItem;
