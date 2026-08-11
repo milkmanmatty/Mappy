@@ -37,15 +37,29 @@ namespace Mappy.UI.Controls
             this.mapView.Layers.Add(new DummyLayer());
             this.mapView.Layers.Add(new DummyLayer());
             this.mapView.ShiftMouseWheelHandler = this.ShiftMouseWheel;
+            this.mapView.ZoomFactorChanged += this.MapViewZoomFactorChanged;
 
             this.dragScrollTimer.Tick += this.DragScrollTimerTick;
             this.Disposed += this.MapViewPanelDisposed;
         }
 
+        public event EventHandler ZoomChanged;
+
+        public static int ZoomLevelCount => LayerView.ZoomLevelCount;
+
+        public int ZoomLevelIndex => this.mapView.ZoomLevelIndex;
+
+        public float ZoomFactor => this.mapView.ZoomFactor;
+
+        public void SetZoomLevelIndex(int levelIndex)
+        {
+            this.mapView.SetZoomLevelIndex(levelIndex);
+        }
+
         public void SetModel(IMapViewViewModel newModel)
         {
             newModel.CanvasSize.Subscribe(x => this.mapView.CanvasSize = x);
-            newModel.ViewportLocation.Subscribe(x => this.mapView.AutoScrollPosition = x);
+            newModel.ViewportLocation.Subscribe(x => this.mapView.ScrollToVirtualLocation(x));
             newModel.HeightEditMode.Subscribe(this.OnHeightEditModeChanged);
             newModel.VoidEditMode.Subscribe(this.OnVoidEditModeChanged);
 
@@ -182,7 +196,18 @@ namespace Mappy.UI.Controls
             // this null check has to be here
             // since it seems this event fires during construction,
             // before we get a chance to assign the model.
-            this.model?.ClientSizeChanged(this.mapView.ClientSize);
+            this.model?.ClientSizeChanged(this.mapView.VisibleVirtualSize);
+        }
+
+        private void MapViewZoomFactorChanged(object sender, EventArgs e)
+        {
+            if (this.model != null)
+            {
+                this.model.ClientSizeChanged(this.mapView.VisibleVirtualSize);
+                this.NotifyViewportMoved();
+            }
+
+            this.ZoomChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void MapViewDragEnter(object sender, DragEventArgs e)
@@ -199,21 +224,26 @@ namespace Mappy.UI.Controls
             var pos = this.mapView.AutoScrollPosition;
             if (pos != this.oldAutoScrollPos)
             {
-                var loc = new Point(pos.X * -1, pos.Y * -1);
-                this.model.ScrollPositionChanged(loc);
                 this.oldAutoScrollPos = pos;
+                this.NotifyViewportMoved();
+            }
+        }
 
-                // Keep hover/height-cursor preview aligned when viewport moves without mouse move.
-                var clientPoint = this.mapView.PointToClient(Cursor.Position);
-                if (this.mapView.ClientRectangle.Contains(clientPoint))
-                {
-                    this.model.MouseMove(this.mapView.ToVirtualPoint(clientPoint));
-                }
+        private void NotifyViewportMoved()
+        {
+            this.model.ScrollPositionChanged(this.mapView.ToVirtualPoint(Point.Empty));
+
+            // Keep hover/height-cursor preview aligned when viewport moves without mouse move.
+            var clientPoint = this.mapView.PointToClient(Cursor.Position);
+            if (this.mapView.ClientRectangle.Contains(clientPoint))
+            {
+                this.model.MouseMove(this.mapView.ToVirtualPoint(clientPoint));
             }
         }
 
         private void MapViewPanelDisposed(object sender, EventArgs e)
         {
+            this.mapView.ZoomFactorChanged -= this.MapViewZoomFactorChanged;
             this.dragScrollTimer.Stop();
             this.dragScrollTimer.Tick -= this.DragScrollTimerTick;
             this.dragScrollTimer.Dispose();
@@ -247,11 +277,10 @@ namespace Mappy.UI.Controls
             }
 
             var scrollPos = this.GetScrollPosition();
-            var maxX = Math.Max(this.mapView.CanvasSize.Width - this.mapView.ClientSize.Width, 0);
-            var maxY = Math.Max(this.mapView.CanvasSize.Height - this.mapView.ClientSize.Height, 0);
+            var max = this.mapView.MaxScrollPosition;
             var next = new Point(
-                this.Clamp(scrollPos.X - deltaX, 0, maxX),
-                this.Clamp(scrollPos.Y - deltaY, 0, maxY));
+                this.Clamp(scrollPos.X - deltaX, 0, max.X),
+                this.Clamp(scrollPos.Y - deltaY, 0, max.Y));
 
             if (next != scrollPos)
             {
@@ -326,12 +355,11 @@ namespace Mappy.UI.Controls
                 return;
             }
 
-            var maxX = Math.Max(this.mapView.CanvasSize.Width - this.mapView.ClientSize.Width, 0);
-            var maxY = Math.Max(this.mapView.CanvasSize.Height - this.mapView.ClientSize.Height, 0);
+            var max = this.mapView.MaxScrollPosition;
 
             var next = new Point(
-                this.Clamp(viewport.X + deltaX, 0, maxX),
-                this.Clamp(viewport.Y + deltaY, 0, maxY));
+                this.Clamp(viewport.X + deltaX, 0, max.X),
+                this.Clamp(viewport.Y + deltaY, 0, max.Y));
 
             if (next != viewport)
             {

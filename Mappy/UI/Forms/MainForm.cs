@@ -21,6 +21,7 @@ namespace Mappy.UI.Forms
         private PaletteForm paletteForm;
         private int dockedSidebarWidth;
         private bool isPaletteFloating;
+        private bool updatingZoomControls;
 
         public MainForm()
         {
@@ -35,6 +36,7 @@ namespace Mappy.UI.Forms
                 ShowAlways = true,
             };
             this.ConfigureMinimapModeToolTips();
+            this.ConfigureZoomControls();
             MappySettings.SettingsSaved += this.OnSettingsSaved;
             this.ApplyAdjustmentWheelSteps();
             this.dockedSidebarWidth = this.sidebarTabs.Width;
@@ -90,6 +92,51 @@ namespace Mappy.UI.Forms
         private void EditMenuDropDownClosed(object sender, ToolStripDropDownClosedEventArgs e)
         {
             this.minimapModeToolTip.Hide(this.editMenuItem.DropDown);
+        }
+
+        private void ConfigureZoomControls()
+        {
+            this.zoomTrackBar.Minimum = 0;
+            this.zoomTrackBar.Maximum = MapViewPanel.ZoomLevelCount - 1;
+            this.zoomTrackBar.MouseWheelStep = 1;
+
+            var zoomToolTip = new ToolTip(this.components);
+            zoomToolTip.SetToolTip(this.zoomTrackBar, @"Zoom (Ctrl+Mouse Wheel over the map)");
+
+            this.mapViewPanel.ZoomChanged += this.MapViewPanelZoomChanged;
+            this.RefreshZoomControls();
+        }
+
+        private void MapViewPanelZoomChanged(object sender, EventArgs e)
+        {
+            this.RefreshZoomControls();
+        }
+
+        private void RefreshZoomControls()
+        {
+            // Guard against the slider echoing the change we are pushing into it.
+            this.updatingZoomControls = true;
+            try
+            {
+                this.zoomTrackBar.Value = this.mapViewPanel.ZoomLevelIndex;
+            }
+            finally
+            {
+                this.updatingZoomControls = false;
+            }
+
+            this.zoomValueLabel.Text = (this.mapViewPanel.ZoomFactor * 100)
+                .ToString("0.##", CultureInfo.CurrentCulture) + "%";
+        }
+
+        private void ZoomTrackBarValueChanged(object sender, EventArgs e)
+        {
+            if (this.updatingZoomControls)
+            {
+                return;
+            }
+
+            this.mapViewPanel.SetZoomLevelIndex(this.zoomTrackBar.Value);
         }
 
         private void OnSettingsSaved(object sender, EventArgs e)
