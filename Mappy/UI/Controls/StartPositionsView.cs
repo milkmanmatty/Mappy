@@ -22,8 +22,11 @@
 
         private void PopulateList()
         {
-            var im = new ImageList();
-            im.ImageSize = new Size(64, 64);
+            var im = new ImageList
+            {
+                ImageSize = new Size(64, 64),
+                ColorDepth = ColorDepth.Depth32Bit,
+            };
 
             for (var i = 0; i < 10; i++)
             {

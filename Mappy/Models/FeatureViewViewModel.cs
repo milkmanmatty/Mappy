@@ -3,6 +3,7 @@ namespace Mappy.Models
     using System;
     using System.Collections.Generic;
     using System.Drawing;
+    using System.Drawing.Drawing2D;
     using System.Linq;
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
@@ -102,36 +103,45 @@ namespace Mappy.Models
 
         private static Bitmap RescaleImage(Bitmap img)
         {
-            var outWidth = 64;
-            var outHeight = 64;
+            var outWidth = 128;
+            var outHeight = 128;
 
-            var thumb = new Bitmap(outWidth, outHeight);
-            var g = Graphics.FromImage(thumb);
-
-            var ratioX = outWidth / (double)img.Width;
-            var ratioY = outHeight / (double)img.Height;
-
-            // use the smaller ratio
-            var ratio = Math.Min(ratioX, ratioY);
-
-            int newWidth;
-            int newHeight;
-            if (img.Width <= outWidth && img.Height <= outHeight)
+            var thumb = new Bitmap(outWidth, outHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            using (var g = Graphics.FromImage(thumb))
             {
-                // keep original image size if smaller
-                newWidth = img.Width;
-                newHeight = img.Height;
-            }
-            else
-            {
-                newWidth = (int)(img.Width * ratio);
-                newHeight = (int)(img.Height * ratio);
-            }
+                g.Clear(Color.Transparent);
+                g.CompositingMode = CompositingMode.SourceOver;
+                g.CompositingQuality = CompositingQuality.HighQuality;
 
-            var posX = (outWidth - newWidth) / 2;
-            var posY = (outHeight - newHeight) / 2;
+                var ratioX = outWidth / (double)img.Width;
+                var ratioY = outHeight / (double)img.Height;
 
-            g.DrawImage(img, posX, posY, newWidth, newHeight);
+                // use the smaller ratio
+                var ratio = Math.Min(ratioX, ratioY);
+
+                int newWidth;
+                int newHeight;
+                if (img.Width <= outWidth && img.Height <= outHeight)
+                {
+                    // keep original image size if smaller
+                    newWidth = img.Width;
+                    newHeight = img.Height;
+                    g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                    g.PixelOffsetMode = PixelOffsetMode.Half;
+                }
+                else
+                {
+                    newWidth = Math.Max(1, (int)(img.Width * ratio));
+                    newHeight = Math.Max(1, (int)(img.Height * ratio));
+                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                }
+
+                var posX = (outWidth - newWidth) / 2;
+                var posY = (outHeight - newHeight) / 2;
+
+                g.DrawImage(img, posX, posY, newWidth, newHeight);
+            }
 
             return thumb;
         }
