@@ -365,8 +365,9 @@ namespace Mappy.Util
             Action<int> reportProgress,
             Func<bool> shouldCancel)
         {
-            var width = map.Width * 32;
-            var height = map.Height * 32;
+            // Exclude 1 tile on the right, and 4 tiles at the bottom.
+            var width = Math.Max(1, (map.Width * 32) - 32);
+            var height = Math.Max(1, (map.Height * 32) - 128);
             var totalTiles = map.Width * map.Height;
 
             using (var full = new Bitmap(width, height, PixelFormat.Format32bppArgb))
@@ -388,6 +389,18 @@ namespace Mappy.Util
                                 return false;
                             }
 
+                            var destX = tileX * 32;
+                            var destY = tileY * 32;
+                            if (destX >= width || destY >= height)
+                            {
+                                tilesProcessed++;
+                                reportProgress((tilesProcessed * 100) / totalTiles);
+                                continue;
+                            }
+
+                            var copyWidth = Math.Min(32, width - destX);
+                            var copyHeight = Math.Min(32, height - destY);
+
                             var tile = map.Get(tileX, tileY);
                             var tileData = tile.LockBits(
                                 new Rectangle(0, 0, 32, 32),
@@ -400,15 +413,15 @@ namespace Mappy.Util
                                 {
                                     var src = (byte*)tileData.Scan0;
                                     var dst = (byte*)targetData.Scan0
-                                        + (targetData.Stride * (tileY * 32))
-                                        + (tileX * 32 * 4);
-                                    for (var row = 0; row < 32; row++)
+                                        + (targetData.Stride * destY)
+                                        + (destX * 4);
+                                    for (var row = 0; row < copyHeight; row++)
                                     {
                                         Buffer.MemoryCopy(
                                             src + (row * tileData.Stride),
                                             dst + (row * targetData.Stride),
-                                            32 * 4,
-                                            32 * 4);
+                                            copyWidth * 4,
+                                            copyWidth * 4);
                                     }
                                 }
                             }
