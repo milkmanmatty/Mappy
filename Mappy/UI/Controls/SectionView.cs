@@ -96,7 +96,11 @@
             lv.Items.Clear();
 
             // update the images list
-            var images = new ImageList { ImageSize = this.ImageSize };
+            var images = new ImageList
+            {
+                ImageSize = this.ImageSize,
+                ColorDepth = ColorDepth.Depth32Bit,
+            };
             foreach (var x in sections)
             {
                 images.Images.Add(x.Image);

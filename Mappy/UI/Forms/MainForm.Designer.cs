@@ -858,7 +858,7 @@ namespace Mappy.UI.Forms
 	        // featureView
 	        // 
 	        this.featureView.Dock = System.Windows.Forms.DockStyle.Fill;
-	        this.featureView.ImageSize = new System.Drawing.Size(64, 64);
+	        this.featureView.ImageSize = new System.Drawing.Size(128, 128);
 	        this.featureView.Location = new System.Drawing.Point(4, 5);
 	        this.featureView.Margin = new System.Windows.Forms.Padding(6);
 	        this.featureView.Name = "featureView";
