@@ -702,7 +702,12 @@ namespace Mappy.Models
             }
             else
             {
-                targetCount = Math.Max(1, (int)Math.Round(candidates.Count * options.DensityPercent / 100.0));
+                targetCount = (int)Math.Round(candidates.Count * options.DensityPercent / 100m);
+            }
+
+            if (targetCount <= 0)
+            {
+                return;
             }
             var paddingSq = (double)options.Padding * options.Padding;
             var paddingRadiusCells = (int)Math.Ceiling(options.Padding / 16.0);
