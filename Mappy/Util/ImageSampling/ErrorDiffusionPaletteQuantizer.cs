@@ -115,18 +115,18 @@ namespace Mappy.Util.ImageSampling
                             var here = (x + 1) * 3;
                             var forward = (x + scanDirection + 1) * 3;
                             var backward = (x - scanDirection + 1) * 3;
-                            var source = Color.FromArgb(row[x]);
+                            var source = row[x];
 
-                            var red = ClampToByte(source.R + RoundError(currentErrors[here]));
-                            var green = ClampToByte(source.G + RoundError(currentErrors[here + 1]));
-                            var blue = ClampToByte(source.B + RoundError(currentErrors[here + 2]));
+                            var red = ClampToByte(((source >> 16) & 0xFF) + RoundError(currentErrors[here]));
+                            var green = ClampToByte(((source >> 8) & 0xFF) + RoundError(currentErrors[here + 1]));
+                            var blue = ClampToByte((source & 0xFF) + RoundError(currentErrors[here + 2]));
 
                             var nearest = FindNearest(subset, red, green, blue);
-                            row[x] = nearest.Color.ToArgb();
+                            row[x] = nearest.Argb;
 
-                            var redError = red - nearest.Color.R;
-                            var greenError = green - nearest.Color.G;
-                            var blueError = blue - nearest.Color.B;
+                            var redError = red - nearest.R;
+                            var greenError = green - nearest.G;
+                            var blueError = blue - nearest.B;
 
                             AddError(currentErrors, forward, redError, greenError, blueError, 7);
                             AddError(nextErrors, backward, redError, greenError, blueError, 3);
@@ -190,6 +190,8 @@ namespace Mappy.Util.ImageSampling
             }
 
             var used = new bool[palette.Count];
+            var seenArgb = new HashSet<int>();
+            var usedCount = 0;
             var lastProgress = 0;
             var totalPixels = sourceImages.Sum(x => (long)x.Width * x.Height);
             long processedPixels = 0;
@@ -200,13 +202,15 @@ namespace Mappy.Util.ImageSampling
                         sourceImages[i],
                         paletteArgb,
                         used,
+                        seenArgb,
+                        ref usedCount,
                         shouldCancel,
                         processed =>
                         {
                             processedPixels += processed;
                             var progress = totalPixels == 0
                                 ? 20
-                                : (int)((processedPixels * 20) / totalPixels);
+                                : Math.Min(20, (int)((processedPixels * 20) / totalPixels));
                             if (progress > lastProgress)
                             {
                                 reportProgress(progress);
@@ -216,9 +220,14 @@ namespace Mappy.Util.ImageSampling
                 {
                     return null;
                 }
+
+                if (usedCount == palette.Count)
+                {
+                    break;
+                }
             }
 
-            if (sourceImages.Count == 0)
+            if (lastProgress < 20)
             {
                 reportProgress(20);
             }
@@ -288,11 +297,14 @@ namespace Mappy.Util.ImageSampling
             Bitmap bitmap,
             IDictionary<int, List<int>> paletteArgb,
             bool[] used,
+            HashSet<int> seenArgb,
+            ref int usedCount,
             Func<bool> shouldCancel,
             Action<int> reportPixelsProcessed)
         {
             var rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
             var data = bitmap.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            var paletteSize = used.Length;
 
             try
             {
@@ -308,14 +320,31 @@ namespace Mappy.Util.ImageSampling
                         var row = (int*)((byte*)data.Scan0 + (y * data.Stride));
                         for (var x = 0; x < bitmap.Width; x++)
                         {
-                            if (!paletteArgb.TryGetValue(row[x], out var indices))
+                            var argb = row[x];
+                            if (!seenArgb.Add(argb))
+                            {
+                                continue;
+                            }
+
+                            if (!paletteArgb.TryGetValue(argb, out var indices))
                             {
                                 continue;
                             }
 
                             foreach (var index in indices)
                             {
+                                if (used[index])
+                                {
+                                    continue;
+                                }
+
                                 used[index] = true;
+                                usedCount++;
+                            }
+
+                            if (usedCount == paletteSize)
+                            {
+                                return true;
                             }
                         }
 
@@ -376,11 +405,20 @@ namespace Mappy.Util.ImageSampling
         {
             public PaletteEntry(Color color)
             {
-                this.Color = color;
+                this.Argb = color.ToArgb();
+                this.R = color.R;
+                this.G = color.G;
+                this.B = color.B;
                 this.Oklab = ToOklab(color.R, color.G, color.B);
             }
 
-            public Color Color { get; }
+            public int Argb { get; }
+
+            public int R { get; }
+
+            public int G { get; }
+
+            public int B { get; }
 
             public OklabColor Oklab { get; }
         }
