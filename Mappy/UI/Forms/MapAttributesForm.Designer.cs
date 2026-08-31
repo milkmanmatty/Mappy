@@ -46,6 +46,8 @@ namespace Mappy.UI.Forms
             this.label10 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.maxWindInGameLabel = new System.Windows.Forms.Label();
+            this.minWindInGameLabel = new System.Windows.Forms.Label();
             this.numericUpDown8 = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
@@ -293,6 +295,8 @@ namespace Mappy.UI.Forms
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.maxWindInGameLabel);
+            this.tabPage2.Controls.Add(this.minWindInGameLabel);
             this.tabPage2.Controls.Add(this.numericUpDown8);
             this.tabPage2.Controls.Add(this.label9);
             this.tabPage2.Controls.Add(this.numericUpDown7);
@@ -320,7 +324,7 @@ namespace Mappy.UI.Forms
             // numericUpDown8
             // 
             this.numericUpDown8.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.mapAttributesResultBindingSource, "MohoMetal", true));
-            this.numericUpDown8.Location = new System.Drawing.Point(304, 62);
+            this.numericUpDown8.Location = new System.Drawing.Point(304, 78);
             this.numericUpDown8.Maximum = new decimal(new int[] {
             20000,
             0,
@@ -333,7 +337,7 @@ namespace Mappy.UI.Forms
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(301, 46);
+            this.label9.Location = new System.Drawing.Point(301, 62);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(63, 13);
             this.label9.TabIndex = 22;
@@ -364,7 +368,7 @@ namespace Mappy.UI.Forms
             // numericUpDown6
             // 
             this.numericUpDown6.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.mapAttributesResultBindingSource, "Gravity", true));
-            this.numericUpDown6.Location = new System.Drawing.Point(206, 62);
+            this.numericUpDown6.Location = new System.Drawing.Point(206, 78);
             this.numericUpDown6.Maximum = new decimal(new int[] {
             20000,
             0,
@@ -377,7 +381,7 @@ namespace Mappy.UI.Forms
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(203, 46);
+            this.label7.Location = new System.Drawing.Point(203, 62);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(40, 13);
             this.label7.TabIndex = 18;
@@ -408,7 +412,7 @@ namespace Mappy.UI.Forms
             // numericUpDown4
             // 
             this.numericUpDown4.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.mapAttributesResultBindingSource, "SolarStrength", true));
-            this.numericUpDown4.Location = new System.Drawing.Point(108, 62);
+            this.numericUpDown4.Location = new System.Drawing.Point(108, 78);
             this.numericUpDown4.Maximum = new decimal(new int[] {
             20000,
             0,
@@ -421,7 +425,7 @@ namespace Mappy.UI.Forms
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(105, 46);
+            this.label5.Location = new System.Drawing.Point(105, 62);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(74, 13);
             this.label5.TabIndex = 14;
@@ -452,7 +456,7 @@ namespace Mappy.UI.Forms
             // numericUpDown2
             // 
             this.numericUpDown2.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.mapAttributesResultBindingSource, "MaxWindSpeed", true));
-            this.numericUpDown2.Location = new System.Drawing.Point(10, 62);
+            this.numericUpDown2.Location = new System.Drawing.Point(10, 78);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             20000,
             0,
@@ -465,7 +469,7 @@ namespace Mappy.UI.Forms
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 46);
+            this.label3.Location = new System.Drawing.Point(7, 62);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(89, 13);
             this.label3.TabIndex = 10;
@@ -492,6 +496,26 @@ namespace Mappy.UI.Forms
             this.label2.Size = new System.Drawing.Size(86, 13);
             this.label2.TabIndex = 8;
             this.label2.Text = "Min Wind Speed";
+            // 
+            // minWindInGameLabel
+            // 
+            this.minWindInGameLabel.AutoSize = true;
+            this.minWindInGameLabel.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.minWindInGameLabel.Location = new System.Drawing.Point(8, 44);
+            this.minWindInGameLabel.Name = "minWindInGameLabel";
+            this.minWindInGameLabel.Size = new System.Drawing.Size(79, 13);
+            this.minWindInGameLabel.TabIndex = 24;
+            this.minWindInGameLabel.Text = "0.0 in-game";
+            // 
+            // maxWindInGameLabel
+            // 
+            this.maxWindInGameLabel.AutoSize = true;
+            this.maxWindInGameLabel.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.maxWindInGameLabel.Location = new System.Drawing.Point(8, 99);
+            this.maxWindInGameLabel.Name = "maxWindInGameLabel";
+            this.maxWindInGameLabel.Size = new System.Drawing.Size(79, 13);
+            this.maxWindInGameLabel.TabIndex = 25;
+            this.maxWindInGameLabel.Text = "0.0 in-game";
             // 
             // tabPage3
             // 
@@ -1227,6 +1251,8 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label minWindInGameLabel;
+        private System.Windows.Forms.Label maxWindInGameLabel;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.Label label14;
