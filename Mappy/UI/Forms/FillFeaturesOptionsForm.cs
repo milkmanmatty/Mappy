@@ -102,9 +102,11 @@ namespace Mappy.UI.Forms
             this.densityPercentUpDown = new NumericUpDown
             {
                 Location = new Point(128, 22),
-                Width = 55,
-                Minimum = 1,
+                Width = 65,
+                Minimum = 0.01m,
                 Maximum = 100,
+                DecimalPlaces = 2,
+                Increment = 0.01m,
                 Value = current.DensityPercent,
             };
             var percentLabel = new Label
@@ -181,7 +183,7 @@ namespace Mappy.UI.Forms
         public FillFeaturesCountMode CountMode =>
             this.percentageRadioButton.Checked ? FillFeaturesCountMode.Percentage : FillFeaturesCountMode.FixedCount;
 
-        public int DensityPercent => (int)this.densityPercentUpDown.Value;
+        public decimal DensityPercent => this.densityPercentUpDown.Value;
 
         public int FixedCount => (int)this.fixedCountUpDown.Value;
 

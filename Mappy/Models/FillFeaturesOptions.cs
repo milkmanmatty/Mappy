@@ -16,7 +16,7 @@ namespace Mappy.Models
 
         public FillFeaturesCountMode CountMode { get; set; } = FillFeaturesCountMode.Percentage;
 
-        public int DensityPercent { get; set; } = 50;
+        public decimal DensityPercent { get; set; } = 50m;
 
         public int FixedCount { get; set; } = 20;
     }
