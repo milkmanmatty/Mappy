@@ -2,6 +2,7 @@ namespace Mappy
 {
     using System;
     using System.IO;
+    using System.Text;
     using System.Windows.Forms;
 
     using Mappy.IO;
@@ -33,9 +34,10 @@ namespace Mappy
         [STAThread]
         public static void Main(string[] args)
         {
-            bugsnagClient = new Bugsnag.Client(new Bugsnag.Configuration
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+            bugsnagClient = new Bugsnag.Client(new Bugsnag.Configuration("fa43381b116de659fcf1cfda14884d98")
             {
-                ApiKey = "fa43381b116de659fcf1cfda14884d98",
                 AppVersion = Application.ProductVersion,
                 AutoNotify = false,
             });

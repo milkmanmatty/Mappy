@@ -11,7 +11,10 @@ outpath = os.path.join(projectdir, "Properties\\AssemblyInfo.cs")
 print(projectdir)
 
 # get the tag
-tag = check_output(["git", "describe", "--tags", "--dirty=-d"], cwd=projectdir, universal_newlines=True)
+try:
+    tag = check_output(["git", "describe", "--tags", "--dirty=-d"], cwd=projectdir, universal_newlines=True).strip()
+except Exception:
+    tag = "v1.0.0"
 
 # grab main version blob (x.y.z) and git extras (w-<hash>)
 main_match = re.match(r"v([^-]+)(?:-([0-9a-z-]+))?", tag)

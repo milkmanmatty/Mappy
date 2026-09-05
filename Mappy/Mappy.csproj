@@ -1,597 +1,65 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{EA26A863-F126-4809-8B32-09829D21B4CE}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <RootNamespace>Mappy</RootNamespace>
     <AssemblyName>Mappy</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <UseWindowsForms>true</UseWindowsForms>
     <PlatformTarget>x86</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <Platforms>x86</Platforms>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>mappy.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <DocumentationFile>bin\Debug\Mappy.XML</DocumentationFile>
-    <NoWarn>1591</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>mappy.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\Release\Mappy.XML</DocumentationFile>
-    <NoWarn>1591</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup />
-  <PropertyGroup>
-    <StartupObject>Mappy.Program</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup />
-  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <NoWarn>$(NoWarn);1591;CA1416;WFO1000</NoWarn>
     <ApplicationIcon>Assets\mappy.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup />
-  <PropertyGroup>
+    <StartupObject>Mappy.Program</StartupObject>
     <NoWin32Manifest>true</NoWin32Manifest>
+    <SupportedOSPlatformVersion>6.1</SupportedOSPlatformVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bugsnag, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bugsnag.2.0.2\lib\net45\Bugsnag.dll</HintPath>
-    </Reference>
-    <Reference Include="mscorlib" />
-    <Reference Include="Ookii.Dialogs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Ookii.Dialogs\Ookii.Dialogs.dll</HintPath>
-    </Reference>
-    <Reference Include="Pngcs">
-      <HintPath>..\Pngcs\Pngcs.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Core" />
-    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reactive.Windows.Forms, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rx-WinForms.2.2.5\lib\net45\System.Reactive.Windows.Forms.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Text.Encoding.CodePages, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Encoding.CodePages.5.0.0\lib\net461\System.Text.Encoding.CodePages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="WindowsFormsIntegration" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Collections\BindingGrid.cs" />
-    <Compile Include="Collections\BindingSparseGrid.cs" />
-    <Compile Include="Collections\Grid.cs" />
-    <Compile Include="Collections\GridCoordinates.cs" />
-    <Compile Include="Collections\GridEventArgs.cs" />
-    <Compile Include="Collections\GridMethods.cs" />
-    <Compile Include="Collections\IGrid.cs" />
-    <Compile Include="Collections\IQuadTreeItem.cs" />
-    <Compile Include="Collections\ISparseGrid.cs" />
-    <Compile Include="Collections\QuadTree.cs" />
-    <Compile Include="Collections\SparseGrid.cs" />
-    <Compile Include="Collections\SparseGridEventArgs.cs" />
-    <Compile Include="Configuration.cs" />
-    <Compile Include="RecentFiles.cs" />
-    <Compile Include="RecentMapEntry.cs" />
-    <Compile Include="Data\BindingMapTile.cs" />
-    <Compile Include="Data\Feature.cs" />
-    <Compile Include="Data\FeatureInfo.cs" />
-    <Compile Include="Data\FeatureRecord.cs" />
-    <Compile Include="Data\IMapTile.cs" />
-    <Compile Include="Data\MapAttributes.cs" />
-    <Compile Include="Data\MapSchema.cs" />
-    <Compile Include="Data\MapTile.cs" />
-    <Compile Include="Data\SchemaUnit.cs" />
-    <Compile Include="Data\UnitCatalogLoadRecord.cs" />
-    <Compile Include="Data\UnitCatalogSide.cs" />
-    <Compile Include="Data\Positioned.cs" />
-    <Compile Include="Data\SchemaUnitsChangedEventArgs.cs" />
-    <Compile Include="Data\Section.cs" />
-    <Compile Include="Data\StartPositionChangedEventArgs.cs" />
-    <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="Globals.cs" />
-    <Compile Include="IO\AbstractHpiLoader.cs" />
-    <Compile Include="IO\FeatureBitmapLoader.cs" />
-    <Compile Include="IO\FeatureRenderLoader.cs" />
-    <Compile Include="IO\FeatureTdfLoader.cs" />
-    <Compile Include="IO\FeatureLoadingUtils.cs" />
-    <Compile Include="IO\GafTextureLoader.cs" />
-    <Compile Include="IO\UnitLoadingUtils.cs" />
-    <Compile Include="IO\UnitFbiCatalogLoader.cs" />
-    <Compile Include="IO\Gaf\GafEntry.cs" />
-    <Compile Include="IO\Gaf\GafEntryArrayAdapter.cs" />
-    <Compile Include="IO\Gaf\GafEntryAllFramesArrayAdapter.cs" />
-    <Compile Include="IO\Gaf\GafFrame.cs" />
-    <Compile Include="IO\HpiErrorInfo.cs" />
-    <Compile Include="IO\HpiInnerFileErrorInfo.cs" />
-    <Compile Include="IO\LoadResult.cs" />
-    <Compile Include="IO\MapModelFactory.cs" />
-    <Compile Include="IO\MapModelTntAdapter.cs" />
-    <Compile Include="IO\MapSaver.cs" />
-    <Compile Include="IO\ModelEdgeReaderAdapter.cs" />
-    <Compile Include="IO\ModelPrimitiveCollectorAdapter.cs" />
-    <Compile Include="IO\GafTextureFrame.cs" />
-    <Compile Include="IO\ThreeDoTextured.cs" />
-    <Compile Include="IO\SectionFactory.cs" />
-    <Compile Include="IO\SectionLoader.cs" />
-    <Compile Include="IO\SectionLoadingUtils.cs" />
-    <Compile Include="IO\ThreeDoWireframe.cs" />
-    <Compile Include="MappySettings.cs" />
-    <Compile Include="TilesetFilterSettings.cs" />
-    <Compile Include="TilesetFilterStore.cs" />
-    <Compile Include="Maybe.cs" />
-    <Compile Include="Models\BandboxBehaviours\FreeBandboxBehaviour.cs" />
-    <Compile Include="Models\BandboxBehaviours\IBandboxBehaviour.cs" />
-    <Compile Include="Models\BandboxBehaviours\IBandboxModel.cs" />
-    <Compile Include="Models\BandboxBehaviours\TileBandboxBehaviour.cs" />
-    <Compile Include="Models\BandboxMode.cs" />
-    <Compile Include="Models\ComboBoxViewModel.cs" />
-    <Compile Include="Models\CoreModel.cs" />
-    <Compile Include="Models\Enums\FlipDirection.cs" />
-    <Compile Include="Models\Enums\GUITab.cs" />
-    <Compile Include="Models\Enums\HeightEditMode.cs" />
-    <Compile Include="Models\Enums\LightDirection.cs" />
-    <Compile Include="Models\Enums\UnitPlacementPlayerMenuChoice.cs" />
-    <Compile Include="Models\FeatureClipboardRecord.cs" />
-    <Compile Include="Models\SchemaUnitClipboardRecord.cs" />
-    <Compile Include="Models\FeatureInstance.cs" />
-    <Compile Include="Models\FeatureInstanceEventArgs.cs" />
-    <Compile Include="Models\FeatureViewViewModel.cs" />
-    <Compile Include="Models\FillFeaturesOptions.cs" />
-    <Compile Include="Models\FlipOptions.cs" />
-    <Compile Include="Models\IMainFormViewModel.cs" />
-    <Compile Include="Models\IMainModel.cs" />
-    <Compile Include="Models\IMapViewViewModel.cs" />
-    <Compile Include="Models\IMinimapFormViewModel.cs" />
-    <Compile Include="Models\IReadOnlyApplicationModel.cs" />
-    <Compile Include="Models\IReadOnlyMapModel.cs" />
-    <Compile Include="Models\ISectionViewViewModel.cs" />
-    <Compile Include="Models\ISelectionModel.cs" />
-    <Compile Include="Models\ListViewItem.cs" />
-    <Compile Include="Models\MainFormViewModel.cs" />
-    <Compile Include="Models\MapAttributesResult.cs" />
-    <Compile Include="Models\MapUnitRef.cs" />
-    <Compile Include="Models\MapViewViewModel.cs" />
-    <Compile Include="Models\MinimapFormViewModel.cs" />
-    <Compile Include="Models\SectionFeatureLoadResult.cs" />
-    <Compile Include="Models\SectionImportExportPaths.cs" />
-    <Compile Include="Models\ReplaceFeatureOptions.cs" />
-    <Compile Include="Models\SectionViewViewModel.cs" />
-    <Compile Include="Models\UndoableMapModel.cs" />
-    <Compile Include="Operations\AddFeatureOperation.cs" />
-    <Compile Include="Operations\ClearAllFeaturesOperation.cs" />
-    <Compile Include="Operations\FillFeaturesOperation.cs" />
-    <Compile Include="Operations\AddSchemaUnitOperation.cs" />
-    <Compile Include="Operations\ChangeAttributesOperation.cs" />
-    <Compile Include="Operations\ChangeStartPositionOperation.cs" />
-    <Compile Include="Operations\BatchMoveFeatureOperation.cs" />
-    <Compile Include="Operations\BatchMoveSchemaUnitsOperation.cs" />
-    <Compile Include="Operations\FillAreaOperation.cs" />
-    <Compile Include="Operations\HeightBrushOperation.cs" />
-    <Compile Include="Operations\VoidBrushOperation.cs" />
-    <Compile Include="Operations\MoveFeatureOperation.cs" />
-    <Compile Include="Operations\RemoveFeatureOperation.cs" />
-    <Compile Include="Operations\ReplaceFeatureOperation.cs" />
-    <Compile Include="Operations\RemoveSchemaUnitOperation.cs" />
-    <Compile Include="Operations\RemoveStartPositionOperation.cs" />
-    <Compile Include="Operations\SelectionModel\DeselectOperation.cs" />
-    <Compile Include="Operations\SelectionModel\SelectFeatureOperation.cs" />
-    <Compile Include="Operations\SelectionModel\SelectStartPositionOperation.cs" />
-    <Compile Include="Operations\SelectionModel\SelectTileOperation.cs" />
-    <Compile Include="Operations\SelectionModel\SelectUnitOperation.cs" />
-    <Compile Include="Operations\SelectionModel\AddUnitToSelectionOperation.cs" />
-    <Compile Include="Operations\SetSealevelOperation.cs" />
-    <Compile Include="Operations\UpdateSchemaUnitOperation.cs" />
-    <Compile Include="Operations\TileAreaOperation.cs" />
-    <Compile Include="Operations\UpdateMinimapOperation.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Services\BitmapCache.cs" />
-    <Compile Include="Services\DialogService.cs" />
-    <Compile Include="Services\Dispatcher.cs" />
-    <Compile Include="Services\FeatureService.cs" />
-    <Compile Include="Services\IDialogService.cs" />
-    <Compile Include="Services\ImageImportService.cs" />
-    <Compile Include="Services\ImageRelightingService.cs" />
-    <Compile Include="Services\MapLoadingService.cs" />
-    <Compile Include="Services\SectionBitmapService.cs" />
-    <Compile Include="Services\UnitCatalogService.cs" />
-    <Compile Include="Data\SectionInfo.cs" />
-    <Compile Include="Services\SectionService.cs" />
-    <Compile Include="UI\Controls\AbstractLayer.cs" />
-    <Compile Include="UI\Controls\AreaChangedEventArgs.cs" />
-    <Compile Include="UI\Controls\DoubleComboListView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Controls\DoubleComboListView.Designer.cs">
-      <DependentUpon>DoubleComboListView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\DummyLayer.cs" />
-    <Compile Include="UI\Controls\GridLayer.cs" />
-    <Compile Include="UI\Controls\GuideLayer.cs" />
-    <Compile Include="UI\Controls\DrawableItem.cs" />
-    <Compile Include="UI\Controls\PainterLayer.cs" />
-    <Compile Include="UI\Controls\ILayer.cs" />
-    <Compile Include="UI\Controls\DrawableItemCollection.cs" />
-    <Compile Include="UI\Controls\LayerCollection.cs" />
-    <Compile Include="UI\Controls\LayerView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Controls\LayerChangedEventArgs.cs" />
-    <Compile Include="UI\Controls\MapViewPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Controls\MapViewPanel.Designer.cs">
-      <DependentUpon>MapViewPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\MinimapControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Controls\StepNumericUpDown.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Controls\StepTrackBar.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Controls\SectionView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Controls\SectionView.Designer.cs">
-      <DependentUpon>SectionView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\SelectableItemsLayer.cs" />
-    <Compile Include="UI\Controls\StartPositionDragData.cs" />
-    <Compile Include="UI\Controls\StartPositionsView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Controls\StartPositionsView.Designer.cs">
-      <DependentUpon>StartPositionsView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\VoidLayer.cs" />
-    <Compile Include="UI\Drawables\AbstractDrawable.cs" />
-    <Compile Include="UI\Drawables\DrawableBandbox.cs" />
-    <Compile Include="UI\Drawables\DrawableFilledEllipse.cs" />
-    <Compile Include="UI\Drawables\DrawableBitmap.cs" />
-    <Compile Include="UI\Drawables\DrawablePolyline.cs" />
-    <Compile Include="UI\Drawables\DrawableTile.cs" />
-    <Compile Include="UI\Drawables\IDrawable.cs" />
-    <Compile Include="UI\Forms\ExportCustomSectionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\ExportCustomSectionForm.Designer.cs">
-      <DependentUpon>ExportCustomSectionForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Forms\InfoForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\InfoForm.Designer.cs">
-      <DependentUpon>InfoForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Forms\AboutForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\AboutForm.Designer.cs">
-      <DependentUpon>AboutForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Forms\FlipSectionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\FlipSectionForm.Designer.cs">
-      <DependentUpon>FlipSectionForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Forms\ImportCustomSectionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\ImportCustomSectionForm.Designer.cs">
-      <DependentUpon>ImportCustomSectionForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Forms\MapAttributesForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\MapAttributesForm.Designer.cs">
-      <DependentUpon>MapAttributesForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Forms\MinimapForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\MinimapForm.Designer.cs">
-      <DependentUpon>MinimapForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Forms\PaletteForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\PaletteForm.Designer.cs">
-      <DependentUpon>PaletteForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Forms\NewMapForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\NewMapForm.Designer.cs">
-      <DependentUpon>NewMapForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Operations\AddFloatingTileOperation.cs" />
-    <Compile Include="Operations\ClearTilesOperation.cs" />
-    <Compile Include="Operations\CompositeOperation.cs" />
-    <Compile Include="Models\IMapModel.cs" />
-    <Compile Include="Operations\IReplayableOperation.cs" />
-    <Compile Include="LoadingUtils.cs" />
-    <Compile Include="Operations\CopyAreaOperation.cs" />
-    <Compile Include="GridUtil.cs" />
-    <Compile Include="Operations\MoveTileOperation.cs" />
-    <Compile Include="Operations\OperationFactory.cs" />
-    <Compile Include="Operations\RemoveTileOperation.cs" />
-    <Compile Include="UI\Forms\ProgressForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\ProgressForm.Designer.cs">
-      <DependentUpon>ProgressForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Painters\HeightGridPainter.cs" />
-    <Compile Include="UI\Painters\HeightGridColorScheme.cs" />
-    <Compile Include="UI\Painters\GridPainter.cs" />
-    <Compile Include="UI\Painters\VoidPainter.cs" />
-    <Compile Include="UI\Tags\FeatureTag.cs" />
-    <Compile Include="UI\Tags\IMapItemTag.cs" />
-    <Compile Include="UI\Tags\SectionTag.cs" />
-    <Compile Include="UI\Tags\StartPositionTag.cs" />
-    <Compile Include="UI\Tags\UnitTag.cs" />
-    <Compile Include="Util\ImageSampling\BilinearWrapper.cs" />
-    <Compile Include="Util\ImageSampling\ErrorDiffusionPaletteQuantizer.cs" />
-    <Compile Include="Util\ImageSampling\IPixelImage.cs" />
-    <Compile Include="Util\ImageSampling\NearestNeighbourPaletteWrapper.cs" />
-    <Compile Include="Util\ImageSampling\MapPixelImageAdapter.cs" />
-    <Compile Include="Util\ImageSampling\NearestNeighbourWrapper.cs" />
-    <Compile Include="Util\ImgUtil.cs" />
-    <Compile Include="Util\MetalSpotDisplayFormat.cs" />
-    <Compile Include="Util\PlayerSlotVisuals.cs" />
-    <Compile Include="Util\TaTeamColorRemap.cs" />
-    <Compile Include="Util\Notifier.cs" />
-    <Compile Include="Util\OffsetBitmap.cs" />
-    <Compile Include="Util\Util.cs" />
-    <Compile Include="UI\Painters\ContourHeightPainter.cs" />
-    <Compile Include="Models\MapModel.cs" />
-    <Compile Include="UI\Forms\MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Forms\MainFormMissionUi.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\ExportMapImageOptionsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Models\MapImageExportOptions.cs" />
-    <Compile Include="Models\Enums\FeatureExportMode.cs" />
-    <Compile Include="UI\Forms\UnitPlayerPromptForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\NewSchemaTypePromptForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\FillFeaturesOptionsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\ReplaceFeatureForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\TilesetsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\UnitPlayerPickerForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\UnitPropertiesForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Painters\BitmapGridPainter.cs" />
-    <Compile Include="UI\Forms\MapSelectionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\MapSelectionForm.Designer.cs">
-      <DependentUpon>MapSelectionForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Painters\IPainter.cs" />
-    <Compile Include="UI\Forms\PreferencesForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\PreferencesForm.Designer.cs">
-      <DependentUpon>PreferencesForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Operations\OperationManager.cs" />
-    <Compile Include="Views\IProgressView.cs" />
-    <EmbeddedResource Include="UI\Controls\DoubleComboListView.resx">
-      <DependentUpon>DoubleComboListView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Controls\MapViewPanel.resx">
-      <DependentUpon>MapViewPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Controls\StartPositionsView.resx">
-      <DependentUpon>StartPositionsView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\ExportCustomSectionForm.resx">
-      <DependentUpon>ExportCustomSectionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\InfoForm.resx">
-      <DependentUpon>InfoForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\AboutForm.resx">
-      <DependentUpon>AboutForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\FlipSectionForm.resx">
-      <DependentUpon>FlipSectionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\ImportCustomSectionForm.resx">
-      <DependentUpon>ImportCustomSectionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\MapAttributesForm.resx">
-      <DependentUpon>MapAttributesForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\MapSelectionForm.resx">
-      <DependentUpon>MapSelectionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\MinimapForm.resx">
-      <DependentUpon>MinimapForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\NewMapForm.resx">
-      <DependentUpon>NewMapForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\PreferencesForm.resx">
-      <DependentUpon>PreferencesForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Controls\SectionView.resx">
-      <DependentUpon>SectionView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\ProgressForm.resx">
-      <DependentUpon>ProgressForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="app.config" />
-    <None Include="default.json.sample">
+    <None Include="Properties\AssemblyInfo.cs.tmpl" />
+    <None Include="Mappy.ruleset" />
+    <None Include="Properties\DataSources\Mappy.Models.MapAttributesResult.datasource" />
+    <None Update="default.json.sample">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Mappy.ruleset">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="packages.config" />
-    <None Include="Properties\AssemblyInfo.cs.tmpl" />
-    <None Include="Properties\DataSources\Mappy.Models.MapAttributesResult.datasource" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Geometry\Geometry.csproj">
-      <Project>{896df25e-8ee5-4dbd-85d2-249045dc9631}</Project>
-      <Name>Geometry</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TAUtil\TAUtil.Gdi\TAUtil.Gdi.csproj">
-      <Project>{cbf5cec6-3710-4f40-8a8e-ef57870b7793}</Project>
-      <Name>TAUtil.Gdi</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TAUtil\TAUtil.HpiUtil\TAUtil.HpiUtil.csproj">
-      <Project>{a13082e4-3557-4666-bf02-b376c9907b69}</Project>
-      <Name>TAUtil.HpiUtil</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TAUtil\TAUtil\TAUtil.csproj">
-      <Project>{71AE8770-7794-4CF8-88F1-1D7429F24EB4}</Project>
-      <Name>TAUtil</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\nofeature.png" />
-    <None Include="Assets\number_1.png" />
-    <None Include="Assets\number_10.png" />
-    <None Include="Assets\number_2.png" />
-    <None Include="Assets\number_3.png" />
-    <None Include="Assets\number_4.png" />
-    <None Include="Assets\number_5.png" />
-    <None Include="Assets\number_6.png" />
-    <None Include="Assets\number_7.png" />
-    <None Include="Assets\number_8.png" />
-    <None Include="Assets\number_9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\AboutText.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\mappy.ico" />
     <Content Include="Assets\TA Palette.pal">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>python "$(ProjectDir)..\GenerateAssemblyInfo.py" "$(ProjectDir)</PreBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+  <ItemGroup>
+    <PackageReference Include="Bugsnag" Version="4.1.1" />
+    <PackageReference Include="Hjg.Pngcs" Version="1.1.5" />
+    <PackageReference Include="Ookii.Dialogs.WinForms" Version="4.0.0" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.Reactive" Version="6.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Geometry\Geometry.csproj" />
+    <ProjectReference Include="..\..\TAUtil\TAUtil\TAUtil.csproj" />
+    <ProjectReference Include="..\..\TAUtil\TAUtil.Gdi\TAUtil.Gdi.csproj" />
+    <ProjectReference Include="..\..\TAUtil\TAUtil.HpiUtil\TAUtil.HpiUtil.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.Windows.Forms.AnchorLayoutV2" Value="true" Trim="false" />
+  </ItemGroup>
+  <Target Name="GenerateAssemblyInfo" BeforeTargets="BeforeBuild">
+    <Exec Command="python &quot;$(MSBuildThisFileDirectory)..\GenerateAssemblyInfo.py&quot; &quot;$(MSBuildThisFileDirectory)&quot;" />
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

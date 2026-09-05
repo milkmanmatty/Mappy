@@ -33,7 +33,7 @@ namespace Mappy.IO
                     var buf = new byte[file.Size];
                     archive.Extract(file, buf);
                     using (var ms = new MemoryStream(buf, false))
-                    using (var reader = new StreamReader(ms, Encoding.Default))
+                    using (var reader = new StreamReader(ms, Encoding.GetEncoding(1252)))
                     {
                         var root = TdfNode.LoadTdf(reader);
                         side = UnitCatalogSide.Normalize(FindSideRaw(root));

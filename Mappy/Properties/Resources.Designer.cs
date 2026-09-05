@@ -72,7 +72,7 @@ namespace Mappy.Properties {
         /// </summary>
         internal static string AboutText {
             get {
-                return ResourceManager.GetString("AboutText", resourceCulture);
+                return ((string)(ResourceManager.GetObject("AboutText", resourceCulture)));
             }
         }
         
@@ -96,7 +96,7 @@ namespace Mappy.Properties {
         /// </summary>
         internal static string InfoText {
             get {
-                return ResourceManager.GetString("InfoText", resourceCulture);
+                return ((string)(ResourceManager.GetObject("InfoText", resourceCulture)));
             }
         }
         

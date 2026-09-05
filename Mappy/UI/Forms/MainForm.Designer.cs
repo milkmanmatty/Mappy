@@ -838,7 +838,7 @@ namespace Mappy.UI.Forms
 	        this.sectionsView.Dock = System.Windows.Forms.DockStyle.Fill;
 	        this.sectionsView.ImageSize = new System.Drawing.Size(128, 128);
 	        this.sectionsView.Location = new System.Drawing.Point(4, 5);
-	        this.sectionsView.Margin = new System.Windows.Forms.Padding(6);
+	        this.sectionsView.Margin = new System.Windows.Forms.Padding(0);
 	        this.sectionsView.Name = "sectionsView";
 	        this.sectionsView.Size = new System.Drawing.Size(306, 789);
 	        this.sectionsView.TabIndex = 3;
@@ -860,7 +860,7 @@ namespace Mappy.UI.Forms
 	        this.featureView.Dock = System.Windows.Forms.DockStyle.Fill;
 	        this.featureView.ImageSize = new System.Drawing.Size(128, 128);
 	        this.featureView.Location = new System.Drawing.Point(4, 5);
-	        this.featureView.Margin = new System.Windows.Forms.Padding(6);
+	        this.featureView.Margin = new System.Windows.Forms.Padding(0);
 	        this.featureView.Name = "featureView";
 	        this.featureView.Size = new System.Drawing.Size(306, 789);
 	        this.featureView.TabIndex = 0;

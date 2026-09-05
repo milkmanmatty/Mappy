@@ -5,7 +5,7 @@ namespace Mappy.UI.Forms
     using System.Windows.Forms;
 
     using Mappy;
-    using Ookii.Dialogs;
+    using Ookii.Dialogs.WinForms;
 
     public partial class PreferencesForm : Form
     {
