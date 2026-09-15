@@ -308,6 +308,11 @@ namespace Mappy.Services
             return dlg;
         }
 
+        public void ShowModeless(Form form)
+        {
+            form.Show(this.owner);
+        }
+
         public bool CapturePreferences()
         {
             var f = new PreferencesForm();

@@ -1022,24 +1022,34 @@ namespace Mappy.Services
                 m =>
                     {
                         var u = m.Attributes.GetUnit(schemaIndex, unitId).ClonePreservingId();
-                        using (var f = new UI.Forms.UnitPropertiesForm())
-                        {
-                            f.Bind(u, schemaIndex, m.Attributes.Schemas, this.unitCatalogService);
-                            if (f.ShowDialog() != DialogResult.OK)
+                        var f = new UI.Forms.UnitPropertiesForm();
+                        f.Bind(u, schemaIndex, m.Attributes.Schemas, this.unitCatalogService);
+                        f.ShowRequested += (s, e) => this.CenterViewOnSchemaUnit(schemaIndex, unitId);
+                        f.FormClosed += (s, e) =>
                             {
-                                return;
-                            }
+                                try
+                                {
+                                    if (f.DialogResult != DialogResult.OK)
+                                    {
+                                        return;
+                                    }
 
-                            f.ApplyTo(u);
-                            var toSchema = f.SelectedSchemaIndex;
-                            var n = m.Attributes.Schemas.Count;
-                            if (toSchema < 0 || toSchema >= n)
-                            {
-                                toSchema = schemaIndex;
-                            }
+                                    f.ApplyTo(u);
+                                    var toSchema = f.SelectedSchemaIndex;
+                                    var n = m.Attributes.Schemas.Count;
+                                    if (toSchema < 0 || toSchema >= n)
+                                    {
+                                        toSchema = schemaIndex;
+                                    }
 
-                            m.MoveSchemaUnitBetweenSchemas(schemaIndex, toSchema, u);
-                        }
+                                    m.MoveSchemaUnitBetweenSchemas(schemaIndex, toSchema, u);
+                                }
+                                finally
+                                {
+                                    f.Dispose();
+                                }
+                            };
+                        this.dialogService.ShowModeless(f);
                     });
         }
 

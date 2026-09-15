@@ -1747,7 +1747,12 @@ namespace Mappy.Models
             var markerSource = this.unitCatalogService != null
                 ? this.unitCatalogService.GetPrimaryLabelForMapMarker(u.Unitname)
                 : u.Unitname;
-            var label = markerSource.Length > 4 ? markerSource.Substring(0, 4) : markerSource;
+            var label = markerSource ?? string.Empty;
+            var labelWidth = TextRenderer.MeasureText(
+                label,
+                SystemFonts.DefaultFont,
+                Size.Empty,
+                TextFormatFlags.NoPadding | TextFormatFlags.SingleLine).Width;
 
             var objectBase = this.unitCatalogService != null
                 ? this.unitCatalogService.GetThreeDoBaseName(u.Unitname)
@@ -1767,6 +1772,7 @@ namespace Mappy.Models
                 var bh = unitModel.Bitmap.Height;
                 var minTopW = SchemaBadgeW + 6 + badgeW + Pad;
                 outW = Math.Max(bw + Pad * 2, minTopW);
+                outW = Math.Max(outW, labelWidth + Pad * 2);
                 wireX = (outW - bw) / 2;
                 wireY = TopRowH;
                 outH = TopRowH + bh + Pad + LabelH + Pad;
@@ -1776,7 +1782,7 @@ namespace Mappy.Models
             }
             else
             {
-                outW = 48;
+                outW = Math.Max(48, labelWidth + Pad * 2);
                 wireX = 0;
                 wireY = TopRowH;
                 outH = TopRowH + Pad + LabelH + Pad;
@@ -1828,7 +1834,7 @@ namespace Mappy.Models
                     SystemFonts.DefaultFont,
                     new Rectangle(Pad, labelY, outW - Pad * 2, LabelH),
                     Color.White,
-                    TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
             }
 
             return (bmp, anchor);

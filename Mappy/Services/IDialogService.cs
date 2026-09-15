@@ -56,6 +56,8 @@ namespace Mappy.Services
 
         IProgressView CreateProgressView();
 
+        void ShowModeless(Form form);
+
         void ShowAbout();
 
         void ShowInfo();
