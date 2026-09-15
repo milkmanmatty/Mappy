@@ -172,14 +172,32 @@ namespace Mappy.UI.Forms
             this.tabControl.TabPages.Add(aiPage);
             this.Controls.Add(this.tabControl);
 
-            var ok = new Button { Text = "OK", DialogResult = DialogResult.OK, Location = new Point(80, TabAreaHeight + 8) };
-            var cancel = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, Location = new Point(180, TabAreaHeight + 8) };
+            var show = new Button { Text = "Show", Location = new Point(12, TabAreaHeight + 8), Width = 75 };
+            show.Click += (s, e) => this.ShowRequested?.Invoke(this, EventArgs.Empty);
+
+            var ok = new Button { Text = "OK", Location = new Point(180, TabAreaHeight + 8), Width = 75 };
+            ok.Click += (s, e) =>
+                {
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                };
+
+            var cancel = new Button { Text = "Cancel", Location = new Point(265, TabAreaHeight + 8), Width = 75 };
+            cancel.Click += (s, e) =>
+                {
+                    this.DialogResult = DialogResult.Cancel;
+                    this.Close();
+                };
+
             this.AcceptButton = ok;
             this.CancelButton = cancel;
+            this.Controls.Add(show);
             this.Controls.Add(ok);
             this.Controls.Add(cancel);
             this.ClientSize = new Size(360, TabAreaHeight + BottomBarHeight);
         }
+
+        public event EventHandler ShowRequested;
 
         public int SelectedSchemaIndex => this.comboSchema.SelectedIndex;
 
