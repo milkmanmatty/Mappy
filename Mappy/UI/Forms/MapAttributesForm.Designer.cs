@@ -46,6 +46,10 @@ namespace Mappy.UI.Forms
             this.label10 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.comboBoxMapping = new System.Windows.Forms.ComboBox();
+            this.labelMapping = new System.Windows.Forms.Label();
+            this.comboBoxLineOfSight = new System.Windows.Forms.ComboBox();
+            this.labelLineOfSight = new System.Windows.Forms.Label();
             this.maxWindInGameLabel = new System.Windows.Forms.Label();
             this.minWindInGameLabel = new System.Windows.Forms.Label();
             this.numericUpDown8 = new System.Windows.Forms.NumericUpDown();
@@ -295,6 +299,10 @@ namespace Mappy.UI.Forms
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.comboBoxMapping);
+            this.tabPage2.Controls.Add(this.labelMapping);
+            this.tabPage2.Controls.Add(this.comboBoxLineOfSight);
+            this.tabPage2.Controls.Add(this.labelLineOfSight);
             this.tabPage2.Controls.Add(this.maxWindInGameLabel);
             this.tabPage2.Controls.Add(this.minWindInGameLabel);
             this.tabPage2.Controls.Add(this.numericUpDown8);
@@ -320,6 +328,51 @@ namespace Mappy.UI.Forms
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // comboBoxMapping
+            // 
+            this.comboBoxMapping.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxMapping.FormattingEnabled = true;
+            this.comboBoxMapping.Items.AddRange(new object[] {
+            "Unmapped",
+            "Mapped"});
+            this.comboBoxMapping.Location = new System.Drawing.Point(108, 136);
+            this.comboBoxMapping.Name = "comboBoxMapping";
+            this.comboBoxMapping.Size = new System.Drawing.Size(92, 21);
+            this.comboBoxMapping.TabIndex = 29;
+            this.comboBoxMapping.DataBindings.Add(new System.Windows.Forms.Binding("SelectedIndex", this.mapAttributesResultBindingSource, "Mapping", true));
+            // 
+            // labelMapping
+            // 
+            this.labelMapping.AutoSize = true;
+            this.labelMapping.Location = new System.Drawing.Point(105, 120);
+            this.labelMapping.Name = "labelMapping";
+            this.labelMapping.Size = new System.Drawing.Size(45, 13);
+            this.labelMapping.TabIndex = 28;
+            this.labelMapping.Text = "Mapping";
+            // 
+            // comboBoxLineOfSight
+            // 
+            this.comboBoxLineOfSight.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxLineOfSight.FormattingEnabled = true;
+            this.comboBoxLineOfSight.Items.AddRange(new object[] {
+            "Permanent",
+            "Line of Sight",
+            "Circular"});
+            this.comboBoxLineOfSight.Location = new System.Drawing.Point(10, 136);
+            this.comboBoxLineOfSight.Name = "comboBoxLineOfSight";
+            this.comboBoxLineOfSight.Size = new System.Drawing.Size(92, 21);
+            this.comboBoxLineOfSight.TabIndex = 27;
+            this.comboBoxLineOfSight.DataBindings.Add(new System.Windows.Forms.Binding("SelectedIndex", this.mapAttributesResultBindingSource, "LineOfSight", true));
+            // 
+            // labelLineOfSight
+            // 
+            this.labelLineOfSight.AutoSize = true;
+            this.labelLineOfSight.Location = new System.Drawing.Point(7, 120);
+            this.labelLineOfSight.Name = "labelLineOfSight";
+            this.labelLineOfSight.Size = new System.Drawing.Size(70, 13);
+            this.labelLineOfSight.TabIndex = 26;
+            this.labelLineOfSight.Text = "Line of Sight";
             // 
             // numericUpDown8
             // 
@@ -1253,6 +1306,10 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label minWindInGameLabel;
         private System.Windows.Forms.Label maxWindInGameLabel;
+        private System.Windows.Forms.ComboBox comboBoxLineOfSight;
+        private System.Windows.Forms.Label labelLineOfSight;
+        private System.Windows.Forms.ComboBox comboBoxMapping;
+        private System.Windows.Forms.Label labelMapping;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.Label label14;

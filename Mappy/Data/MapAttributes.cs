@@ -79,6 +79,9 @@ namespace Mappy.Data
         private int minWindSpeed;
         private int maxWindSpeed;
 
+        private int lineOfSight;
+        private int mapping;
+
         private bool lavaWorld;
 
         private bool waterDoesDamage;
@@ -105,6 +108,9 @@ namespace Mappy.Data
 
             this.MinWindSpeed = 0;
             this.MaxWindSpeed = 3000;
+
+            this.LineOfSight = 0;
+            this.Mapping = 0;
 
             this.LavaWorld = false;
 
@@ -244,6 +250,20 @@ namespace Mappy.Data
             set => this.SetField(ref this.maxWindSpeed, value, nameof(this.MaxWindSpeed));
         }
 
+        // 0 = permanent, 1 = line of sight, 2 = circular.
+        public int LineOfSight
+        {
+            get => this.lineOfSight;
+            set => this.SetField(ref this.lineOfSight, ClampInt(value, 0, 2), nameof(this.LineOfSight));
+        }
+
+        /// 0 = unmapped, 1 = mapped.
+        public int Mapping
+        {
+            get => this.mapping;
+            set => this.SetField(ref this.mapping, ClampInt(value, 0, 1), nameof(this.Mapping));
+        }
+
         public int WaterDamage
         {
             get => this.waterDamage;
@@ -314,6 +334,8 @@ namespace Mappy.Data
             m.Planet = gh.Entries.GetOrDefault("planet", string.Empty);
             m.TidalStrength = TdfConvert.ToInt32(gh.Entries.GetOrDefault("tidalstrength", "0"));
             m.SolarStrength = TdfConvert.ToInt32(gh.Entries.GetOrDefault("solarstrength", "0"));
+            m.LineOfSight = ClampInt(TdfConvert.ToInt32(gh.Entries.GetOrDefault("lineofsight", "0")), 0, 2);
+            m.Mapping = ClampInt(TdfConvert.ToInt32(gh.Entries.GetOrDefault("mapping", "0")), 0, 1);
             m.LavaWorld = TdfConvert.ToBool(gh.Entries.GetOrDefault("lavaworld", "0"));
             m.MinWindSpeed = TdfConvert.ToInt32(gh.Entries.GetOrDefault("minwindspeed", "0"));
             m.MaxWindSpeed = TdfConvert.ToInt32(gh.Entries.GetOrDefault("maxwindspeed", "0"));
@@ -384,8 +406,8 @@ namespace Mappy.Data
             r.Entries["glamour"] = this.Glamour;
             r.Entries["glamoursound"] = this.GlamourSound;
             r.Entries["nomovie"] = TdfConvert.ToString(this.NoMovie);
-            r.Entries["lineofsight"] = "0";
-            r.Entries["mapping"] = "0";
+            r.Entries["lineofsight"] = TdfConvert.ToString(this.LineOfSight);
+            r.Entries["mapping"] = TdfConvert.ToString(this.Mapping);
             r.Entries["tidalstrength"] = TdfConvert.ToString(this.TidalStrength);
             r.Entries["solarstrength"] = TdfConvert.ToString(this.SolarStrength);
             r.Entries["lavaworld"] = TdfConvert.ToString(this.LavaWorld);
@@ -474,6 +496,8 @@ namespace Mappy.Data
             this.NumPlayers = source.NumPlayers;
             this.TidalStrength = source.TidalStrength;
             this.SolarStrength = source.SolarStrength;
+            this.LineOfSight = source.LineOfSight;
+            this.Mapping = source.Mapping;
             this.MinWindSpeed = source.MinWindSpeed;
             this.MaxWindSpeed = source.MaxWindSpeed;
             this.LavaWorld = source.LavaWorld;
@@ -497,6 +521,21 @@ namespace Mappy.Data
             {
                 this.schemaList.Add(CloneSchema(sch));
             }
+        }
+
+        private static int ClampInt(int value, int min, int max)
+        {
+            if (value < min)
+            {
+                return min;
+            }
+
+            if (value > max)
+            {
+                return max;
+            }
+
+            return value;
         }
 
         private static MapSchema CloneSchema(MapSchema sch)
