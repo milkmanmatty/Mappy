@@ -1083,6 +1083,24 @@ namespace Mappy.Models
             this.undoManager.Execute(new UpdateSchemaUnitOperation(this.model, schemaIndex, edited));
         }
 
+        public void DeleteSchemaUnit(int schemaIndex, Guid unitId)
+        {
+            if (schemaIndex < 0 || schemaIndex >= this.model.Attributes.Schemas.Count)
+            {
+                return;
+            }
+
+            if (!this.model.Attributes.Schemas[schemaIndex].Units.Any(u => u.Id == unitId))
+            {
+                return;
+            }
+
+            this.undoManager.Execute(
+                new CompositeOperation(
+                    OperationFactory.CreateDeselectAndMergeOperation(this.model),
+                    new RemoveSchemaUnitOperation(this.model, schemaIndex, unitId)));
+        }
+
         public void MoveSchemaUnitBetweenSchemas(int fromSchemaIndex, int toSchemaIndex, SchemaUnit edited)
         {
             if (fromSchemaIndex == toSchemaIndex)
@@ -1124,6 +1142,37 @@ namespace Mappy.Models
             }
 
             this.undoManager.Execute(new CompositeOperation(ops));
+        }
+
+        public void DuplicateSchemaUnitsTo(int fromSchemaIndex, int toSchemaIndex)
+        {
+            if (fromSchemaIndex == toSchemaIndex
+                || fromSchemaIndex < 0
+                || toSchemaIndex < 0
+                || fromSchemaIndex >= this.model.Attributes.Schemas.Count
+                || toSchemaIndex >= this.model.Attributes.Schemas.Count)
+            {
+                return;
+            }
+
+            var sourceUnits = this.model.Attributes.Schemas[fromSchemaIndex].Units;
+            if (sourceUnits.Count == 0)
+            {
+                return;
+            }
+
+            var copies = sourceUnits.Select(u => u.CloneWithNewId()).ToList();
+            foreach (var copy in copies)
+            {
+                SyncSchemaUnitYPosFromHeightGrid(copy, this.model);
+            }
+
+            this.model.ActiveSchemaIndex = toSchemaIndex;
+
+            this.undoManager.Execute(
+                new CompositeOperation(
+                    OperationFactory.CreateDeselectAndMergeOperation(this.model),
+                    new BatchAddSchemaUnitsOperation(this.model, toSchemaIndex, copies)));
         }
 
         private static void SyncSchemaUnitYPosFromHeightGrid(SchemaUnit u, IMapModel map)

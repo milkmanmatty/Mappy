@@ -650,6 +650,7 @@ namespace Mappy.Models
             this.mapModel.FeatureInstanceChanged -= this.FeatureInstanceChanged;
             this.mapModel.StartPositionChanged -= this.StartPositionChanged;
             this.mapModel.Attributes.SchemaUnitsChanged -= this.SchemaUnitsChangedHandler;
+            this.mapModel.Attributes.SchemasChanged -= this.SchemasChangedHandler;
             this.mapModel.PropertyChanged -= this.MapModelPropertyChanged;
             this.mapModel.SelectedUnits.CollectionChanged -= this.SelectedUnitsCollectionChanged;
             this.AttachSelectedFeaturesCollection(null);
@@ -868,6 +869,7 @@ namespace Mappy.Models
             this.mapModel.StartPositionChanged += this.StartPositionChanged;
 
             this.mapModel.Attributes.SchemaUnitsChanged += this.SchemaUnitsChangedHandler;
+            this.mapModel.Attributes.SchemasChanged += this.SchemasChangedHandler;
 
             this.mapModel.SelectedUnits.CollectionChanged += this.SelectedUnitsCollectionChanged;
 
@@ -894,7 +896,18 @@ namespace Mappy.Models
                     this.RemoveSchemaUnitItem(e.SchemaIndex, e.UnitId);
                     this.InsertSchemaUnit(e.SchemaIndex, e.UnitId);
                     break;
+                case SchemaUnitsChangedEventArgs.ActionKind.Bulk:
+                    this.UpdateAllSchemaUnits();
+                    this.RefreshSelection();
+                    break;
             }
+        }
+
+        private void SchemasChangedHandler(object sender, EventArgs e)
+        {
+            this.UpdateStartPositions();
+            this.UpdateAllSchemaUnits();
+            this.RefreshSelection();
         }
 
         private void SelectedFeaturesCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

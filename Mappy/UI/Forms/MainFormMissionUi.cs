@@ -2,6 +2,7 @@ namespace Mappy.UI.Forms
 {
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Linq;
     using System.Reactive.Linq;
     using System.Windows.Forms;
@@ -263,6 +264,8 @@ namespace Mappy.UI.Forms
                 Margin = new Padding(0, 0, 0, 0),
             };
             this.missionPlacedUnitsTree.NodeMouseDoubleClick += this.MissionPlacedUnitsTree_NodeMouseDoubleClick;
+            this.missionPlacedUnitsTree.NodeMouseClick += this.MissionPlacedUnitsTree_NodeMouseClick;
+            this.missionPlacedUnitsTree.KeyDown += this.MissionPlacedUnitsTree_KeyDown;
             root.Controls.Add(this.missionPlacedUnitsTree, 0, 4);
 
             this.missionTab.Controls.Add(root);
@@ -436,15 +439,7 @@ namespace Mappy.UI.Forms
                 return;
             }
 
-            if (e.Action == SchemaUnitsChangedEventArgs.ActionKind.Move)
-            {
-                this.ScheduleMissionPlacedUnitsTreeMoveDebounce();
-            }
-            else
-            {
-                this.CancelMissionPlacedUnitsTreeMoveDebounce();
-                this.RefreshMissionPlacedUnitsTree();
-            }
+            this.ScheduleMissionPlacedUnitsTreeMoveDebounce();
         }
 
         private void EnsureMissionPlacedUnitsTreeMoveDebounceTimer()
@@ -610,6 +605,82 @@ namespace Mappy.UI.Forms
             {
                 this.missionDispatcher?.CenterViewOnSchemaUnit(tag.SchemaIndex, tag.UnitId.Value);
             }
+        }
+
+        private void MissionPlacedUnitsTree_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Delete)
+            {
+                return;
+            }
+
+            if (!(this.missionPlacedUnitsTree.SelectedNode?.Tag is MissionPlacedUnitTreeTag tag) || !tag.UnitId.HasValue)
+            {
+                return;
+            }
+
+            this.missionDispatcher?.DeleteSchemaUnit(tag.SchemaIndex, tag.UnitId.Value);
+            e.Handled = true;
+            e.SuppressKeyPress = true;
+        }
+
+        private void MissionPlacedUnitsTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right || e.Node == null)
+            {
+                return;
+            }
+
+            this.missionPlacedUnitsTree.SelectedNode = e.Node;
+
+            if (!(e.Node.Tag is MissionPlacedUnitTreeTag tag) || tag.UnitId.HasValue)
+            {
+                return;
+            }
+
+            this.ShowMissionPlacedUnitsSchemaContextMenu(tag.SchemaIndex, e.Location);
+        }
+
+        private void ShowMissionPlacedUnitsSchemaContextMenu(int fromSchemaIndex, Point location)
+        {
+            UndoableMapModel map = null;
+            this.missionCoreModel?.Map.IfSome(m => map = m);
+            if (map == null || fromSchemaIndex < 0 || fromSchemaIndex >= map.Attributes.Schemas.Count)
+            {
+                return;
+            }
+
+            var sourceUnitCount = map.Attributes.Schemas[fromSchemaIndex].Units.Count;
+            var menu = new ContextMenuStrip();
+            var duplicateTo = new ToolStripMenuItem("Duplicate to...");
+            duplicateTo.Enabled = sourceUnitCount > 0 && map.Attributes.Schemas.Count > 1;
+
+            for (var i = 0; i < map.Attributes.Schemas.Count; i++)
+            {
+                if (i == fromSchemaIndex)
+                {
+                    continue;
+                }
+
+                var toSchemaIndex = i;
+                var sch = map.Attributes.Schemas[i];
+                var item = new ToolStripMenuItem($"Schema {i}: {sch.SchemaType}");
+                item.Enabled = sourceUnitCount > 0;
+                item.Click += (_, __) =>
+                    {
+                        this.missionDispatcher?.DuplicateSchemaUnitsTo(fromSchemaIndex, toSchemaIndex);
+                        this.SyncSchemaCombosToIndex(toSchemaIndex);
+                    };
+                duplicateTo.DropDownItems.Add(item);
+            }
+
+            if (duplicateTo.DropDownItems.Count == 0)
+            {
+                duplicateTo.Enabled = false;
+            }
+
+            menu.Items.Add(duplicateTo);
+            menu.Show(this.missionPlacedUnitsTree, location);
         }
 
         private readonly struct MissionPlacedUnitTreeTag

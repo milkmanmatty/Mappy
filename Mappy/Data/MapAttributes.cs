@@ -87,6 +87,8 @@ namespace Mappy.Data
         private bool waterDoesDamage;
         private int waterDamage;
 
+        private int schemaUnitsChangedMuteCount;
+
         public MapAttributes()
         {
             this.Name = "Untitled Map";
@@ -126,6 +128,7 @@ namespace Mappy.Data
 
         public event EventHandler<SchemaUnitsChangedEventArgs> SchemaUnitsChanged;
 
+        public event EventHandler SchemasChanged;
 
         public IReadOnlyList<MapSchema> Schemas => this.schemaList;
 
@@ -324,6 +327,25 @@ namespace Mappy.Data
             }
         }
 
+        public void BeginSchemaUnitsChangedMute()
+        {
+            this.schemaUnitsChangedMuteCount++;
+        }
+
+        public void EndSchemaUnitsChangedMuteAndNotify(int schemaIndex)
+        {
+            if (this.schemaUnitsChangedMuteCount > 0)
+            {
+                this.schemaUnitsChangedMuteCount--;
+            }
+
+            if (this.schemaUnitsChangedMuteCount == 0)
+            {
+                this.OnSchemaUnitsChanged(
+                    new SchemaUnitsChangedEventArgs(schemaIndex, SchemaUnitsChangedEventArgs.ActionKind.Bulk, Guid.Empty));
+            }
+        }
+
         public static MapAttributes Load(TdfNode n)
         {
             var gh = n.Keys["GlobalHeader"];
@@ -460,6 +482,7 @@ namespace Mappy.Data
                 SchemaType = schemaType,
             };
             this.schemaList.Add(sch);
+            this.OnSchemasChanged();
             return sch;
         }
 
@@ -476,6 +499,7 @@ namespace Mappy.Data
                 this.schemaList[i].SchemaNumber = i;
             }
 
+            this.OnSchemasChanged();
             return true;
         }
 
@@ -769,7 +793,17 @@ namespace Mappy.Data
 
         protected virtual void OnSchemaUnitsChanged(SchemaUnitsChangedEventArgs e)
         {
+            if (this.schemaUnitsChangedMuteCount > 0)
+            {
+                return;
+            }
+
             this.SchemaUnitsChanged?.Invoke(this, e);
+        }
+
+        protected virtual void OnSchemasChanged()
+        {
+            this.SchemasChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

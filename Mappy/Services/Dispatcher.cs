@@ -951,6 +951,11 @@ namespace Mappy.Services
             this.model.Map.IfSome(x => x.SelectUnit(new MapUnitRef(schemaIndex, unitId)));
         }
 
+        public void DeleteSchemaUnit(int schemaIndex, Guid unitId)
+        {
+            this.model.Map.IfSome(m => m.DeleteSchemaUnit(schemaIndex, unitId));
+        }
+
         public void PlaceUnitFromSidebar(string unitName, int x, int y, Point screenLocation)
         {
             int? player;
@@ -978,6 +983,11 @@ namespace Mappy.Services
         public void SetActiveSchemaIndex(int index)
         {
             this.model.Map.IfSome(m => m.ActiveSchemaIndex = index);
+        }
+
+        public void DuplicateSchemaUnitsTo(int fromSchemaIndex, int toSchemaIndex)
+        {
+            this.model.Map.IfSome(m => m.DuplicateSchemaUnitsTo(fromSchemaIndex, toSchemaIndex));
         }
 
         public void AddMapSchema()
@@ -1021,6 +1031,12 @@ namespace Mappy.Services
             this.model.Map.IfSome(
                 m =>
                     {
+                        if (schemaIndex < 0 || schemaIndex >= m.Attributes.Schemas.Count
+                            || !m.Attributes.Schemas[schemaIndex].Units.Any(x => x.Id == unitId))
+                        {
+                            return;
+                        }
+
                         var u = m.Attributes.GetUnit(schemaIndex, unitId).ClonePreservingId();
                         var f = new UI.Forms.UnitPropertiesForm();
                         f.Bind(u, schemaIndex, m.Attributes.Schemas, this.unitCatalogService);
