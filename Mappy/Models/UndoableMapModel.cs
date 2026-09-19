@@ -494,6 +494,84 @@ namespace Mappy.Models
             this.ApplyHeightBrushOperation(new HeightBrushOperation(grid, singleChange));
         }
 
+        public void SmoothHeightBrushAtAnchor(int anchorX, int anchorY, int cursorSize)
+        {
+            var size = Math.Max(1, cursorSize);
+            var grid = this.model.Tile.HeightGrid;
+            var width = grid.Width;
+            var height = grid.Height;
+
+            if (anchorX < 0 || anchorY < 0 || anchorX >= width || anchorY >= height)
+            {
+                return;
+            }
+
+            var endX = anchorX + 1;
+            var endY = anchorY + 1;
+            var startX = Math.Max(0, endX - size);
+            var startY = Math.Max(0, endY - size);
+            endX = Math.Min(width, endX);
+            endY = Math.Min(height, endY);
+
+            var snapStartX = Math.Max(0, startX - 1);
+            var snapStartY = Math.Max(0, startY - 1);
+            var snapEndX = Math.Min(width, endX + 1);
+            var snapEndY = Math.Min(height, endY + 1);
+            var snapWidth = snapEndX - snapStartX;
+            var snapHeight = snapEndY - snapStartY;
+            var snapshot = new int[snapWidth * snapHeight];
+            for (var yy = snapStartY; yy < snapEndY; yy++)
+            {
+                for (var xx = snapStartX; xx < snapEndX; xx++)
+                {
+                    snapshot[((yy - snapStartY) * snapWidth) + (xx - snapStartX)] = grid[(yy * width) + xx];
+                }
+            }
+
+            var changes = new List<HeightBrushOperation.HeightChange>();
+            for (var yy = startY; yy < endY; yy++)
+            {
+                for (var xx = startX; xx < endX; xx++)
+                {
+                    var sum = 0;
+                    var count = 0;
+                    for (var ny = yy - 1; ny <= yy + 1; ny++)
+                    {
+                        for (var nx = xx - 1; nx <= xx + 1; nx++)
+                        {
+                            if (nx < snapStartX || ny < snapStartY || nx >= snapEndX || ny >= snapEndY)
+                            {
+                                continue;
+                            }
+
+                            sum += snapshot[((ny - snapStartY) * snapWidth) + (nx - snapStartX)];
+                            count++;
+                        }
+                    }
+
+                    if (count == 0)
+                    {
+                        continue;
+                    }
+
+                    var idx = (yy * width) + xx;
+                    var oldValue = grid[idx];
+                    var newValue = Util.Clamp((int)Math.Round(sum / (double)count), 0, 255);
+                    if (newValue != oldValue)
+                    {
+                        changes.Add(new HeightBrushOperation.HeightChange(idx, oldValue, newValue));
+                    }
+                }
+            }
+
+            if (changes.Count == 0)
+            {
+                return;
+            }
+
+            this.ApplyHeightBrushOperation(new HeightBrushOperation(grid, changes));
+        }
+
         public void FlushHeightBrush()
         {
             this.previousHeightBrushOpen = false;

@@ -121,6 +121,7 @@ namespace Mappy.UI.Forms
 	        this.startPositionsTab = new System.Windows.Forms.TabPage();
 	        this.startPositionsView1 = new Mappy.UI.Controls.StartPositionsView();
 	        this.heightTab = new System.Windows.Forms.TabPage();
+	        this.smoothHeightRadioButton = new System.Windows.Forms.RadioButton();
 	        this.setHeightRadioButton = new System.Windows.Forms.RadioButton();
 	        this.incrementDecrementHeightRadioButton = new System.Windows.Forms.RadioButton();
 	        this.selectedHeightNumericUpDown = new Mappy.UI.Controls.StepNumericUpDown();
@@ -888,6 +889,7 @@ namespace Mappy.UI.Forms
 	        // 
 	        // heightTab
 	        // 
+	        this.heightTab.Controls.Add(this.smoothHeightRadioButton);
 	        this.heightTab.Controls.Add(this.setHeightRadioButton);
 	        this.heightTab.Controls.Add(this.incrementDecrementHeightRadioButton);
 	        this.heightTab.Controls.Add(this.selectedHeightNumericUpDown);
@@ -903,6 +905,18 @@ namespace Mappy.UI.Forms
 	        this.heightTab.TabIndex = 3;
 	        this.heightTab.Text = "Height";
 	        this.heightTab.UseVisualStyleBackColor = true;
+	        // 
+	        // smoothHeightRadioButton
+	        // 
+	        this.smoothHeightRadioButton.AutoSize = true;
+	        this.smoothHeightRadioButton.Location = new System.Drawing.Point(9, 75);
+	        this.smoothHeightRadioButton.Name = "smoothHeightRadioButton";
+	        this.smoothHeightRadioButton.Size = new System.Drawing.Size(84, 24);
+	        this.smoothHeightRadioButton.TabIndex = 8;
+	        this.smoothHeightRadioButton.TabStop = true;
+	        this.smoothHeightRadioButton.Text = "Smooth";
+	        this.smoothHeightRadioButton.UseVisualStyleBackColor = true;
+	        this.smoothHeightRadioButton.CheckedChanged += new System.EventHandler(this.SmoothHeightRadioButtonCheckedChanged);
 	        // 
 	        // setHeightRadioButton
 	        // 
@@ -932,7 +946,7 @@ namespace Mappy.UI.Forms
 	        // selectedHeightNumericUpDown
 	        // 
 	        this.selectedHeightNumericUpDown.Enabled = false;
-	        this.selectedHeightNumericUpDown.Location = new System.Drawing.Point(147, 74);
+	        this.selectedHeightNumericUpDown.Location = new System.Drawing.Point(147, 107);
 	        this.selectedHeightNumericUpDown.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
 	        this.selectedHeightNumericUpDown.Name = "selectedHeightNumericUpDown";
 	        this.selectedHeightNumericUpDown.Size = new System.Drawing.Size(62, 26);
@@ -943,7 +957,7 @@ namespace Mappy.UI.Forms
 	        // 
 	        this.selectedHeightLabel.AutoSize = true;
 	        this.selectedHeightLabel.Enabled = false;
-	        this.selectedHeightLabel.Location = new System.Drawing.Point(6, 77);
+	        this.selectedHeightLabel.Location = new System.Drawing.Point(6, 110);
 	        this.selectedHeightLabel.Name = "selectedHeightLabel";
 	        this.selectedHeightLabel.Size = new System.Drawing.Size(120, 20);
 	        this.selectedHeightLabel.TabIndex = 4;
@@ -951,7 +965,7 @@ namespace Mappy.UI.Forms
 	        // 
 	        // cursorSizeNumericUpDown
 	        // 
-	        this.cursorSizeNumericUpDown.Location = new System.Drawing.Point(147, 138);
+	        this.cursorSizeNumericUpDown.Location = new System.Drawing.Point(147, 171);
 	        this.cursorSizeNumericUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
 	        this.cursorSizeNumericUpDown.Name = "cursorSizeNumericUpDown";
 	        this.cursorSizeNumericUpDown.Size = new System.Drawing.Size(62, 26);
@@ -962,7 +976,7 @@ namespace Mappy.UI.Forms
 	        // cursorSizeLabel
 	        // 
 	        this.cursorSizeLabel.AutoSize = true;
-	        this.cursorSizeLabel.Location = new System.Drawing.Point(6, 142);
+	        this.cursorSizeLabel.Location = new System.Drawing.Point(6, 175);
 	        this.cursorSizeLabel.Name = "cursorSizeLabel";
 	        this.cursorSizeLabel.Size = new System.Drawing.Size(88, 20);
 	        this.cursorSizeLabel.TabIndex = 2;
@@ -970,7 +984,7 @@ namespace Mappy.UI.Forms
 	        // 
 	        // intervalNumericUpDown
 	        // 
-	        this.intervalNumericUpDown.Location = new System.Drawing.Point(147, 106);
+	        this.intervalNumericUpDown.Location = new System.Drawing.Point(147, 139);
 	        this.intervalNumericUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
 	        this.intervalNumericUpDown.Name = "intervalNumericUpDown";
 	        this.intervalNumericUpDown.Size = new System.Drawing.Size(62, 26);
@@ -981,7 +995,7 @@ namespace Mappy.UI.Forms
 	        // intervalLabel
 	        // 
 	        this.intervalLabel.AutoSize = true;
-	        this.intervalLabel.Location = new System.Drawing.Point(6, 109);
+	        this.intervalLabel.Location = new System.Drawing.Point(6, 142);
 	        this.intervalLabel.Name = "intervalLabel";
 	        this.intervalLabel.Size = new System.Drawing.Size(61, 20);
 	        this.intervalLabel.TabIndex = 0;
@@ -1247,6 +1261,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.TabPage startPositionsTab;
         private StartPositionsView startPositionsView1;
         private System.Windows.Forms.TabPage heightTab;
+        private System.Windows.Forms.RadioButton smoothHeightRadioButton;
         private System.Windows.Forms.RadioButton setHeightRadioButton;
         private System.Windows.Forms.RadioButton incrementDecrementHeightRadioButton;
         private StepNumericUpDown selectedHeightNumericUpDown;

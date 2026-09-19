@@ -251,6 +251,7 @@ namespace Mappy.UI.Forms
                     {
                         this.incrementDecrementHeightRadioButton.Checked = x == HeightEditMode.IncrementDecrement;
                         this.setHeightRadioButton.Checked = x == HeightEditMode.Set;
+                        this.smoothHeightRadioButton.Checked = x == HeightEditMode.Smooth;
                         this.intervalLabel.Enabled = x == HeightEditMode.IncrementDecrement;
                         this.intervalNumericUpDown.Enabled = x == HeightEditMode.IncrementDecrement;
                         this.selectedHeightLabel.Enabled = x == HeightEditMode.Set;
@@ -473,6 +474,16 @@ namespace Mappy.UI.Forms
             }
 
             this.model.HeightEditModeChanged(HeightEditMode.Set);
+        }
+
+        private void SmoothHeightRadioButtonCheckedChanged(object sender, EventArgs e)
+        {
+            if (this.model == null || !this.smoothHeightRadioButton.Checked)
+            {
+                return;
+            }
+
+            this.model.HeightEditModeChanged(HeightEditMode.Smooth);
         }
 
         private void SelectedHeightNumericUpDownValueChanged(object sender, EventArgs e)

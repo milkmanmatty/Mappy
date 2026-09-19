@@ -126,6 +126,8 @@ namespace Mappy.Models
 
         private bool activeHeightSetBrush;
 
+        private bool activeHeightSmoothBrush;
+
         private bool? activeVoidBrushValue;
 
         private Point? lastHeightBrushPoint;
@@ -308,6 +310,7 @@ namespace Mappy.Models
                 if (this.heightEditModeType == Enums.HeightEditMode.Set && (Control.ModifierKeys & Keys.Control) == Keys.Control)
                 {
                     this.activeHeightSetBrush = false;
+                    this.activeHeightSmoothBrush = false;
                     this.activeHeightBrushDelta = 0;
                     this.lastHeightBrushPoint = null;
                     this.TrySampleHeightIntoSetValue(location);
@@ -318,6 +321,10 @@ namespace Mappy.Models
                 if (this.heightEditModeType == Enums.HeightEditMode.Set)
                 {
                     this.activeHeightSetBrush = true;
+                }
+                else if (this.heightEditModeType == Enums.HeightEditMode.Smooth)
+                {
+                    this.activeHeightSmoothBrush = true;
                 }
                 else
                 {
@@ -374,7 +381,8 @@ namespace Mappy.Models
 
             if (this.heightEditMode)
             {
-                if (this.heightEditModeType == Enums.HeightEditMode.Set)
+                if (this.heightEditModeType == Enums.HeightEditMode.Set
+                    || this.heightEditModeType == Enums.HeightEditMode.Smooth)
                 {
                     return;
                 }
@@ -426,7 +434,7 @@ namespace Mappy.Models
                     return;
                 }
 
-                if (this.heightEditMode && (this.activeHeightSetBrush || this.activeHeightBrushDelta != 0))
+                if (this.heightEditMode && (this.activeHeightSetBrush || this.activeHeightSmoothBrush || this.activeHeightBrushDelta != 0))
                 {
                     this.ApplyHeightEditAt(location);
                     return;
@@ -461,9 +469,10 @@ namespace Mappy.Models
         {
             this.mouseDown = false;
 
-            if (this.heightEditMode && (this.activeHeightSetBrush || this.activeHeightBrushDelta != 0))
+            if (this.heightEditMode && (this.activeHeightSetBrush || this.activeHeightSmoothBrush || this.activeHeightBrushDelta != 0))
             {
                 this.activeHeightSetBrush = false;
+                this.activeHeightSmoothBrush = false;
                 this.activeHeightBrushDelta = 0;
                 this.lastHeightBrushPoint = null;
                 this.dispatcher.FlushHeightBrush();
@@ -514,7 +523,7 @@ namespace Mappy.Models
                         var nextValue = this.heightEditSetValue + notchDelta;
                         this.dispatcher.SetHeightEditSetValue(Util.Clamp(nextValue, 0, 255));
                     }
-                    else
+                    else if (this.heightEditModeType == Enums.HeightEditMode.IncrementDecrement)
                     {
                         var nextInterval = this.heightEditInterval + notchDelta;
                         this.dispatcher.SetHeightEditInterval(Math.Max(1, nextInterval));
@@ -540,9 +549,10 @@ namespace Mappy.Models
 
         public void LeaveFocus()
         {
-            if (this.activeHeightSetBrush || this.activeHeightBrushDelta != 0)
+            if (this.activeHeightSetBrush || this.activeHeightSmoothBrush || this.activeHeightBrushDelta != 0)
             {
                 this.activeHeightSetBrush = false;
+                this.activeHeightSmoothBrush = false;
                 this.activeHeightBrushDelta = 0;
                 this.lastHeightBrushPoint = null;
                 this.dispatcher.FlushHeightBrush();
@@ -1049,6 +1059,7 @@ namespace Mappy.Models
             this.bandboxMode = false;
 
             this.activeHeightSetBrush = false;
+            this.activeHeightSmoothBrush = false;
             this.activeHeightBrushDelta = 0;
             this.lastHeightBrushPoint = null;
             this.pinnedSingleHeightPoint = null;
@@ -1073,6 +1084,12 @@ namespace Mappy.Models
             if (this.heightEditModeType == Enums.HeightEditMode.Set)
             {
                 this.ApplySetHeightBrushAt(location);
+                return;
+            }
+
+            if (this.heightEditModeType == Enums.HeightEditMode.Smooth)
+            {
+                this.ApplySmoothHeightBrushAt(location);
                 return;
             }
 
@@ -1219,6 +1236,58 @@ namespace Mappy.Models
                     this.heightEditSetValue,
                     this.heightEditCursorSize);
             }
+
+            this.baseTile?.Invalidate();
+            this.UpdateHeightCursor(location);
+            this.dispatcher.UpdateMousePosition(Maybe.None<Point>());
+            this.dispatcher.UpdateMousePosition(Maybe.Return(location));
+        }
+
+        private void ApplySmoothHeightBrushAt(Point location)
+        {
+            if (!this.activeHeightSmoothBrush || this.mapModel == null)
+            {
+                return;
+            }
+
+            Point? anchor;
+            if (this.heightEditCursorSize == 1)
+            {
+                anchor = this.ResolveSingleHeightAnchor(this.mapModel.BaseTile.HeightGrid, location);
+            }
+            else
+            {
+                this.pinnedSingleHeightPoint = null;
+                anchor = this.ResolveAreaHeightAnchor(this.mapModel.BaseTile.HeightGrid, location);
+            }
+
+            if (!anchor.HasValue)
+            {
+                return;
+            }
+
+            if (this.heightEditCursorSize > 1 &&
+                this.lastHeightBrushPoint.HasValue &&
+                this.lastHeightBrushPoint.Value == anchor.Value)
+            {
+                return;
+            }
+
+            this.lastHeightBrushPoint = anchor;
+            if (this.heightEditCursorSize == 1)
+            {
+                this.pinnedSingleHeightPoint = anchor;
+            }
+            else
+            {
+                this.pinnedAreaHeightPoint = anchor;
+                this.pinnedAreaHeightPointAnchor = location;
+            }
+
+            this.dispatcher.SmoothHeightBrushAtAnchor(
+                anchor.Value.X,
+                anchor.Value.Y,
+                this.heightEditCursorSize);
 
             this.baseTile?.Invalidate();
             this.UpdateHeightCursor(location);
