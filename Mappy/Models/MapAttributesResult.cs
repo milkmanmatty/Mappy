@@ -42,6 +42,10 @@ namespace Mappy.Models
 
         public int SolarStrength { get; set; }
 
+        public int LineOfSight { get; set; }
+
+        public int Mapping { get; set; }
+
         public int SeaLevel { get; set; }
 
         public int Gravity { get; set; }
@@ -155,6 +159,8 @@ namespace Mappy.Models
                     Players = attrs.NumPlayers,
                     SeaLevel = map.SeaLevel,
                     SolarStrength = attrs.SolarStrength,
+                    LineOfSight = attrs.LineOfSight,
+                    Mapping = attrs.Mapping,
                     SurfaceMetal = sch.SurfaceMetal,
                     TidalStrength = attrs.TidalStrength,
                     WaterDamage = attrs.WaterDamage,
@@ -209,6 +215,8 @@ namespace Mappy.Models
             attrs.NumPlayers = this.Players;
             map.SeaLevel = this.SeaLevel;
             attrs.SolarStrength = this.SolarStrength;
+            attrs.LineOfSight = this.LineOfSight;
+            attrs.Mapping = this.Mapping;
             attrs.TidalStrength = this.TidalStrength;
             attrs.WaterDamage = this.WaterDamage;
             attrs.WaterDoesDamage = this.WaterDoesDamage;
