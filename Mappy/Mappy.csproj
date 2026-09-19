@@ -230,6 +230,7 @@
     <Compile Include="Operations\ClearAllFeaturesOperation.cs" />
     <Compile Include="Operations\FillFeaturesOperation.cs" />
     <Compile Include="Operations\AddSchemaUnitOperation.cs" />
+    <Compile Include="Operations\BatchAddSchemaUnitsOperation.cs" />
     <Compile Include="Operations\ChangeAttributesOperation.cs" />
     <Compile Include="Operations\ChangeStartPositionOperation.cs" />
     <Compile Include="Operations\BatchMoveFeatureOperation.cs" />

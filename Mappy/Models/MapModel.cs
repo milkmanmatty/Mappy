@@ -5,6 +5,7 @@ namespace Mappy.Models
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Drawing;
+    using System.Linq;
 
     using Mappy.Collections;
     using Mappy.Data;
@@ -72,6 +73,7 @@ namespace Mappy.Models
             this.FloatingTilesChanged += this.FloatingTilesListChanged;
 
             this.Attributes.SchemaUnitsChanged += this.OnAttributesSchemaUnitsChanged;
+            this.Attributes.SchemasChanged += this.OnAttributesSchemasChanged;
         }
 
         public event EventHandler<FeatureInstanceEventArgs> FeatureInstanceChanged;
@@ -515,6 +517,32 @@ namespace Mappy.Models
             }
         }
 
+        private void OnAttributesSchemasChanged(object sender, EventArgs e)
+        {
+            var schemaCount = this.Attributes.Schemas.Count;
+
+            for (var i = this.selectedUnits.Count - 1; i >= 0; i--)
+            {
+                var u = this.selectedUnits[i];
+                if (u.SchemaIndex < 0 || u.SchemaIndex >= schemaCount
+                    || !this.Attributes.Schemas[u.SchemaIndex].Units.Any(x => x.Id == u.UnitId))
+                {
+                    this.selectedUnits.RemoveAt(i);
+                }
+            }
+
+            if (this.SelectedStartSchemaIndex.HasValue
+                && (this.SelectedStartSchemaIndex.Value < 0 || this.SelectedStartSchemaIndex.Value >= schemaCount))
+            {
+                this.DeselectStartPosition();
+            }
+
+            if (this.activeSchemaIndex >= schemaCount)
+            {
+                this.ActiveSchemaIndex = Math.Max(0, schemaCount - 1);
+            }
+        }
+
         private void OnAttributesSchemaUnitsChanged(object sender, SchemaUnitsChangedEventArgs e)
         {
             if (e.Action == SchemaUnitsChangedEventArgs.ActionKind.Remove)
@@ -523,6 +551,22 @@ namespace Mappy.Models
                 {
                     var u = this.selectedUnits[i];
                     if (u.SchemaIndex == e.SchemaIndex && u.UnitId == e.UnitId)
+                    {
+                        this.selectedUnits.RemoveAt(i);
+                    }
+                }
+            }
+            else if (e.Action == SchemaUnitsChangedEventArgs.ActionKind.Bulk)
+            {
+                for (var i = this.selectedUnits.Count - 1; i >= 0; i--)
+                {
+                    var u = this.selectedUnits[i];
+                    if (u.SchemaIndex != e.SchemaIndex)
+                    {
+                        continue;
+                    }
+
+                    if (!this.Attributes.Schemas[e.SchemaIndex].Units.Any(x => x.Id == u.UnitId))
                     {
                         this.selectedUnits.RemoveAt(i);
                     }

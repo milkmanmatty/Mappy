@@ -1,15 +1,6 @@
 namespace Mappy.Data
 {
     using System;
-    using System.Collections.Generic;
-    using System.Drawing;
-    using System.Globalization;
-    using System.IO;
-    using System.Linq;
-    using System.Text.RegularExpressions;
-
-    using Mappy.Util;
-    using TAUtil.Tdf;
 
     public class SchemaUnitsChangedEventArgs : EventArgs
     {
@@ -31,6 +22,7 @@ namespace Mappy.Data
             Add,
             Remove,
             Move,
+            Bulk,
         }
     }
 }
