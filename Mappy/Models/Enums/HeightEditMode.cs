@@ -4,5 +4,6 @@ namespace Mappy.Models.Enums
     {
         IncrementDecrement,
         Set,
+        Smooth,
     }
 }

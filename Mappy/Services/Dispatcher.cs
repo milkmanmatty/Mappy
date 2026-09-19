@@ -1087,6 +1087,11 @@ namespace Mappy.Services
             this.model.Map.IfSome(map => map.SetHeightBrushAtAnchor(anchorX, anchorY, value, cursorSize));
         }
 
+        public void SmoothHeightBrushAtAnchor(int anchorX, int anchorY, int cursorSize)
+        {
+            this.model.Map.IfSome(map => map.SmoothHeightBrushAtAnchor(anchorX, anchorY, cursorSize));
+        }
+
         public void FlushHeightBrush()
         {
             this.model.Map.IfSome(x => x.FlushHeightBrush());
