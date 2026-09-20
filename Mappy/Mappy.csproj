@@ -324,6 +324,7 @@
     <Compile Include="UI\Drawables\DrawableBandbox.cs" />
     <Compile Include="UI\Drawables\DrawableFilledEllipse.cs" />
     <Compile Include="UI\Drawables\DrawableBitmap.cs" />
+    <Compile Include="UI\Drawables\DrawableUnitMarker.cs" />
     <Compile Include="UI\Drawables\DrawablePolyline.cs" />
     <Compile Include="UI\Drawables\DrawableTile.cs" />
     <Compile Include="UI\Drawables\IDrawable.cs" />

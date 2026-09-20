@@ -1775,13 +1775,15 @@ namespace Mappy.Models
             var schemaType = schemaIndex >= 0 && schemaIndex < this.mapModel.Attributes.Schemas.Count
                 ? this.mapModel.Attributes.Schemas[schemaIndex].SchemaType
                 : string.Empty;
-            var (bmp, markerAnchor) = this.BuildUnitMarkerBitmap(u, schemaType);
+            var (bmp, markerAnchor, label, labelHeight, pad, labelContentWidth) = this.BuildUnitMarkerBitmap(u, schemaType);
+            var opacity = 1f;
             if (schemaIndex != this.mapModel.ActiveSchemaIndex)
             {
-                bmp = ApplyInactiveSchemaOpacity(bmp, MappySettings.Settings.GetInactiveSchemaOpacityOrDefault());
+                opacity = MappySettings.Settings.GetInactiveSchemaOpacityOrDefault();
+                bmp = ApplyInactiveSchemaOpacity(bmp, opacity);
             }
 
-            var dw = new DrawableBitmap(bmp);
+            var dw = new DrawableUnitMarker(bmp, label, labelHeight, pad, labelContentWidth, opacity);
             var depth = 2000000 + (schemaIndex * 512) + (u.Player % 512);
 
             var item = new DrawableItem(
@@ -1812,7 +1814,9 @@ namespace Mappy.Models
             this.unitItems.Remove(key);
         }
 
-        private (Bitmap Bitmap, Point Anchor) BuildUnitMarkerBitmap(SchemaUnit u, string schemaType)
+        private (Bitmap Bitmap, Point Anchor, string Label, int LabelHeight, int Pad, int LabelContentWidth) BuildUnitMarkerBitmap(
+            SchemaUnit u,
+            string schemaType)
         {
             const int SchemaBadgeW = 12;
             const int SchemaBadgeH = 12;
@@ -1835,6 +1839,11 @@ namespace Mappy.Models
                 SystemFonts.DefaultFont,
                 Size.Empty,
                 TextFormatFlags.NoPadding | TextFormatFlags.SingleLine).Width;
+            const int BackplatePadX = 3;
+            if (MappySettings.Settings.ShowUnitNameBackplate && !string.IsNullOrEmpty(label))
+            {
+                labelWidth += BackplatePadX * 2;
+            }
 
             var objectBase = this.unitCatalogService != null
                 ? this.unitCatalogService.GetThreeDoBaseName(u.Unitname)
@@ -1871,6 +1880,7 @@ namespace Mappy.Models
                 anchor = new Point(outW / 2, outH / 2);
             }
 
+            // Body only: unit model + badges. Drawn at paint time so zoom stays sharp
             var bmp = new Bitmap(outW, outH, PixelFormat.Format32bppArgb);
             using (var g = Graphics.FromImage(bmp))
             {
@@ -1908,18 +1918,9 @@ namespace Mappy.Models
                     new Rectangle(badgeX, BadgeY, badgeW, BadgeH),
                     PlayerSlotVisuals.ForegroundForPlayer(slot),
                     TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
-
-                var labelY = outH - LabelH - Pad;
-                TextRenderer.DrawText(
-                    g,
-                    label,
-                    SystemFonts.DefaultFont,
-                    new Rectangle(Pad, labelY, outW - Pad * 2, LabelH),
-                    Color.White,
-                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
             }
 
-            return (bmp, anchor);
+            return (bmp, anchor, label, LabelH, Pad, labelWidth);
         }
 
         private static Bitmap ApplyInactiveSchemaOpacity(Bitmap source, float opacity)

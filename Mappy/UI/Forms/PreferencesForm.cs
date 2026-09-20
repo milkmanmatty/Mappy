@@ -12,6 +12,15 @@ namespace Mappy.UI.Forms
         private Color blobFeatureBaseColor = Configuration.DefaultBlobFeatureBaseColor;
 
         private bool blobFeatureBaseColorCustomized;
+
+        private Color unitNameTextColor = Configuration.DefaultUnitNameTextColor;
+
+        private bool unitNameTextColorCustomized;
+
+        private Color unitNameBackplateColor = Configuration.DefaultUnitNameBackplateColor;
+
+        private bool unitNameBackplateColorCustomized;
+
         public PreferencesForm()
         {
             this.InitializeComponent();
@@ -35,6 +44,11 @@ namespace Mappy.UI.Forms
             this.calculatedMetalDepositValueCheckBox.Checked = MappySettings.Settings.ShowCalculatedMetalDepositValue;
             this.showUnitFriendlyNameFirstCheckBox.Checked = MappySettings.Settings.ShowUnitFriendlyNameFirst;
             this.showUnitFriendlyNameOnMapCheckBox.Checked = MappySettings.Settings.ShowUnitFriendlyNameOnMap;
+            this.showUnitNameBackplateCheckBox.Checked = MappySettings.Settings.ShowUnitNameBackplate;
+            this.unitNameTextColor = MappySettings.Settings.GetUnitNameTextColorOrDefault();
+            this.unitNameTextColorCustomized = MappySettings.Settings.UnitNameTextColorArgb.HasValue;
+            this.unitNameBackplateColor = MappySettings.Settings.GetUnitNameBackplateColorOrDefault();
+            this.unitNameBackplateColorCustomized = MappySettings.Settings.UnitNameBackplateColorArgb.HasValue;
             this.inactiveSchemaOpacityNumeric.Value = MappySettings.Settings.GetInactiveSchemaOpacityPercentForDialog();
             this.doNotPromptToSaveUnsavedChangesCheckBox.Checked = MappySettings.Settings.DoNotPromptToSaveUnsavedChanges;
 
@@ -75,6 +89,47 @@ namespace Mappy.UI.Forms
 
                 this.blobFeatureBaseColor = colorDialog.Color;
                 this.blobFeatureBaseColorCustomized = true;
+            }
+        }
+
+        private void UnitNameTextColorCustomizeButtonClick(object sender, EventArgs e)
+        {
+            using (var colorDialog = new ColorDialog())
+            {
+                colorDialog.Color = this.unitNameTextColor;
+                colorDialog.FullOpen = true;
+                if (colorDialog.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                this.unitNameTextColor = colorDialog.Color;
+                this.unitNameTextColorCustomized = true;
+            }
+        }
+
+        private void UnitNameBackplateColorCustomizeButtonClick(object sender, EventArgs e)
+        {
+            using (var colorDialog = new ColorDialog())
+            {
+                colorDialog.Color = Color.FromArgb(
+                    255,
+                    this.unitNameBackplateColor.R,
+                    this.unitNameBackplateColor.G,
+                    this.unitNameBackplateColor.B);
+                colorDialog.FullOpen = true;
+                if (colorDialog.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                // Preserve the default/custom alpha so the backplate stays partially transparent.
+                this.unitNameBackplateColor = Color.FromArgb(
+                    this.unitNameBackplateColor.A,
+                    colorDialog.Color.R,
+                    colorDialog.Color.G,
+                    colorDialog.Color.B);
+                this.unitNameBackplateColorCustomized = true;
             }
         }
 
@@ -162,6 +217,13 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.ShowCalculatedMetalDepositValue = this.calculatedMetalDepositValueCheckBox.Checked;
             MappySettings.Settings.ShowUnitFriendlyNameFirst = this.showUnitFriendlyNameFirstCheckBox.Checked;
             MappySettings.Settings.ShowUnitFriendlyNameOnMap = this.showUnitFriendlyNameOnMapCheckBox.Checked;
+            MappySettings.Settings.ShowUnitNameBackplate = this.showUnitNameBackplateCheckBox.Checked;
+            MappySettings.Settings.UnitNameTextColorArgb = this.unitNameTextColorCustomized
+                ? (int?)this.unitNameTextColor.ToArgb()
+                : null;
+            MappySettings.Settings.UnitNameBackplateColorArgb = this.unitNameBackplateColorCustomized
+                ? (int?)this.unitNameBackplateColor.ToArgb()
+                : null;
             MappySettings.Settings.InactiveSchemaOpacityPercent = (int)this.inactiveSchemaOpacityNumeric.Value;
             MappySettings.Settings.DoNotPromptToSaveUnsavedChanges = this.doNotPromptToSaveUnsavedChangesCheckBox.Checked;
             MappySettings.Settings.HeightSelectedHeightWheelStep = (int)this.heightSelectedHeightWheelStepNumeric.Value;
