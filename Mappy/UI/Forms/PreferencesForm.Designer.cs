@@ -45,6 +45,8 @@ namespace Mappy.UI.Forms
             this.dragScrollSpeedYLabel = new System.Windows.Forms.Label();
             this.dragScrollSpeedXLabel = new System.Windows.Forms.Label();
             this.missionGroupBox = new System.Windows.Forms.GroupBox();
+            this.unitsFolderNameTextBox = new System.Windows.Forms.TextBox();
+            this.unitsFolderNameLabel = new System.Windows.Forms.Label();
             this.showUnitFriendlyNameOnMapCheckBox = new System.Windows.Forms.CheckBox();
             this.showUnitFriendlyNameFirstCheckBox = new System.Windows.Forms.CheckBox();
             this.inactiveSchemaOpacityNumeric = new System.Windows.Forms.NumericUpDown();
@@ -312,16 +314,34 @@ namespace Mappy.UI.Forms
             // 
             this.missionGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.missionGroupBox.Controls.Add(this.unitsFolderNameTextBox);
+            this.missionGroupBox.Controls.Add(this.unitsFolderNameLabel);
             this.missionGroupBox.Controls.Add(this.showUnitFriendlyNameOnMapCheckBox);
             this.missionGroupBox.Controls.Add(this.showUnitFriendlyNameFirstCheckBox);
             this.missionGroupBox.Controls.Add(this.inactiveSchemaOpacityNumeric);
             this.missionGroupBox.Controls.Add(this.inactiveSchemaOpacityLabel);
             this.missionGroupBox.Location = new System.Drawing.Point(12, 12);
             this.missionGroupBox.Name = "missionGroupBox";
-            this.missionGroupBox.Size = new System.Drawing.Size(426, 108);
+            this.missionGroupBox.Size = new System.Drawing.Size(426, 136);
             this.missionGroupBox.TabIndex = 0;
             this.missionGroupBox.TabStop = false;
             this.missionGroupBox.Text = "Mission";
+            // 
+            // unitsFolderNameTextBox
+            // 
+            this.unitsFolderNameTextBox.Location = new System.Drawing.Point(233, 99);
+            this.unitsFolderNameTextBox.Name = "unitsFolderNameTextBox";
+            this.unitsFolderNameTextBox.Size = new System.Drawing.Size(120, 20);
+            this.unitsFolderNameTextBox.TabIndex = 5;
+            // 
+            // unitsFolderNameLabel
+            // 
+            this.unitsFolderNameLabel.AutoSize = true;
+            this.unitsFolderNameLabel.Location = new System.Drawing.Point(14, 102);
+            this.unitsFolderNameLabel.Name = "unitsFolderNameLabel";
+            this.unitsFolderNameLabel.Size = new System.Drawing.Size(97, 13);
+            this.unitsFolderNameLabel.TabIndex = 4;
+            this.unitsFolderNameLabel.Text = "Units folder name:";
             // 
             // showUnitFriendlyNameOnMapCheckBox
             // 
@@ -894,6 +914,8 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.NumericUpDown inactiveSchemaOpacityNumeric;
         private System.Windows.Forms.CheckBox showUnitFriendlyNameFirstCheckBox;
         private System.Windows.Forms.CheckBox showUnitFriendlyNameOnMapCheckBox;
+        private System.Windows.Forms.Label unitsFolderNameLabel;
+        private System.Windows.Forms.TextBox unitsFolderNameTextBox;
         private System.Windows.Forms.GroupBox resourceNamesGroupBox;
         private System.Windows.Forms.CheckBox fullResourceNamesCheckBox;
         private System.Windows.Forms.CheckBox featureReclaimAmountsCheckBox;
