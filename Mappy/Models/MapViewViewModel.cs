@@ -1835,6 +1835,11 @@ namespace Mappy.Models
                 SystemFonts.DefaultFont,
                 Size.Empty,
                 TextFormatFlags.NoPadding | TextFormatFlags.SingleLine).Width;
+            const int BackplatePadX = 3;
+            if (MappySettings.Settings.ShowUnitNameBackplate && !string.IsNullOrEmpty(label))
+            {
+                labelWidth += BackplatePadX * 2;
+            }
 
             var objectBase = this.unitCatalogService != null
                 ? this.unitCatalogService.GetThreeDoBaseName(u.Unitname)
@@ -1910,12 +1915,24 @@ namespace Mappy.Models
                     TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
 
                 var labelY = outH - LabelH - Pad;
+                var labelRect = new Rectangle(Pad, labelY, outW - Pad * 2, LabelH);
+                var settings = MappySettings.Settings;
+                if (settings.ShowUnitNameBackplate && !string.IsNullOrEmpty(label))
+                {
+                    var backplateWidth = Math.Min(outW - Pad * 2, labelWidth);
+                    var backplateX = (outW - backplateWidth) / 2;
+                    using (var br = new SolidBrush(settings.GetUnitNameBackplateColorOrDefault()))
+                    {
+                        g.FillRectangle(br, backplateX, labelY, backplateWidth, LabelH);
+                    }
+                }
+
                 TextRenderer.DrawText(
                     g,
                     label,
                     SystemFonts.DefaultFont,
-                    new Rectangle(Pad, labelY, outW - Pad * 2, LabelH),
-                    Color.White,
+                    labelRect,
+                    settings.GetUnitNameTextColorOrDefault(),
                     TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
             }
 

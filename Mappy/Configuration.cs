@@ -56,6 +56,44 @@ namespace Mappy
 
         public bool ShowUnitFriendlyNameOnMap { get; set; }
 
+        public bool ShowUnitNameBackplate { get; set; }
+
+        public int? UnitNameTextColorArgb { get; set; }
+
+        public int? UnitNameBackplateColorArgb { get; set; }
+
+        public static Color DefaultUnitNameTextColor { get; } = Color.White;
+
+        public static Color DefaultUnitNameBackplateColor { get; } = Color.FromArgb(180, 0, 0, 0);
+
+        [XmlIgnore]
+        public Color UnitNameTextColor
+        {
+            get => this.GetUnitNameTextColorOrDefault();
+            set => this.UnitNameTextColorArgb = value.ToArgb();
+        }
+
+        [XmlIgnore]
+        public Color UnitNameBackplateColor
+        {
+            get => this.GetUnitNameBackplateColorOrDefault();
+            set => this.UnitNameBackplateColorArgb = value.ToArgb();
+        }
+
+        public Color GetUnitNameTextColorOrDefault()
+        {
+            return this.UnitNameTextColorArgb.HasValue
+                ? Color.FromArgb(this.UnitNameTextColorArgb.Value)
+                : DefaultUnitNameTextColor;
+        }
+
+        public Color GetUnitNameBackplateColorOrDefault()
+        {
+            return this.UnitNameBackplateColorArgb.HasValue
+                ? Color.FromArgb(this.UnitNameBackplateColorArgb.Value)
+                : DefaultUnitNameBackplateColor;
+        }
+
         public bool DoNotPromptToSaveUnsavedChanges { get; set; }
 
         public bool StickyClipboard { get; set; }

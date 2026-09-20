@@ -45,6 +45,10 @@ namespace Mappy.UI.Forms
             this.dragScrollSpeedYLabel = new System.Windows.Forms.Label();
             this.dragScrollSpeedXLabel = new System.Windows.Forms.Label();
             this.missionGroupBox = new System.Windows.Forms.GroupBox();
+            this.unitNameBackplateColorCustomizeButton = new System.Windows.Forms.Button();
+            this.showUnitNameBackplateCheckBox = new System.Windows.Forms.CheckBox();
+            this.unitNameTextColorCustomizeButton = new System.Windows.Forms.Button();
+            this.unitNameTextColorLabel = new System.Windows.Forms.Label();
             this.showUnitFriendlyNameOnMapCheckBox = new System.Windows.Forms.CheckBox();
             this.showUnitFriendlyNameFirstCheckBox = new System.Windows.Forms.CheckBox();
             this.inactiveSchemaOpacityNumeric = new System.Windows.Forms.NumericUpDown();
@@ -312,16 +316,59 @@ namespace Mappy.UI.Forms
             // 
             this.missionGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.missionGroupBox.Controls.Add(this.unitNameBackplateColorCustomizeButton);
+            this.missionGroupBox.Controls.Add(this.showUnitNameBackplateCheckBox);
+            this.missionGroupBox.Controls.Add(this.unitNameTextColorCustomizeButton);
+            this.missionGroupBox.Controls.Add(this.unitNameTextColorLabel);
             this.missionGroupBox.Controls.Add(this.showUnitFriendlyNameOnMapCheckBox);
             this.missionGroupBox.Controls.Add(this.showUnitFriendlyNameFirstCheckBox);
             this.missionGroupBox.Controls.Add(this.inactiveSchemaOpacityNumeric);
             this.missionGroupBox.Controls.Add(this.inactiveSchemaOpacityLabel);
             this.missionGroupBox.Location = new System.Drawing.Point(12, 12);
             this.missionGroupBox.Name = "missionGroupBox";
-            this.missionGroupBox.Size = new System.Drawing.Size(426, 108);
+            this.missionGroupBox.Size = new System.Drawing.Size(426, 160);
             this.missionGroupBox.TabIndex = 0;
             this.missionGroupBox.TabStop = false;
             this.missionGroupBox.Text = "Mission";
+            // 
+            // unitNameBackplateColorCustomizeButton
+            // 
+            this.unitNameBackplateColorCustomizeButton.Location = new System.Drawing.Point(152, 119);
+            this.unitNameBackplateColorCustomizeButton.Name = "unitNameBackplateColorCustomizeButton";
+            this.unitNameBackplateColorCustomizeButton.Size = new System.Drawing.Size(85, 23);
+            this.unitNameBackplateColorCustomizeButton.TabIndex = 7;
+            this.unitNameBackplateColorCustomizeButton.Text = "Customize...";
+            this.unitNameBackplateColorCustomizeButton.UseVisualStyleBackColor = true;
+            this.unitNameBackplateColorCustomizeButton.Click += new System.EventHandler(this.UnitNameBackplateColorCustomizeButtonClick);
+            // 
+            // showUnitNameBackplateCheckBox
+            // 
+            this.showUnitNameBackplateCheckBox.AutoSize = true;
+            this.showUnitNameBackplateCheckBox.Location = new System.Drawing.Point(17, 123);
+            this.showUnitNameBackplateCheckBox.Name = "showUnitNameBackplateCheckBox";
+            this.showUnitNameBackplateCheckBox.Size = new System.Drawing.Size(129, 17);
+            this.showUnitNameBackplateCheckBox.TabIndex = 6;
+            this.showUnitNameBackplateCheckBox.Text = "Unit name backplate";
+            this.showUnitNameBackplateCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // unitNameTextColorCustomizeButton
+            // 
+            this.unitNameTextColorCustomizeButton.Location = new System.Drawing.Point(152, 93);
+            this.unitNameTextColorCustomizeButton.Name = "unitNameTextColorCustomizeButton";
+            this.unitNameTextColorCustomizeButton.Size = new System.Drawing.Size(85, 23);
+            this.unitNameTextColorCustomizeButton.TabIndex = 5;
+            this.unitNameTextColorCustomizeButton.Text = "Customize...";
+            this.unitNameTextColorCustomizeButton.UseVisualStyleBackColor = true;
+            this.unitNameTextColorCustomizeButton.Click += new System.EventHandler(this.UnitNameTextColorCustomizeButtonClick);
+            // 
+            // unitNameTextColorLabel
+            // 
+            this.unitNameTextColorLabel.AutoSize = true;
+            this.unitNameTextColorLabel.Location = new System.Drawing.Point(14, 98);
+            this.unitNameTextColorLabel.Name = "unitNameTextColorLabel";
+            this.unitNameTextColorLabel.Size = new System.Drawing.Size(109, 13);
+            this.unitNameTextColorLabel.TabIndex = 4;
+            this.unitNameTextColorLabel.Text = "Unit name text colour:";
             // 
             // showUnitFriendlyNameOnMapCheckBox
             // 
@@ -894,6 +941,10 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.NumericUpDown inactiveSchemaOpacityNumeric;
         private System.Windows.Forms.CheckBox showUnitFriendlyNameFirstCheckBox;
         private System.Windows.Forms.CheckBox showUnitFriendlyNameOnMapCheckBox;
+        private System.Windows.Forms.Label unitNameTextColorLabel;
+        private System.Windows.Forms.Button unitNameTextColorCustomizeButton;
+        private System.Windows.Forms.CheckBox showUnitNameBackplateCheckBox;
+        private System.Windows.Forms.Button unitNameBackplateColorCustomizeButton;
         private System.Windows.Forms.GroupBox resourceNamesGroupBox;
         private System.Windows.Forms.CheckBox fullResourceNamesCheckBox;
         private System.Windows.Forms.CheckBox featureReclaimAmountsCheckBox;
