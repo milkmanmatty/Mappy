@@ -96,6 +96,7 @@ namespace Mappy.UI.Forms
 	        this.grid1024MenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.gridColorMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.toggleFeaturesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.toggleOrdersMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.playerMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.playerPromptMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.player1MenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -535,7 +536,7 @@ namespace Mappy.UI.Forms
 	        // 
 	        // viewMenuItem
 	        // 
-	        this.viewMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.toggleHeightmapMenuItem, this.toggleHeightGridMenuItem, this.toggleMinimapMenuItem, this.floatPaletteMenuItem, this.toggleVoidsMenuItem, this.gridMenuItem, this.toggleFeaturesMenuItem });
+	        this.viewMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.toggleHeightmapMenuItem, this.toggleHeightGridMenuItem, this.toggleMinimapMenuItem, this.floatPaletteMenuItem, this.toggleVoidsMenuItem, this.gridMenuItem, this.toggleFeaturesMenuItem, this.toggleOrdersMenuItem });
 	        this.viewMenuItem.Name = "viewMenuItem";
 	        this.viewMenuItem.Size = new System.Drawing.Size(61, 29);
 	        this.viewMenuItem.Text = "&View";
@@ -665,6 +666,14 @@ namespace Mappy.UI.Forms
 	        this.toggleFeaturesMenuItem.Size = new System.Drawing.Size(315, 30);
 	        this.toggleFeaturesMenuItem.Text = "Features";
 	        this.toggleFeaturesMenuItem.Click += new System.EventHandler(this.ToggleFeaturesMenuItemClick);
+	        // 
+	        // toggleOrdersMenuItem
+	        // 
+	        this.toggleOrdersMenuItem.Name = "toggleOrdersMenuItem";
+	        this.toggleOrdersMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
+	        this.toggleOrdersMenuItem.Size = new System.Drawing.Size(315, 30);
+	        this.toggleOrdersMenuItem.Text = "Orders";
+	        this.toggleOrdersMenuItem.Click += new System.EventHandler(this.ToggleOrdersMenuItemClick);
 	        // 
 	        // playerMenuItem
 	        // 
@@ -1244,6 +1253,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripMenuItem grid1024MenuItem;
         private System.Windows.Forms.ToolStripMenuItem gridColorMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toggleFeaturesMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toggleOrdersMenuItem;
         private System.Windows.Forms.ToolStripMenuItem playerMenuItem;
         private System.Windows.Forms.ToolStripMenuItem playerPromptMenuItem;
         private System.Windows.Forms.ToolStripMenuItem player1MenuItem;

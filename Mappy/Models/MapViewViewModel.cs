@@ -69,6 +69,8 @@ namespace Mappy.Models
 
         private readonly GuideLayer guides = new GuideLayer();
 
+        private readonly MissionPathLayer missionPaths = new MissionPathLayer();
+
         private readonly BehaviorSubject<SelectableItemsLayer> itemsLayer =
             new BehaviorSubject<SelectableItemsLayer>(new SelectableItemsLayer(0, 0));
 
@@ -232,6 +234,7 @@ namespace Mappy.Models
             this.UpdateAllSchemaUnits();
             this.RefreshFeatureBaseBlobs();
             this.RefreshSelection();
+            this.missionPaths.InvalidatePaths();
         }
 
         public IObservable<Size> CanvasSize { get; }
@@ -249,6 +252,8 @@ namespace Mappy.Models
         public ILayer GridLayer => this.grid;
 
         public ILayer GuidesLayer => this.guides;
+
+        public ILayer MissionPathLayer => this.missionPaths;
 
         public void DragDrop(IDataObject data, Point location, Point screenLocation)
         {
@@ -506,6 +511,16 @@ namespace Mappy.Models
             }
         }
 
+        public void SetMissionPathsVisible(bool visible)
+        {
+            if (this.missionPaths.Enabled == visible)
+            {
+                return;
+            }
+
+            this.missionPaths.Enabled = visible;
+        }
+
         public bool ShiftMouseWheel(int delta, bool ctrlPressed)
         {
             var notchDelta = delta / SystemInformation.MouseWheelScrollDelta;
@@ -627,6 +642,7 @@ namespace Mappy.Models
         {
             this.UnwireMapModel();
             this.mapModel = undoModel.Or(null);
+            this.missionPaths.SetMap(this.mapModel);
             this.WireMapModel();
             this.ResetView();
         }
@@ -901,6 +917,8 @@ namespace Mappy.Models
                     this.RefreshSelection();
                     break;
             }
+
+            this.missionPaths.InvalidatePaths();
         }
 
         private void SchemasChangedHandler(object sender, EventArgs e)
@@ -908,6 +926,7 @@ namespace Mappy.Models
             this.UpdateStartPositions();
             this.UpdateAllSchemaUnits();
             this.RefreshSelection();
+            this.missionPaths.InvalidatePaths();
         }
 
         private void SelectedFeaturesCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -997,6 +1016,7 @@ namespace Mappy.Models
                     this.UpdateStartPositions();
                     this.UpdateAllSchemaUnits();
                     this.RefreshSelection();
+                    this.missionPaths.InvalidatePaths();
                     break;
             }
         }
@@ -1647,6 +1667,7 @@ namespace Mappy.Models
         private void BaseTileChanged(object sender, EventArgs e)
         {
             this.baseTile.Invalidate();
+            this.missionPaths.InvalidatePaths();
         }
 
         private void TileLocationChanged(object sender, EventArgs e)

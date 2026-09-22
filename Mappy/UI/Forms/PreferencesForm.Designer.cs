@@ -45,6 +45,19 @@ namespace Mappy.UI.Forms
             this.dragScrollSpeedYLabel = new System.Windows.Forms.Label();
             this.dragScrollSpeedXLabel = new System.Windows.Forms.Label();
             this.missionGroupBox = new System.Windows.Forms.GroupBox();
+            this.missionUiGroupBox = new System.Windows.Forms.GroupBox();
+            this.missionMovePathLabel = new System.Windows.Forms.Label();
+            this.missionMovePathCustomizeButton = new System.Windows.Forms.Button();
+            this.missionAttackPathLabel = new System.Windows.Forms.Label();
+            this.missionAttackPathCustomizeButton = new System.Windows.Forms.Button();
+            this.missionPatrolPathLabel = new System.Windows.Forms.Label();
+            this.missionPatrolPathCustomizeButton = new System.Windows.Forms.Button();
+            this.missionPatrolDashLabel = new System.Windows.Forms.Label();
+            this.missionPatrolDashCustomizeButton = new System.Windows.Forms.Button();
+            this.missionWaitTextLabel = new System.Windows.Forms.Label();
+            this.missionWaitTextCustomizeButton = new System.Windows.Forms.Button();
+            this.missionWaitBackplateLabel = new System.Windows.Forms.Label();
+            this.missionWaitBackplateCustomizeButton = new System.Windows.Forms.Button();
             this.unitNameBackplateColorCustomizeButton = new System.Windows.Forms.Button();
             this.showUnitNameBackplateCheckBox = new System.Windows.Forms.CheckBox();
             this.unitNameTextColorCustomizeButton = new System.Windows.Forms.Button();
@@ -96,6 +109,7 @@ namespace Mappy.UI.Forms
             ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedYNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).BeginInit();
             this.missionGroupBox.SuspendLayout();
+            this.missionUiGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.inactiveSchemaOpacityNumeric)).BeginInit();
             this.resourceNamesGroupBox.SuspendLayout();
             this.miscGroupBox.SuspendLayout();
@@ -331,6 +345,143 @@ namespace Mappy.UI.Forms
             this.missionGroupBox.TabStop = false;
             this.missionGroupBox.Text = "Mission";
             // 
+            // missionUiGroupBox
+            // 
+            this.missionUiGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.missionUiGroupBox.Controls.Add(this.missionWaitBackplateCustomizeButton);
+            this.missionUiGroupBox.Controls.Add(this.missionWaitBackplateLabel);
+            this.missionUiGroupBox.Controls.Add(this.missionWaitTextCustomizeButton);
+            this.missionUiGroupBox.Controls.Add(this.missionWaitTextLabel);
+            this.missionUiGroupBox.Controls.Add(this.missionPatrolDashCustomizeButton);
+            this.missionUiGroupBox.Controls.Add(this.missionPatrolDashLabel);
+            this.missionUiGroupBox.Controls.Add(this.missionPatrolPathCustomizeButton);
+            this.missionUiGroupBox.Controls.Add(this.missionPatrolPathLabel);
+            this.missionUiGroupBox.Controls.Add(this.missionAttackPathCustomizeButton);
+            this.missionUiGroupBox.Controls.Add(this.missionAttackPathLabel);
+            this.missionUiGroupBox.Controls.Add(this.missionMovePathCustomizeButton);
+            this.missionUiGroupBox.Controls.Add(this.missionMovePathLabel);
+            this.missionUiGroupBox.Location = new System.Drawing.Point(12, 184);
+            this.missionUiGroupBox.Name = "missionUiGroupBox";
+            this.missionUiGroupBox.Size = new System.Drawing.Size(426, 188);
+            this.missionUiGroupBox.TabIndex = 1;
+            this.missionUiGroupBox.TabStop = false;
+            this.missionUiGroupBox.Text = "UI";
+            // 
+            // missionMovePathLabel
+            // 
+            this.missionMovePathLabel.AutoSize = true;
+            this.missionMovePathLabel.Location = new System.Drawing.Point(14, 26);
+            this.missionMovePathLabel.Name = "missionMovePathLabel";
+            this.missionMovePathLabel.Size = new System.Drawing.Size(96, 13);
+            this.missionMovePathLabel.TabIndex = 0;
+            this.missionMovePathLabel.Text = "Move path colour:";
+            // 
+            // missionMovePathCustomizeButton
+            // 
+            this.missionMovePathCustomizeButton.Location = new System.Drawing.Point(200, 21);
+            this.missionMovePathCustomizeButton.Name = "missionMovePathCustomizeButton";
+            this.missionMovePathCustomizeButton.Size = new System.Drawing.Size(85, 23);
+            this.missionMovePathCustomizeButton.TabIndex = 1;
+            this.missionMovePathCustomizeButton.Text = "Customize...";
+            this.missionMovePathCustomizeButton.UseVisualStyleBackColor = true;
+            this.missionMovePathCustomizeButton.Click += new System.EventHandler(this.MissionMovePathCustomizeButtonClick);
+            // 
+            // missionAttackPathLabel
+            // 
+            this.missionAttackPathLabel.AutoSize = true;
+            this.missionAttackPathLabel.Location = new System.Drawing.Point(14, 52);
+            this.missionAttackPathLabel.Name = "missionAttackPathLabel";
+            this.missionAttackPathLabel.Size = new System.Drawing.Size(99, 13);
+            this.missionAttackPathLabel.TabIndex = 2;
+            this.missionAttackPathLabel.Text = "Attack path colour:";
+            // 
+            // missionAttackPathCustomizeButton
+            // 
+            this.missionAttackPathCustomizeButton.Location = new System.Drawing.Point(200, 47);
+            this.missionAttackPathCustomizeButton.Name = "missionAttackPathCustomizeButton";
+            this.missionAttackPathCustomizeButton.Size = new System.Drawing.Size(85, 23);
+            this.missionAttackPathCustomizeButton.TabIndex = 3;
+            this.missionAttackPathCustomizeButton.Text = "Customize...";
+            this.missionAttackPathCustomizeButton.UseVisualStyleBackColor = true;
+            this.missionAttackPathCustomizeButton.Click += new System.EventHandler(this.MissionAttackPathCustomizeButtonClick);
+            // 
+            // missionPatrolPathLabel
+            // 
+            this.missionPatrolPathLabel.AutoSize = true;
+            this.missionPatrolPathLabel.Location = new System.Drawing.Point(14, 78);
+            this.missionPatrolPathLabel.Name = "missionPatrolPathLabel";
+            this.missionPatrolPathLabel.Size = new System.Drawing.Size(97, 13);
+            this.missionPatrolPathLabel.TabIndex = 4;
+            this.missionPatrolPathLabel.Text = "Patrol path colour:";
+            // 
+            // missionPatrolPathCustomizeButton
+            // 
+            this.missionPatrolPathCustomizeButton.Location = new System.Drawing.Point(200, 73);
+            this.missionPatrolPathCustomizeButton.Name = "missionPatrolPathCustomizeButton";
+            this.missionPatrolPathCustomizeButton.Size = new System.Drawing.Size(85, 23);
+            this.missionPatrolPathCustomizeButton.TabIndex = 5;
+            this.missionPatrolPathCustomizeButton.Text = "Customize...";
+            this.missionPatrolPathCustomizeButton.UseVisualStyleBackColor = true;
+            this.missionPatrolPathCustomizeButton.Click += new System.EventHandler(this.MissionPatrolPathCustomizeButtonClick);
+            // 
+            // missionPatrolDashLabel
+            // 
+            this.missionPatrolDashLabel.AutoSize = true;
+            this.missionPatrolDashLabel.Location = new System.Drawing.Point(14, 104);
+            this.missionPatrolDashLabel.Name = "missionPatrolDashLabel";
+            this.missionPatrolDashLabel.Size = new System.Drawing.Size(99, 13);
+            this.missionPatrolDashLabel.TabIndex = 6;
+            this.missionPatrolDashLabel.Text = "Patrol dash colour:";
+            // 
+            // missionPatrolDashCustomizeButton
+            // 
+            this.missionPatrolDashCustomizeButton.Location = new System.Drawing.Point(200, 99);
+            this.missionPatrolDashCustomizeButton.Name = "missionPatrolDashCustomizeButton";
+            this.missionPatrolDashCustomizeButton.Size = new System.Drawing.Size(85, 23);
+            this.missionPatrolDashCustomizeButton.TabIndex = 7;
+            this.missionPatrolDashCustomizeButton.Text = "Customize...";
+            this.missionPatrolDashCustomizeButton.UseVisualStyleBackColor = true;
+            this.missionPatrolDashCustomizeButton.Click += new System.EventHandler(this.MissionPatrolDashCustomizeButtonClick);
+            // 
+            // missionWaitTextLabel
+            // 
+            this.missionWaitTextLabel.AutoSize = true;
+            this.missionWaitTextLabel.Location = new System.Drawing.Point(14, 130);
+            this.missionWaitTextLabel.Name = "missionWaitTextLabel";
+            this.missionWaitTextLabel.Size = new System.Drawing.Size(89, 13);
+            this.missionWaitTextLabel.TabIndex = 8;
+            this.missionWaitTextLabel.Text = "Wait text colour:";
+            // 
+            // missionWaitTextCustomizeButton
+            // 
+            this.missionWaitTextCustomizeButton.Location = new System.Drawing.Point(200, 125);
+            this.missionWaitTextCustomizeButton.Name = "missionWaitTextCustomizeButton";
+            this.missionWaitTextCustomizeButton.Size = new System.Drawing.Size(85, 23);
+            this.missionWaitTextCustomizeButton.TabIndex = 9;
+            this.missionWaitTextCustomizeButton.Text = "Customize...";
+            this.missionWaitTextCustomizeButton.UseVisualStyleBackColor = true;
+            this.missionWaitTextCustomizeButton.Click += new System.EventHandler(this.MissionWaitTextCustomizeButtonClick);
+            // 
+            // missionWaitBackplateLabel
+            // 
+            this.missionWaitBackplateLabel.AutoSize = true;
+            this.missionWaitBackplateLabel.Location = new System.Drawing.Point(14, 156);
+            this.missionWaitBackplateLabel.Name = "missionWaitBackplateLabel";
+            this.missionWaitBackplateLabel.Size = new System.Drawing.Size(118, 13);
+            this.missionWaitBackplateLabel.TabIndex = 10;
+            this.missionWaitBackplateLabel.Text = "Wait backplate colour:";
+            // 
+            // missionWaitBackplateCustomizeButton
+            // 
+            this.missionWaitBackplateCustomizeButton.Location = new System.Drawing.Point(200, 151);
+            this.missionWaitBackplateCustomizeButton.Name = "missionWaitBackplateCustomizeButton";
+            this.missionWaitBackplateCustomizeButton.Size = new System.Drawing.Size(85, 23);
+            this.missionWaitBackplateCustomizeButton.TabIndex = 11;
+            this.missionWaitBackplateCustomizeButton.Text = "Customize...";
+            this.missionWaitBackplateCustomizeButton.UseVisualStyleBackColor = true;
+            this.missionWaitBackplateCustomizeButton.Click += new System.EventHandler(this.MissionWaitBackplateCustomizeButtonClick);
+            // 
             // unitNameBackplateColorCustomizeButton
             // 
             this.unitNameBackplateColorCustomizeButton.Location = new System.Drawing.Point(152, 119);
@@ -507,6 +658,7 @@ namespace Mappy.UI.Forms
             // missionTabPage
             // 
             this.missionTabPage.AutoScroll = true;
+            this.missionTabPage.Controls.Add(this.missionUiGroupBox);
             this.missionTabPage.Controls.Add(this.missionGroupBox);
             this.missionTabPage.Location = new System.Drawing.Point(4, 22);
             this.missionTabPage.Name = "missionTabPage";
@@ -893,6 +1045,8 @@ namespace Mappy.UI.Forms
             ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).EndInit();
             this.missionGroupBox.ResumeLayout(false);
             this.missionGroupBox.PerformLayout();
+            this.missionUiGroupBox.ResumeLayout(false);
+            this.missionUiGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.inactiveSchemaOpacityNumeric)).EndInit();
             this.resourceNamesGroupBox.ResumeLayout(false);
             this.resourceNamesGroupBox.PerformLayout();
@@ -937,6 +1091,19 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.NumericUpDown dragScrollSpeedYNumeric;
         private System.Windows.Forms.NumericUpDown dragScrollSpeedXNumeric;
         private System.Windows.Forms.GroupBox missionGroupBox;
+        private System.Windows.Forms.GroupBox missionUiGroupBox;
+        private System.Windows.Forms.Label missionMovePathLabel;
+        private System.Windows.Forms.Button missionMovePathCustomizeButton;
+        private System.Windows.Forms.Label missionAttackPathLabel;
+        private System.Windows.Forms.Button missionAttackPathCustomizeButton;
+        private System.Windows.Forms.Label missionPatrolPathLabel;
+        private System.Windows.Forms.Button missionPatrolPathCustomizeButton;
+        private System.Windows.Forms.Label missionPatrolDashLabel;
+        private System.Windows.Forms.Button missionPatrolDashCustomizeButton;
+        private System.Windows.Forms.Label missionWaitTextLabel;
+        private System.Windows.Forms.Button missionWaitTextCustomizeButton;
+        private System.Windows.Forms.Label missionWaitBackplateLabel;
+        private System.Windows.Forms.Button missionWaitBackplateCustomizeButton;
         private System.Windows.Forms.Label inactiveSchemaOpacityLabel;
         private System.Windows.Forms.NumericUpDown inactiveSchemaOpacityNumeric;
         private System.Windows.Forms.CheckBox showUnitFriendlyNameFirstCheckBox;
