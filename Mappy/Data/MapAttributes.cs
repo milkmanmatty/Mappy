@@ -754,8 +754,8 @@ namespace Mappy.Data
                 {
                     var u = sch.Units[i];
                     var un = new TdfNode("unit" + i);
-                    un.Entries["Unitname"] = u.Unitname;
-                    un.Entries["Ident"] = u.Ident;
+                    un.Entries["Unitname"] = (u.Unitname ?? string.Empty).ToUpperInvariant();
+                    un.Entries["Ident"] = (u.Ident ?? string.Empty).ToUpperInvariant();
                     un.Entries["XPos"] = TdfConvert.ToString(u.XPos);
                     un.Entries["YPos"] = TdfConvert.ToString(u.YPos);
                     un.Entries["ZPos"] = TdfConvert.ToString(u.ZPos);

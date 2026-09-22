@@ -109,7 +109,7 @@ namespace Mappy.UI.Forms
             this.numericHealth = new NumericUpDown { Minimum = 1, Maximum = 100, Width = 80 };
             AddLabeledRow(statsPage, "Health %", this.numericHealth, ref y);
 
-            this.numericAngle = new NumericUpDown { Minimum = -32768, Maximum = 32767, Width = 80 };
+            this.numericAngle = new NumericUpDown { Minimum = 0, Maximum = 65535, Width = 80 };
             AddLabeledRow(statsPage, "Angle", this.numericAngle, ref y);
 
             this.numericKills = new NumericUpDown { Minimum = 0, Maximum = 100000, Width = 80 };
@@ -225,9 +225,9 @@ namespace Mappy.UI.Forms
             this.comboPlayer.SelectedIndex = pi;
 
             this.textIdent.Text = u.Ident;
-            this.numericHealth.Value = Math.Max(this.numericHealth.Minimum, Math.Min(this.numericHealth.Maximum, u.HealthPercentage));
-            this.numericAngle.Value = u.Angle;
-            this.numericKills.Value = u.Kills;
+            this.numericHealth.Value = ClampToNumericRange(this.numericHealth, u.HealthPercentage);
+            this.numericAngle.Value = ClampToNumericRange(this.numericAngle, u.Angle);
+            this.numericKills.Value = ClampToNumericRange(this.numericKills, u.Kills);
             this.numericX.Value = ClampToNumericRange(this.numericX, u.XPos);
             this.numericY.Value = ClampToNumericRange(this.numericY, u.YPos);
             this.numericZ.Value = ClampToNumericRange(this.numericZ, u.ZPos);

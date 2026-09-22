@@ -62,9 +62,29 @@ namespace Mappy
 
         public int? UnitNameBackplateColorArgb { get; set; }
 
+        public int? MissionMovePathColorArgb { get; set; }
+
+        public int? MissionAttackPathColorArgb { get; set; }
+
+        public int? MissionPatrolPathColorArgb { get; set; }
+
+        public int? MissionPatrolDashColorArgb { get; set; }
+
+        public int? MissionWaitTextColorArgb { get; set; }
+
+        public int? MissionWaitBackplateColorArgb { get; set; }
+
         public static Color DefaultUnitNameTextColor { get; } = Color.White;
 
         public static Color DefaultUnitNameBackplateColor { get; } = Color.FromArgb(180, 0, 0, 0);
+
+        public static Color DefaultMissionMovePathColor { get; } = Color.FromArgb(0, 220, 70);
+
+        public static Color DefaultMissionAttackPathColor { get; } = Color.Red;
+
+        public static Color DefaultMissionPatrolPathColor { get; } = Color.DodgerBlue;
+
+        public static Color DefaultMissionPatrolDashColor { get; } = Color.White;
 
         [XmlIgnore]
         public Color UnitNameTextColor
@@ -91,6 +111,48 @@ namespace Mappy
         {
             return this.UnitNameBackplateColorArgb.HasValue
                 ? Color.FromArgb(this.UnitNameBackplateColorArgb.Value)
+                : DefaultUnitNameBackplateColor;
+        }
+
+        public Color GetMissionMovePathColorOrDefault()
+        {
+            return this.MissionMovePathColorArgb.HasValue
+                ? Color.FromArgb(this.MissionMovePathColorArgb.Value)
+                : DefaultMissionMovePathColor;
+        }
+
+        public Color GetMissionAttackPathColorOrDefault()
+        {
+            return this.MissionAttackPathColorArgb.HasValue
+                ? Color.FromArgb(this.MissionAttackPathColorArgb.Value)
+                : DefaultMissionAttackPathColor;
+        }
+
+        public Color GetMissionPatrolPathColorOrDefault()
+        {
+            return this.MissionPatrolPathColorArgb.HasValue
+                ? Color.FromArgb(this.MissionPatrolPathColorArgb.Value)
+                : DefaultMissionPatrolPathColor;
+        }
+
+        public Color GetMissionPatrolDashColorOrDefault()
+        {
+            return this.MissionPatrolDashColorArgb.HasValue
+                ? Color.FromArgb(this.MissionPatrolDashColorArgb.Value)
+                : DefaultMissionPatrolDashColor;
+        }
+
+        public Color GetMissionWaitTextColorOrDefault()
+        {
+            return this.MissionWaitTextColorArgb.HasValue
+                ? Color.FromArgb(this.MissionWaitTextColorArgb.Value)
+                : DefaultUnitNameTextColor;
+        }
+
+        public Color GetMissionWaitBackplateColorOrDefault()
+        {
+            return this.MissionWaitBackplateColorArgb.HasValue
+                ? Color.FromArgb(this.MissionWaitBackplateColorArgb.Value)
                 : DefaultUnitNameBackplateColor;
         }
 

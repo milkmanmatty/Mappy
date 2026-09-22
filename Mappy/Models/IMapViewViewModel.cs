@@ -18,6 +18,8 @@ namespace Mappy.Models
 
         ILayer GridLayer { get; }
 
+        ILayer MissionPathLayer { get; }
+
         IObservable<Point> ViewportLocation { get; }
 
         IObservable<bool> HeightEditMode { get; }
@@ -35,6 +37,8 @@ namespace Mappy.Models
         void MouseUp();
 
         void KeyDown(Keys key);
+
+        void SetMissionPathsVisible(bool visible);
 
         bool ShiftMouseWheel(int delta, bool ctrlPressed);
 

@@ -296,6 +296,7 @@
     <Compile Include="UI\Controls\MapViewPanel.Designer.cs">
       <DependentUpon>MapViewPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Controls\MissionPathLayer.cs" />
     <Compile Include="UI\Controls\MinimapControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -415,6 +416,7 @@
     <Compile Include="Util\ImageSampling\MapPixelImageAdapter.cs" />
     <Compile Include="Util\ImageSampling\NearestNeighbourWrapper.cs" />
     <Compile Include="Util\ImgUtil.cs" />
+    <Compile Include="Util\InitialMissionPath.cs" />
     <Compile Include="Util\MetalSpotDisplayFormat.cs" />
     <Compile Include="Util\PlayerSlotVisuals.cs" />
     <Compile Include="Util\TaTeamColorRemap.cs" />

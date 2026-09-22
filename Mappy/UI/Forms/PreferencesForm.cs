@@ -21,6 +21,30 @@ namespace Mappy.UI.Forms
 
         private bool unitNameBackplateColorCustomized;
 
+        private Color missionMovePathColor = Configuration.DefaultMissionMovePathColor;
+
+        private bool missionMovePathColorCustomized;
+
+        private Color missionAttackPathColor = Configuration.DefaultMissionAttackPathColor;
+
+        private bool missionAttackPathColorCustomized;
+
+        private Color missionPatrolPathColor = Configuration.DefaultMissionPatrolPathColor;
+
+        private bool missionPatrolPathColorCustomized;
+
+        private Color missionPatrolDashColor = Configuration.DefaultMissionPatrolDashColor;
+
+        private bool missionPatrolDashColorCustomized;
+
+        private Color missionWaitTextColor = Configuration.DefaultUnitNameTextColor;
+
+        private bool missionWaitTextColorCustomized;
+
+        private Color missionWaitBackplateColor = Configuration.DefaultUnitNameBackplateColor;
+
+        private bool missionWaitBackplateColorCustomized;
+
         public PreferencesForm()
         {
             this.InitializeComponent();
@@ -49,6 +73,18 @@ namespace Mappy.UI.Forms
             this.unitNameTextColorCustomized = MappySettings.Settings.UnitNameTextColorArgb.HasValue;
             this.unitNameBackplateColor = MappySettings.Settings.GetUnitNameBackplateColorOrDefault();
             this.unitNameBackplateColorCustomized = MappySettings.Settings.UnitNameBackplateColorArgb.HasValue;
+            this.missionMovePathColor = MappySettings.Settings.GetMissionMovePathColorOrDefault();
+            this.missionMovePathColorCustomized = MappySettings.Settings.MissionMovePathColorArgb.HasValue;
+            this.missionAttackPathColor = MappySettings.Settings.GetMissionAttackPathColorOrDefault();
+            this.missionAttackPathColorCustomized = MappySettings.Settings.MissionAttackPathColorArgb.HasValue;
+            this.missionPatrolPathColor = MappySettings.Settings.GetMissionPatrolPathColorOrDefault();
+            this.missionPatrolPathColorCustomized = MappySettings.Settings.MissionPatrolPathColorArgb.HasValue;
+            this.missionPatrolDashColor = MappySettings.Settings.GetMissionPatrolDashColorOrDefault();
+            this.missionPatrolDashColorCustomized = MappySettings.Settings.MissionPatrolDashColorArgb.HasValue;
+            this.missionWaitTextColor = MappySettings.Settings.GetMissionWaitTextColorOrDefault();
+            this.missionWaitTextColorCustomized = MappySettings.Settings.MissionWaitTextColorArgb.HasValue;
+            this.missionWaitBackplateColor = MappySettings.Settings.GetMissionWaitBackplateColorOrDefault();
+            this.missionWaitBackplateColorCustomized = MappySettings.Settings.MissionWaitBackplateColorArgb.HasValue;
             this.inactiveSchemaOpacityNumeric.Value = MappySettings.Settings.GetInactiveSchemaOpacityPercentForDialog();
             this.doNotPromptToSaveUnsavedChangesCheckBox.Checked = MappySettings.Settings.DoNotPromptToSaveUnsavedChanges;
 
@@ -105,6 +141,56 @@ namespace Mappy.UI.Forms
 
                 this.unitNameTextColor = colorDialog.Color;
                 this.unitNameTextColorCustomized = true;
+            }
+        }
+
+        private void MissionMovePathCustomizeButtonClick(object sender, EventArgs e)
+        {
+            this.CustomizeMissionColor(ref this.missionMovePathColor, ref this.missionMovePathColorCustomized, false);
+        }
+
+        private void MissionAttackPathCustomizeButtonClick(object sender, EventArgs e)
+        {
+            this.CustomizeMissionColor(ref this.missionAttackPathColor, ref this.missionAttackPathColorCustomized, false);
+        }
+
+        private void MissionPatrolPathCustomizeButtonClick(object sender, EventArgs e)
+        {
+            this.CustomizeMissionColor(ref this.missionPatrolPathColor, ref this.missionPatrolPathColorCustomized, false);
+        }
+
+        private void MissionPatrolDashCustomizeButtonClick(object sender, EventArgs e)
+        {
+            this.CustomizeMissionColor(ref this.missionPatrolDashColor, ref this.missionPatrolDashColorCustomized, false);
+        }
+
+        private void MissionWaitTextCustomizeButtonClick(object sender, EventArgs e)
+        {
+            this.CustomizeMissionColor(ref this.missionWaitTextColor, ref this.missionWaitTextColorCustomized, false);
+        }
+
+        private void MissionWaitBackplateCustomizeButtonClick(object sender, EventArgs e)
+        {
+            this.CustomizeMissionColor(ref this.missionWaitBackplateColor, ref this.missionWaitBackplateColorCustomized, true);
+        }
+
+        private void CustomizeMissionColor(ref Color color, ref bool customized, bool preserveAlpha)
+        {
+            using (var colorDialog = new ColorDialog())
+            {
+                colorDialog.Color = preserveAlpha
+                    ? Color.FromArgb(255, color.R, color.G, color.B)
+                    : color;
+                colorDialog.FullOpen = true;
+                if (colorDialog.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                color = preserveAlpha
+                    ? Color.FromArgb(color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B)
+                    : colorDialog.Color;
+                customized = true;
             }
         }
 
@@ -223,6 +309,24 @@ namespace Mappy.UI.Forms
                 : null;
             MappySettings.Settings.UnitNameBackplateColorArgb = this.unitNameBackplateColorCustomized
                 ? (int?)this.unitNameBackplateColor.ToArgb()
+                : null;
+            MappySettings.Settings.MissionMovePathColorArgb = this.missionMovePathColorCustomized
+                ? (int?)this.missionMovePathColor.ToArgb()
+                : null;
+            MappySettings.Settings.MissionAttackPathColorArgb = this.missionAttackPathColorCustomized
+                ? (int?)this.missionAttackPathColor.ToArgb()
+                : null;
+            MappySettings.Settings.MissionPatrolPathColorArgb = this.missionPatrolPathColorCustomized
+                ? (int?)this.missionPatrolPathColor.ToArgb()
+                : null;
+            MappySettings.Settings.MissionPatrolDashColorArgb = this.missionPatrolDashColorCustomized
+                ? (int?)this.missionPatrolDashColor.ToArgb()
+                : null;
+            MappySettings.Settings.MissionWaitTextColorArgb = this.missionWaitTextColorCustomized
+                ? (int?)this.missionWaitTextColor.ToArgb()
+                : null;
+            MappySettings.Settings.MissionWaitBackplateColorArgb = this.missionWaitBackplateColorCustomized
+                ? (int?)this.missionWaitBackplateColor.ToArgb()
                 : null;
             MappySettings.Settings.InactiveSchemaOpacityPercent = (int)this.inactiveSchemaOpacityNumeric.Value;
             MappySettings.Settings.DoNotPromptToSaveUnsavedChanges = this.doNotPromptToSaveUnsavedChangesCheckBox.Checked;

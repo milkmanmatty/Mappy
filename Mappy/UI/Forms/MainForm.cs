@@ -23,6 +23,8 @@ namespace Mappy.UI.Forms
         private bool isPaletteFloating;
         private bool updatingZoomControls;
 
+        private bool missionPathsVisible;
+
         public MainForm()
         {
             this.InitializeComponent();
@@ -856,6 +858,11 @@ namespace Mappy.UI.Forms
             this.TryHandlePaletteTabShortcut(e);
         }
 
+        private void ToggleOrdersMenuItemClick(object sender, EventArgs e)
+        {
+            this.SetMissionPathsVisible(!this.missionPathsVisible);
+        }
+
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             if (this.TryHandlePaletteTabShortcut(e))
@@ -869,6 +876,13 @@ namespace Mappy.UI.Forms
                 this.model.CenterViewOnStartPosition(playerIndex);
                 e.Handled = true;
             }
+        }
+
+        private void SetMissionPathsVisible(bool visible)
+        {
+            this.missionPathsVisible = visible;
+            this.toggleOrdersMenuItem.Checked = visible;
+            this.mapViewPanel.SetMissionPathsVisible(visible);
         }
 
         private bool TryHandlePaletteTabShortcut(KeyEventArgs e)

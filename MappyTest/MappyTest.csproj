@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ErrorDiffusionPaletteQuantizerTest.cs" />
+    <Compile Include="InitialMissionPathTest.cs" />
     <Compile Include="MaybeTest.cs" />
     <Compile Include="MinimapControlTest.cs" />
     <Compile Include="QuadTreeTest.cs" />
