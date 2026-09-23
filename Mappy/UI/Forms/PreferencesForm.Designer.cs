@@ -71,6 +71,7 @@ namespace Mappy.UI.Forms
             this.featureReclaimAmountsCheckBox = new System.Windows.Forms.CheckBox();
             this.fullResourceNamesCheckBox = new System.Windows.Forms.CheckBox();
             this.miscGroupBox = new System.Windows.Forms.GroupBox();
+            this.splitTilesCheckBox = new System.Windows.Forms.CheckBox();
             this.doNotPromptToSaveUnsavedChangesCheckBox = new System.Windows.Forms.CheckBox();
             this.preferencesTabControl = new System.Windows.Forms.TabControl();
             this.miscTabPage = new System.Windows.Forms.TabPage();
@@ -566,20 +567,21 @@ namespace Mappy.UI.Forms
             // 
             this.resourceNamesGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.resourceNamesGroupBox.Controls.Add(this.splitTilesCheckBox);
             this.resourceNamesGroupBox.Controls.Add(this.calculatedMetalDepositValueCheckBox);
             this.resourceNamesGroupBox.Controls.Add(this.featureReclaimAmountsCheckBox);
             this.resourceNamesGroupBox.Controls.Add(this.fullResourceNamesCheckBox);
             this.resourceNamesGroupBox.Location = new System.Drawing.Point(12, 233);
             this.resourceNamesGroupBox.Name = "resourceNamesGroupBox";
-            this.resourceNamesGroupBox.Size = new System.Drawing.Size(426, 95);
+            this.resourceNamesGroupBox.Size = new System.Drawing.Size(426, 72);
             this.resourceNamesGroupBox.TabIndex = 1;
             this.resourceNamesGroupBox.TabStop = false;
-            this.resourceNamesGroupBox.Text = "Resource Labels";
+            this.resourceNamesGroupBox.Text = "Sections / Features";
             // 
             // calculatedMetalDepositValueCheckBox
             // 
             this.calculatedMetalDepositValueCheckBox.AutoSize = true;
-            this.calculatedMetalDepositValueCheckBox.Location = new System.Drawing.Point(17, 68);
+            this.calculatedMetalDepositValueCheckBox.Location = new System.Drawing.Point(17, 45);
             this.calculatedMetalDepositValueCheckBox.Name = "calculatedMetalDepositValueCheckBox";
             this.calculatedMetalDepositValueCheckBox.Size = new System.Drawing.Size(170, 17);
             this.calculatedMetalDepositValueCheckBox.TabIndex = 2;
@@ -589,7 +591,7 @@ namespace Mappy.UI.Forms
             // featureReclaimAmountsCheckBox
             // 
             this.featureReclaimAmountsCheckBox.AutoSize = true;
-            this.featureReclaimAmountsCheckBox.Location = new System.Drawing.Point(17, 45);
+            this.featureReclaimAmountsCheckBox.Location = new System.Drawing.Point(210, 22);
             this.featureReclaimAmountsCheckBox.Name = "featureReclaimAmountsCheckBox";
             this.featureReclaimAmountsCheckBox.Size = new System.Drawing.Size(168, 17);
             this.featureReclaimAmountsCheckBox.TabIndex = 1;
@@ -606,12 +608,22 @@ namespace Mappy.UI.Forms
             this.fullResourceNamesCheckBox.Text = "Full resource names";
             this.fullResourceNamesCheckBox.UseVisualStyleBackColor = true;
             // 
+            // splitTilesCheckBox
+            // 
+            this.splitTilesCheckBox.AutoSize = true;
+            this.splitTilesCheckBox.Location = new System.Drawing.Point(210, 45);
+            this.splitTilesCheckBox.Name = "splitTilesCheckBox";
+            this.splitTilesCheckBox.Size = new System.Drawing.Size(73, 17);
+            this.splitTilesCheckBox.TabIndex = 3;
+            this.splitTilesCheckBox.Text = "Split tilesets";
+            this.splitTilesCheckBox.UseVisualStyleBackColor = true;
+            // 
             // miscGroupBox
             // 
             this.miscGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.miscGroupBox.Controls.Add(this.doNotPromptToSaveUnsavedChangesCheckBox);
-            this.miscGroupBox.Location = new System.Drawing.Point(12, 334);
+            this.miscGroupBox.Location = new System.Drawing.Point(12, 311);
             this.miscGroupBox.Name = "miscGroupBox";
             this.miscGroupBox.Size = new System.Drawing.Size(426, 50);
             this.miscGroupBox.TabIndex = 2;
@@ -1117,6 +1129,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.CheckBox featureReclaimAmountsCheckBox;
         private System.Windows.Forms.CheckBox calculatedMetalDepositValueCheckBox;
         private System.Windows.Forms.GroupBox miscGroupBox;
+        private System.Windows.Forms.CheckBox splitTilesCheckBox;
         private System.Windows.Forms.CheckBox doNotPromptToSaveUnsavedChangesCheckBox;
         private System.Windows.Forms.TabControl preferencesTabControl;
         private System.Windows.Forms.TabPage miscTabPage;

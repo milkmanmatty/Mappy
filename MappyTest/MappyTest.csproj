@@ -69,6 +69,7 @@
     <Compile Include="MaybeTest.cs" />
     <Compile Include="MinimapControlTest.cs" />
     <Compile Include="QuadTreeTest.cs" />
+    <Compile Include="SectionServiceTest.cs" />
     <Compile Include="TreeItem.cs" />
   </ItemGroup>
   <ItemGroup>

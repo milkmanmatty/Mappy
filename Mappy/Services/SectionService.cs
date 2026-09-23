@@ -7,6 +7,7 @@ namespace Mappy.Services
     using System.IO;
     using System.Linq;
 
+    using Mappy;
     using Mappy.Data;
     using Mappy.IO;
 
@@ -18,6 +19,12 @@ namespace Mappy.Services
         private readonly Dictionary<int, SectionInfo> sections = new Dictionary<int, SectionInfo>();
 
         private readonly Dictionary<int, Section> sectionsCache = new Dictionary<int, Section>();
+
+        private Dictionary<WorldArchiveKey, string> splitLabels;
+
+        private Dictionary<string, WorldArchiveKey> splitKeyByLabel;
+
+        private Dictionary<WorldArchiveKey, List<KeyValuePair<int, SectionInfo>>> sectionsBySplitKey;
 
         private int nextId;
 
@@ -46,6 +53,15 @@ namespace Mappy.Services
 
         public IEnumerable<string> EnumerateWorlds()
         {
+            if (MappySettings.Settings.SplitTiles)
+            {
+                this.EnsureSplitIndex();
+                return this.splitLabels
+                    .Where(x => this.worldFilter == null || this.worldFilter.Contains(x.Key.World))
+                    .Select(x => x.Value)
+                    .OrderBy(x => x, StringComparer.InvariantCultureIgnoreCase);
+            }
+
             var worlds = this.EnumerateWorldsUnfiltered();
             if (this.worldFilter == null)
             {
@@ -70,10 +86,8 @@ namespace Mappy.Services
 
 
         public IEnumerable<string> EnumerateCategories(string world) =>
-            this.sections
-                .Select(x => x.Value)
-                .Where(x => x.World == world)
-                .Select(x => x.Category)
+            this.SectionsInSelectedWorld(world)
+                .Select(x => x.Value.Category)
                 .Distinct(StringComparer.InvariantCultureIgnoreCase)
                 .OrderBy(x => x, StringComparer.InvariantCultureIgnoreCase);
 
@@ -114,9 +128,8 @@ namespace Mappy.Services
 
         private IEnumerable<KeyValuePair<int, Section>> EnumerateSectionsInternal(string world, string category)
         {
-            var relevantSections = this.sections.Where(
-                x => string.Equals(x.Value.World, world, StringComparison.InvariantCultureIgnoreCase)
-                    && string.Equals(x.Value.Category, category, StringComparison.InvariantCultureIgnoreCase));
+            var relevantSections = this.SectionsInSelectedWorld(world)
+                .Where(x => string.Equals(x.Value.Category, category, StringComparison.InvariantCultureIgnoreCase));
 
             var uncachedSections = new List<KeyValuePair<int, SectionInfo>>();
             foreach (var s in relevantSections)
@@ -151,6 +164,140 @@ namespace Mappy.Services
         {
             var id = this.nextId++;
             this.sections[id] = s;
+            this.splitLabels = null;
+            this.splitKeyByLabel = null;
+            this.sectionsBySplitKey = null;
+        }
+
+        private IEnumerable<KeyValuePair<int, SectionInfo>> SectionsInSelectedWorld(string selectedWorld)
+        {
+            if (string.IsNullOrEmpty(selectedWorld))
+            {
+                return Enumerable.Empty<KeyValuePair<int, SectionInfo>>();
+            }
+
+            if (!MappySettings.Settings.SplitTiles)
+            {
+                return this.sections.Where(
+                    x => string.Equals(x.Value.World, selectedWorld, StringComparison.InvariantCultureIgnoreCase));
+            }
+
+            this.EnsureSplitIndex();
+            if (!this.splitKeyByLabel.TryGetValue(selectedWorld, out var key)
+                || !this.sectionsBySplitKey.TryGetValue(key, out var matches))
+            {
+                return Enumerable.Empty<KeyValuePair<int, SectionInfo>>();
+            }
+
+            return matches;
+        }
+
+        private void EnsureSplitIndex()
+        {
+            if (this.splitLabels != null)
+            {
+                return;
+            }
+
+            var grouped = new Dictionary<WorldArchiveKey, List<KeyValuePair<int, SectionInfo>>>(WorldArchiveKeyComparer.Instance);
+            foreach (var entry in this.sections)
+            {
+                var key = new WorldArchiveKey(entry.Value.World, entry.Value.HpiFileName);
+                if (!grouped.TryGetValue(key, out var list))
+                {
+                    list = new List<KeyValuePair<int, SectionInfo>>();
+                    grouped.Add(key, list);
+                }
+
+                list.Add(entry);
+            }
+
+            this.sectionsBySplitKey = grouped;
+            this.splitLabels = this.BuildSplitLabels(grouped.Keys);
+            this.splitKeyByLabel = new Dictionary<string, WorldArchiveKey>(StringComparer.InvariantCultureIgnoreCase);
+            foreach (var entry in this.splitLabels)
+            {
+                this.splitKeyByLabel[entry.Value] = entry.Key;
+            }
+        }
+
+        private Dictionary<WorldArchiveKey, string> BuildSplitLabels(IEnumerable<WorldArchiveKey> keys)
+        {
+            var groups = keys.ToList();
+
+            var ambiguous = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+            foreach (var bucket in groups.GroupBy(key => this.CollisionKey(key.World, key.HpiFileName), StringComparer.InvariantCultureIgnoreCase))
+            {
+                if (bucket.Count() > 1)
+                {
+                    ambiguous.Add(bucket.Key);
+                }
+            }
+
+            var labels = new Dictionary<WorldArchiveKey, string>(WorldArchiveKeyComparer.Instance);
+            foreach (var key in groups)
+            {
+                var fileName = Path.GetFileName(key.HpiFileName);
+                var useFullPath = string.IsNullOrEmpty(fileName) || ambiguous.Contains(this.CollisionKey(key.World, key.HpiFileName));
+                var archive = useFullPath ? key.HpiFileName : fileName;
+                if (string.IsNullOrEmpty(archive))
+                {
+                    archive = "unknown";
+                }
+
+                labels[key] = $"{key.World} ({archive})";
+            }
+
+            return labels;
+        }
+
+        private string CollisionKey(string world, string hpiFileName)
+        {
+            return string.Concat(world ?? string.Empty, "\u001f", Path.GetFileName(hpiFileName) ?? string.Empty);
+        }
+
+        private sealed class WorldArchiveKey
+        {
+            public WorldArchiveKey(string world, string hpiFileName)
+            {
+                this.World = world ?? string.Empty;
+                this.HpiFileName = hpiFileName ?? string.Empty;
+            }
+
+            public string World { get; }
+
+            public string HpiFileName { get; }
+        }
+
+        private sealed class WorldArchiveKeyComparer : IEqualityComparer<WorldArchiveKey>
+        {
+            public static readonly WorldArchiveKeyComparer Instance = new WorldArchiveKeyComparer();
+
+            public bool Equals(WorldArchiveKey x, WorldArchiveKey y)
+            {
+                if (ReferenceEquals(x, y))
+                {
+                    return true;
+                }
+
+                if (x == null || y == null)
+                {
+                    return false;
+                }
+
+                return string.Equals(x.World, y.World, StringComparison.InvariantCultureIgnoreCase)
+                    && string.Equals(x.HpiFileName, y.HpiFileName, StringComparison.InvariantCultureIgnoreCase);
+            }
+
+            public int GetHashCode(WorldArchiveKey obj)
+            {
+                unchecked
+                {
+                    var hash = StringComparer.InvariantCultureIgnoreCase.GetHashCode(obj.World ?? string.Empty);
+                    hash = (hash * 397) ^ StringComparer.InvariantCultureIgnoreCase.GetHashCode(obj.HpiFileName ?? string.Empty);
+                    return hash;
+                }
+            }
         }
     }
 }

@@ -158,6 +158,8 @@ namespace Mappy
 
         public bool DoNotPromptToSaveUnsavedChanges { get; set; }
 
+        public bool SplitTiles { get; set; }
+
         public bool StickyClipboard { get; set; }
 
         public bool BlobFeatureBase { get; set; }
