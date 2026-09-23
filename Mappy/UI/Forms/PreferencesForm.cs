@@ -87,6 +87,7 @@ namespace Mappy.UI.Forms
             this.missionWaitBackplateColorCustomized = MappySettings.Settings.MissionWaitBackplateColorArgb.HasValue;
             this.inactiveSchemaOpacityNumeric.Value = MappySettings.Settings.GetInactiveSchemaOpacityPercentForDialog();
             this.doNotPromptToSaveUnsavedChangesCheckBox.Checked = MappySettings.Settings.DoNotPromptToSaveUnsavedChanges;
+            this.splitTilesCheckBox.Checked = MappySettings.Settings.SplitTiles;
 
             var settings = MappySettings.Settings;
             this.heightSelectedHeightWheelStepNumeric.Value = settings.GetHeightSelectedHeightWheelStepOrDefault();
@@ -330,6 +331,7 @@ namespace Mappy.UI.Forms
                 : null;
             MappySettings.Settings.InactiveSchemaOpacityPercent = (int)this.inactiveSchemaOpacityNumeric.Value;
             MappySettings.Settings.DoNotPromptToSaveUnsavedChanges = this.doNotPromptToSaveUnsavedChangesCheckBox.Checked;
+            MappySettings.Settings.SplitTiles = this.splitTilesCheckBox.Checked;
             MappySettings.Settings.HeightSelectedHeightWheelStep = (int)this.heightSelectedHeightWheelStepNumeric.Value;
             MappySettings.Settings.HeightIntervalWheelStep = (int)this.heightIntervalWheelStepNumeric.Value;
             MappySettings.Settings.HeightCursorSizeWheelStep = (int)this.heightCursorSizeWheelStepNumeric.Value;
