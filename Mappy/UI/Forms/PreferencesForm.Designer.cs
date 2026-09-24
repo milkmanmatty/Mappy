@@ -45,19 +45,8 @@ namespace Mappy.UI.Forms
             this.dragScrollSpeedYLabel = new System.Windows.Forms.Label();
             this.dragScrollSpeedXLabel = new System.Windows.Forms.Label();
             this.missionGroupBox = new System.Windows.Forms.GroupBox();
-            this.missionUiGroupBox = new System.Windows.Forms.GroupBox();
-            this.missionMovePathLabel = new System.Windows.Forms.Label();
-            this.missionMovePathCustomizeButton = new System.Windows.Forms.Button();
-            this.missionAttackPathLabel = new System.Windows.Forms.Label();
-            this.missionAttackPathCustomizeButton = new System.Windows.Forms.Button();
-            this.missionPatrolPathLabel = new System.Windows.Forms.Label();
-            this.missionPatrolPathCustomizeButton = new System.Windows.Forms.Button();
-            this.missionPatrolDashLabel = new System.Windows.Forms.Label();
-            this.missionPatrolDashCustomizeButton = new System.Windows.Forms.Button();
-            this.missionWaitTextLabel = new System.Windows.Forms.Label();
-            this.missionWaitTextCustomizeButton = new System.Windows.Forms.Button();
-            this.missionWaitBackplateLabel = new System.Windows.Forms.Label();
-            this.missionWaitBackplateCustomizeButton = new System.Windows.Forms.Button();
+            this.unitsFolderNameTextBox = new System.Windows.Forms.TextBox();
+            this.unitsFolderNameLabel = new System.Windows.Forms.Label();
             this.unitNameBackplateColorCustomizeButton = new System.Windows.Forms.Button();
             this.showUnitNameBackplateCheckBox = new System.Windows.Forms.CheckBox();
             this.unitNameTextColorCustomizeButton = new System.Windows.Forms.Button();
@@ -66,12 +55,25 @@ namespace Mappy.UI.Forms
             this.showUnitFriendlyNameFirstCheckBox = new System.Windows.Forms.CheckBox();
             this.inactiveSchemaOpacityNumeric = new System.Windows.Forms.NumericUpDown();
             this.inactiveSchemaOpacityLabel = new System.Windows.Forms.Label();
+            this.missionUiGroupBox = new System.Windows.Forms.GroupBox();
+            this.missionWaitBackplateCustomizeButton = new System.Windows.Forms.Button();
+            this.missionWaitBackplateLabel = new System.Windows.Forms.Label();
+            this.missionWaitTextCustomizeButton = new System.Windows.Forms.Button();
+            this.missionWaitTextLabel = new System.Windows.Forms.Label();
+            this.missionPatrolDashCustomizeButton = new System.Windows.Forms.Button();
+            this.missionPatrolDashLabel = new System.Windows.Forms.Label();
+            this.missionPatrolPathCustomizeButton = new System.Windows.Forms.Button();
+            this.missionPatrolPathLabel = new System.Windows.Forms.Label();
+            this.missionAttackPathCustomizeButton = new System.Windows.Forms.Button();
+            this.missionAttackPathLabel = new System.Windows.Forms.Label();
+            this.missionMovePathCustomizeButton = new System.Windows.Forms.Button();
+            this.missionMovePathLabel = new System.Windows.Forms.Label();
             this.resourceNamesGroupBox = new System.Windows.Forms.GroupBox();
+            this.splitTilesCheckBox = new System.Windows.Forms.CheckBox();
             this.calculatedMetalDepositValueCheckBox = new System.Windows.Forms.CheckBox();
             this.featureReclaimAmountsCheckBox = new System.Windows.Forms.CheckBox();
             this.fullResourceNamesCheckBox = new System.Windows.Forms.CheckBox();
             this.miscGroupBox = new System.Windows.Forms.GroupBox();
-            this.splitTilesCheckBox = new System.Windows.Forms.CheckBox();
             this.doNotPromptToSaveUnsavedChangesCheckBox = new System.Windows.Forms.CheckBox();
             this.preferencesTabControl = new System.Windows.Forms.TabControl();
             this.miscTabPage = new System.Windows.Forms.TabPage();
@@ -110,8 +112,8 @@ namespace Mappy.UI.Forms
             ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedYNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).BeginInit();
             this.missionGroupBox.SuspendLayout();
-            this.missionUiGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.inactiveSchemaOpacityNumeric)).BeginInit();
+            this.missionUiGroupBox.SuspendLayout();
             this.resourceNamesGroupBox.SuspendLayout();
             this.miscGroupBox.SuspendLayout();
             this.preferencesTabControl.SuspendLayout();
@@ -120,13 +122,13 @@ namespace Mappy.UI.Forms
             this.adjustmentsTabPage.SuspendLayout();
             this.adjustmentsMiscGroupBox.SuspendLayout();
             this.wheelStepGroupBox.SuspendLayout();
-            this.defaultsTabPage.SuspendLayout();
-            this.viewDefaultsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.seaLevelWheelStepNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.voidCursorSizeWheelStepNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightCursorSizeWheelStepNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightIntervalWheelStepNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightSelectedHeightWheelStepNumeric)).BeginInit();
+            this.defaultsTabPage.SuspendLayout();
+            this.viewDefaultsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // searchPathsListView
@@ -331,6 +333,8 @@ namespace Mappy.UI.Forms
             // 
             this.missionGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.missionGroupBox.Controls.Add(this.unitsFolderNameTextBox);
+            this.missionGroupBox.Controls.Add(this.unitsFolderNameLabel);
             this.missionGroupBox.Controls.Add(this.unitNameBackplateColorCustomizeButton);
             this.missionGroupBox.Controls.Add(this.showUnitNameBackplateCheckBox);
             this.missionGroupBox.Controls.Add(this.unitNameTextColorCustomizeButton);
@@ -341,151 +345,30 @@ namespace Mappy.UI.Forms
             this.missionGroupBox.Controls.Add(this.inactiveSchemaOpacityLabel);
             this.missionGroupBox.Location = new System.Drawing.Point(12, 12);
             this.missionGroupBox.Name = "missionGroupBox";
-            this.missionGroupBox.Size = new System.Drawing.Size(426, 160);
+            this.missionGroupBox.Size = new System.Drawing.Size(426, 188);
             this.missionGroupBox.TabIndex = 0;
             this.missionGroupBox.TabStop = false;
             this.missionGroupBox.Text = "Mission";
             // 
-            // missionUiGroupBox
+            // unitsFolderNameTextBox
             // 
-            this.missionUiGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.missionUiGroupBox.Controls.Add(this.missionWaitBackplateCustomizeButton);
-            this.missionUiGroupBox.Controls.Add(this.missionWaitBackplateLabel);
-            this.missionUiGroupBox.Controls.Add(this.missionWaitTextCustomizeButton);
-            this.missionUiGroupBox.Controls.Add(this.missionWaitTextLabel);
-            this.missionUiGroupBox.Controls.Add(this.missionPatrolDashCustomizeButton);
-            this.missionUiGroupBox.Controls.Add(this.missionPatrolDashLabel);
-            this.missionUiGroupBox.Controls.Add(this.missionPatrolPathCustomizeButton);
-            this.missionUiGroupBox.Controls.Add(this.missionPatrolPathLabel);
-            this.missionUiGroupBox.Controls.Add(this.missionAttackPathCustomizeButton);
-            this.missionUiGroupBox.Controls.Add(this.missionAttackPathLabel);
-            this.missionUiGroupBox.Controls.Add(this.missionMovePathCustomizeButton);
-            this.missionUiGroupBox.Controls.Add(this.missionMovePathLabel);
-            this.missionUiGroupBox.Location = new System.Drawing.Point(12, 184);
-            this.missionUiGroupBox.Name = "missionUiGroupBox";
-            this.missionUiGroupBox.Size = new System.Drawing.Size(426, 188);
-            this.missionUiGroupBox.TabIndex = 1;
-            this.missionUiGroupBox.TabStop = false;
-            this.missionUiGroupBox.Text = "UI";
+            this.unitsFolderNameTextBox.Location = new System.Drawing.Point(233, 149);
+            this.unitsFolderNameTextBox.Name = "unitsFolderNameTextBox";
+            this.unitsFolderNameTextBox.Size = new System.Drawing.Size(85, 20);
+            this.unitsFolderNameTextBox.TabIndex = 9;
             // 
-            // missionMovePathLabel
+            // unitsFolderNameLabel
             // 
-            this.missionMovePathLabel.AutoSize = true;
-            this.missionMovePathLabel.Location = new System.Drawing.Point(14, 26);
-            this.missionMovePathLabel.Name = "missionMovePathLabel";
-            this.missionMovePathLabel.Size = new System.Drawing.Size(96, 13);
-            this.missionMovePathLabel.TabIndex = 0;
-            this.missionMovePathLabel.Text = "Move path colour:";
-            // 
-            // missionMovePathCustomizeButton
-            // 
-            this.missionMovePathCustomizeButton.Location = new System.Drawing.Point(200, 21);
-            this.missionMovePathCustomizeButton.Name = "missionMovePathCustomizeButton";
-            this.missionMovePathCustomizeButton.Size = new System.Drawing.Size(85, 23);
-            this.missionMovePathCustomizeButton.TabIndex = 1;
-            this.missionMovePathCustomizeButton.Text = "Customize...";
-            this.missionMovePathCustomizeButton.UseVisualStyleBackColor = true;
-            this.missionMovePathCustomizeButton.Click += new System.EventHandler(this.MissionMovePathCustomizeButtonClick);
-            // 
-            // missionAttackPathLabel
-            // 
-            this.missionAttackPathLabel.AutoSize = true;
-            this.missionAttackPathLabel.Location = new System.Drawing.Point(14, 52);
-            this.missionAttackPathLabel.Name = "missionAttackPathLabel";
-            this.missionAttackPathLabel.Size = new System.Drawing.Size(99, 13);
-            this.missionAttackPathLabel.TabIndex = 2;
-            this.missionAttackPathLabel.Text = "Attack path colour:";
-            // 
-            // missionAttackPathCustomizeButton
-            // 
-            this.missionAttackPathCustomizeButton.Location = new System.Drawing.Point(200, 47);
-            this.missionAttackPathCustomizeButton.Name = "missionAttackPathCustomizeButton";
-            this.missionAttackPathCustomizeButton.Size = new System.Drawing.Size(85, 23);
-            this.missionAttackPathCustomizeButton.TabIndex = 3;
-            this.missionAttackPathCustomizeButton.Text = "Customize...";
-            this.missionAttackPathCustomizeButton.UseVisualStyleBackColor = true;
-            this.missionAttackPathCustomizeButton.Click += new System.EventHandler(this.MissionAttackPathCustomizeButtonClick);
-            // 
-            // missionPatrolPathLabel
-            // 
-            this.missionPatrolPathLabel.AutoSize = true;
-            this.missionPatrolPathLabel.Location = new System.Drawing.Point(14, 78);
-            this.missionPatrolPathLabel.Name = "missionPatrolPathLabel";
-            this.missionPatrolPathLabel.Size = new System.Drawing.Size(97, 13);
-            this.missionPatrolPathLabel.TabIndex = 4;
-            this.missionPatrolPathLabel.Text = "Patrol path colour:";
-            // 
-            // missionPatrolPathCustomizeButton
-            // 
-            this.missionPatrolPathCustomizeButton.Location = new System.Drawing.Point(200, 73);
-            this.missionPatrolPathCustomizeButton.Name = "missionPatrolPathCustomizeButton";
-            this.missionPatrolPathCustomizeButton.Size = new System.Drawing.Size(85, 23);
-            this.missionPatrolPathCustomizeButton.TabIndex = 5;
-            this.missionPatrolPathCustomizeButton.Text = "Customize...";
-            this.missionPatrolPathCustomizeButton.UseVisualStyleBackColor = true;
-            this.missionPatrolPathCustomizeButton.Click += new System.EventHandler(this.MissionPatrolPathCustomizeButtonClick);
-            // 
-            // missionPatrolDashLabel
-            // 
-            this.missionPatrolDashLabel.AutoSize = true;
-            this.missionPatrolDashLabel.Location = new System.Drawing.Point(14, 104);
-            this.missionPatrolDashLabel.Name = "missionPatrolDashLabel";
-            this.missionPatrolDashLabel.Size = new System.Drawing.Size(99, 13);
-            this.missionPatrolDashLabel.TabIndex = 6;
-            this.missionPatrolDashLabel.Text = "Patrol dash colour:";
-            // 
-            // missionPatrolDashCustomizeButton
-            // 
-            this.missionPatrolDashCustomizeButton.Location = new System.Drawing.Point(200, 99);
-            this.missionPatrolDashCustomizeButton.Name = "missionPatrolDashCustomizeButton";
-            this.missionPatrolDashCustomizeButton.Size = new System.Drawing.Size(85, 23);
-            this.missionPatrolDashCustomizeButton.TabIndex = 7;
-            this.missionPatrolDashCustomizeButton.Text = "Customize...";
-            this.missionPatrolDashCustomizeButton.UseVisualStyleBackColor = true;
-            this.missionPatrolDashCustomizeButton.Click += new System.EventHandler(this.MissionPatrolDashCustomizeButtonClick);
-            // 
-            // missionWaitTextLabel
-            // 
-            this.missionWaitTextLabel.AutoSize = true;
-            this.missionWaitTextLabel.Location = new System.Drawing.Point(14, 130);
-            this.missionWaitTextLabel.Name = "missionWaitTextLabel";
-            this.missionWaitTextLabel.Size = new System.Drawing.Size(89, 13);
-            this.missionWaitTextLabel.TabIndex = 8;
-            this.missionWaitTextLabel.Text = "Wait text colour:";
-            // 
-            // missionWaitTextCustomizeButton
-            // 
-            this.missionWaitTextCustomizeButton.Location = new System.Drawing.Point(200, 125);
-            this.missionWaitTextCustomizeButton.Name = "missionWaitTextCustomizeButton";
-            this.missionWaitTextCustomizeButton.Size = new System.Drawing.Size(85, 23);
-            this.missionWaitTextCustomizeButton.TabIndex = 9;
-            this.missionWaitTextCustomizeButton.Text = "Customize...";
-            this.missionWaitTextCustomizeButton.UseVisualStyleBackColor = true;
-            this.missionWaitTextCustomizeButton.Click += new System.EventHandler(this.MissionWaitTextCustomizeButtonClick);
-            // 
-            // missionWaitBackplateLabel
-            // 
-            this.missionWaitBackplateLabel.AutoSize = true;
-            this.missionWaitBackplateLabel.Location = new System.Drawing.Point(14, 156);
-            this.missionWaitBackplateLabel.Name = "missionWaitBackplateLabel";
-            this.missionWaitBackplateLabel.Size = new System.Drawing.Size(118, 13);
-            this.missionWaitBackplateLabel.TabIndex = 10;
-            this.missionWaitBackplateLabel.Text = "Wait backplate colour:";
-            // 
-            // missionWaitBackplateCustomizeButton
-            // 
-            this.missionWaitBackplateCustomizeButton.Location = new System.Drawing.Point(200, 151);
-            this.missionWaitBackplateCustomizeButton.Name = "missionWaitBackplateCustomizeButton";
-            this.missionWaitBackplateCustomizeButton.Size = new System.Drawing.Size(85, 23);
-            this.missionWaitBackplateCustomizeButton.TabIndex = 11;
-            this.missionWaitBackplateCustomizeButton.Text = "Customize...";
-            this.missionWaitBackplateCustomizeButton.UseVisualStyleBackColor = true;
-            this.missionWaitBackplateCustomizeButton.Click += new System.EventHandler(this.MissionWaitBackplateCustomizeButtonClick);
+            this.unitsFolderNameLabel.AutoSize = true;
+            this.unitsFolderNameLabel.Location = new System.Drawing.Point(14, 152);
+            this.unitsFolderNameLabel.Name = "unitsFolderNameLabel";
+            this.unitsFolderNameLabel.Size = new System.Drawing.Size(92, 13);
+            this.unitsFolderNameLabel.TabIndex = 8;
+            this.unitsFolderNameLabel.Text = "Units folder name:";
             // 
             // unitNameBackplateColorCustomizeButton
             // 
-            this.unitNameBackplateColorCustomizeButton.Location = new System.Drawing.Point(152, 119);
+            this.unitNameBackplateColorCustomizeButton.Location = new System.Drawing.Point(233, 120);
             this.unitNameBackplateColorCustomizeButton.Name = "unitNameBackplateColorCustomizeButton";
             this.unitNameBackplateColorCustomizeButton.Size = new System.Drawing.Size(85, 23);
             this.unitNameBackplateColorCustomizeButton.TabIndex = 7;
@@ -498,14 +381,14 @@ namespace Mappy.UI.Forms
             this.showUnitNameBackplateCheckBox.AutoSize = true;
             this.showUnitNameBackplateCheckBox.Location = new System.Drawing.Point(17, 123);
             this.showUnitNameBackplateCheckBox.Name = "showUnitNameBackplateCheckBox";
-            this.showUnitNameBackplateCheckBox.Size = new System.Drawing.Size(129, 17);
+            this.showUnitNameBackplateCheckBox.Size = new System.Drawing.Size(124, 17);
             this.showUnitNameBackplateCheckBox.TabIndex = 6;
             this.showUnitNameBackplateCheckBox.Text = "Unit name backplate";
             this.showUnitNameBackplateCheckBox.UseVisualStyleBackColor = true;
             // 
             // unitNameTextColorCustomizeButton
             // 
-            this.unitNameTextColorCustomizeButton.Location = new System.Drawing.Point(152, 93);
+            this.unitNameTextColorCustomizeButton.Location = new System.Drawing.Point(233, 93);
             this.unitNameTextColorCustomizeButton.Name = "unitNameTextColorCustomizeButton";
             this.unitNameTextColorCustomizeButton.Size = new System.Drawing.Size(85, 23);
             this.unitNameTextColorCustomizeButton.TabIndex = 5;
@@ -518,7 +401,7 @@ namespace Mappy.UI.Forms
             this.unitNameTextColorLabel.AutoSize = true;
             this.unitNameTextColorLabel.Location = new System.Drawing.Point(14, 98);
             this.unitNameTextColorLabel.Name = "unitNameTextColorLabel";
-            this.unitNameTextColorLabel.Size = new System.Drawing.Size(109, 13);
+            this.unitNameTextColorLabel.Size = new System.Drawing.Size(110, 13);
             this.unitNameTextColorLabel.TabIndex = 4;
             this.unitNameTextColorLabel.Text = "Unit name text colour:";
             // 
@@ -563,6 +446,143 @@ namespace Mappy.UI.Forms
             this.inactiveSchemaOpacityLabel.TabIndex = 0;
             this.inactiveSchemaOpacityLabel.Text = "Inactive schema opacity (%):";
             // 
+            // missionUiGroupBox
+            // 
+            this.missionUiGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.missionUiGroupBox.Controls.Add(this.missionWaitBackplateCustomizeButton);
+            this.missionUiGroupBox.Controls.Add(this.missionWaitBackplateLabel);
+            this.missionUiGroupBox.Controls.Add(this.missionWaitTextCustomizeButton);
+            this.missionUiGroupBox.Controls.Add(this.missionWaitTextLabel);
+            this.missionUiGroupBox.Controls.Add(this.missionPatrolDashCustomizeButton);
+            this.missionUiGroupBox.Controls.Add(this.missionPatrolDashLabel);
+            this.missionUiGroupBox.Controls.Add(this.missionPatrolPathCustomizeButton);
+            this.missionUiGroupBox.Controls.Add(this.missionPatrolPathLabel);
+            this.missionUiGroupBox.Controls.Add(this.missionAttackPathCustomizeButton);
+            this.missionUiGroupBox.Controls.Add(this.missionAttackPathLabel);
+            this.missionUiGroupBox.Controls.Add(this.missionMovePathCustomizeButton);
+            this.missionUiGroupBox.Controls.Add(this.missionMovePathLabel);
+            this.missionUiGroupBox.Location = new System.Drawing.Point(12, 212);
+            this.missionUiGroupBox.Name = "missionUiGroupBox";
+            this.missionUiGroupBox.Size = new System.Drawing.Size(426, 188);
+            this.missionUiGroupBox.TabIndex = 1;
+            this.missionUiGroupBox.TabStop = false;
+            this.missionUiGroupBox.Text = "UI";
+            // 
+            // missionWaitBackplateCustomizeButton
+            // 
+            this.missionWaitBackplateCustomizeButton.Location = new System.Drawing.Point(233, 151);
+            this.missionWaitBackplateCustomizeButton.Name = "missionWaitBackplateCustomizeButton";
+            this.missionWaitBackplateCustomizeButton.Size = new System.Drawing.Size(85, 23);
+            this.missionWaitBackplateCustomizeButton.TabIndex = 11;
+            this.missionWaitBackplateCustomizeButton.Text = "Customize...";
+            this.missionWaitBackplateCustomizeButton.UseVisualStyleBackColor = true;
+            this.missionWaitBackplateCustomizeButton.Click += new System.EventHandler(this.MissionWaitBackplateCustomizeButtonClick);
+            // 
+            // missionWaitBackplateLabel
+            // 
+            this.missionWaitBackplateLabel.AutoSize = true;
+            this.missionWaitBackplateLabel.Location = new System.Drawing.Point(14, 156);
+            this.missionWaitBackplateLabel.Name = "missionWaitBackplateLabel";
+            this.missionWaitBackplateLabel.Size = new System.Drawing.Size(114, 13);
+            this.missionWaitBackplateLabel.TabIndex = 10;
+            this.missionWaitBackplateLabel.Text = "Wait backplate colour:";
+            // 
+            // missionWaitTextCustomizeButton
+            // 
+            this.missionWaitTextCustomizeButton.Location = new System.Drawing.Point(233, 125);
+            this.missionWaitTextCustomizeButton.Name = "missionWaitTextCustomizeButton";
+            this.missionWaitTextCustomizeButton.Size = new System.Drawing.Size(85, 23);
+            this.missionWaitTextCustomizeButton.TabIndex = 9;
+            this.missionWaitTextCustomizeButton.Text = "Customize...";
+            this.missionWaitTextCustomizeButton.UseVisualStyleBackColor = true;
+            this.missionWaitTextCustomizeButton.Click += new System.EventHandler(this.MissionWaitTextCustomizeButtonClick);
+            // 
+            // missionWaitTextLabel
+            // 
+            this.missionWaitTextLabel.AutoSize = true;
+            this.missionWaitTextLabel.Location = new System.Drawing.Point(14, 130);
+            this.missionWaitTextLabel.Name = "missionWaitTextLabel";
+            this.missionWaitTextLabel.Size = new System.Drawing.Size(84, 13);
+            this.missionWaitTextLabel.TabIndex = 8;
+            this.missionWaitTextLabel.Text = "Wait text colour:";
+            // 
+            // missionPatrolDashCustomizeButton
+            // 
+            this.missionPatrolDashCustomizeButton.Location = new System.Drawing.Point(233, 99);
+            this.missionPatrolDashCustomizeButton.Name = "missionPatrolDashCustomizeButton";
+            this.missionPatrolDashCustomizeButton.Size = new System.Drawing.Size(85, 23);
+            this.missionPatrolDashCustomizeButton.TabIndex = 7;
+            this.missionPatrolDashCustomizeButton.Text = "Customize...";
+            this.missionPatrolDashCustomizeButton.UseVisualStyleBackColor = true;
+            this.missionPatrolDashCustomizeButton.Click += new System.EventHandler(this.MissionPatrolDashCustomizeButtonClick);
+            // 
+            // missionPatrolDashLabel
+            // 
+            this.missionPatrolDashLabel.AutoSize = true;
+            this.missionPatrolDashLabel.Location = new System.Drawing.Point(14, 104);
+            this.missionPatrolDashLabel.Name = "missionPatrolDashLabel";
+            this.missionPatrolDashLabel.Size = new System.Drawing.Size(95, 13);
+            this.missionPatrolDashLabel.TabIndex = 6;
+            this.missionPatrolDashLabel.Text = "Patrol dash colour:";
+            // 
+            // missionPatrolPathCustomizeButton
+            // 
+            this.missionPatrolPathCustomizeButton.Location = new System.Drawing.Point(233, 73);
+            this.missionPatrolPathCustomizeButton.Name = "missionPatrolPathCustomizeButton";
+            this.missionPatrolPathCustomizeButton.Size = new System.Drawing.Size(85, 23);
+            this.missionPatrolPathCustomizeButton.TabIndex = 5;
+            this.missionPatrolPathCustomizeButton.Text = "Customize...";
+            this.missionPatrolPathCustomizeButton.UseVisualStyleBackColor = true;
+            this.missionPatrolPathCustomizeButton.Click += new System.EventHandler(this.MissionPatrolPathCustomizeButtonClick);
+            // 
+            // missionPatrolPathLabel
+            // 
+            this.missionPatrolPathLabel.AutoSize = true;
+            this.missionPatrolPathLabel.Location = new System.Drawing.Point(14, 78);
+            this.missionPatrolPathLabel.Name = "missionPatrolPathLabel";
+            this.missionPatrolPathLabel.Size = new System.Drawing.Size(93, 13);
+            this.missionPatrolPathLabel.TabIndex = 4;
+            this.missionPatrolPathLabel.Text = "Patrol path colour:";
+            // 
+            // missionAttackPathCustomizeButton
+            // 
+            this.missionAttackPathCustomizeButton.Location = new System.Drawing.Point(233, 47);
+            this.missionAttackPathCustomizeButton.Name = "missionAttackPathCustomizeButton";
+            this.missionAttackPathCustomizeButton.Size = new System.Drawing.Size(85, 23);
+            this.missionAttackPathCustomizeButton.TabIndex = 3;
+            this.missionAttackPathCustomizeButton.Text = "Customize...";
+            this.missionAttackPathCustomizeButton.UseVisualStyleBackColor = true;
+            this.missionAttackPathCustomizeButton.Click += new System.EventHandler(this.MissionAttackPathCustomizeButtonClick);
+            // 
+            // missionAttackPathLabel
+            // 
+            this.missionAttackPathLabel.AutoSize = true;
+            this.missionAttackPathLabel.Location = new System.Drawing.Point(14, 52);
+            this.missionAttackPathLabel.Name = "missionAttackPathLabel";
+            this.missionAttackPathLabel.Size = new System.Drawing.Size(97, 13);
+            this.missionAttackPathLabel.TabIndex = 2;
+            this.missionAttackPathLabel.Text = "Attack path colour:";
+            // 
+            // missionMovePathCustomizeButton
+            // 
+            this.missionMovePathCustomizeButton.Location = new System.Drawing.Point(233, 21);
+            this.missionMovePathCustomizeButton.Name = "missionMovePathCustomizeButton";
+            this.missionMovePathCustomizeButton.Size = new System.Drawing.Size(85, 23);
+            this.missionMovePathCustomizeButton.TabIndex = 1;
+            this.missionMovePathCustomizeButton.Text = "Customize...";
+            this.missionMovePathCustomizeButton.UseVisualStyleBackColor = true;
+            this.missionMovePathCustomizeButton.Click += new System.EventHandler(this.MissionMovePathCustomizeButtonClick);
+            // 
+            // missionMovePathLabel
+            // 
+            this.missionMovePathLabel.AutoSize = true;
+            this.missionMovePathLabel.Location = new System.Drawing.Point(14, 26);
+            this.missionMovePathLabel.Name = "missionMovePathLabel";
+            this.missionMovePathLabel.Size = new System.Drawing.Size(93, 13);
+            this.missionMovePathLabel.TabIndex = 0;
+            this.missionMovePathLabel.Text = "Move path colour:";
+            // 
             // resourceNamesGroupBox
             // 
             this.resourceNamesGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -577,6 +597,16 @@ namespace Mappy.UI.Forms
             this.resourceNamesGroupBox.TabIndex = 1;
             this.resourceNamesGroupBox.TabStop = false;
             this.resourceNamesGroupBox.Text = "Sections / Features";
+            // 
+            // splitTilesCheckBox
+            // 
+            this.splitTilesCheckBox.AutoSize = true;
+            this.splitTilesCheckBox.Location = new System.Drawing.Point(210, 45);
+            this.splitTilesCheckBox.Name = "splitTilesCheckBox";
+            this.splitTilesCheckBox.Size = new System.Drawing.Size(81, 17);
+            this.splitTilesCheckBox.TabIndex = 3;
+            this.splitTilesCheckBox.Text = "Split tilesets";
+            this.splitTilesCheckBox.UseVisualStyleBackColor = true;
             // 
             // calculatedMetalDepositValueCheckBox
             // 
@@ -607,16 +637,6 @@ namespace Mappy.UI.Forms
             this.fullResourceNamesCheckBox.TabIndex = 0;
             this.fullResourceNamesCheckBox.Text = "Full resource names";
             this.fullResourceNamesCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // splitTilesCheckBox
-            // 
-            this.splitTilesCheckBox.AutoSize = true;
-            this.splitTilesCheckBox.Location = new System.Drawing.Point(210, 45);
-            this.splitTilesCheckBox.Name = "splitTilesCheckBox";
-            this.splitTilesCheckBox.Size = new System.Drawing.Size(73, 17);
-            this.splitTilesCheckBox.TabIndex = 3;
-            this.splitTilesCheckBox.Text = "Split tilesets";
-            this.splitTilesCheckBox.UseVisualStyleBackColor = true;
             // 
             // miscGroupBox
             // 
@@ -694,125 +714,6 @@ namespace Mappy.UI.Forms
             this.adjustmentsTabPage.Text = "Adjustments";
             this.adjustmentsTabPage.UseVisualStyleBackColor = true;
             // 
-            // defaultsTabPage
-            // 
-            this.defaultsTabPage.AutoScroll = true;
-            this.defaultsTabPage.Controls.Add(this.viewDefaultsGroupBox);
-            this.defaultsTabPage.Location = new System.Drawing.Point(4, 22);
-            this.defaultsTabPage.Name = "defaultsTabPage";
-            this.defaultsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.defaultsTabPage.Size = new System.Drawing.Size(442, 411);
-            this.defaultsTabPage.TabIndex = 3;
-            this.defaultsTabPage.Text = "Defaults";
-            this.defaultsTabPage.UseVisualStyleBackColor = true;
-            // 
-            // viewDefaultsGroupBox
-            // 
-            this.viewDefaultsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.viewDefaultsGroupBox.Controls.Add(this.defaultGridSizeComboBox);
-            this.viewDefaultsGroupBox.Controls.Add(this.defaultGridSizeLabel);
-            this.viewDefaultsGroupBox.Controls.Add(this.defaultFeaturesVisibleCheckBox);
-            this.viewDefaultsGroupBox.Controls.Add(this.defaultGridVisibleCheckBox);
-            this.viewDefaultsGroupBox.Controls.Add(this.defaultVoidsVisibleCheckBox);
-            this.viewDefaultsGroupBox.Controls.Add(this.defaultMinimapVisibleCheckBox);
-            this.viewDefaultsGroupBox.Controls.Add(this.defaultHeightGridVisibleCheckBox);
-            this.viewDefaultsGroupBox.Controls.Add(this.defaultHeightmapVisibleCheckBox);
-            this.viewDefaultsGroupBox.Location = new System.Drawing.Point(12, 12);
-            this.viewDefaultsGroupBox.Name = "viewDefaultsGroupBox";
-            this.viewDefaultsGroupBox.Size = new System.Drawing.Size(426, 178);
-            this.viewDefaultsGroupBox.TabIndex = 0;
-            this.viewDefaultsGroupBox.TabStop = false;
-            this.viewDefaultsGroupBox.Text = "View menu items visible at startup";
-            // 
-            // defaultHeightmapVisibleCheckBox
-            // 
-            this.defaultHeightmapVisibleCheckBox.AutoSize = true;
-            this.defaultHeightmapVisibleCheckBox.Location = new System.Drawing.Point(17, 22);
-            this.defaultHeightmapVisibleCheckBox.Name = "defaultHeightmapVisibleCheckBox";
-            this.defaultHeightmapVisibleCheckBox.Size = new System.Drawing.Size(118, 17);
-            this.defaultHeightmapVisibleCheckBox.TabIndex = 0;
-            this.defaultHeightmapVisibleCheckBox.Text = "Heightmap Contours";
-            this.defaultHeightmapVisibleCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // defaultHeightGridVisibleCheckBox
-            // 
-            this.defaultHeightGridVisibleCheckBox.AutoSize = true;
-            this.defaultHeightGridVisibleCheckBox.Location = new System.Drawing.Point(17, 45);
-            this.defaultHeightGridVisibleCheckBox.Name = "defaultHeightGridVisibleCheckBox";
-            this.defaultHeightGridVisibleCheckBox.Size = new System.Drawing.Size(96, 17);
-            this.defaultHeightGridVisibleCheckBox.TabIndex = 1;
-            this.defaultHeightGridVisibleCheckBox.Text = "Heightmap Grid";
-            this.defaultHeightGridVisibleCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // defaultMinimapVisibleCheckBox
-            // 
-            this.defaultMinimapVisibleCheckBox.AutoSize = true;
-            this.defaultMinimapVisibleCheckBox.Location = new System.Drawing.Point(17, 68);
-            this.defaultMinimapVisibleCheckBox.Name = "defaultMinimapVisibleCheckBox";
-            this.defaultMinimapVisibleCheckBox.Size = new System.Drawing.Size(63, 17);
-            this.defaultMinimapVisibleCheckBox.TabIndex = 2;
-            this.defaultMinimapVisibleCheckBox.Text = "Minimap";
-            this.defaultMinimapVisibleCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // defaultVoidsVisibleCheckBox
-            // 
-            this.defaultVoidsVisibleCheckBox.AutoSize = true;
-            this.defaultVoidsVisibleCheckBox.Location = new System.Drawing.Point(17, 91);
-            this.defaultVoidsVisibleCheckBox.Name = "defaultVoidsVisibleCheckBox";
-            this.defaultVoidsVisibleCheckBox.Size = new System.Drawing.Size(52, 17);
-            this.defaultVoidsVisibleCheckBox.TabIndex = 3;
-            this.defaultVoidsVisibleCheckBox.Text = "Voids";
-            this.defaultVoidsVisibleCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // defaultGridVisibleCheckBox
-            // 
-            this.defaultGridVisibleCheckBox.AutoSize = true;
-            this.defaultGridVisibleCheckBox.Location = new System.Drawing.Point(17, 114);
-            this.defaultGridVisibleCheckBox.Name = "defaultGridVisibleCheckBox";
-            this.defaultGridVisibleCheckBox.Size = new System.Drawing.Size(45, 17);
-            this.defaultGridVisibleCheckBox.TabIndex = 4;
-            this.defaultGridVisibleCheckBox.Text = "Grid";
-            this.defaultGridVisibleCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // defaultGridSizeLabel
-            // 
-            this.defaultGridSizeLabel.AutoSize = true;
-            this.defaultGridSizeLabel.Location = new System.Drawing.Point(68, 115);
-            this.defaultGridSizeLabel.Name = "defaultGridSizeLabel";
-            this.defaultGridSizeLabel.Size = new System.Drawing.Size(30, 13);
-            this.defaultGridSizeLabel.TabIndex = 5;
-            this.defaultGridSizeLabel.Text = "Size:";
-            // 
-            // defaultGridSizeComboBox
-            // 
-            this.defaultGridSizeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.defaultGridSizeComboBox.FormattingEnabled = true;
-            this.defaultGridSizeComboBox.Items.AddRange(new object[] {
-            "16x16",
-            "32x32",
-            "64x64",
-            "128x128",
-            "256x256",
-            "512x512",
-            "1024x1024"});
-            this.defaultGridSizeComboBox.Location = new System.Drawing.Point(104, 112);
-            this.defaultGridSizeComboBox.Name = "defaultGridSizeComboBox";
-            this.defaultGridSizeComboBox.Size = new System.Drawing.Size(90, 21);
-            this.defaultGridSizeComboBox.TabIndex = 6;
-            // 
-            // defaultFeaturesVisibleCheckBox
-            // 
-            this.defaultFeaturesVisibleCheckBox.AutoSize = true;
-            this.defaultFeaturesVisibleCheckBox.Checked = true;
-            this.defaultFeaturesVisibleCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.defaultFeaturesVisibleCheckBox.Location = new System.Drawing.Point(17, 137);
-            this.defaultFeaturesVisibleCheckBox.Name = "defaultFeaturesVisibleCheckBox";
-            this.defaultFeaturesVisibleCheckBox.Size = new System.Drawing.Size(68, 17);
-            this.defaultFeaturesVisibleCheckBox.TabIndex = 7;
-            this.defaultFeaturesVisibleCheckBox.Text = "Features";
-            this.defaultFeaturesVisibleCheckBox.UseVisualStyleBackColor = true;
-            // 
             // adjustmentsMiscGroupBox
             // 
             this.adjustmentsMiscGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -827,16 +728,6 @@ namespace Mappy.UI.Forms
             this.adjustmentsMiscGroupBox.TabStop = false;
             this.adjustmentsMiscGroupBox.Text = "Misc";
             // 
-            // blobFeatureBaseCheckBox
-            // 
-            this.blobFeatureBaseCheckBox.AutoSize = true;
-            this.blobFeatureBaseCheckBox.Location = new System.Drawing.Point(17, 45);
-            this.blobFeatureBaseCheckBox.Name = "blobFeatureBaseCheckBox";
-            this.blobFeatureBaseCheckBox.Size = new System.Drawing.Size(109, 17);
-            this.blobFeatureBaseCheckBox.TabIndex = 1;
-            this.blobFeatureBaseCheckBox.Text = "Blob feature base";
-            this.blobFeatureBaseCheckBox.UseVisualStyleBackColor = true;
-            // 
             // blobFeatureBaseCustomizeButton
             // 
             this.blobFeatureBaseCustomizeButton.Location = new System.Drawing.Point(132, 41);
@@ -846,6 +737,16 @@ namespace Mappy.UI.Forms
             this.blobFeatureBaseCustomizeButton.Text = "Customize...";
             this.blobFeatureBaseCustomizeButton.UseVisualStyleBackColor = true;
             this.blobFeatureBaseCustomizeButton.Click += new System.EventHandler(this.BlobFeatureBaseCustomizeButtonClick);
+            // 
+            // blobFeatureBaseCheckBox
+            // 
+            this.blobFeatureBaseCheckBox.AutoSize = true;
+            this.blobFeatureBaseCheckBox.Location = new System.Drawing.Point(17, 45);
+            this.blobFeatureBaseCheckBox.Name = "blobFeatureBaseCheckBox";
+            this.blobFeatureBaseCheckBox.Size = new System.Drawing.Size(109, 17);
+            this.blobFeatureBaseCheckBox.TabIndex = 1;
+            this.blobFeatureBaseCheckBox.Text = "Blob feature base";
+            this.blobFeatureBaseCheckBox.UseVisualStyleBackColor = true;
             // 
             // stickyClipboardCheckBox
             // 
@@ -1033,6 +934,125 @@ namespace Mappy.UI.Forms
             this.heightSelectedHeightWheelStepLabel.TabIndex = 0;
             this.heightSelectedHeightWheelStepLabel.Text = "Height tab — selected height:";
             // 
+            // defaultsTabPage
+            // 
+            this.defaultsTabPage.AutoScroll = true;
+            this.defaultsTabPage.Controls.Add(this.viewDefaultsGroupBox);
+            this.defaultsTabPage.Location = new System.Drawing.Point(4, 22);
+            this.defaultsTabPage.Name = "defaultsTabPage";
+            this.defaultsTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.defaultsTabPage.Size = new System.Drawing.Size(442, 411);
+            this.defaultsTabPage.TabIndex = 3;
+            this.defaultsTabPage.Text = "Defaults";
+            this.defaultsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // viewDefaultsGroupBox
+            // 
+            this.viewDefaultsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.viewDefaultsGroupBox.Controls.Add(this.defaultGridSizeComboBox);
+            this.viewDefaultsGroupBox.Controls.Add(this.defaultGridSizeLabel);
+            this.viewDefaultsGroupBox.Controls.Add(this.defaultFeaturesVisibleCheckBox);
+            this.viewDefaultsGroupBox.Controls.Add(this.defaultGridVisibleCheckBox);
+            this.viewDefaultsGroupBox.Controls.Add(this.defaultVoidsVisibleCheckBox);
+            this.viewDefaultsGroupBox.Controls.Add(this.defaultMinimapVisibleCheckBox);
+            this.viewDefaultsGroupBox.Controls.Add(this.defaultHeightGridVisibleCheckBox);
+            this.viewDefaultsGroupBox.Controls.Add(this.defaultHeightmapVisibleCheckBox);
+            this.viewDefaultsGroupBox.Location = new System.Drawing.Point(12, 12);
+            this.viewDefaultsGroupBox.Name = "viewDefaultsGroupBox";
+            this.viewDefaultsGroupBox.Size = new System.Drawing.Size(426, 178);
+            this.viewDefaultsGroupBox.TabIndex = 0;
+            this.viewDefaultsGroupBox.TabStop = false;
+            this.viewDefaultsGroupBox.Text = "View menu items visible at startup";
+            // 
+            // defaultGridSizeComboBox
+            // 
+            this.defaultGridSizeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.defaultGridSizeComboBox.FormattingEnabled = true;
+            this.defaultGridSizeComboBox.Items.AddRange(new object[] {
+            "16x16",
+            "32x32",
+            "64x64",
+            "128x128",
+            "256x256",
+            "512x512",
+            "1024x1024"});
+            this.defaultGridSizeComboBox.Location = new System.Drawing.Point(104, 112);
+            this.defaultGridSizeComboBox.Name = "defaultGridSizeComboBox";
+            this.defaultGridSizeComboBox.Size = new System.Drawing.Size(90, 21);
+            this.defaultGridSizeComboBox.TabIndex = 6;
+            // 
+            // defaultGridSizeLabel
+            // 
+            this.defaultGridSizeLabel.AutoSize = true;
+            this.defaultGridSizeLabel.Location = new System.Drawing.Point(68, 115);
+            this.defaultGridSizeLabel.Name = "defaultGridSizeLabel";
+            this.defaultGridSizeLabel.Size = new System.Drawing.Size(30, 13);
+            this.defaultGridSizeLabel.TabIndex = 5;
+            this.defaultGridSizeLabel.Text = "Size:";
+            // 
+            // defaultFeaturesVisibleCheckBox
+            // 
+            this.defaultFeaturesVisibleCheckBox.AutoSize = true;
+            this.defaultFeaturesVisibleCheckBox.Checked = true;
+            this.defaultFeaturesVisibleCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.defaultFeaturesVisibleCheckBox.Location = new System.Drawing.Point(17, 137);
+            this.defaultFeaturesVisibleCheckBox.Name = "defaultFeaturesVisibleCheckBox";
+            this.defaultFeaturesVisibleCheckBox.Size = new System.Drawing.Size(67, 17);
+            this.defaultFeaturesVisibleCheckBox.TabIndex = 7;
+            this.defaultFeaturesVisibleCheckBox.Text = "Features";
+            this.defaultFeaturesVisibleCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // defaultGridVisibleCheckBox
+            // 
+            this.defaultGridVisibleCheckBox.AutoSize = true;
+            this.defaultGridVisibleCheckBox.Location = new System.Drawing.Point(17, 114);
+            this.defaultGridVisibleCheckBox.Name = "defaultGridVisibleCheckBox";
+            this.defaultGridVisibleCheckBox.Size = new System.Drawing.Size(45, 17);
+            this.defaultGridVisibleCheckBox.TabIndex = 4;
+            this.defaultGridVisibleCheckBox.Text = "Grid";
+            this.defaultGridVisibleCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // defaultVoidsVisibleCheckBox
+            // 
+            this.defaultVoidsVisibleCheckBox.AutoSize = true;
+            this.defaultVoidsVisibleCheckBox.Location = new System.Drawing.Point(17, 91);
+            this.defaultVoidsVisibleCheckBox.Name = "defaultVoidsVisibleCheckBox";
+            this.defaultVoidsVisibleCheckBox.Size = new System.Drawing.Size(52, 17);
+            this.defaultVoidsVisibleCheckBox.TabIndex = 3;
+            this.defaultVoidsVisibleCheckBox.Text = "Voids";
+            this.defaultVoidsVisibleCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // defaultMinimapVisibleCheckBox
+            // 
+            this.defaultMinimapVisibleCheckBox.AutoSize = true;
+            this.defaultMinimapVisibleCheckBox.Location = new System.Drawing.Point(17, 68);
+            this.defaultMinimapVisibleCheckBox.Name = "defaultMinimapVisibleCheckBox";
+            this.defaultMinimapVisibleCheckBox.Size = new System.Drawing.Size(65, 17);
+            this.defaultMinimapVisibleCheckBox.TabIndex = 2;
+            this.defaultMinimapVisibleCheckBox.Text = "Minimap";
+            this.defaultMinimapVisibleCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // defaultHeightGridVisibleCheckBox
+            // 
+            this.defaultHeightGridVisibleCheckBox.AutoSize = true;
+            this.defaultHeightGridVisibleCheckBox.Location = new System.Drawing.Point(17, 45);
+            this.defaultHeightGridVisibleCheckBox.Name = "defaultHeightGridVisibleCheckBox";
+            this.defaultHeightGridVisibleCheckBox.Size = new System.Drawing.Size(99, 17);
+            this.defaultHeightGridVisibleCheckBox.TabIndex = 1;
+            this.defaultHeightGridVisibleCheckBox.Text = "Heightmap Grid";
+            this.defaultHeightGridVisibleCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // defaultHeightmapVisibleCheckBox
+            // 
+            this.defaultHeightmapVisibleCheckBox.AutoSize = true;
+            this.defaultHeightmapVisibleCheckBox.Location = new System.Drawing.Point(17, 22);
+            this.defaultHeightmapVisibleCheckBox.Name = "defaultHeightmapVisibleCheckBox";
+            this.defaultHeightmapVisibleCheckBox.Size = new System.Drawing.Size(122, 17);
+            this.defaultHeightmapVisibleCheckBox.TabIndex = 0;
+            this.defaultHeightmapVisibleCheckBox.Text = "Heightmap Contours";
+            this.defaultHeightmapVisibleCheckBox.UseVisualStyleBackColor = true;
+            // 
             // PreferencesForm
             // 
             this.AcceptButton = this.okButton;
@@ -1057,9 +1077,9 @@ namespace Mappy.UI.Forms
             ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).EndInit();
             this.missionGroupBox.ResumeLayout(false);
             this.missionGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.inactiveSchemaOpacityNumeric)).EndInit();
             this.missionUiGroupBox.ResumeLayout(false);
             this.missionUiGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.inactiveSchemaOpacityNumeric)).EndInit();
             this.resourceNamesGroupBox.ResumeLayout(false);
             this.resourceNamesGroupBox.PerformLayout();
             this.miscGroupBox.ResumeLayout(false);
@@ -1072,14 +1092,14 @@ namespace Mappy.UI.Forms
             this.adjustmentsMiscGroupBox.PerformLayout();
             this.wheelStepGroupBox.ResumeLayout(false);
             this.wheelStepGroupBox.PerformLayout();
-            this.defaultsTabPage.ResumeLayout(false);
-            this.viewDefaultsGroupBox.ResumeLayout(false);
-            this.viewDefaultsGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.seaLevelWheelStepNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.voidCursorSizeWheelStepNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightCursorSizeWheelStepNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightIntervalWheelStepNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightSelectedHeightWheelStepNumeric)).EndInit();
+            this.defaultsTabPage.ResumeLayout(false);
+            this.viewDefaultsGroupBox.ResumeLayout(false);
+            this.viewDefaultsGroupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1120,6 +1140,8 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.NumericUpDown inactiveSchemaOpacityNumeric;
         private System.Windows.Forms.CheckBox showUnitFriendlyNameFirstCheckBox;
         private System.Windows.Forms.CheckBox showUnitFriendlyNameOnMapCheckBox;
+        private System.Windows.Forms.Label unitsFolderNameLabel;
+        private System.Windows.Forms.TextBox unitsFolderNameTextBox;
         private System.Windows.Forms.Label unitNameTextColorLabel;
         private System.Windows.Forms.Button unitNameTextColorCustomizeButton;
         private System.Windows.Forms.CheckBox showUnitNameBackplateCheckBox;

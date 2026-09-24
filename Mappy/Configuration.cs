@@ -56,6 +56,8 @@ namespace Mappy
 
         public bool ShowUnitFriendlyNameOnMap { get; set; }
 
+        public string UnitsFolderName { get; set; }
+
         public bool ShowUnitNameBackplate { get; set; }
 
         public int? UnitNameTextColorArgb { get; set; }
@@ -276,6 +278,12 @@ namespace Mappy
         public int GetVoidCursorSizeWheelStepOrDefault() => GetWheelStepOrDefault(this.VoidCursorSizeWheelStep);
 
         public int GetSeaLevelWheelStepOrDefault() => GetWheelStepOrDefault(this.SeaLevelWheelStep);
+
+        public string GetUnitsFolderNameOrDefault()
+        {
+            var name = this.UnitsFolderName?.Trim();
+            return string.IsNullOrEmpty(name) ? "units" : name;
+        }
 
         public int GetInactiveSchemaOpacityPercentForDialog()
         {

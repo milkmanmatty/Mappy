@@ -8,6 +8,7 @@ namespace Mappy.Data
     using System.Linq;
     using System.Text.RegularExpressions;
 
+    using Mappy;
     using Mappy.Util;
     using TAUtil.Tdf;
 
@@ -647,9 +648,10 @@ namespace Mappy.Data
                 }
             }
 
-            if (schemaNode.Keys.ContainsKey("units"))
+            var unitsFolderName = MappySettings.Settings.GetUnitsFolderNameOrDefault();
+            if (schemaNode.Keys.ContainsKey(unitsFolderName))
             {
-                var unitsRoot = schemaNode.Keys["units"];
+                var unitsRoot = schemaNode.Keys[unitsFolderName];
                 var ordered = unitsRoot.Keys.OrderBy(kv => ParseUnitKeyIndex(kv.Key)).ToList();
                 foreach (var kv in ordered)
                 {
@@ -679,7 +681,7 @@ namespace Mappy.Data
             foreach (var kv in schemaNode.Keys)
             {
                 if (string.Equals(kv.Key, "specials", StringComparison.OrdinalIgnoreCase)
-                    || string.Equals(kv.Key, "units", StringComparison.OrdinalIgnoreCase))
+                    || string.Equals(kv.Key, unitsFolderName, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
@@ -749,7 +751,8 @@ namespace Mappy.Data
 
             if (sch.Units.Count > 0)
             {
-                var unitsRoot = new TdfNode("units");
+                var unitsFolderName = MappySettings.Settings.GetUnitsFolderNameOrDefault();
+                var unitsRoot = new TdfNode(unitsFolderName);
                 for (var i = 0; i < sch.Units.Count; i++)
                 {
                     var u = sch.Units[i];
@@ -772,7 +775,7 @@ namespace Mappy.Data
                     unitsRoot.Keys[un.Name] = un;
                 }
 
-                s.Keys["units"] = unitsRoot;
+                s.Keys[unitsFolderName] = unitsRoot;
             }
 
             foreach (var kv in sch.ExtraChildNodes)

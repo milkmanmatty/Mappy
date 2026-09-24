@@ -68,6 +68,7 @@ namespace Mappy.UI.Forms
             this.calculatedMetalDepositValueCheckBox.Checked = MappySettings.Settings.ShowCalculatedMetalDepositValue;
             this.showUnitFriendlyNameFirstCheckBox.Checked = MappySettings.Settings.ShowUnitFriendlyNameFirst;
             this.showUnitFriendlyNameOnMapCheckBox.Checked = MappySettings.Settings.ShowUnitFriendlyNameOnMap;
+            this.unitsFolderNameTextBox.Text = MappySettings.Settings.GetUnitsFolderNameOrDefault();
             this.showUnitNameBackplateCheckBox.Checked = MappySettings.Settings.ShowUnitNameBackplate;
             this.unitNameTextColor = MappySettings.Settings.GetUnitNameTextColorOrDefault();
             this.unitNameTextColorCustomized = MappySettings.Settings.UnitNameTextColorArgb.HasValue;
@@ -304,6 +305,9 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.ShowCalculatedMetalDepositValue = this.calculatedMetalDepositValueCheckBox.Checked;
             MappySettings.Settings.ShowUnitFriendlyNameFirst = this.showUnitFriendlyNameFirstCheckBox.Checked;
             MappySettings.Settings.ShowUnitFriendlyNameOnMap = this.showUnitFriendlyNameOnMapCheckBox.Checked;
+            MappySettings.Settings.UnitsFolderName = string.IsNullOrWhiteSpace(this.unitsFolderNameTextBox.Text)
+                ? "units"
+                : this.unitsFolderNameTextBox.Text.Trim();
             MappySettings.Settings.ShowUnitNameBackplate = this.showUnitNameBackplateCheckBox.Checked;
             MappySettings.Settings.UnitNameTextColorArgb = this.unitNameTextColorCustomized
                 ? (int?)this.unitNameTextColor.ToArgb()
