@@ -13,6 +13,8 @@ namespace Mappy
 
         private const int DefaultGridSizeValue = 16;
 
+        private const int DefaultNewMapDimension = 256;
+
         /// <summary>
         /// Gets or sets the main window state: 0 = Normal, 1 = Minimized, 2 = Maximized.
         /// </summary>
@@ -239,6 +241,10 @@ namespace Mappy
 
         public int? DefaultGridSize { get; set; }
 
+        public int DefaultNewMapWidth { get; set; } = DefaultNewMapDimension;
+
+        public int DefaultNewMapHeight { get; set; } = DefaultNewMapDimension;
+
         public bool GetDefaultHeightmapVisibleOrDefault() => this.DefaultHeightmapVisible ?? false;
 
         public bool GetDefaultHeightGridVisibleOrDefault() => this.DefaultHeightGridVisible ?? false;
@@ -255,6 +261,16 @@ namespace Mappy
         {
             var size = this.DefaultGridSize ?? DefaultGridSizeValue;
             return size > 0 ? size : DefaultGridSizeValue;
+        }
+
+        public int GetDefaultNewMapWidthOrDefault()
+        {
+            return this.DefaultNewMapWidth > 0 ? this.DefaultNewMapWidth : DefaultNewMapDimension;
+        }
+
+        public int GetDefaultNewMapHeightOrDefault()
+        {
+            return this.DefaultNewMapHeight > 0 ? this.DefaultNewMapHeight : DefaultNewMapDimension;
         }
 
         public void ApplyViewDefaults(Models.CoreModel model)
