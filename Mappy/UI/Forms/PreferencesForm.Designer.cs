@@ -968,7 +968,7 @@ namespace Mappy.UI.Forms
             this.newMapDefaultsGroupBox.Size = new System.Drawing.Size(426, 66);
             this.newMapDefaultsGroupBox.TabIndex = 0;
             this.newMapDefaultsGroupBox.TabStop = false;
-            this.newMapDefaultsGroupBox.Text = "New map dimensions (tiles)";
+            this.newMapDefaultsGroupBox.Text = "New map playable area (tiles)";
             // 
             // defaultNewMapHeightNumeric
             // 
