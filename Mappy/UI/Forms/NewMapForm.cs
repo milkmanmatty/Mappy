@@ -7,7 +7,11 @@ namespace Mappy.UI.Forms
     public partial class NewMapForm : Form
     {
         public NewMapForm()
-            : this(64, 64, "New Map", "Create")
+            : this(
+                MappySettings.Settings.GetDefaultNewMapWidthOrDefault(),
+                MappySettings.Settings.GetDefaultNewMapHeightOrDefault(),
+                "New Map",
+                "Create")
         {
         }
 

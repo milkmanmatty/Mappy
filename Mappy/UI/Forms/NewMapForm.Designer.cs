@@ -46,7 +46,7 @@
             this.widthTextBox.Name = "widthTextBox";
             this.widthTextBox.Size = new System.Drawing.Size(53, 20);
             this.widthTextBox.TabIndex = 0;
-            this.widthTextBox.Text = "64";
+            this.widthTextBox.Text = "256";
             this.widthTextBox.TextChanged += new System.EventHandler(this.WidthTextChanged);
             // 
             // widthLabel
@@ -75,7 +75,7 @@
             this.heightTextBox.Name = "heightTextBox";
             this.heightTextBox.Size = new System.Drawing.Size(53, 20);
             this.heightTextBox.TabIndex = 3;
-            this.heightTextBox.Text = "64";
+            this.heightTextBox.Text = "256";
             this.heightTextBox.TextChanged += new System.EventHandler(this.HeightTextChanged);
             // 
             // button1

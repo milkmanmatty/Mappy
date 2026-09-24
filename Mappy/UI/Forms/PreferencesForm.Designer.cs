@@ -95,6 +95,11 @@ namespace Mappy.UI.Forms
             this.heightSelectedHeightWheelStepNumeric = new System.Windows.Forms.NumericUpDown();
             this.heightSelectedHeightWheelStepLabel = new System.Windows.Forms.Label();
             this.defaultsTabPage = new System.Windows.Forms.TabPage();
+            this.newMapDefaultsGroupBox = new System.Windows.Forms.GroupBox();
+            this.defaultNewMapHeightNumeric = new System.Windows.Forms.NumericUpDown();
+            this.defaultNewMapHeightLabel = new System.Windows.Forms.Label();
+            this.defaultNewMapWidthNumeric = new System.Windows.Forms.NumericUpDown();
+            this.defaultNewMapWidthLabel = new System.Windows.Forms.Label();
             this.viewDefaultsGroupBox = new System.Windows.Forms.GroupBox();
             this.defaultGridSizeComboBox = new System.Windows.Forms.ComboBox();
             this.defaultGridSizeLabel = new System.Windows.Forms.Label();
@@ -128,6 +133,9 @@ namespace Mappy.UI.Forms
             ((System.ComponentModel.ISupportInitialize)(this.heightIntervalWheelStepNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightSelectedHeightWheelStepNumeric)).BeginInit();
             this.defaultsTabPage.SuspendLayout();
+            this.newMapDefaultsGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.defaultNewMapHeightNumeric)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.defaultNewMapWidthNumeric)).BeginInit();
             this.viewDefaultsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -938,6 +946,7 @@ namespace Mappy.UI.Forms
             // 
             this.defaultsTabPage.AutoScroll = true;
             this.defaultsTabPage.Controls.Add(this.viewDefaultsGroupBox);
+            this.defaultsTabPage.Controls.Add(this.newMapDefaultsGroupBox);
             this.defaultsTabPage.Location = new System.Drawing.Point(4, 22);
             this.defaultsTabPage.Name = "defaultsTabPage";
             this.defaultsTabPage.Padding = new System.Windows.Forms.Padding(3);
@@ -945,6 +954,83 @@ namespace Mappy.UI.Forms
             this.defaultsTabPage.TabIndex = 3;
             this.defaultsTabPage.Text = "Defaults";
             this.defaultsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // newMapDefaultsGroupBox
+            // 
+            this.newMapDefaultsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapHeightNumeric);
+            this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapHeightLabel);
+            this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapWidthNumeric);
+            this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapWidthLabel);
+            this.newMapDefaultsGroupBox.Location = new System.Drawing.Point(12, 12);
+            this.newMapDefaultsGroupBox.Name = "newMapDefaultsGroupBox";
+            this.newMapDefaultsGroupBox.Size = new System.Drawing.Size(426, 66);
+            this.newMapDefaultsGroupBox.TabIndex = 0;
+            this.newMapDefaultsGroupBox.TabStop = false;
+            this.newMapDefaultsGroupBox.Text = "New map dimensions (tiles)";
+            // 
+            // defaultNewMapHeightNumeric
+            // 
+            this.defaultNewMapHeightNumeric.Location = new System.Drawing.Point(291, 27);
+            this.defaultNewMapHeightNumeric.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.defaultNewMapHeightNumeric.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.defaultNewMapHeightNumeric.Name = "defaultNewMapHeightNumeric";
+            this.defaultNewMapHeightNumeric.Size = new System.Drawing.Size(85, 20);
+            this.defaultNewMapHeightNumeric.TabIndex = 3;
+            this.defaultNewMapHeightNumeric.Value = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            // 
+            // defaultNewMapHeightLabel
+            // 
+            this.defaultNewMapHeightLabel.AutoSize = true;
+            this.defaultNewMapHeightLabel.Location = new System.Drawing.Point(238, 29);
+            this.defaultNewMapHeightLabel.Name = "defaultNewMapHeightLabel";
+            this.defaultNewMapHeightLabel.Size = new System.Drawing.Size(41, 13);
+            this.defaultNewMapHeightLabel.TabIndex = 2;
+            this.defaultNewMapHeightLabel.Text = "Height:";
+            // 
+            // defaultNewMapWidthNumeric
+            // 
+            this.defaultNewMapWidthNumeric.Location = new System.Drawing.Point(70, 27);
+            this.defaultNewMapWidthNumeric.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.defaultNewMapWidthNumeric.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.defaultNewMapWidthNumeric.Name = "defaultNewMapWidthNumeric";
+            this.defaultNewMapWidthNumeric.Size = new System.Drawing.Size(85, 20);
+            this.defaultNewMapWidthNumeric.TabIndex = 1;
+            this.defaultNewMapWidthNumeric.Value = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            // 
+            // defaultNewMapWidthLabel
+            // 
+            this.defaultNewMapWidthLabel.AutoSize = true;
+            this.defaultNewMapWidthLabel.Location = new System.Drawing.Point(17, 29);
+            this.defaultNewMapWidthLabel.Name = "defaultNewMapWidthLabel";
+            this.defaultNewMapWidthLabel.Size = new System.Drawing.Size(38, 13);
+            this.defaultNewMapWidthLabel.TabIndex = 0;
+            this.defaultNewMapWidthLabel.Text = "Width:";
             // 
             // viewDefaultsGroupBox
             // 
@@ -958,10 +1044,10 @@ namespace Mappy.UI.Forms
             this.viewDefaultsGroupBox.Controls.Add(this.defaultMinimapVisibleCheckBox);
             this.viewDefaultsGroupBox.Controls.Add(this.defaultHeightGridVisibleCheckBox);
             this.viewDefaultsGroupBox.Controls.Add(this.defaultHeightmapVisibleCheckBox);
-            this.viewDefaultsGroupBox.Location = new System.Drawing.Point(12, 12);
+            this.viewDefaultsGroupBox.Location = new System.Drawing.Point(12, 84);
             this.viewDefaultsGroupBox.Name = "viewDefaultsGroupBox";
             this.viewDefaultsGroupBox.Size = new System.Drawing.Size(426, 178);
-            this.viewDefaultsGroupBox.TabIndex = 0;
+            this.viewDefaultsGroupBox.TabIndex = 1;
             this.viewDefaultsGroupBox.TabStop = false;
             this.viewDefaultsGroupBox.Text = "View menu items visible at startup";
             // 
@@ -1098,6 +1184,10 @@ namespace Mappy.UI.Forms
             ((System.ComponentModel.ISupportInitialize)(this.heightIntervalWheelStepNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightSelectedHeightWheelStepNumeric)).EndInit();
             this.defaultsTabPage.ResumeLayout(false);
+            this.newMapDefaultsGroupBox.ResumeLayout(false);
+            this.newMapDefaultsGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.defaultNewMapHeightNumeric)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.defaultNewMapWidthNumeric)).EndInit();
             this.viewDefaultsGroupBox.ResumeLayout(false);
             this.viewDefaultsGroupBox.PerformLayout();
             this.ResumeLayout(false);
@@ -1182,5 +1272,10 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.Label defaultGridSizeLabel;
         private System.Windows.Forms.ComboBox defaultGridSizeComboBox;
         private System.Windows.Forms.CheckBox defaultFeaturesVisibleCheckBox;
+        private System.Windows.Forms.GroupBox newMapDefaultsGroupBox;
+        private System.Windows.Forms.NumericUpDown defaultNewMapHeightNumeric;
+        private System.Windows.Forms.Label defaultNewMapHeightLabel;
+        private System.Windows.Forms.NumericUpDown defaultNewMapWidthNumeric;
+        private System.Windows.Forms.Label defaultNewMapWidthLabel;
     }
 }

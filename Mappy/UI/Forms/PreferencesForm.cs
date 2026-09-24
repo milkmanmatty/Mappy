@@ -107,6 +107,8 @@ namespace Mappy.UI.Forms
             this.defaultVoidsVisibleCheckBox.Checked = settings.GetDefaultVoidsVisibleOrDefault();
             this.defaultGridVisibleCheckBox.Checked = settings.GetDefaultGridVisibleOrDefault();
             this.defaultFeaturesVisibleCheckBox.Checked = settings.GetDefaultFeaturesVisibleOrDefault();
+            this.defaultNewMapWidthNumeric.Value = settings.GetDefaultNewMapWidthOrDefault();
+            this.defaultNewMapHeightNumeric.Value = settings.GetDefaultNewMapHeightOrDefault();
 
             var gridSize = settings.GetDefaultGridSizeOrDefault();
             var gridSizeText = gridSize + "x" + gridSize;
@@ -353,6 +355,8 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.DefaultGridVisible = this.defaultGridVisibleCheckBox.Checked;
             MappySettings.Settings.DefaultFeaturesVisible = this.defaultFeaturesVisibleCheckBox.Checked;
             MappySettings.Settings.DefaultGridSize = this.ParseGridSizeComboSelection();
+            MappySettings.Settings.DefaultNewMapWidth = (int)this.defaultNewMapWidthNumeric.Value;
+            MappySettings.Settings.DefaultNewMapHeight = (int)this.defaultNewMapHeightNumeric.Value;
             MappySettings.SaveSettings(notifyListeners: true);
         }
 
