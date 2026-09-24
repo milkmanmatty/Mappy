@@ -6,6 +6,7 @@ namespace Mappy.IO
     using System.Linq;
     using System.Text;
 
+    using Mappy;
     using Mappy.Data;
 
     using TAUtil.Hpi;
@@ -13,8 +14,6 @@ namespace Mappy.IO
 
     public class UnitFbiCatalogLoader : AbstractHpiLoader<UnitCatalogLoadRecord>
     {
-        private static readonly HashSet<string> UnitFolderNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "units", "ZUnits" };
-
         protected override void LoadFile(HpiArchive archive, HpiArchive.FileInfo file)
         {
             var name = Path.GetFileNameWithoutExtension(file.Name);
@@ -71,11 +70,12 @@ namespace Mappy.IO
 
         private static IEnumerable<HpiArchive.FileInfo> EnumerateUnitFbis(HpiArchive.DirectoryInfo dir)
         {
+            var unitsFolderName = MappySettings.Settings.GetUnitsFolderNameOrDefault();
             foreach (var entry in dir.Entries)
             {
                 if (entry is HpiArchive.DirectoryInfo sub)
                 {
-                    if (UnitFolderNames.Contains(sub.Name))
+                    if (string.Equals(sub.Name, unitsFolderName, StringComparison.OrdinalIgnoreCase))
                     {
                         foreach (var f in GetUnitFbisRecursive(sub))
                         {
