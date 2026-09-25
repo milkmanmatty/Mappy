@@ -107,8 +107,10 @@ namespace Mappy.UI.Forms
             this.defaultVoidsVisibleCheckBox.Checked = settings.GetDefaultVoidsVisibleOrDefault();
             this.defaultGridVisibleCheckBox.Checked = settings.GetDefaultGridVisibleOrDefault();
             this.defaultFeaturesVisibleCheckBox.Checked = settings.GetDefaultFeaturesVisibleOrDefault();
-            this.defaultNewMapWidthNumeric.Value = settings.GetDefaultNewMapWidthOrDefault();
-            this.defaultNewMapHeightNumeric.Value = settings.GetDefaultNewMapHeightOrDefault();
+            this.defaultNewMapWidthNumeric.Maximum = NewMapForm.MaximumNewMapDimension;
+            this.defaultNewMapHeightNumeric.Maximum = NewMapForm.MaximumNewMapDimension;
+            this.defaultNewMapWidthNumeric.Value = Math.Min(settings.GetDefaultNewMapWidthOrDefault(), NewMapForm.MaximumNewMapDimension);
+            this.defaultNewMapHeightNumeric.Value = Math.Min(settings.GetDefaultNewMapHeightOrDefault(), NewMapForm.MaximumNewMapDimension);
 
             var gridSize = settings.GetDefaultGridSizeOrDefault();
             var gridSizeText = gridSize + "x" + gridSize;
