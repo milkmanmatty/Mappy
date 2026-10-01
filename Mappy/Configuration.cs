@@ -217,6 +217,8 @@ namespace Mappy
 
         public int? InactiveSchemaOpacityPercent { get; set; }
 
+        public bool OnlySelectActiveSchema { get; set; } = true;
+
         public int HeightSelectedHeightWheelStep { get; set; } = DefaultWheelStep;
 
         public int HeightIntervalWheelStep { get; set; } = DefaultWheelStep;

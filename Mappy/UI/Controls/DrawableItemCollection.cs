@@ -1,5 +1,6 @@
 namespace Mappy.UI.Controls
 {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.Specialized;
@@ -64,8 +65,13 @@ namespace Mappy.UI.Controls
 
         public DrawableItem HitTest(Point p)
         {
+            return this.HitTest(p, null);
+        }
+
+        public DrawableItem HitTest(Point p, Func<DrawableItem, bool> include)
+        {
             return this.items.FindAtPoint(p)
-                .Where(x => !x.Locked && x.Visible)
+                .Where(x => !x.Locked && x.Visible && (include == null || include(x)))
                 .OrderByDescending(x => x.Z)
                 .FirstOrDefault();
         }

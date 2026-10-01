@@ -1,5 +1,6 @@
 ﻿namespace Mappy.UI.Controls
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Drawing;
@@ -18,7 +19,12 @@
 
         public DrawableItem HitTest(int x, int y)
         {
-            return this.Items.HitTest(new Point(x, y));
+            return this.HitTest(x, y, null);
+        }
+
+        public DrawableItem HitTest(int x, int y, Func<DrawableItem, bool> include)
+        {
+            return this.Items.HitTest(new Point(x, y), include);
         }
 
         public void AddToSelection(DrawableItem item)
@@ -53,7 +59,12 @@
 
         public bool IsInSelection(int x, int y)
         {
-            var item = this.HitTest(x, y);
+            return this.IsInSelection(x, y, null);
+        }
+
+        public bool IsInSelection(int x, int y, Func<DrawableItem, bool> include)
+        {
+            var item = this.HitTest(x, y, include);
 
             if (item == null)
             {
