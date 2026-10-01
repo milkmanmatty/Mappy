@@ -46,6 +46,11 @@
             this.heightDown16Button = new System.Windows.Forms.Button();
             this.addStandardBorderCheckBox = new System.Windows.Forms.CheckBox();
             this.finalSizeLabel = new System.Windows.Forms.Label();
+            this.resizeAnchorLabel = new System.Windows.Forms.Label();
+            this.resizeAnchorGrid = new System.Windows.Forms.TableLayoutPanel();
+            this.resizeChangeLabel = new System.Windows.Forms.Label();
+            this.moveStandardBorderCheckBox = new System.Windows.Forms.CheckBox();
+            this.moveStandardBorderHelpLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // widthTextBox
@@ -241,7 +246,62 @@
             this.finalSizeLabel.Size = new System.Drawing.Size(155, 13);
             this.finalSizeLabel.TabIndex = 15;
             this.finalSizeLabel.Text = "Final map size: 257 × 260 tiles";
-            // 
+            //
+            // resizeAnchorLabel
+            //
+            this.resizeAnchorLabel.AutoSize = true;
+            this.resizeAnchorLabel.Location = new System.Drawing.Point(14, 134);
+            this.resizeAnchorLabel.Name = "resizeAnchorLabel";
+            this.resizeAnchorLabel.Size = new System.Drawing.Size(105, 13);
+            this.resizeAnchorLabel.TabIndex = 16;
+            this.resizeAnchorLabel.Text = "Anchor existing map:";
+            this.resizeAnchorLabel.Visible = false;
+            //
+            // resizeAnchorGrid
+            //
+            this.resizeAnchorGrid.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
+            this.resizeAnchorGrid.ColumnCount = 3;
+            this.resizeAnchorGrid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.resizeAnchorGrid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.resizeAnchorGrid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
+            this.resizeAnchorGrid.Location = new System.Drawing.Point(14, 155);
+            this.resizeAnchorGrid.Name = "resizeAnchorGrid";
+            this.resizeAnchorGrid.RowCount = 3;
+            this.resizeAnchorGrid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.resizeAnchorGrid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.resizeAnchorGrid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
+            this.resizeAnchorGrid.Size = new System.Drawing.Size(108, 108);
+            this.resizeAnchorGrid.TabIndex = 17;
+            this.resizeAnchorGrid.Visible = false;
+            //
+            // resizeChangeLabel
+            //
+            this.resizeChangeLabel.Location = new System.Drawing.Point(132, 158);
+            this.resizeChangeLabel.Name = "resizeChangeLabel";
+            this.resizeChangeLabel.Size = new System.Drawing.Size(180, 84);
+            this.resizeChangeLabel.TabIndex = 18;
+            this.resizeChangeLabel.Visible = false;
+            //
+            // moveStandardBorderCheckBox
+            //
+            this.moveStandardBorderCheckBox.AutoSize = true;
+            this.moveStandardBorderCheckBox.Location = new System.Drawing.Point(14, 276);
+            this.moveStandardBorderCheckBox.Name = "moveStandardBorderCheckBox";
+            this.moveStandardBorderCheckBox.TabIndex = 19;
+            this.moveStandardBorderCheckBox.Text = "Move map border to new edges";
+            this.moveStandardBorderCheckBox.UseVisualStyleBackColor = true;
+            this.moveStandardBorderCheckBox.Visible = false;
+            this.moveStandardBorderCheckBox.CheckedChanged += new System.EventHandler(this.MoveStandardBorderCheckBoxCheckedChanged);
+            //
+            // moveStandardBorderHelpLabel
+            //
+            this.moveStandardBorderHelpLabel.Location = new System.Drawing.Point(30, 300);
+            this.moveStandardBorderHelpLabel.Name = "moveStandardBorderHelpLabel";
+            this.moveStandardBorderHelpLabel.Size = new System.Drawing.Size(282, 56);
+            this.moveStandardBorderHelpLabel.TabIndex = 20;
+            this.moveStandardBorderHelpLabel.Text = "Ticked: moves the existing border to the resized map’s edges.\r\nUnticked: keeps the border with the existing terrain.";
+            this.moveStandardBorderHelpLabel.Visible = false;
+            //
             // NewMapForm
             // 
             this.AcceptButton = this.button1;
@@ -249,6 +309,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.button2;
             this.ClientSize = new System.Drawing.Size(324, 221);
+            this.Controls.Add(this.moveStandardBorderHelpLabel);
+            this.Controls.Add(this.moveStandardBorderCheckBox);
+            this.Controls.Add(this.resizeChangeLabel);
+            this.Controls.Add(this.resizeAnchorGrid);
+            this.Controls.Add(this.resizeAnchorLabel);
             this.Controls.Add(this.finalSizeLabel);
             this.Controls.Add(this.addStandardBorderCheckBox);
             this.Controls.Add(this.heightDown16Button);
@@ -297,5 +362,10 @@
         private System.Windows.Forms.Button heightDown16Button;
         private System.Windows.Forms.CheckBox addStandardBorderCheckBox;
         private System.Windows.Forms.Label finalSizeLabel;
+        private System.Windows.Forms.Label resizeAnchorLabel;
+        private System.Windows.Forms.TableLayoutPanel resizeAnchorGrid;
+        private System.Windows.Forms.Label resizeChangeLabel;
+        private System.Windows.Forms.CheckBox moveStandardBorderCheckBox;
+        private System.Windows.Forms.Label moveStandardBorderHelpLabel;
     }
 }

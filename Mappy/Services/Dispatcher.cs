@@ -496,21 +496,26 @@ namespace Mappy.Services
             this.model.Map.IfSome(
                 map =>
                 {
-                    var newSize = this.dialogService.AskUserResizeMapSize(map.MapWidth, map.MapHeight);
-                    if (newSize.Width <= 0 || newSize.Height <= 0)
+                    var resize = this.dialogService.AskUserResizeMapOptions(map.MapWidth, map.MapHeight);
+                    if (resize == null)
                     {
                         return;
                     }
 
+                    var newSize = resize.Size;
                     if (newSize.Width == map.MapWidth && newSize.Height == map.MapHeight)
                     {
                         return;
                     }
 
+                    var tileOffset = resize.GetTileOffset(new Size(map.MapWidth, map.MapHeight));
                     map.ClearSelection();
                     var oldViewportLocation = map.ViewportLocation;
-                    map.ResizeMap(newSize.Width, newSize.Height);
-                    this.model.SetViewportLocation(oldViewportLocation);
+                    map.ResizeMap(newSize.Width, newSize.Height, tileOffset.X, tileOffset.Y, resize.MoveStandardBorder);
+                    this.model.SetViewportLocation(
+                        new Point(
+                            oldViewportLocation.X + (tileOffset.X * 32),
+                            oldViewportLocation.Y + (tileOffset.Y * 32)));
                 });
         }
 

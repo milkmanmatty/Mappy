@@ -642,6 +642,11 @@ namespace Mappy.Models
 
         public void ResizeMap(int newWidth, int newHeight)
         {
+            this.ResizeMap(newWidth, newHeight, 0, 0);
+        }
+
+        public void ResizeMap(int newWidth, int newHeight, int tileOffsetX, int tileOffsetY, bool moveStandardBorder = false)
+        {
             if (newWidth < 1)
             {
                 throw new ArgumentOutOfRangeException(nameof(newWidth));
@@ -652,12 +657,20 @@ namespace Mappy.Models
                 throw new ArgumentOutOfRangeException(nameof(newHeight));
             }
 
-            if (newWidth == this.MapWidth && newHeight == this.MapHeight)
+            if (moveStandardBorder && (this.MapWidth <= ResizeMapOptions.StandardBorderWidth
+                || this.MapHeight <= ResizeMapOptions.StandardBorderHeight
+                || newWidth <= ResizeMapOptions.StandardBorderWidth
+                || newHeight <= ResizeMapOptions.StandardBorderHeight))
+            {
+                throw new ArgumentException("Moving the standard border requires a non-empty playable area.");
+            }
+
+            if (newWidth == this.MapWidth && newHeight == this.MapHeight && tileOffsetX == 0 && tileOffsetY == 0)
             {
                 return;
             }
 
-            var resizedModel = CreateResizedModel(this.model, newWidth, newHeight);
+            var resizedModel = CreateResizedModel(this.model, newWidth, newHeight, tileOffsetX, tileOffsetY, moveStandardBorder);
             this.undoManager.Execute(new ResizeMapOperation(this, this.model, resizedModel));
             this.previousTranslationOpen = false;
             this.previousSeaLevelOpen = false;
@@ -1385,40 +1398,93 @@ namespace Mappy.Models
             }
         }
 
-        private static ISelectionModel CreateResizedModel(ISelectionModel source, int newWidth, int newHeight)
+        private static ISelectionModel CreateResizedModel(
+            ISelectionModel source,
+            int newWidth,
+            int newHeight,
+            int tileOffsetX,
+            int tileOffsetY,
+            bool moveStandardBorder)
         {
-            var resizedModel = new MapModel(newWidth, newHeight);
+            var resizedModel = new MapModel(newWidth, newHeight)
+            {
+                SeaLevel = source.SeaLevel,
+            };
 
             var fillTile = source.Tile.TileGrid.Get(0, 0);
             GridMethods.Fill(resizedModel.Tile.TileGrid, fillTile);
 
-            var copyTileWidth = Math.Min(source.Tile.TileGrid.Width, resizedModel.Tile.TileGrid.Width);
-            var copyTileHeight = Math.Min(source.Tile.TileGrid.Height, resizedModel.Tile.TileGrid.Height);
-            GridMethods.Copy(source.Tile.TileGrid, resizedModel.Tile.TileGrid, 0, 0, 0, 0, copyTileWidth, copyTileHeight);
+            var originalSize = new Size(source.Tile.TileGrid.Width, source.Tile.TileGrid.Height);
+            var newSize = new Size(newWidth, newHeight);
+            var tileOffset = new Point(tileOffsetX, tileOffsetY);
+            var borderWidth = moveStandardBorder ? ResizeMapOptions.StandardBorderWidth : 0;
+            var borderHeight = moveStandardBorder ? ResizeMapOptions.StandardBorderHeight : 0;
 
-            var copyHeightWidth = Math.Min(source.Tile.HeightGrid.Width, resizedModel.Tile.HeightGrid.Width);
-            var copyHeightHeight = Math.Min(source.Tile.HeightGrid.Height, resizedModel.Tile.HeightGrid.Height);
-            GridMethods.Copy(source.Tile.HeightGrid, resizedModel.Tile.HeightGrid, 0, 0, 0, 0, copyHeightWidth, copyHeightHeight);
+            var sourceX = Math.Max(0, -tileOffsetX);
+            var sourceY = Math.Max(0, -tileOffsetY);
+            var destinationX = Math.Max(0, tileOffsetX);
+            var destinationY = Math.Max(0, tileOffsetY);
+            var copyTileWidth = Math.Min(originalSize.Width - borderWidth - sourceX, newWidth - borderWidth - destinationX);
+            var copyTileHeight = Math.Min(originalSize.Height - borderHeight - sourceY, newHeight - borderHeight - destinationY);
+            if (copyTileWidth > 0 && copyTileHeight > 0)
+            {
+                GridMethods.Copy(
+                    source.Tile.TileGrid,
+                    resizedModel.Tile.TileGrid,
+                    sourceX,
+                    sourceY,
+                    destinationX,
+                    destinationY,
+                    copyTileWidth,
+                    copyTileHeight);
+                GridMethods.Copy(
+                    source.Tile.HeightGrid,
+                    resizedModel.Tile.HeightGrid,
+                    sourceX * 2,
+                    sourceY * 2,
+                    destinationX * 2,
+                    destinationY * 2,
+                    copyTileWidth * 2,
+                    copyTileHeight * 2);
+                GridMethods.Merge(
+                    source.Voids,
+                    resizedModel.Voids,
+                    sourceX * 2,
+                    sourceY * 2,
+                    destinationX * 2,
+                    destinationY * 2,
+                    copyTileWidth * 2,
+                    copyTileHeight * 2);
+            }
 
-            var copyVoidWidth = Math.Min(source.Voids.Width, resizedModel.Voids.Width);
-            var copyVoidHeight = Math.Min(source.Voids.Height, resizedModel.Voids.Height);
-            GridMethods.Merge(source.Voids, resizedModel.Voids, 0, 0, 0, 0, copyVoidWidth, copyVoidHeight);
+            if (moveStandardBorder)
+            {
+                CopyResizedBorder(source, resizedModel, tileOffset);
+            }
 
             var mapBounds = new Rectangle(0, 0, newWidth * 32, newHeight * 32);
             foreach (var feature in source.EnumerateFeatureInstances())
             {
-                if (feature.X >= 0
-                    && feature.Y >= 0
-                    && feature.X < resizedModel.FeatureGridWidth
-                    && feature.Y < resizedModel.FeatureGridHeight)
+                var location = GetResizedLocation(
+                    new Point(feature.X, feature.Y), originalSize, newSize, tileOffset, moveStandardBorder, 2);
+                if (!location.HasValue)
                 {
-                    var drawBounds = feature.BaseFeature.GetDrawBounds(
+                    continue;
+                }
+
+                var movedFeature = feature.Translate(location.Value.X - feature.X, location.Value.Y - feature.Y);
+                if (movedFeature.X >= 0
+                    && movedFeature.Y >= 0
+                    && movedFeature.X < resizedModel.FeatureGridWidth
+                    && movedFeature.Y < resizedModel.FeatureGridHeight)
+                {
+                    var drawBounds = movedFeature.BaseFeature.GetDrawBounds(
                         resizedModel.Tile.HeightGrid,
-                        feature.X,
-                        feature.Y);
+                        movedFeature.X,
+                        movedFeature.Y);
                     if (mapBounds.Contains(drawBounds))
                     {
-                        resizedModel.AddFeatureInstance(feature);
+                        resizedModel.AddFeatureInstance(movedFeature);
                     }
                 }
             }
@@ -1426,10 +1492,6 @@ namespace Mappy.Models
             resizedModel.Attributes.CopyFrom(source.Attributes);
             resizedModel.ActiveSchemaIndex = Math.Min(source.ActiveSchemaIndex, Math.Max(0, resizedModel.Attributes.Schemas.Count - 1));
 
-            var maxX = (newWidth * 32) - 1;
-            var maxY = (newHeight * 32) - 1;
-            var hgW = resizedModel.Tile.HeightGrid.Width;
-            var hgH = resizedModel.Tile.HeightGrid.Height;
             for (var si = 0; si < resizedModel.Attributes.Schemas.Count; si++)
             {
                 for (var i = 0; i < 10; i++)
@@ -1440,28 +1502,27 @@ namespace Mappy.Models
                         continue;
                     }
 
-                    var p = startPosition.Value;
-                    if (p.X < 0 || p.Y < 0 || p.X > maxX || p.Y > maxY)
+                    var location = GetResizedLocation(
+                        startPosition.Value, originalSize, newSize, tileOffset, moveStandardBorder, 32);
+                    resizedModel.Attributes.SetStartPosition(si, i, location);
+                }
+
+                var toRemove = new List<Guid>();
+                foreach (var unit in resizedModel.Attributes.Schemas[si].Units)
+                {
+                    var location = GetResizedLocation(
+                        new Point(unit.XPos, unit.ZPos), originalSize, newSize, tileOffset, moveStandardBorder, 32);
+                    if (location.HasValue)
                     {
-                        resizedModel.Attributes.SetStartPosition(si, i, null);
+                        unit.XPos = location.Value.X;
+                        unit.ZPos = location.Value.Y;
+                    }
+                    else
+                    {
+                        toRemove.Add(unit.Id);
                     }
                 }
 
-                var toRemove = resizedModel.Attributes.Schemas[si].Units
-                    .Where(
-                        u =>
-                        {
-                            if (u.XPos < 0 || u.ZPos < 0 || u.XPos > maxX || u.ZPos > maxY)
-                            {
-                                return true;
-                            }
-
-                            var hx = u.XPos / 16;
-                            var hz = u.ZPos / 16;
-                            return hx < 0 || hz < 0 || hx >= hgW || hz >= hgH;
-                        })
-                    .Select(u => u.Id)
-                    .ToList();
                 foreach (var id in toRemove)
                 {
                     resizedModel.RemoveSchemaUnit(si, id);
@@ -1483,6 +1544,91 @@ namespace Mappy.Models
             }
 
             return resizedModel;
+        }
+
+        private static void CopyResizedBorder(ISelectionModel source, ISelectionModel destination, Point tileOffset)
+        {
+            var oldPlayableWidth = source.Tile.TileGrid.Width - ResizeMapOptions.StandardBorderWidth;
+            var oldPlayableHeight = source.Tile.TileGrid.Height - ResizeMapOptions.StandardBorderHeight;
+            var newPlayableWidth = destination.Tile.TileGrid.Width - ResizeMapOptions.StandardBorderWidth;
+            var newPlayableHeight = destination.Tile.TileGrid.Height - ResizeMapOptions.StandardBorderHeight;
+
+            // Keep the right column aligned with the anchored playable area.
+            // Repeat the nearest border tile where there is no old border to copy.
+            for (var y = 0; y < newPlayableHeight; y++)
+            {
+                var sourceY = Math.Max(0, Math.Min(oldPlayableHeight - 1, y - tileOffset.Y));
+                CopyBorderTile(source, destination, oldPlayableWidth, sourceY, newPlayableWidth, y);
+            }
+
+            for (var row = 0; row < ResizeMapOptions.StandardBorderHeight; row++)
+            {
+                for (var x = 0; x <= newPlayableWidth; x++)
+                {
+                    // Copy the bottom-right corner once, without stretching it.
+                    var sourceX = x == newPlayableWidth
+                        ? oldPlayableWidth
+                        : Math.Max(0, Math.Min(oldPlayableWidth - 1, x - tileOffset.X));
+                    CopyBorderTile(source, destination, sourceX, oldPlayableHeight + row, x, newPlayableHeight + row);
+                }
+            }
+        }
+
+        private static void CopyBorderTile(
+            ISelectionModel source,
+            ISelectionModel destination,
+            int sourceX,
+            int sourceY,
+            int destinationX,
+            int destinationY)
+        {
+            destination.Tile.TileGrid.Set(destinationX, destinationY, source.Tile.TileGrid.Get(sourceX, sourceY));
+            GridMethods.Copy(source.Tile.HeightGrid, destination.Tile.HeightGrid,
+                sourceX * 2, sourceY * 2, destinationX * 2, destinationY * 2, 2, 2);
+            GridMethods.Copy(source.Voids, destination.Voids,
+                sourceX * 2, sourceY * 2, destinationX * 2, destinationY * 2, 2, 2);
+        }
+
+        private static Point? GetResizedLocation(
+            Point location,
+            Size originalSize,
+            Size newSize,
+            Point tileOffset,
+            bool moveStandardBorder,
+            int unitsPerTile)
+        {
+            var offsetX = tileOffset.X;
+            var offsetY = tileOffset.Y;
+            var maximumWidth = newSize.Width;
+            var maximumHeight = newSize.Height;
+            if (moveStandardBorder)
+            {
+                // Border contents follow the new edge; playable contents follow the anchor.
+                // Cropped playable contents must not spill into the relocated border.
+                if (location.X >= (originalSize.Width - ResizeMapOptions.StandardBorderWidth) * unitsPerTile)
+                {
+                    offsetX = newSize.Width - originalSize.Width;
+                }
+                else
+                {
+                    maximumWidth -= ResizeMapOptions.StandardBorderWidth;
+                }
+
+                if (location.Y >= (originalSize.Height - ResizeMapOptions.StandardBorderHeight) * unitsPerTile)
+                {
+                    offsetY = newSize.Height - originalSize.Height;
+                }
+                else
+                {
+                    maximumHeight -= ResizeMapOptions.StandardBorderHeight;
+                }
+            }
+
+            location.Offset(offsetX * unitsPerTile, offsetY * unitsPerTile);
+            return location.X >= 0 && location.Y >= 0
+                && location.X < maximumWidth * unitsPerTile && location.Y < maximumHeight * unitsPerTile
+                ? location
+                : (Point?)null;
         }
 
         private void ApplyHeightBrushOperation(HeightBrushOperation op)
