@@ -10,6 +10,8 @@ namespace Mappy.Models
 
         public int? UnitSchemaIndex { get; set; }
 
+        public bool PlayableAreaOnly { get; set; }
+
         public string FilePath { get; set; }
     }
 }

@@ -2020,6 +2020,7 @@ namespace Mappy.Services
                             floatingTiles,
                             featureOverlays,
                             unitOverlays,
+                            opts.PlayableAreaOnly,
                             worker.ReportProgress,
                             () => worker.CancellationPending);
                         args.Cancel = !success;

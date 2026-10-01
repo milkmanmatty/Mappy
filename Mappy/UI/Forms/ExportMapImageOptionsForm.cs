@@ -8,6 +8,7 @@ namespace Mappy.UI.Forms
     public sealed class ExportMapImageOptionsForm : Form
     {
         private readonly CheckBox includeSectionsCheckBox;
+        private readonly CheckBox playableAreaOnlyCheckBox;
         private readonly ComboBox featuresComboBox;
         private readonly ComboBox unitsComboBox;
 
@@ -77,20 +78,40 @@ namespace Mappy.UI.Forms
 
             this.unitsComboBox.SelectedIndex = 0;
             this.Controls.Add(this.unitsComboBox);
+            y += 32;
+
+            this.playableAreaOnlyCheckBox = new CheckBox
+            {
+                Text = "Playable area only",
+                Checked = false,
+                AutoSize = true,
+                Location = new Point(14, y),
+            };
+            this.Controls.Add(this.playableAreaOnlyCheckBox);
+            y += 22;
+
+            var playableAreaHint = new Label
+            {
+                Text = "Checked to look pretty, unchecked to edit and re-import later.",
+                AutoSize = false,
+                Location = new Point(30, y),
+                Size = new Size(320, 32),
+            };
+            this.Controls.Add(playableAreaHint);
             y += 36;
 
             var ok = new Button
             {
                 Text = "Export...",
                 DialogResult = DialogResult.OK,
-                Location = new Point(100, y),
+                Location = new Point(170, y),
                 Width = 80,
             };
             var cancel = new Button
             {
                 Text = "Cancel",
                 DialogResult = DialogResult.Cancel,
-                Location = new Point(190, y),
+                Location = new Point(260, y),
                 Width = 80,
             };
             this.AcceptButton = ok;
@@ -98,10 +119,12 @@ namespace Mappy.UI.Forms
             this.Controls.Add(ok);
             this.Controls.Add(cancel);
 
-            this.ClientSize = new Size(310, y + 36);
+            this.ClientSize = new Size(360, y + 36);
         }
 
         public bool IncludeSections => this.includeSectionsCheckBox.Checked;
+
+        public bool PlayableAreaOnly => this.playableAreaOnlyCheckBox.Checked;
 
         public FeatureExportMode FeatureMode
         {

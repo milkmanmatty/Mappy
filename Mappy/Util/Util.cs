@@ -283,7 +283,7 @@ namespace Mappy.Util
 
         public static bool WriteMapImage(Stream s, IGrid<Bitmap> map, Action<int> reportProgress, Func<bool> shouldCancel)
         {
-            return WriteMapImage(s, map, null, null, null, reportProgress, shouldCancel);
+            return WriteMapImage(s, map, null, null, null, false, reportProgress, shouldCancel);
         }
 
         public static bool WriteMapImage(
@@ -292,12 +292,19 @@ namespace Mappy.Util
             IList<Positioned<IMapTile>> floatingTiles,
             IList<FeatureOverlay> featureOverlays,
             IList<UnitOverlay> unitOverlays,
+            bool playableAreaOnly,
             Action<int> reportProgress,
             Func<bool> shouldCancel)
         {
-            // Exclude 1 tile on the right, and 4 tiles at the bottom.
-            var width = Math.Max(1, (map.Width * 32) - 32);
-            var height = Math.Max(1, (map.Height * 32) - 128);
+            var width = map.Width * 32;
+            var height = map.Height * 32;
+            if (playableAreaOnly)
+            {
+                // Exclude 1 tile on the right, and 4 tiles at the bottom.
+                width = Math.Max(1, width - 32);
+                height = Math.Max(1, height - 128);
+            }
+
             var totalTiles = map.Width * map.Height;
 
             using (var full = new Bitmap(width, height, PixelFormat.Format32bppArgb))
