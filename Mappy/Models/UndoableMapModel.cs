@@ -7,6 +7,7 @@ namespace Mappy.Models
     using System.ComponentModel;
     using System.Drawing;
     using System.Linq;
+    using Mappy;
     using Mappy.Collections;
     using Mappy.Data;
     using Mappy.Models.BandboxBehaviours;
@@ -1206,8 +1207,15 @@ namespace Mappy.Models
                 if (this.selectedGuiTab == GUITab.Mission)
                 {
                     var selections = new List<IReplayableOperation>();
+                    var onlyActiveSchema = MappySettings.Settings.OnlySelectActiveSchema;
+                    var activeSchema = this.model.ActiveSchemaIndex;
                     for (var si = 0; si < this.model.Attributes.Schemas.Count; si++)
                     {
+                        if (onlyActiveSchema && si != activeSchema)
+                        {
+                            continue;
+                        }
+
                         foreach (var u in this.model.Attributes.Schemas[si].Units)
                         {
                             if (u.XPos >= minX && u.XPos <= maxX && u.ZPos >= minY && u.ZPos <= maxY)
@@ -1781,6 +1789,12 @@ namespace Mappy.Models
             }
 
             var refs = this.SelectedUnits.ToList();
+            if (MappySettings.Settings.OnlySelectActiveSchema)
+            {
+                var activeSchema = this.model.ActiveSchemaIndex;
+                refs = refs.Where(r => r.SchemaIndex == activeSchema).ToList();
+            }
+
             if (refs.Count == 0)
             {
                 return;

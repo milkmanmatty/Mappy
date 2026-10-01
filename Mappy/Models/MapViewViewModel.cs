@@ -230,6 +230,7 @@ namespace Mappy.Models
                 return;
             }
 
+            this.DropUnitsOutsideActiveSchema();
             this.UpdateStartPositions();
             this.UpdateAllSchemaUnits();
             this.RefreshFeatureBaseBlobs();
@@ -349,9 +350,9 @@ namespace Mappy.Models
                 return;
             }
 
-            if (!this.itemsLayer.Value.IsInSelection(location.X, location.Y))
+            if (!this.itemsLayer.Value.IsInSelection(location.X, location.Y, this.IsSelectableMapItem))
             {
-                var hit = this.itemsLayer.Value.HitTest(location.X, location.Y);
+                var hit = this.itemsLayer.Value.HitTest(location.X, location.Y, this.IsSelectableMapItem);
                 if (hit != null && hit.Tag is IMapItemTag)
                 {
                     this.SelectFromTag(hit.Tag);
@@ -372,7 +373,7 @@ namespace Mappy.Models
                 return;
             }
 
-            var hit = this.itemsLayer.Value.HitTest(location.X, location.Y);
+            var hit = this.itemsLayer.Value.HitTest(location.X, location.Y, this.IsSelectableMapItem);
             if (hit?.Tag is UnitTag ut)
             {
                 this.dispatcher.EditSchemaUnit(ut.SchemaIndex, ut.UnitId);
@@ -406,13 +407,13 @@ namespace Mappy.Models
                 return;
             }
 
-            if (!this.itemsLayer.Value.IsInSelection(location.X, location.Y)
+            if (!this.itemsLayer.Value.IsInSelection(location.X, location.Y, this.IsSelectableMapItem)
                 && this.model.SelectedGUITab == GUITab.Mission
                 && !string.IsNullOrEmpty(this.unitCatalogService.SelectedUnitName))
             {
                 this.dispatcher.PlaceUnitFromSidebar(this.unitCatalogService.SelectedUnitName, location.X, location.Y, screenLocation);
             }
-            else if (!this.itemsLayer.Value.IsInSelection(location.X, location.Y) &&
+            else if (!this.itemsLayer.Value.IsInSelection(location.X, location.Y, this.IsSelectableMapItem) &&
                 this.featureService.SelectedFeature != null)
             {
                 this.dispatcher.DragDropFeature(
@@ -1013,6 +1014,7 @@ namespace Mappy.Models
                     this.RefreshSelection();
                     break;
                 case "ActiveSchemaIndex":
+                    this.DropUnitsOutsideActiveSchema();
                     this.UpdateStartPositions();
                     this.UpdateAllSchemaUnits();
                     this.RefreshSelection();
@@ -2179,6 +2181,34 @@ namespace Mappy.Models
                 this.itemsLayer.Value.Items.Remove(item);
                 this.itemsLayer.Value.RemoveFromSelection(item);
                 this.featureMapping.Remove(id);
+            }
+        }
+
+        private bool IsSelectableMapItem(DrawableItem item)
+        {
+            if (item == null || !MappySettings.Settings.OnlySelectActiveSchema || this.mapModel == null)
+            {
+                return item != null;
+            }
+
+            return !(item.Tag is UnitTag unit) || unit.SchemaIndex == this.mapModel.ActiveSchemaIndex;
+        }
+
+        private void DropUnitsOutsideActiveSchema()
+        {
+            if (this.mapModel == null || !MappySettings.Settings.OnlySelectActiveSchema)
+            {
+                return;
+            }
+
+            var active = this.mapModel.ActiveSchemaIndex;
+            var units = this.mapModel.SelectedUnits;
+            for (var i = units.Count - 1; i >= 0; i--)
+            {
+                if (units[i].SchemaIndex != active)
+                {
+                    units.RemoveAt(i);
+                }
             }
         }
 

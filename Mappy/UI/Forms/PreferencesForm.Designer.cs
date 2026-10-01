@@ -55,6 +55,7 @@ namespace Mappy.UI.Forms
             this.showUnitFriendlyNameFirstCheckBox = new System.Windows.Forms.CheckBox();
             this.inactiveSchemaOpacityNumeric = new System.Windows.Forms.NumericUpDown();
             this.inactiveSchemaOpacityLabel = new System.Windows.Forms.Label();
+            this.onlySelectActiveSchemaCheckBox = new System.Windows.Forms.CheckBox();
             this.missionUiGroupBox = new System.Windows.Forms.GroupBox();
             this.missionWaitBackplateCustomizeButton = new System.Windows.Forms.Button();
             this.missionWaitBackplateLabel = new System.Windows.Forms.Label();
@@ -349,11 +350,12 @@ namespace Mappy.UI.Forms
             this.missionGroupBox.Controls.Add(this.unitNameTextColorLabel);
             this.missionGroupBox.Controls.Add(this.showUnitFriendlyNameOnMapCheckBox);
             this.missionGroupBox.Controls.Add(this.showUnitFriendlyNameFirstCheckBox);
+            this.missionGroupBox.Controls.Add(this.onlySelectActiveSchemaCheckBox);
             this.missionGroupBox.Controls.Add(this.inactiveSchemaOpacityNumeric);
             this.missionGroupBox.Controls.Add(this.inactiveSchemaOpacityLabel);
             this.missionGroupBox.Location = new System.Drawing.Point(12, 12);
             this.missionGroupBox.Name = "missionGroupBox";
-            this.missionGroupBox.Size = new System.Drawing.Size(426, 188);
+            this.missionGroupBox.Size = new System.Drawing.Size(426, 212);
             this.missionGroupBox.TabIndex = 0;
             this.missionGroupBox.TabStop = false;
             this.missionGroupBox.Text = "Mission";
@@ -454,6 +456,18 @@ namespace Mappy.UI.Forms
             this.inactiveSchemaOpacityLabel.TabIndex = 0;
             this.inactiveSchemaOpacityLabel.Text = "Inactive schema opacity (%):";
             // 
+            // onlySelectActiveSchemaCheckBox
+            // 
+            this.onlySelectActiveSchemaCheckBox.AutoSize = true;
+            this.onlySelectActiveSchemaCheckBox.Checked = true;
+            this.onlySelectActiveSchemaCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.onlySelectActiveSchemaCheckBox.Location = new System.Drawing.Point(17, 176);
+            this.onlySelectActiveSchemaCheckBox.Name = "onlySelectActiveSchemaCheckBox";
+            this.onlySelectActiveSchemaCheckBox.Size = new System.Drawing.Size(155, 17);
+            this.onlySelectActiveSchemaCheckBox.TabIndex = 10;
+            this.onlySelectActiveSchemaCheckBox.Text = "Only select active schema";
+            this.onlySelectActiveSchemaCheckBox.UseVisualStyleBackColor = true;
+            // 
             // missionUiGroupBox
             // 
             this.missionUiGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -470,7 +484,7 @@ namespace Mappy.UI.Forms
             this.missionUiGroupBox.Controls.Add(this.missionAttackPathLabel);
             this.missionUiGroupBox.Controls.Add(this.missionMovePathCustomizeButton);
             this.missionUiGroupBox.Controls.Add(this.missionMovePathLabel);
-            this.missionUiGroupBox.Location = new System.Drawing.Point(12, 212);
+            this.missionUiGroupBox.Location = new System.Drawing.Point(12, 236);
             this.missionUiGroupBox.Name = "missionUiGroupBox";
             this.missionUiGroupBox.Size = new System.Drawing.Size(426, 188);
             this.missionUiGroupBox.TabIndex = 1;
@@ -1145,7 +1159,7 @@ namespace Mappy.UI.Forms
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(450, 467);
+            this.ClientSize = new System.Drawing.Size(450, 491);
             this.Controls.Add(this.preferencesTabControl);
             this.Controls.Add(this.bottomPanel);
             this.Name = "PreferencesForm";
@@ -1228,6 +1242,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.Button missionWaitBackplateCustomizeButton;
         private System.Windows.Forms.Label inactiveSchemaOpacityLabel;
         private System.Windows.Forms.NumericUpDown inactiveSchemaOpacityNumeric;
+        private System.Windows.Forms.CheckBox onlySelectActiveSchemaCheckBox;
         private System.Windows.Forms.CheckBox showUnitFriendlyNameFirstCheckBox;
         private System.Windows.Forms.CheckBox showUnitFriendlyNameOnMapCheckBox;
         private System.Windows.Forms.Label unitsFolderNameLabel;
