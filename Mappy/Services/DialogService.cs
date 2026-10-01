@@ -172,6 +172,7 @@ namespace Mappy.Services
                     IncludeSections = optionsForm.IncludeSections,
                     FeatureMode = optionsForm.FeatureMode,
                     UnitSchemaIndex = optionsForm.UnitSchemaIndex,
+                    PlayableAreaOnly = optionsForm.PlayableAreaOnly,
                     FilePath = path,
                 };
             }
