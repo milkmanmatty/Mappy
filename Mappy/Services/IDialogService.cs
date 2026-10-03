@@ -36,7 +36,7 @@ namespace Mappy.Services
 
         Size AskUserNewMapSize();
 
-        Size AskUserResizeMapSize(int currentWidth, int currentHeight);
+        ResizeMapOptions AskUserResizeMapOptions(int currentWidth, int currentHeight);
 
         Color? AskUserGridColor(Color previousColor);
 

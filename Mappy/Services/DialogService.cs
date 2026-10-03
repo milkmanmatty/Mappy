@@ -223,7 +223,7 @@ namespace Mappy.Services
             }
         }
 
-        public Size AskUserResizeMapSize(int currentWidth, int currentHeight)
+        public ResizeMapOptions AskUserResizeMapOptions(int currentWidth, int currentHeight)
         {
             var dialog = new NewMapForm(currentWidth, currentHeight, "Resize Map", "OK");
             var result = dialog.ShowDialog(this.owner);
@@ -231,9 +231,12 @@ namespace Mappy.Services
             switch (result)
             {
                 case DialogResult.OK:
-                    return new Size(dialog.MapWidth, dialog.MapHeight);
+                    return new ResizeMapOptions(
+                        new Size(dialog.MapWidth, dialog.MapHeight),
+                        dialog.ResizeAnchor,
+                        dialog.MoveStandardBorder);
                 case DialogResult.Cancel:
-                    return Size.Empty;
+                    return null;
                 default:
                     throw new ArgumentException("bad dialogresult");
             }

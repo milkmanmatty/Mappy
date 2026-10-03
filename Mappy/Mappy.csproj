@@ -425,6 +425,7 @@
     <Compile Include="Util\Util.cs" />
     <Compile Include="UI\Painters\ContourHeightPainter.cs" />
     <Compile Include="Models\MapModel.cs" />
+    <Compile Include="Models\ResizeMapOptions.cs" />
     <Compile Include="UI\Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
