@@ -334,8 +334,8 @@ namespace Mappy.UI.Forms
             this.comboBoxMapping.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxMapping.FormattingEnabled = true;
             this.comboBoxMapping.Items.AddRange(new object[] {
-            "Unmapped",
-            "Mapped"});
+            "Mapped",
+            "Unmapped"});
             this.comboBoxMapping.Location = new System.Drawing.Point(108, 136);
             this.comboBoxMapping.Name = "comboBoxMapping";
             this.comboBoxMapping.Size = new System.Drawing.Size(92, 21);

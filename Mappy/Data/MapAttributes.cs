@@ -261,7 +261,7 @@ namespace Mappy.Data
             set => this.SetField(ref this.lineOfSight, ClampInt(value, 0, 2), nameof(this.LineOfSight));
         }
 
-        /// 0 = unmapped, 1 = mapped.
+        // 0 = mapped, 1 = unmapped.
         public int Mapping
         {
             get => this.mapping;
