@@ -267,6 +267,11 @@ namespace Mappy.Models
             this.dispatcher.ShowAbout();
         }
 
+        public void CheckForUpdatesMenuItemClick()
+        {
+            this.dispatcher.CheckForUpdates();
+        }
+
         public void MapAttributesMenuItemClick()
         {
             this.dispatcher.OpenMapAttributes();

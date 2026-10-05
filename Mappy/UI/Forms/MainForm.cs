@@ -382,6 +382,11 @@ namespace Mappy.UI.Forms
             this.model.AboutMenuItemClick();
         }
 
+        private void CheckForUpdatesMenuItemClick(object sender, EventArgs e)
+        {
+            this.model.CheckForUpdatesMenuItemClick();
+        }
+
         private void GenerateMinimapMenuItemClick(object sender, EventArgs e)
         {
             this.model.GenerateMinimapMenuItemClick();

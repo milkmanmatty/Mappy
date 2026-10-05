@@ -110,6 +110,8 @@ namespace Mappy.Models
 
         void AboutMenuItemClick();
 
+        void CheckForUpdatesMenuItemClick();
+
         void MapAttributesMenuItemClick();
 
         void GridColorMenuItemClick();

@@ -216,6 +216,74 @@ namespace Mappy.Services
             this.dialogService.ShowAbout();
         }
 
+        public void CheckForUpdates()
+        {
+            var repository = MappySettings.Settings.GetUpdateRepositoryOrDefault();
+            var dlg = this.dialogService.CreateProgressView();
+            dlg.Title = "Check for Updates";
+            dlg.MessageText = "Checking for updates...";
+            dlg.ShowProgress = false;
+            dlg.CancelEnabled = true;
+
+            var worker = new BackgroundWorker();
+            worker.WorkerSupportsCancellation = true;
+            worker.DoWork += (sender, args) =>
+            {
+                var background = (BackgroundWorker)sender;
+                try
+                {
+                    args.Result = UpdateService.FetchLatestRelease(repository, () => background.CancellationPending);
+                }
+                catch (UpdateService.UpdateCancelledException)
+                {
+                    args.Cancel = true;
+                }
+            };
+
+            dlg.CancelPressed += (sender, args) => worker.CancelAsync();
+            worker.RunWorkerCompleted += (sender, args) =>
+            {
+                dlg.Close();
+
+                if (args.Cancelled)
+                {
+                    return;
+                }
+
+                if (args.Error != null)
+                {
+                    this.dialogService.ShowError(DescribeUpdateError(args.Error, "There was a problem checking for updates."));
+                    return;
+                }
+
+                var release = (UpdateService.UpdateRelease)args.Result;
+                var current = UpdateService.GetCurrentVersion();
+                var installed = Application.ProductVersion;
+                if (!UpdateService.IsNewer(release.Version, current))
+                {
+                    this.dialogService.ShowMessage(
+                        "You're up to date."
+                        + Environment.NewLine + Environment.NewLine
+                        + "Installed: " + installed
+                        + Environment.NewLine
+                        + "Latest release: " + release.TagName,
+                        "Check for Updates");
+                    return;
+                }
+
+                var prompt = "Version " + release.TagName + " is available (you have " + installed + "). Download and install it now?";
+                if (!this.dialogService.Confirm(prompt, "Update Available"))
+                {
+                    return;
+                }
+
+                this.DownloadAndApplyUpdate(release);
+            };
+
+            worker.RunWorkerAsync();
+            dlg.Display();
+        }
+
         public void Undo()
         {
             this.model.Map.IfSome(x => x.Undo());
@@ -1695,6 +1763,96 @@ namespace Mappy.Services
                 default:
                     return true;
             }
+        }
+
+        private void DownloadAndApplyUpdate(UpdateService.UpdateRelease release)
+        {
+            var dlg = this.dialogService.CreateProgressView();
+            dlg.Title = "Download Update";
+            dlg.MessageText = "Downloading update...";
+            dlg.ShowProgress = true;
+            dlg.Progress = 0;
+            dlg.CancelEnabled = true;
+
+            var worker = new BackgroundWorker();
+            worker.WorkerReportsProgress = true;
+            worker.WorkerSupportsCancellation = true;
+            worker.DoWork += (sender, args) =>
+            {
+                var background = (BackgroundWorker)sender;
+                try
+                {
+                    args.Result = UpdateService.DownloadAndExtract(
+                        release,
+                        (percent, message) => background.ReportProgress(percent, message),
+                        () => background.CancellationPending);
+                }
+                catch (UpdateService.UpdateCancelledException)
+                {
+                    args.Cancel = true;
+                }
+            };
+
+            worker.ProgressChanged += (sender, args) =>
+            {
+                dlg.Progress = args.ProgressPercentage;
+                if (args.UserState is string message && !string.IsNullOrEmpty(message))
+                {
+                    dlg.MessageText = message;
+                }
+            };
+
+            dlg.CancelPressed += (sender, args) => worker.CancelAsync();
+            worker.RunWorkerCompleted += (sender, args) =>
+            {
+                dlg.Close();
+
+                if (args.Cancelled)
+                {
+                    return;
+                }
+
+                if (args.Error != null)
+                {
+                    this.dialogService.ShowError(DescribeUpdateError(args.Error, "There was a problem downloading the update."));
+                    return;
+                }
+
+                var prepared = (UpdateService.PreparedUpdate)args.Result;
+                if (!this.CheckOkayDiscard())
+                {
+                    UpdateService.TryDeleteDirectory(prepared.WorkDirectory);
+                    this.dialogService.ShowMessage("The update was downloaded but not installed.", "Check for Updates");
+                    return;
+                }
+
+                try
+                {
+                    UpdateService.StartUpdater(prepared);
+                }
+                catch (Exception ex)
+                {
+                    UpdateService.TryDeleteDirectory(prepared.WorkDirectory);
+                    this.dialogService.ShowError("There was a problem preparing the update: " + ex.Message);
+                    return;
+                }
+
+                Application.Exit();
+            };
+
+            worker.RunWorkerAsync();
+            dlg.Display();
+        }
+
+        private string DescribeUpdateError(Exception error, string fallback)
+        {
+            var check = error as UpdateService.UpdateCheckException;
+            if (check != null && !string.IsNullOrWhiteSpace(check.Message))
+            {
+                return check.Message;
+            }
+
+            return fallback;
         }
 
         private bool CheckOkayDiscard()

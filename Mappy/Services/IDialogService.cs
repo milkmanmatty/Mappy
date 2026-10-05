@@ -54,6 +54,10 @@ namespace Mappy.Services
 
         void ShowError(string message);
 
+        void ShowMessage(string message, string title);
+
+        bool Confirm(string message, string title);
+
         IProgressView CreateProgressView();
 
         void ShowModeless(Form form);

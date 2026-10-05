@@ -7,6 +7,8 @@ namespace Mappy
 
     public class Configuration
     {
+        public const string DefaultUpdateRepository = "milkmanmatty/Mappy";
+
         private const int DefaultDragAutoScrollSpeed = 16;
 
         private const int DefaultWheelStep = 1;
@@ -162,6 +164,8 @@ namespace Mappy
 
         public bool DoNotPromptToSaveUnsavedChanges { get; set; }
 
+        public string UpdateRepository { get; set; }
+
         public bool SplitTiles { get; set; }
 
         public bool StickyClipboard { get; set; }
@@ -301,6 +305,12 @@ namespace Mappy
         {
             var name = this.UnitsFolderName?.Trim();
             return string.IsNullOrEmpty(name) ? "units" : name;
+        }
+
+        public string GetUpdateRepositoryOrDefault()
+        {
+            var value = this.UpdateRepository?.Trim();
+            return string.IsNullOrEmpty(value) ? DefaultUpdateRepository : value;
         }
 
         public int GetInactiveSchemaOpacityPercentForDialog()
