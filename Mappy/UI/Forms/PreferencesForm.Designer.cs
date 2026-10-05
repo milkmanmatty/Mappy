@@ -53,9 +53,9 @@ namespace Mappy.UI.Forms
             this.unitNameTextColorLabel = new System.Windows.Forms.Label();
             this.showUnitFriendlyNameOnMapCheckBox = new System.Windows.Forms.CheckBox();
             this.showUnitFriendlyNameFirstCheckBox = new System.Windows.Forms.CheckBox();
+            this.onlySelectActiveSchemaCheckBox = new System.Windows.Forms.CheckBox();
             this.inactiveSchemaOpacityNumeric = new System.Windows.Forms.NumericUpDown();
             this.inactiveSchemaOpacityLabel = new System.Windows.Forms.Label();
-            this.onlySelectActiveSchemaCheckBox = new System.Windows.Forms.CheckBox();
             this.missionUiGroupBox = new System.Windows.Forms.GroupBox();
             this.missionWaitBackplateCustomizeButton = new System.Windows.Forms.Button();
             this.missionWaitBackplateLabel = new System.Windows.Forms.Label();
@@ -96,11 +96,6 @@ namespace Mappy.UI.Forms
             this.heightSelectedHeightWheelStepNumeric = new System.Windows.Forms.NumericUpDown();
             this.heightSelectedHeightWheelStepLabel = new System.Windows.Forms.Label();
             this.defaultsTabPage = new System.Windows.Forms.TabPage();
-            this.newMapDefaultsGroupBox = new System.Windows.Forms.GroupBox();
-            this.defaultNewMapHeightNumeric = new System.Windows.Forms.NumericUpDown();
-            this.defaultNewMapHeightLabel = new System.Windows.Forms.Label();
-            this.defaultNewMapWidthNumeric = new System.Windows.Forms.NumericUpDown();
-            this.defaultNewMapWidthLabel = new System.Windows.Forms.Label();
             this.viewDefaultsGroupBox = new System.Windows.Forms.GroupBox();
             this.defaultGridSizeComboBox = new System.Windows.Forms.ComboBox();
             this.defaultGridSizeLabel = new System.Windows.Forms.Label();
@@ -110,6 +105,14 @@ namespace Mappy.UI.Forms
             this.defaultMinimapVisibleCheckBox = new System.Windows.Forms.CheckBox();
             this.defaultHeightGridVisibleCheckBox = new System.Windows.Forms.CheckBox();
             this.defaultHeightmapVisibleCheckBox = new System.Windows.Forms.CheckBox();
+            this.newMapDefaultsGroupBox = new System.Windows.Forms.GroupBox();
+            this.defaultNewMapHeightNumeric = new System.Windows.Forms.NumericUpDown();
+            this.defaultNewMapHeightLabel = new System.Windows.Forms.Label();
+            this.defaultNewMapWidthNumeric = new System.Windows.Forms.NumericUpDown();
+            this.defaultNewMapWidthLabel = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.updateRepositoryTextBox = new System.Windows.Forms.TextBox();
+            this.updateRepositoryLabel = new System.Windows.Forms.Label();
             this.sidePanel.SuspendLayout();
             this.bottomPanel.SuspendLayout();
             this.searchPathsPanel.SuspendLayout();
@@ -134,10 +137,11 @@ namespace Mappy.UI.Forms
             ((System.ComponentModel.ISupportInitialize)(this.heightIntervalWheelStepNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightSelectedHeightWheelStepNumeric)).BeginInit();
             this.defaultsTabPage.SuspendLayout();
+            this.viewDefaultsGroupBox.SuspendLayout();
             this.newMapDefaultsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.defaultNewMapHeightNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.defaultNewMapWidthNumeric)).BeginInit();
-            this.viewDefaultsGroupBox.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // searchPathsListView
@@ -232,7 +236,7 @@ namespace Mappy.UI.Forms
             this.bottomPanel.Controls.Add(this.cancelButton);
             this.bottomPanel.Controls.Add(this.okButton);
             this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.bottomPanel.Location = new System.Drawing.Point(0, 437);
+            this.bottomPanel.Location = new System.Drawing.Point(0, 461);
             this.bottomPanel.Name = "bottomPanel";
             this.bottomPanel.Size = new System.Drawing.Size(450, 30);
             this.bottomPanel.TabIndex = 8;
@@ -435,6 +439,18 @@ namespace Mappy.UI.Forms
             this.showUnitFriendlyNameFirstCheckBox.Text = "Prioritise friendly name (tab)";
             this.showUnitFriendlyNameFirstCheckBox.UseVisualStyleBackColor = true;
             // 
+            // onlySelectActiveSchemaCheckBox
+            // 
+            this.onlySelectActiveSchemaCheckBox.AutoSize = true;
+            this.onlySelectActiveSchemaCheckBox.Checked = true;
+            this.onlySelectActiveSchemaCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.onlySelectActiveSchemaCheckBox.Location = new System.Drawing.Point(17, 176);
+            this.onlySelectActiveSchemaCheckBox.Name = "onlySelectActiveSchemaCheckBox";
+            this.onlySelectActiveSchemaCheckBox.Size = new System.Drawing.Size(150, 17);
+            this.onlySelectActiveSchemaCheckBox.TabIndex = 10;
+            this.onlySelectActiveSchemaCheckBox.Text = "Only select active schema";
+            this.onlySelectActiveSchemaCheckBox.UseVisualStyleBackColor = true;
+            // 
             // inactiveSchemaOpacityNumeric
             // 
             this.inactiveSchemaOpacityNumeric.Location = new System.Drawing.Point(233, 20);
@@ -455,18 +471,6 @@ namespace Mappy.UI.Forms
             this.inactiveSchemaOpacityLabel.Size = new System.Drawing.Size(142, 13);
             this.inactiveSchemaOpacityLabel.TabIndex = 0;
             this.inactiveSchemaOpacityLabel.Text = "Inactive schema opacity (%):";
-            // 
-            // onlySelectActiveSchemaCheckBox
-            // 
-            this.onlySelectActiveSchemaCheckBox.AutoSize = true;
-            this.onlySelectActiveSchemaCheckBox.Checked = true;
-            this.onlySelectActiveSchemaCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.onlySelectActiveSchemaCheckBox.Location = new System.Drawing.Point(17, 176);
-            this.onlySelectActiveSchemaCheckBox.Name = "onlySelectActiveSchemaCheckBox";
-            this.onlySelectActiveSchemaCheckBox.Size = new System.Drawing.Size(155, 17);
-            this.onlySelectActiveSchemaCheckBox.TabIndex = 10;
-            this.onlySelectActiveSchemaCheckBox.Text = "Only select active schema";
-            this.onlySelectActiveSchemaCheckBox.UseVisualStyleBackColor = true;
             // 
             // missionUiGroupBox
             // 
@@ -667,7 +671,7 @@ namespace Mappy.UI.Forms
             this.miscGroupBox.Controls.Add(this.doNotPromptToSaveUnsavedChangesCheckBox);
             this.miscGroupBox.Location = new System.Drawing.Point(12, 311);
             this.miscGroupBox.Name = "miscGroupBox";
-            this.miscGroupBox.Size = new System.Drawing.Size(426, 50);
+            this.miscGroupBox.Size = new System.Drawing.Size(426, 52);
             this.miscGroupBox.TabIndex = 2;
             this.miscGroupBox.TabStop = false;
             this.miscGroupBox.Text = "Misc";
@@ -692,19 +696,20 @@ namespace Mappy.UI.Forms
             this.preferencesTabControl.Location = new System.Drawing.Point(0, 0);
             this.preferencesTabControl.Name = "preferencesTabControl";
             this.preferencesTabControl.SelectedIndex = 0;
-            this.preferencesTabControl.Size = new System.Drawing.Size(450, 437);
+            this.preferencesTabControl.Size = new System.Drawing.Size(450, 461);
             this.preferencesTabControl.TabIndex = 0;
             // 
             // miscTabPage
             // 
             this.miscTabPage.AutoScroll = true;
+            this.miscTabPage.Controls.Add(this.groupBox1);
             this.miscTabPage.Controls.Add(this.miscGroupBox);
             this.miscTabPage.Controls.Add(this.resourceNamesGroupBox);
             this.miscTabPage.Controls.Add(this.mainGroupBox);
             this.miscTabPage.Location = new System.Drawing.Point(4, 22);
             this.miscTabPage.Name = "miscTabPage";
             this.miscTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.miscTabPage.Size = new System.Drawing.Size(442, 411);
+            this.miscTabPage.Size = new System.Drawing.Size(442, 435);
             this.miscTabPage.TabIndex = 0;
             this.miscTabPage.Text = "Misc";
             this.miscTabPage.UseVisualStyleBackColor = true;
@@ -717,7 +722,7 @@ namespace Mappy.UI.Forms
             this.missionTabPage.Location = new System.Drawing.Point(4, 22);
             this.missionTabPage.Name = "missionTabPage";
             this.missionTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.missionTabPage.Size = new System.Drawing.Size(442, 411);
+            this.missionTabPage.Size = new System.Drawing.Size(442, 435);
             this.missionTabPage.TabIndex = 1;
             this.missionTabPage.Text = "Mission";
             this.missionTabPage.UseVisualStyleBackColor = true;
@@ -731,7 +736,7 @@ namespace Mappy.UI.Forms
             this.adjustmentsTabPage.Location = new System.Drawing.Point(4, 22);
             this.adjustmentsTabPage.Name = "adjustmentsTabPage";
             this.adjustmentsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.adjustmentsTabPage.Size = new System.Drawing.Size(442, 411);
+            this.adjustmentsTabPage.Size = new System.Drawing.Size(442, 435);
             this.adjustmentsTabPage.TabIndex = 2;
             this.adjustmentsTabPage.Text = "Adjustments";
             this.adjustmentsTabPage.UseVisualStyleBackColor = true;
@@ -969,83 +974,6 @@ namespace Mappy.UI.Forms
             this.defaultsTabPage.Text = "Defaults";
             this.defaultsTabPage.UseVisualStyleBackColor = true;
             // 
-            // newMapDefaultsGroupBox
-            // 
-            this.newMapDefaultsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapHeightNumeric);
-            this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapHeightLabel);
-            this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapWidthNumeric);
-            this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapWidthLabel);
-            this.newMapDefaultsGroupBox.Location = new System.Drawing.Point(12, 12);
-            this.newMapDefaultsGroupBox.Name = "newMapDefaultsGroupBox";
-            this.newMapDefaultsGroupBox.Size = new System.Drawing.Size(426, 66);
-            this.newMapDefaultsGroupBox.TabIndex = 0;
-            this.newMapDefaultsGroupBox.TabStop = false;
-            this.newMapDefaultsGroupBox.Text = "New map playable area (tiles)";
-            // 
-            // defaultNewMapHeightNumeric
-            // 
-            this.defaultNewMapHeightNumeric.Location = new System.Drawing.Point(291, 27);
-            this.defaultNewMapHeightNumeric.Maximum = new decimal(new int[] {
-            2147483647,
-            0,
-            0,
-            0});
-            this.defaultNewMapHeightNumeric.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.defaultNewMapHeightNumeric.Name = "defaultNewMapHeightNumeric";
-            this.defaultNewMapHeightNumeric.Size = new System.Drawing.Size(85, 20);
-            this.defaultNewMapHeightNumeric.TabIndex = 3;
-            this.defaultNewMapHeightNumeric.Value = new decimal(new int[] {
-            256,
-            0,
-            0,
-            0});
-            // 
-            // defaultNewMapHeightLabel
-            // 
-            this.defaultNewMapHeightLabel.AutoSize = true;
-            this.defaultNewMapHeightLabel.Location = new System.Drawing.Point(238, 29);
-            this.defaultNewMapHeightLabel.Name = "defaultNewMapHeightLabel";
-            this.defaultNewMapHeightLabel.Size = new System.Drawing.Size(41, 13);
-            this.defaultNewMapHeightLabel.TabIndex = 2;
-            this.defaultNewMapHeightLabel.Text = "Height:";
-            // 
-            // defaultNewMapWidthNumeric
-            // 
-            this.defaultNewMapWidthNumeric.Location = new System.Drawing.Point(70, 27);
-            this.defaultNewMapWidthNumeric.Maximum = new decimal(new int[] {
-            2147483647,
-            0,
-            0,
-            0});
-            this.defaultNewMapWidthNumeric.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.defaultNewMapWidthNumeric.Name = "defaultNewMapWidthNumeric";
-            this.defaultNewMapWidthNumeric.Size = new System.Drawing.Size(85, 20);
-            this.defaultNewMapWidthNumeric.TabIndex = 1;
-            this.defaultNewMapWidthNumeric.Value = new decimal(new int[] {
-            256,
-            0,
-            0,
-            0});
-            // 
-            // defaultNewMapWidthLabel
-            // 
-            this.defaultNewMapWidthLabel.AutoSize = true;
-            this.defaultNewMapWidthLabel.Location = new System.Drawing.Point(17, 29);
-            this.defaultNewMapWidthLabel.Name = "defaultNewMapWidthLabel";
-            this.defaultNewMapWidthLabel.Size = new System.Drawing.Size(38, 13);
-            this.defaultNewMapWidthLabel.TabIndex = 0;
-            this.defaultNewMapWidthLabel.Text = "Width:";
-            // 
             // viewDefaultsGroupBox
             // 
             this.viewDefaultsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -1153,6 +1081,114 @@ namespace Mappy.UI.Forms
             this.defaultHeightmapVisibleCheckBox.Text = "Heightmap Contours";
             this.defaultHeightmapVisibleCheckBox.UseVisualStyleBackColor = true;
             // 
+            // newMapDefaultsGroupBox
+            // 
+            this.newMapDefaultsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapHeightNumeric);
+            this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapHeightLabel);
+            this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapWidthNumeric);
+            this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapWidthLabel);
+            this.newMapDefaultsGroupBox.Location = new System.Drawing.Point(12, 12);
+            this.newMapDefaultsGroupBox.Name = "newMapDefaultsGroupBox";
+            this.newMapDefaultsGroupBox.Size = new System.Drawing.Size(426, 66);
+            this.newMapDefaultsGroupBox.TabIndex = 0;
+            this.newMapDefaultsGroupBox.TabStop = false;
+            this.newMapDefaultsGroupBox.Text = "New map playable area (tiles)";
+            // 
+            // defaultNewMapHeightNumeric
+            // 
+            this.defaultNewMapHeightNumeric.Location = new System.Drawing.Point(291, 27);
+            this.defaultNewMapHeightNumeric.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.defaultNewMapHeightNumeric.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.defaultNewMapHeightNumeric.Name = "defaultNewMapHeightNumeric";
+            this.defaultNewMapHeightNumeric.Size = new System.Drawing.Size(85, 20);
+            this.defaultNewMapHeightNumeric.TabIndex = 3;
+            this.defaultNewMapHeightNumeric.Value = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            // 
+            // defaultNewMapHeightLabel
+            // 
+            this.defaultNewMapHeightLabel.AutoSize = true;
+            this.defaultNewMapHeightLabel.Location = new System.Drawing.Point(238, 29);
+            this.defaultNewMapHeightLabel.Name = "defaultNewMapHeightLabel";
+            this.defaultNewMapHeightLabel.Size = new System.Drawing.Size(41, 13);
+            this.defaultNewMapHeightLabel.TabIndex = 2;
+            this.defaultNewMapHeightLabel.Text = "Height:";
+            // 
+            // defaultNewMapWidthNumeric
+            // 
+            this.defaultNewMapWidthNumeric.Location = new System.Drawing.Point(70, 27);
+            this.defaultNewMapWidthNumeric.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.defaultNewMapWidthNumeric.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.defaultNewMapWidthNumeric.Name = "defaultNewMapWidthNumeric";
+            this.defaultNewMapWidthNumeric.Size = new System.Drawing.Size(85, 20);
+            this.defaultNewMapWidthNumeric.TabIndex = 1;
+            this.defaultNewMapWidthNumeric.Value = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            // 
+            // defaultNewMapWidthLabel
+            // 
+            this.defaultNewMapWidthLabel.AutoSize = true;
+            this.defaultNewMapWidthLabel.Location = new System.Drawing.Point(17, 29);
+            this.defaultNewMapWidthLabel.Name = "defaultNewMapWidthLabel";
+            this.defaultNewMapWidthLabel.Size = new System.Drawing.Size(38, 13);
+            this.defaultNewMapWidthLabel.TabIndex = 0;
+            this.defaultNewMapWidthLabel.Text = "Width:";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.updateRepositoryTextBox);
+            this.groupBox1.Controls.Add(this.updateRepositoryLabel);
+            this.groupBox1.Location = new System.Drawing.Point(13, 369);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(426, 53);
+            this.groupBox1.TabIndex = 3;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Updates";
+            // 
+            // updateRepositoryTextBox
+            // 
+            this.updateRepositoryTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.updateRepositoryTextBox.Location = new System.Drawing.Point(112, 17);
+            this.updateRepositoryTextBox.Name = "updateRepositoryTextBox";
+            this.updateRepositoryTextBox.Size = new System.Drawing.Size(262, 20);
+            this.updateRepositoryTextBox.TabIndex = 4;
+            // 
+            // updateRepositoryLabel
+            // 
+            this.updateRepositoryLabel.AutoSize = true;
+            this.updateRepositoryLabel.Location = new System.Drawing.Point(13, 20);
+            this.updateRepositoryLabel.Name = "updateRepositoryLabel";
+            this.updateRepositoryLabel.Size = new System.Drawing.Size(93, 13);
+            this.updateRepositoryLabel.TabIndex = 3;
+            this.updateRepositoryLabel.Text = "Update repository:";
+            // 
             // PreferencesForm
             // 
             this.AcceptButton = this.okButton;
@@ -1198,12 +1234,14 @@ namespace Mappy.UI.Forms
             ((System.ComponentModel.ISupportInitialize)(this.heightIntervalWheelStepNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightSelectedHeightWheelStepNumeric)).EndInit();
             this.defaultsTabPage.ResumeLayout(false);
+            this.viewDefaultsGroupBox.ResumeLayout(false);
+            this.viewDefaultsGroupBox.PerformLayout();
             this.newMapDefaultsGroupBox.ResumeLayout(false);
             this.newMapDefaultsGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.defaultNewMapHeightNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.defaultNewMapWidthNumeric)).EndInit();
-            this.viewDefaultsGroupBox.ResumeLayout(false);
-            this.viewDefaultsGroupBox.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1292,5 +1330,8 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.Label defaultNewMapHeightLabel;
         private System.Windows.Forms.NumericUpDown defaultNewMapWidthNumeric;
         private System.Windows.Forms.Label defaultNewMapWidthLabel;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox updateRepositoryTextBox;
+        private System.Windows.Forms.Label updateRepositoryLabel;
     }
 }

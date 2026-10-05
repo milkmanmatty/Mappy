@@ -89,6 +89,7 @@ namespace Mappy.UI.Forms
             this.inactiveSchemaOpacityNumeric.Value = MappySettings.Settings.GetInactiveSchemaOpacityPercentForDialog();
             this.onlySelectActiveSchemaCheckBox.Checked = MappySettings.Settings.OnlySelectActiveSchema;
             this.doNotPromptToSaveUnsavedChangesCheckBox.Checked = MappySettings.Settings.DoNotPromptToSaveUnsavedChanges;
+            this.updateRepositoryTextBox.Text = MappySettings.Settings.GetUpdateRepositoryOrDefault();
             this.splitTilesCheckBox.Checked = MappySettings.Settings.SplitTiles;
 
             var settings = MappySettings.Settings;
@@ -341,6 +342,7 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.InactiveSchemaOpacityPercent = (int)this.inactiveSchemaOpacityNumeric.Value;
             MappySettings.Settings.OnlySelectActiveSchema = this.onlySelectActiveSchemaCheckBox.Checked;
             MappySettings.Settings.DoNotPromptToSaveUnsavedChanges = this.doNotPromptToSaveUnsavedChangesCheckBox.Checked;
+            MappySettings.Settings.UpdateRepository = this.updateRepositoryTextBox.Text.Trim();
             MappySettings.Settings.SplitTiles = this.splitTilesCheckBox.Checked;
             MappySettings.Settings.HeightSelectedHeightWheelStep = (int)this.heightSelectedHeightWheelStepNumeric.Value;
             MappySettings.Settings.HeightIntervalWheelStep = (int)this.heightIntervalWheelStepNumeric.Value;

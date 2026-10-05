@@ -305,6 +305,21 @@ namespace Mappy.Services
             MessageBox.Show(this.owner, message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
+        public void ShowMessage(string message, string title)
+        {
+            MessageBox.Show(this.owner, message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        public bool Confirm(string message, string title)
+        {
+            return MessageBox.Show(
+                this.owner,
+                message,
+                title,
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question) == DialogResult.Yes;
+        }
+
         public IProgressView CreateProgressView()
         {
             var dlg = new ProgressForm();

@@ -112,6 +112,7 @@ namespace Mappy.UI.Forms
 	        this.player11MenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.checkForUpdatesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.sidebarTabs = new System.Windows.Forms.TabControl();
 	        this.otaMissionTab = new System.Windows.Forms.TabPage();
@@ -782,7 +783,7 @@ namespace Mappy.UI.Forms
 	        // 
 	        // helpMenuItem
 	        // 
-	        this.helpMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.infoToolStripMenuItem, this.aboutMenuItem });
+	        this.helpMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.infoToolStripMenuItem, this.checkForUpdatesMenuItem, this.aboutMenuItem });
 	        this.helpMenuItem.Name = "helpMenuItem";
 	        this.helpMenuItem.Size = new System.Drawing.Size(61, 29);
 	        this.helpMenuItem.Text = "&Help";
@@ -793,6 +794,13 @@ namespace Mappy.UI.Forms
 	        this.infoToolStripMenuItem.Size = new System.Drawing.Size(149, 30);
 	        this.infoToolStripMenuItem.Text = "Hotkeys";
 	        this.infoToolStripMenuItem.Click += new System.EventHandler(this.InfoMenuItemClick);
+	        // 
+	        // checkForUpdatesMenuItem
+	        // 
+	        this.checkForUpdatesMenuItem.Name = "checkForUpdatesMenuItem";
+	        this.checkForUpdatesMenuItem.Size = new System.Drawing.Size(220, 30);
+	        this.checkForUpdatesMenuItem.Text = "Check for &Updates...";
+	        this.checkForUpdatesMenuItem.Click += new System.EventHandler(this.CheckForUpdatesMenuItemClick);
 	        // 
 	        // aboutMenuItem
 	        // 
@@ -1220,6 +1228,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripMenuItem fileMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem checkForUpdatesMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openMenuItem;
         private System.Windows.Forms.ToolStripMenuItem recentMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitMenuItem;
