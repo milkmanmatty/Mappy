@@ -84,6 +84,8 @@ namespace Mappy.Models
 
         private readonly BehaviorSubject<bool> heightEditModeObservable = new BehaviorSubject<bool>(false);
 
+        private readonly BehaviorSubject<bool> missionPickPrecisionCursor = new BehaviorSubject<bool>(false);
+
         private readonly BehaviorSubject<bool> voidEditModeObservable = new BehaviorSubject<bool>(false);
 
         private IMainModel mapModel;
@@ -219,6 +221,8 @@ namespace Mappy.Models
             this.dispatcher = dispatcher;
             this.featureService = featureService;
             this.unitCatalogService = unitCatalogService;
+            this.dispatcher.MissionCoordinatePickChanged += (s, e) =>
+                this.missionPickPrecisionCursor.OnNext(this.dispatcher.MissionPickPrecisionCursor);
 
             MappySettings.SettingsSaved += this.OnSettingsSaved;
         }
@@ -245,6 +249,8 @@ namespace Mappy.Models
         public IObservable<bool> HeightEditMode => this.heightEditModeObservable;
 
         public IObservable<bool> VoidEditMode => this.voidEditModeObservable;
+
+        public IObservable<bool> MissionPickPrecisionCursor => this.missionPickPrecisionCursor;
 
         public IObservable<ILayer> ItemsLayer => this.itemsLayer;
 
@@ -308,6 +314,11 @@ namespace Mappy.Models
 
         public void MouseLeftDown(Point location)
         {
+            if (this.dispatcher.TryMissionCoordinatePick(location.X, location.Y))
+            {
+                return;
+            }
+
             this.mouseDown = true;
             this.lastMousePos = location;
 
@@ -506,6 +517,11 @@ namespace Mappy.Models
 
         public void KeyDown(Keys key)
         {
+            if (key == Keys.Escape && this.dispatcher.TryCancelMissionCoordinatePick())
+            {
+                return;
+            }
+
             if (key == Keys.Delete)
             {
                 this.dispatcher.DeleteSelection();
