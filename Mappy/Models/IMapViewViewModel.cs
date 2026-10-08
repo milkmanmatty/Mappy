@@ -26,6 +26,8 @@ namespace Mappy.Models
 
         IObservable<bool> VoidEditMode { get; }
 
+        IObservable<bool> MissionPickPrecisionCursor { get; }
+
         void MouseLeftDown(Point location);
 
         void MouseRightDown(Point location, Point screenLocation);

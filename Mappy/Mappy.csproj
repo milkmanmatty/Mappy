@@ -419,6 +419,7 @@
     <Compile Include="Util\ImageSampling\MapPixelImageAdapter.cs" />
     <Compile Include="Util\ImageSampling\NearestNeighbourWrapper.cs" />
     <Compile Include="Util\ImgUtil.cs" />
+    <Compile Include="Util\InitialMissionCommands.cs" />
     <Compile Include="Util\InitialMissionPath.cs" />
     <Compile Include="Util\MetalSpotDisplayFormat.cs" />
     <Compile Include="Util\PlayerSlotVisuals.cs" />
@@ -464,6 +465,12 @@
     </Compile>
     <Compile Include="UI\Forms\UnitPropertiesForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\UnitPickerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\MissionEditorPanel.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UI\Painters\BitmapGridPainter.cs" />
     <Compile Include="UI\Forms\MapSelectionForm.cs">

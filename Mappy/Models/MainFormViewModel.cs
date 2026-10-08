@@ -507,6 +507,11 @@ namespace Mappy.Models
             this.dispatcher.CenterViewOnStartPosition(index);
         }
 
+        public bool TryCancelMissionCoordinatePick()
+        {
+            return this.dispatcher.TryCancelMissionCoordinatePick();
+        }
+
         private static string GetHeightText(IReadOnlyMapModel map, Point mousePosition)
         {
             var gridPos = Util.ScreenToHeightIndex(map.Tile.HeightGrid, mousePosition);

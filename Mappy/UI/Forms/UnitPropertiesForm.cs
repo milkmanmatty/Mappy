@@ -10,6 +10,8 @@ namespace Mappy.UI.Forms
 
     public class UnitPropertiesForm : Form
     {
+        private const int FormClientWidth = 360;
+        private const int MissionPanelWidth = 540;
         private const int TabAreaHeight = 340;
         private const int BottomBarHeight = 50;
 
@@ -38,6 +40,20 @@ namespace Mappy.UI.Forms
         private CheckBox checkAiIgnore;
         private CheckBox checkImmunity;
 
+        private Panel missionHost;
+
+        private MissionEditorPanel missionEditor;
+
+        private bool missionExpanded;
+
+        private bool syncingMissionText;
+
+        private UnitCatalogService missionCatalog;
+
+        private Action<Action<int, int>, Action, bool> beginMissionPick;
+
+        private Action<Action<int, int>> cancelMissionPick;
+
         public UnitPropertiesForm()
         {
             this.Text = "Unit properties";
@@ -60,7 +76,7 @@ namespace Mappy.UI.Forms
             this.tabControl = new TabControl
             {
                 Location = new Point(0, 0),
-                Size = new Size(360, TabAreaHeight),
+                Size = new Size(FormClientWidth, TabAreaHeight),
             };
 
             var statsPage = new TabPage("Stats");
@@ -127,8 +143,28 @@ namespace Mappy.UI.Forms
             var aiPage = new TabPage("AI");
             int aiY = 12;
 
-            this.textInitialMission = new TextBox { Width = 200 };
-            AddLabeledRow(aiPage, "Initial Mission", this.textInitialMission, ref aiY);
+            aiPage.Controls.Add(new Label
+            {
+                Text = "Initial Mission",
+                Location = new Point(12, aiY + 3),
+                Width = labelW,
+            });
+            this.textInitialMission = new TextBox
+            {
+                Width = 140,
+                Location = new Point(fieldX, aiY),
+            };
+            var setMission = new Button
+            {
+                Text = ">>",
+                Location = new Point(fieldX + 146, aiY - 1),
+                Width = 54,
+            };
+            setMission.Click += (s, e) => this.SetMissionExpanded(true);
+            this.textInitialMission.TextChanged += (s, e) => this.MissionTextBoxChanged();
+            aiPage.Controls.Add(this.textInitialMission);
+            aiPage.Controls.Add(setMission);
+            aiY += 28;
 
             this.numericBuildPriority = new NumericUpDown { Minimum = -1000000, Maximum = 1000000, Width = 100 };
             AddLabeledRow(aiPage, "Build Priority", this.numericBuildPriority, ref aiY);
@@ -172,17 +208,18 @@ namespace Mappy.UI.Forms
             this.tabControl.TabPages.Add(aiPage);
             this.Controls.Add(this.tabControl);
 
-            var show = new Button { Text = "Show", Location = new Point(12, TabAreaHeight + 8), Width = 75 };
+            var show = new Button { Text = "Show", Location = new Point(12, TabAreaHeight + 8), Width = 75, Height = 23 };
             show.Click += (s, e) => this.ShowRequested?.Invoke(this, EventArgs.Empty);
 
-            var ok = new Button { Text = "OK", Location = new Point(180, TabAreaHeight + 8), Width = 75 };
+            var ok = new Button { Text = "OK", Location = new Point(180, TabAreaHeight + 8), Width = 75, Height = 23 };
             ok.Click += (s, e) =>
                 {
+                    this.ApplyMissionEditorToText();
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 };
 
-            var cancel = new Button { Text = "Cancel", Location = new Point(265, TabAreaHeight + 8), Width = 75 };
+            var cancel = new Button { Text = "Cancel", Location = new Point(265, TabAreaHeight + 8), Width = 75, Height = 23 };
             cancel.Click += (s, e) =>
                 {
                     this.DialogResult = DialogResult.Cancel;
@@ -191,15 +228,45 @@ namespace Mappy.UI.Forms
 
             this.AcceptButton = ok;
             this.CancelButton = cancel;
+            this.missionHost = new Panel
+            {
+                Location = new Point(FormClientWidth, 0),
+                Size = new Size(MissionPanelWidth, TabAreaHeight + BottomBarHeight),
+                Visible = false,
+            };
             this.Controls.Add(show);
             this.Controls.Add(ok);
             this.Controls.Add(cancel);
-            this.ClientSize = new Size(360, TabAreaHeight + BottomBarHeight);
+            this.Controls.Add(this.missionHost);
+            this.ClientSize = new Size(FormClientWidth, TabAreaHeight + BottomBarHeight);
         }
 
         public event EventHandler ShowRequested;
 
+        public string InitialMissionText
+        {
+            get
+            {
+                return this.textInitialMission.Text ?? string.Empty;
+            }
+
+            set
+            {
+                this.textInitialMission.Text = value ?? string.Empty;
+            }
+        }
+
         public int SelectedSchemaIndex => this.comboSchema.SelectedIndex;
+
+        public void ConfigureMissionEditing(
+            UnitCatalogService catalog,
+            Action<Action<int, int>, Action, bool> beginPick,
+            Action<Action<int, int>> cancelPick)
+        {
+            this.missionCatalog = catalog;
+            this.beginMissionPick = beginPick;
+            this.cancelMissionPick = cancelPick;
+        }
 
         public void Bind(SchemaUnit u, int schemaIndex, IReadOnlyList<MapSchema> schemas, UnitCatalogService catalog)
         {
@@ -259,6 +326,32 @@ namespace Mappy.UI.Forms
             u.Immunity = this.checkImmunity.Checked;
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (this.missionExpanded && this.missionEditor != null && this.missionEditor.TryHandleCommandKey(keyData))
+            {
+                return true;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            if (keyData == Keys.Escape && this.missionEditor != null && this.missionEditor.TryCancelPick())
+            {
+                return true;
+            }
+
+            return base.ProcessDialogKey(keyData);
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            this.missionEditor?.TryCancelPick();
+            base.OnFormClosed(e);
+        }
+
         private static decimal ClampToNumericRange(NumericUpDown n, int v)
         {
             var d = (decimal)v;
@@ -273,6 +366,81 @@ namespace Mappy.UI.Forms
             }
 
             return d;
+        }
+
+        private void SetMissionExpanded(bool expanded)
+        {
+            if (expanded == this.missionExpanded)
+            {
+                return;
+            }
+
+            if (expanded)
+            {
+                this.EnsureMissionEditor();
+                this.missionEditor.LoadMission(this.InitialMissionText);
+                this.missionHost.Visible = true;
+                this.KeepExpandedFormOnScreen();
+                this.ClientSize = new Size(FormClientWidth + MissionPanelWidth, this.ClientSize.Height);
+                this.missionExpanded = true;
+                return;
+            }
+
+            this.ApplyMissionEditorToText();
+            this.missionEditor?.TryCancelPick();
+            this.missionHost.Visible = false;
+            this.ClientSize = new Size(FormClientWidth, this.ClientSize.Height);
+            this.missionExpanded = false;
+        }
+
+        private void EnsureMissionEditor()
+        {
+            if (this.missionEditor != null)
+            {
+                return;
+            }
+
+            this.missionEditor = new MissionEditorPanel(this.missionCatalog, this.beginMissionPick, this.cancelMissionPick)
+            {
+                Dock = DockStyle.Fill,
+            };
+            this.missionEditor.CollapseRequested += (s, e) => this.SetMissionExpanded(false);
+            this.missionEditor.MissionChanged += (s, e) => this.ApplyMissionEditorToText();
+            this.missionHost.Controls.Add(this.missionEditor);
+        }
+
+        private void ApplyMissionEditorToText()
+        {
+            if (this.missionEditor == null)
+            {
+                return;
+            }
+
+            this.missionEditor.CommitEdit();
+            this.syncingMissionText = true;
+            this.textInitialMission.Text = this.missionEditor.MissionText;
+            this.syncingMissionText = false;
+        }
+
+        private void MissionTextBoxChanged()
+        {
+            if (this.syncingMissionText || !this.missionExpanded || this.missionEditor == null)
+            {
+                return;
+            }
+
+            this.missionEditor.LoadMission(this.textInitialMission.Text);
+        }
+
+        private void KeepExpandedFormOnScreen()
+        {
+            var borderWidth = this.Width - this.ClientSize.Width;
+            var targetRight = this.Left + FormClientWidth + MissionPanelWidth + borderWidth;
+            var screen = Screen.FromControl(this).WorkingArea;
+            if (targetRight > screen.Right)
+            {
+                this.Left = Math.Max(screen.Left, this.Left - (targetRight - screen.Right));
+            }
         }
     }
 }

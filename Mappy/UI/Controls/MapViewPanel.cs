@@ -28,6 +28,8 @@ namespace Mappy.UI.Controls
 
         private bool voidEditMode;
 
+        private bool missionPickPrecisionCursor;
+
         public MapViewPanel()
         {
             this.InitializeComponent();
@@ -63,6 +65,7 @@ namespace Mappy.UI.Controls
             newModel.ViewportLocation.Subscribe(x => this.mapView.ScrollToVirtualLocation(x));
             newModel.HeightEditMode.Subscribe(this.OnHeightEditModeChanged);
             newModel.VoidEditMode.Subscribe(this.OnVoidEditModeChanged);
+            newModel.MissionPickPrecisionCursor.Subscribe(this.OnMissionPickPrecisionCursorChanged);
 
             newModel.ItemsLayer.Subscribe(x => this.mapView.Layers[0] = x);
             newModel.VoidLayer.Subscribe(x => this.mapView.Layers[1] = x);
@@ -173,7 +176,7 @@ namespace Mappy.UI.Controls
         private void MapViewPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             // If the user presses space while the app doesn't have focus we won't pick up the event :(
-            if (e.KeyCode == Keys.Space)
+            if (e.KeyCode == Keys.Space || e.KeyCode == Keys.Escape)
             {
                 e.IsInputKey = true;
             }
@@ -423,22 +426,34 @@ namespace Mappy.UI.Controls
             this.ApplyMapCursor();
         }
 
+        private void OnMissionPickPrecisionCursorChanged(bool enabled)
+        {
+            this.missionPickPrecisionCursor = enabled;
+            this.ApplyMapCursor();
+        }
+
         private void ApplyMapCursor()
         {
-            if (!this.panning)
+            if (this.panning)
             {
-                if (this.heightEditMode)
-                {
-                    this.mapView.Cursor = Cursors.UpArrow;
-                }
-                else if (this.voidEditMode)
-                {
-                    this.mapView.Cursor = Cursors.Cross;
-                }
-                else
-                {
-                    this.mapView.Cursor = Cursors.Default;
-                }
+                return;
+            }
+
+            if (this.missionPickPrecisionCursor)
+            {
+                this.mapView.Cursor = Cursors.Cross;
+            }
+            else if (this.heightEditMode)
+            {
+                this.mapView.Cursor = Cursors.UpArrow;
+            }
+            else if (this.voidEditMode)
+            {
+                this.mapView.Cursor = Cursors.Cross;
+            }
+            else
+            {
+                this.mapView.Cursor = Cursors.Default;
             }
         }
     }

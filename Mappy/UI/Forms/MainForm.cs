@@ -860,6 +860,13 @@ namespace Mappy.UI.Forms
 
         private void PaletteForm_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Escape && this.model != null && this.model.TryCancelMissionCoordinatePick())
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                return;
+            }
+
             this.TryHandlePaletteTabShortcut(e);
         }
 
@@ -870,6 +877,13 @@ namespace Mappy.UI.Forms
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Escape && this.model != null && this.model.TryCancelMissionCoordinatePick())
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                return;
+            }
+
             if (this.TryHandlePaletteTabShortcut(e))
             {
                 return;

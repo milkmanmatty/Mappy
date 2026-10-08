@@ -48,7 +48,16 @@ namespace Mappy.Services
 
         private readonly int[] startPositionViewCycle = new int[10];
 
+        private readonly Dictionary<Guid, UI.Forms.UnitPropertiesForm> openUnitPropertyForms =
+            new Dictionary<Guid, UI.Forms.UnitPropertiesForm>();
+
         private object stickyPasteBuffer;
+
+        private Action<int, int> missionCoordinatePick;
+
+        private Action missionCoordinatePickCancelled;
+
+        private bool missionPickPrecisionCursor;
 
         public Dispatcher(
             CoreModel model,
@@ -1029,6 +1038,50 @@ namespace Mappy.Services
             this.model.Map.IfSome(m => m.DeleteSchemaUnit(schemaIndex, unitId));
         }
 
+        public event EventHandler MissionCoordinatePickChanged;
+
+        public bool MissionPickPrecisionCursor => this.missionPickPrecisionCursor;
+
+        public void BeginMissionCoordinatePick(Action<int, int> onPicked, Action onCancelled, bool precisionCursor)
+        {
+            this.missionCoordinatePick = onPicked;
+            this.missionCoordinatePickCancelled = onCancelled;
+            this.SetMissionPickPrecisionCursor(precisionCursor && onPicked != null);
+        }
+
+        public void CancelMissionCoordinatePick(Action<int, int> owner)
+        {
+            if (owner == null || !ReferenceEquals(this.missionCoordinatePick, owner))
+            {
+                return;
+            }
+
+            this.CancelMissionCoordinatePick();
+        }
+
+        public bool TryCancelMissionCoordinatePick()
+        {
+            if (this.missionCoordinatePick == null && this.missionCoordinatePickCancelled == null)
+            {
+                return false;
+            }
+
+            this.CancelMissionCoordinatePick();
+            return true;
+        }
+
+        public bool TryMissionCoordinatePick(int x, int z)
+        {
+            var picked = this.missionCoordinatePick;
+            if (picked == null)
+            {
+                return false;
+            }
+
+            picked(x, z);
+            return true;
+        }
+
         public void PlaceUnitFromSidebar(string unitName, int x, int y, Point screenLocation)
         {
             int? player;
@@ -1110,14 +1163,26 @@ namespace Mappy.Services
                             return;
                         }
 
+                        if (this.TryActivateOpenUnitProperties(unitId))
+                        {
+                            return;
+                        }
+
                         var u = m.Attributes.GetUnit(schemaIndex, unitId).ClonePreservingId();
                         var f = new UI.Forms.UnitPropertiesForm();
                         f.Bind(u, schemaIndex, m.Attributes.Schemas, this.unitCatalogService);
+                        f.ConfigureMissionEditing(
+                            this.unitCatalogService,
+                            this.BeginMissionCoordinatePick,
+                            this.CancelMissionCoordinatePick);
+                        this.openUnitPropertyForms[unitId] = f;
                         f.ShowRequested += (s, e) => this.CenterViewOnSchemaUnit(schemaIndex, unitId);
                         f.FormClosed += (s, e) =>
                             {
+                                this.openUnitPropertyForms.Remove(unitId);
                                 try
                                 {
+                                    this.TryCancelMissionCoordinatePick();
                                     if (f.DialogResult != DialogResult.OK)
                                     {
                                         return;
@@ -2334,6 +2399,54 @@ namespace Mappy.Services
             };
 
             bg.RunWorkerAsync();
+        }
+
+        private bool TryActivateOpenUnitProperties(Guid unitId)
+        {
+            if (!this.openUnitPropertyForms.TryGetValue(unitId, out var existing))
+            {
+                return false;
+            }
+
+            if (existing == null || existing.IsDisposed)
+            {
+                this.openUnitPropertyForms.Remove(unitId);
+                return false;
+            }
+
+            if (existing.WindowState == FormWindowState.Minimized)
+            {
+                existing.WindowState = FormWindowState.Normal;
+            }
+
+            existing.BringToFront();
+            existing.Activate();
+            return true;
+        }
+
+        private void CancelMissionCoordinatePick()
+        {
+            if (this.missionCoordinatePick == null && this.missionCoordinatePickCancelled == null)
+            {
+                return;
+            }
+
+            var cancelled = this.missionCoordinatePickCancelled;
+            this.missionCoordinatePick = null;
+            this.missionCoordinatePickCancelled = null;
+            this.SetMissionPickPrecisionCursor(false);
+            cancelled?.Invoke();
+        }
+
+        private void SetMissionPickPrecisionCursor(bool precisionCursor)
+        {
+            if (this.missionPickPrecisionCursor == precisionCursor)
+            {
+                return;
+            }
+
+            this.missionPickPrecisionCursor = precisionCursor;
+            this.MissionCoordinatePickChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

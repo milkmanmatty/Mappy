@@ -205,5 +205,7 @@ namespace Mappy.Models
         void ChangeSelectedTabType(GUITab tabType);
 
         void CenterViewOnStartPosition(int index);
+
+        bool TryCancelMissionCoordinatePick();
     }
 }
