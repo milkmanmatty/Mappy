@@ -897,7 +897,7 @@ namespace Mappy.UI.Forms
             }
         }
 
-        private void SetMissionPathsVisible(bool visible)
+        public void SetMissionPathsVisible(bool visible)
         {
             this.missionPathsVisible = visible;
             this.toggleOrdersMenuItem.Checked = visible;

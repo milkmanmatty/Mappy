@@ -109,6 +109,7 @@ namespace Mappy.UI.Forms
             this.defaultVoidsVisibleCheckBox.Checked = settings.GetDefaultVoidsVisibleOrDefault();
             this.defaultGridVisibleCheckBox.Checked = settings.GetDefaultGridVisibleOrDefault();
             this.defaultFeaturesVisibleCheckBox.Checked = settings.GetDefaultFeaturesVisibleOrDefault();
+            this.defaultOrdersVisibleCheckBox.Checked = settings.GetDefaultOrdersVisibleOrDefault();
             this.defaultNewMapWidthNumeric.Maximum = NewMapForm.MaximumNewMapDimension;
             this.defaultNewMapHeightNumeric.Maximum = NewMapForm.MaximumNewMapDimension;
             this.defaultNewMapWidthNumeric.Value = Math.Min(settings.GetDefaultNewMapWidthOrDefault(), NewMapForm.MaximumNewMapDimension);
@@ -360,6 +361,7 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.DefaultVoidsVisible = this.defaultVoidsVisibleCheckBox.Checked;
             MappySettings.Settings.DefaultGridVisible = this.defaultGridVisibleCheckBox.Checked;
             MappySettings.Settings.DefaultFeaturesVisible = this.defaultFeaturesVisibleCheckBox.Checked;
+            MappySettings.Settings.DefaultOrdersVisible = this.defaultOrdersVisibleCheckBox.Checked;
             MappySettings.Settings.DefaultGridSize = this.ParseGridSizeComboSelection();
             MappySettings.Settings.DefaultNewMapWidth = (int)this.defaultNewMapWidthNumeric.Value;
             MappySettings.Settings.DefaultNewMapHeight = (int)this.defaultNewMapHeightNumeric.Value;

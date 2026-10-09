@@ -100,6 +100,7 @@ namespace Mappy.UI.Forms
             this.defaultGridSizeComboBox = new System.Windows.Forms.ComboBox();
             this.defaultGridSizeLabel = new System.Windows.Forms.Label();
             this.defaultFeaturesVisibleCheckBox = new System.Windows.Forms.CheckBox();
+            this.defaultOrdersVisibleCheckBox = new System.Windows.Forms.CheckBox();
             this.defaultGridVisibleCheckBox = new System.Windows.Forms.CheckBox();
             this.defaultVoidsVisibleCheckBox = new System.Windows.Forms.CheckBox();
             this.defaultMinimapVisibleCheckBox = new System.Windows.Forms.CheckBox();
@@ -980,6 +981,7 @@ namespace Mappy.UI.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.viewDefaultsGroupBox.Controls.Add(this.defaultGridSizeComboBox);
             this.viewDefaultsGroupBox.Controls.Add(this.defaultGridSizeLabel);
+            this.viewDefaultsGroupBox.Controls.Add(this.defaultOrdersVisibleCheckBox);
             this.viewDefaultsGroupBox.Controls.Add(this.defaultFeaturesVisibleCheckBox);
             this.viewDefaultsGroupBox.Controls.Add(this.defaultGridVisibleCheckBox);
             this.viewDefaultsGroupBox.Controls.Add(this.defaultVoidsVisibleCheckBox);
@@ -988,7 +990,7 @@ namespace Mappy.UI.Forms
             this.viewDefaultsGroupBox.Controls.Add(this.defaultHeightmapVisibleCheckBox);
             this.viewDefaultsGroupBox.Location = new System.Drawing.Point(12, 84);
             this.viewDefaultsGroupBox.Name = "viewDefaultsGroupBox";
-            this.viewDefaultsGroupBox.Size = new System.Drawing.Size(426, 178);
+            this.viewDefaultsGroupBox.Size = new System.Drawing.Size(426, 201);
             this.viewDefaultsGroupBox.TabIndex = 1;
             this.viewDefaultsGroupBox.TabStop = false;
             this.viewDefaultsGroupBox.Text = "View menu items visible at startup";
@@ -1030,6 +1032,16 @@ namespace Mappy.UI.Forms
             this.defaultFeaturesVisibleCheckBox.TabIndex = 7;
             this.defaultFeaturesVisibleCheckBox.Text = "Features";
             this.defaultFeaturesVisibleCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // defaultOrdersVisibleCheckBox
+            // 
+            this.defaultOrdersVisibleCheckBox.AutoSize = true;
+            this.defaultOrdersVisibleCheckBox.Location = new System.Drawing.Point(17, 160);
+            this.defaultOrdersVisibleCheckBox.Name = "defaultOrdersVisibleCheckBox";
+            this.defaultOrdersVisibleCheckBox.Size = new System.Drawing.Size(57, 17);
+            this.defaultOrdersVisibleCheckBox.TabIndex = 8;
+            this.defaultOrdersVisibleCheckBox.Text = "Orders";
+            this.defaultOrdersVisibleCheckBox.UseVisualStyleBackColor = true;
             // 
             // defaultGridVisibleCheckBox
             // 
@@ -1325,6 +1337,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.Label defaultGridSizeLabel;
         private System.Windows.Forms.ComboBox defaultGridSizeComboBox;
         private System.Windows.Forms.CheckBox defaultFeaturesVisibleCheckBox;
+        private System.Windows.Forms.CheckBox defaultOrdersVisibleCheckBox;
         private System.Windows.Forms.GroupBox newMapDefaultsGroupBox;
         private System.Windows.Forms.NumericUpDown defaultNewMapHeightNumeric;
         private System.Windows.Forms.Label defaultNewMapHeightLabel;

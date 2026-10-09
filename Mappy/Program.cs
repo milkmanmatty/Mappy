@@ -83,6 +83,7 @@ namespace Mappy
             mainForm.FeatureView.SetModel(new FeatureViewViewModel(featureService, dispatcher));
 
             mainForm.MapViewPanel.SetModel(new MapViewViewModel(model, dispatcher, featureService, unitCatalogService));
+            mainForm.SetMissionPathsVisible(MappySettings.Settings.GetDefaultOrdersVisibleOrDefault());
             mainForm.SetMissionServices(model, dispatcher, unitCatalogService);
 
             var minimapForm = new MinimapForm();

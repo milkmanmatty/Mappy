@@ -243,6 +243,8 @@ namespace Mappy
 
         public bool? DefaultFeaturesVisible { get; set; }
 
+        public bool? DefaultOrdersVisible { get; set; }
+
         public bool? DefaultGridVisible { get; set; }
 
         public int? DefaultGridSize { get; set; }
@@ -260,6 +262,8 @@ namespace Mappy
         public bool GetDefaultVoidsVisibleOrDefault() => this.DefaultVoidsVisible ?? false;
 
         public bool GetDefaultFeaturesVisibleOrDefault() => this.DefaultFeaturesVisible ?? true;
+
+        public bool GetDefaultOrdersVisibleOrDefault() => this.DefaultOrdersVisible ?? false;
 
         public bool GetDefaultGridVisibleOrDefault() => this.DefaultGridVisible ?? false;
 
