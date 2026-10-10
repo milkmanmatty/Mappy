@@ -166,6 +166,8 @@ namespace Mappy
 
         public string UpdateRepository { get; set; }
 
+        public string SkippedUpdateTag { get; set; }
+
         public bool SplitTiles { get; set; }
 
         public bool StickyClipboard { get; set; }

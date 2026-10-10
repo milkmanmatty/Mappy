@@ -8,6 +8,13 @@ namespace Mappy.Services
     using Mappy.Models;
     using Mappy.Views;
 
+    public enum UpdatePromptResult
+    {
+        NotNow,
+        Update,
+        SkipVersion,
+    }
+
     public interface IDialogService
     {
         string AskUserToChooseMap(IList<string> maps, Func<string, Bitmap> previewLoader);
@@ -59,6 +66,8 @@ namespace Mappy.Services
         void ShowMessage(string message, string title);
 
         bool Confirm(string message, string title);
+
+        UpdatePromptResult AskUserToUpdate(UpdateService.UpdateRelease release, string installedVersion);
 
         IProgressView CreateProgressView();
 

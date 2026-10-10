@@ -268,7 +268,11 @@ namespace Mappy.Services
                 var release = (UpdateService.UpdateRelease)args.Result;
                 var current = UpdateService.GetCurrentVersion();
                 var installed = Application.ProductVersion;
-                if (!UpdateService.IsNewer(release.Version, current))
+                var skipped = string.Equals(
+                    release.TagName,
+                    MappySettings.Settings.SkippedUpdateTag,
+                    StringComparison.OrdinalIgnoreCase);
+                if (!UpdateService.IsNewer(release.Version, current) || skipped)
                 {
                     this.dialogService.ShowMessage(
                         "You're up to date."
@@ -280,13 +284,16 @@ namespace Mappy.Services
                     return;
                 }
 
-                var prompt = "Version " + release.TagName + " is available (you have " + installed + "). Download and install it now?";
-                if (!this.dialogService.Confirm(prompt, "Update Available"))
+                switch (this.dialogService.AskUserToUpdate(release, installed))
                 {
-                    return;
+                    case UpdatePromptResult.Update:
+                        this.DownloadAndApplyUpdate(release);
+                        break;
+                    case UpdatePromptResult.SkipVersion:
+                        MappySettings.Settings.SkippedUpdateTag = release.TagName;
+                        MappySettings.SaveSettings();
+                        break;
                 }
-
-                this.DownloadAndApplyUpdate(release);
             };
 
             worker.RunWorkerAsync();
@@ -1942,6 +1949,12 @@ namespace Mappy.Services
                     UpdateService.TryDeleteDirectory(prepared.WorkDirectory);
                     this.dialogService.ShowError("There was a problem preparing the update: " + ex.Message);
                     return;
+                }
+
+                if (!string.IsNullOrEmpty(MappySettings.Settings.SkippedUpdateTag))
+                {
+                    MappySettings.Settings.SkippedUpdateTag = null;
+                    MappySettings.SaveSettings();
                 }
 
                 Application.Exit();

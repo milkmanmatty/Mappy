@@ -347,6 +347,25 @@ namespace Mappy.Services
                 MessageBoxIcon.Question) == DialogResult.Yes;
         }
 
+        public UpdatePromptResult AskUserToUpdate(UpdateService.UpdateRelease release, string installedVersion)
+        {
+            using (var form = new UpdateAvailableForm(
+                release?.TagName,
+                installedVersion,
+                release?.ReleaseNotes))
+            {
+                switch (form.ShowDialog(this.owner))
+                {
+                    case DialogResult.Yes:
+                        return UpdatePromptResult.Update;
+                    case DialogResult.Ignore:
+                        return UpdatePromptResult.SkipVersion;
+                    default:
+                        return UpdatePromptResult.NotNow;
+                }
+            }
+        }
+
         public IProgressView CreateProgressView()
         {
             var dlg = new ProgressForm();

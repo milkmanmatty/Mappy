@@ -110,6 +110,7 @@ namespace Mappy.Services
                 AssetName = asset.Name,
                 DownloadUrl = asset.BrowserDownloadUrl,
                 Size = asset.Size,
+                ReleaseNotes = release.Body ?? string.Empty,
             };
         }
 
@@ -453,6 +454,8 @@ namespace Mappy.Services
             public string DownloadUrl { get; set; }
 
             public long Size { get; set; }
+
+            public string ReleaseNotes { get; set; }
         }
 
         public sealed class PreparedUpdate
@@ -486,6 +489,9 @@ namespace Mappy.Services
         {
             [DataMember(Name = "tag_name")]
             public string TagName { get; set; }
+
+            [DataMember(Name = "body")]
+            public string Body { get; set; }
 
             [DataMember(Name = "assets")]
             public GitHubAsset[] Assets { get; set; }
