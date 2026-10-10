@@ -167,6 +167,7 @@
     <Compile Include="IO\FeatureLoadingUtils.cs" />
     <Compile Include="IO\GafTextureLoader.cs" />
     <Compile Include="IO\UnitLoadingUtils.cs" />
+    <Compile Include="IO\UseOnlyTdf.cs" />
     <Compile Include="IO\UnitFbiCatalogLoader.cs" />
     <Compile Include="IO\Gaf\GafEntry.cs" />
     <Compile Include="IO\Gaf\GafEntryArrayAdapter.cs" />
@@ -252,6 +253,7 @@
     <Compile Include="Operations\SelectionModel\SelectUnitOperation.cs" />
     <Compile Include="Operations\SelectionModel\AddUnitToSelectionOperation.cs" />
     <Compile Include="Operations\SetSealevelOperation.cs" />
+    <Compile Include="Operations\SetUseOnlyUnitsOperation.cs" />
     <Compile Include="Operations\UpdateSchemaUnitOperation.cs" />
     <Compile Include="Operations\TileAreaOperation.cs" />
     <Compile Include="Operations\UpdateMinimapOperation.cs" />
@@ -469,6 +471,12 @@
     <Compile Include="UI\Forms\UnitPickerForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UI\Forms\UseOnlyUnitsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\UseOnlyUnitsForm.Designer.cs">
+      <DependentUpon>UseOnlyUnitsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Forms\MissionEditorPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -519,6 +527,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\MapAttributesForm.resx">
       <DependentUpon>MapAttributesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\UseOnlyUnitsForm.resx">
+      <DependentUpon>UseOnlyUnitsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\MapSelectionForm.resx">
       <DependentUpon>MapSelectionForm.cs</DependentUpon>

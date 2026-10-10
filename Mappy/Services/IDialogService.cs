@@ -44,7 +44,9 @@ namespace Mappy.Services
 
         bool AskUserToRemoveMissingRecentFile();
 
-        MapAttributesResult AskUserForMapAttributes(MapAttributesResult r);
+        MapAttributesResult AskUserForMapAttributes(MapAttributesResult r, Func<string, string> editUseOnlyUnits);
+
+        IList<string> AskUserToEditUseOnlyUnits(UnitCatalogService catalog, IList<string> currentNames);
 
         int? AskUnitPlayerNumber(IWin32Window owner, int defaultPlayer = 1);
 

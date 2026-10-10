@@ -256,11 +256,24 @@ namespace Mappy.Services
             return null;
         }
 
-        public MapAttributesResult AskUserForMapAttributes(MapAttributesResult r)
+        public MapAttributesResult AskUserForMapAttributes(MapAttributesResult r, Func<string, string> editUseOnlyUnits)
         {
             var f = new MapAttributesForm();
 
             f.mapAttributesResultBindingSource.Add(r);
+            f.EditUseOnlyUnitsClick += (s, e) =>
+            {
+                if (editUseOnlyUnits == null)
+                {
+                    return;
+                }
+
+                var updated = editUseOnlyUnits(f.UseOnlyFileName);
+                if (updated != null)
+                {
+                    f.UseOnlyFileName = updated;
+                }
+            };
 
             var result = f.ShowDialog(this.owner);
             if (result == DialogResult.OK)
@@ -269,6 +282,20 @@ namespace Mappy.Services
             }
 
             return null;
+        }
+
+        public IList<string> AskUserToEditUseOnlyUnits(UnitCatalogService catalog, IList<string> currentNames)
+        {
+            using (var form = new UseOnlyUnitsForm(catalog, currentNames))
+            {
+                var owner = Form.ActiveForm ?? this.owner;
+                if (form.ShowDialog(owner) != DialogResult.OK)
+                {
+                    return null;
+                }
+
+                return form.SelectedUnitNames ?? new List<string>();
+            }
         }
 
         public int? AskUnitPlayerNumber(IWin32Window owner, int defaultPlayer = 1)

@@ -43,7 +43,8 @@ namespace Mappy.IO
 
                     var display = MergeDisplayName(existing.DisplayName, r.DisplayName);
                     var objectName = MergeObjectName(existing.ObjectName, r.ObjectName);
-                    merged[name] = new UnitCatalogLoadRecord(name, side, display, objectName);
+                    var tedClass = MergeTedClass(existing.TedClass, r.TedClass);
+                    merged[name] = new UnitCatalogLoadRecord(name, side, display, objectName, tedClass);
                 }
             }
 
@@ -60,6 +61,21 @@ namespace Mappy.IO
         }
 
         private static string MergeDisplayName(string a, string b)
+        {
+            if (!string.IsNullOrWhiteSpace(a))
+            {
+                return a.Trim();
+            }
+
+            if (!string.IsNullOrWhiteSpace(b))
+            {
+                return b.Trim();
+            }
+
+            return null;
+        }
+
+        private static string MergeTedClass(string a, string b)
         {
             if (!string.IsNullOrWhiteSpace(a))
             {

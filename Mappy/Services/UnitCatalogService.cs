@@ -19,6 +19,9 @@ namespace Mappy.Services
         private readonly Dictionary<string, string> objectNameByUnit =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
+        private readonly Dictionary<string, string> tedClassByName =
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
         public event EventHandler NamesChanged;
 
         public event EventHandler UnitPickerLabelsChanged;
@@ -100,6 +103,16 @@ namespace Mappy.Services
                     if (!this.objectNameByUnit.TryGetValue(name, out var prevOn) || string.IsNullOrWhiteSpace(prevOn))
                     {
                         this.objectNameByUnit[name] = on;
+                        changed = true;
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(r.TedClass))
+                {
+                    var tc = UnitCatalogLoadRecord.NormalizeTedClass(r.TedClass);
+                    if (!this.tedClassByName.TryGetValue(name, out var prevTc) || string.IsNullOrWhiteSpace(prevTc))
+                    {
+                        this.tedClassByName[name] = tc;
                         changed = true;
                     }
                 }
@@ -188,6 +201,33 @@ namespace Mappy.Services
             }
 
             return unitInternalName.Trim();
+        }
+
+        public string GetUnitTedClass(string unitName)
+        {
+            if (string.IsNullOrEmpty(unitName))
+            {
+                return string.Empty;
+            }
+
+            return this.tedClassByName.TryGetValue(unitName, out var tedClass) && !string.IsNullOrWhiteSpace(tedClass)
+                ? tedClass
+                : string.Empty;
+        }
+
+        public IReadOnlyList<string> EnumerateDistinctTedClasses()
+        {
+            var classes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var name in this.names)
+            {
+                var tedClass = this.GetUnitTedClass(name);
+                if (!string.IsNullOrEmpty(tedClass))
+                {
+                    classes.Add(tedClass);
+                }
+            }
+
+            return classes.OrderBy(c => c, StringComparer.OrdinalIgnoreCase).ToList();
         }
 
         public string GetUnitSide(string unitName)

@@ -277,6 +277,11 @@ namespace Mappy.Models
             this.dispatcher.OpenMapAttributes();
         }
 
+        public void UseOnlyUnitsMenuItemClick()
+        {
+            this.dispatcher.OpenUseOnlyUnitsEditor();
+        }
+
         public void GridColorMenuItemClick()
         {
             this.dispatcher.ChooseColor();

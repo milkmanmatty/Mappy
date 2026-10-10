@@ -156,6 +156,8 @@ namespace Mappy.Models
 
         public MapAttributes Attributes => this.model.Attributes;
 
+        public IReadOnlyList<string> UseOnlyUnitNames => this.model.UseOnlyUnitNames;
+
         public IList<Positioned<IMapTile>> FloatingTiles => this.model.FloatingTiles;
 
         public int? SelectedStartPosition => this.model.SelectedStartPosition;
@@ -1329,6 +1331,11 @@ namespace Mappy.Models
             this.undoManager.Execute(new ChangeAttributesOperation(this.model, newAttrs));
         }
 
+        public void SetUseOnlyUnits(IList<string> names, string fileName)
+        {
+            this.undoManager.Execute(new SetUseOnlyUnitsOperation(this.model, names, fileName));
+        }
+
         public void MarkSaved(string filename)
         {
             this.FilePath = filename;
@@ -1490,6 +1497,7 @@ namespace Mappy.Models
             }
 
             resizedModel.Attributes.CopyFrom(source.Attributes);
+            resizedModel.ReplaceUseOnlyUnitNames(source.UseOnlyUnitNames);
             resizedModel.ActiveSchemaIndex = Math.Min(source.ActiveSchemaIndex, Math.Max(0, resizedModel.Attributes.Schemas.Count - 1));
 
             for (var si = 0; si < resizedModel.Attributes.Schemas.Count; si++)

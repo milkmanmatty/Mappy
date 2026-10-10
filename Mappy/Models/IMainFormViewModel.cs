@@ -114,6 +114,8 @@ namespace Mappy.Models
 
         void MapAttributesMenuItemClick();
 
+        void UseOnlyUnitsMenuItemClick();
+
         void GridColorMenuItemClick();
 
         void NewMenuItemClick();
