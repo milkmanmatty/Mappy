@@ -41,10 +41,18 @@ namespace Mappy.UI.Forms
                 Width = 240,
             };
 
+            var destinationHintLabel = new Label
+            {
+                Text = "Leave blank to remove the source feature.",
+                Location = new Point(128, 72),
+                AutoSize = true,
+                ForeColor = SystemColors.GrayText,
+            };
+
             var okButton = new Button
             {
                 Text = "OK",
-                Location = new Point(212, 86),
+                Location = new Point(212, 102),
             };
             okButton.Click += (_, __) => this.TryAccept();
 
@@ -52,7 +60,7 @@ namespace Mappy.UI.Forms
             {
                 Text = "Cancel",
                 DialogResult = DialogResult.Cancel,
-                Location = new Point(293, 86),
+                Location = new Point(293, 102),
             };
 
             this.AcceptButton = okButton;
@@ -61,9 +69,10 @@ namespace Mappy.UI.Forms
             this.Controls.Add(this.sourceFeatureTextBox);
             this.Controls.Add(destinationLabel);
             this.Controls.Add(this.destinationFeatureTextBox);
+            this.Controls.Add(destinationHintLabel);
             this.Controls.Add(okButton);
             this.Controls.Add(cancelButton);
-            this.ClientSize = new Size(380, 122);
+            this.ClientSize = new Size(380, 138);
         }
 
         public string SourceFeatureName => this.sourceFeatureTextBox.Text;
@@ -75,12 +84,6 @@ namespace Mappy.UI.Forms
             if (string.IsNullOrWhiteSpace(this.SourceFeatureName))
             {
                 MessageBox.Show(this, "Source feature cannot be empty.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(this.DestinationFeatureName))
-            {
-                MessageBox.Show(this, "Destination feature cannot be empty.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
