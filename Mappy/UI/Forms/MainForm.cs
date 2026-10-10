@@ -213,6 +213,7 @@ namespace Mappy.UI.Forms
             model.CanGenerateMinimapEnhancedColours.Subscribe(x => this.generateMinimapEnhancedColoursMenuItem.Enabled = x);
 
             model.CanOpenAttributes.Subscribe(x => this.mapAttributesMenuItem.Enabled = x);
+            model.CanOpenAttributes.Subscribe(x => this.useOnlyUnitsMenuItem.Enabled = x);
 
             // view menu bindings
             model.MinimapVisible.Subscribe(x => this.toggleMinimapMenuItem.Checked = x);
@@ -426,6 +427,11 @@ namespace Mappy.UI.Forms
         private void MapAttributesMenuItemClick(object sender, EventArgs e)
         {
             this.model.MapAttributesMenuItemClick();
+        }
+
+        private void UseOnlyUnitsMenuItemClick(object sender, EventArgs e)
+        {
+            this.model.UseOnlyUnitsMenuItemClick();
         }
 
         private void SeaLevelTrackBarValueChanged(object sender, EventArgs e)

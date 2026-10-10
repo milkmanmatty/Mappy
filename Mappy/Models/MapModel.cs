@@ -39,6 +39,8 @@ namespace Mappy.Models
 
         private readonly ObservableCollection<MapUnitRef> selectedUnits = new ObservableCollection<MapUnitRef>();
 
+        private readonly List<string> useOnlyUnitNames = new List<string>();
+
         public MapModel(int width, int height)
             : this(width, height, new MapAttributes())
         {
@@ -103,6 +105,8 @@ namespace Mappy.Models
         }
 
         public MapAttributes Attributes { get; }
+
+        public IReadOnlyList<string> UseOnlyUnitNames => this.useOnlyUnitNames;
 
         public int ActiveSchemaIndex
         {
@@ -223,6 +227,30 @@ namespace Mappy.Models
                 FeatureInstanceEventArgs.ActionType.Remove,
                 id);
             this.OnFeatureInstanceChanged(arg);
+        }
+
+        public void ReplaceUseOnlyUnitNames(IEnumerable<string> names)
+        {
+            this.useOnlyUnitNames.Clear();
+            if (names == null)
+            {
+                return;
+            }
+
+            var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var name in names)
+            {
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    continue;
+                }
+
+                var trimmed = name.Trim();
+                if (seen.Add(trimmed))
+                {
+                    this.useOnlyUnitNames.Add(trimmed);
+                }
+            }
         }
 
         /// <summary>

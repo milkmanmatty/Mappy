@@ -850,12 +850,36 @@ namespace Mappy.Services
             this.model.Map.IfSome(
                 map =>
                     {
-                        var r = this.dialogService.AskUserForMapAttributes(map.GetAttributes());
+                        var r = this.dialogService.AskUserForMapAttributes(
+                            map.GetAttributes(),
+                            currentFileName => this.ApplyUseOnlyEdit(map, currentFileName));
                         if (r != null)
                         {
                             map.UpdateAttributes(r);
                         }
                     });
+        }
+
+        public void OpenUseOnlyUnitsEditor()
+        {
+            this.model.Map.IfSome(map => this.ApplyUseOnlyEdit(map, map.Attributes.UseOnlyUnits));
+        }
+
+        private string ApplyUseOnlyEdit(UndoableMapModel map, string currentFileName)
+        {
+            var edited = this.dialogService.AskUserToEditUseOnlyUnits(
+                this.unitCatalogService,
+                map.UseOnlyUnitNames.ToList());
+            if (edited == null)
+            {
+                return null;
+            }
+
+            var fileName = edited.Count == 0
+                ? string.Empty
+                : UseOnlyTdf.EnsureFileName(currentFileName, map.FilePath, map.Attributes.Name);
+            map.SetUseOnlyUnits(edited, fileName);
+            return fileName;
         }
 
         public void SetSeaLevel(int value)
@@ -1299,10 +1323,11 @@ namespace Mappy.Services
                 .Select(x => HpiPath.GetFileNameWithoutExtension(x.Name));
         }
 
-        private static void Save(UndoableMapModel map, string filename)
+        private static void Save(UndoableMapModel map, string filename, Func<string, string> useOnlyTedClass)
         {
             // flatten before save --- only the base tile is written to disk
             map.ClearSelection();
+            PrepareUseOnlyForSave(map, filename);
 
             var tntName = filename;
             var otaName = Path.ChangeExtension(filename, ".ota");
@@ -1318,6 +1343,7 @@ namespace Mappy.Services
                 File.Delete(otaName);
                 File.Move(tmpTntName, tntName);
                 File.Move(tmpOtaName, otaName);
+                UseOnlyTdf.WriteLoose(tntName, map.Attributes.UseOnlyUnits, map.UseOnlyUnitNames, useOnlyTedClass);
             }
             catch
             {
@@ -1329,6 +1355,21 @@ namespace Mappy.Services
             }
 
             map.MarkSaved(filename);
+        }
+
+        private static void PrepareUseOnlyForSave(UndoableMapModel map, string destinationPath)
+        {
+            if (map.UseOnlyUnitNames.Count == 0)
+            {
+                return;
+            }
+
+            if (UseOnlyTdf.NormalizeFileName(map.Attributes.UseOnlyUnits) != null)
+            {
+                return;
+            }
+
+            map.Attributes.UseOnlyUnits = UseOnlyTdf.SuggestFileName(destinationPath, map.Attributes.Name);
         }
 
         private bool TryCopyToClipboard(UndoableMapModel map)
@@ -1573,6 +1614,7 @@ namespace Mappy.Services
         {
             // flatten before save --- only the base tile is written to disk
             map.ClearSelection();
+            PrepareUseOnlyForSave(map, filename);
 
             var randomValue = this.rng.Next(1000);
             var tmpExtension = $".mappytemp-{randomValue}";
@@ -1580,7 +1622,7 @@ namespace Mappy.Services
             var tmpFileName = Path.ChangeExtension(filename, tmpExtension);
             try
             {
-                MapSaver.SaveHpi(map, tmpFileName);
+                MapSaver.SaveHpi(map, tmpFileName, this.unitCatalogService.GetUnitTedClass);
                 File.Delete(filename);
                 File.Move(tmpFileName, filename);
             }
@@ -1618,7 +1660,7 @@ namespace Mappy.Services
                 switch (extension)
                 {
                     case ".TNT":
-                        Save(map, filename);
+                        Save(map, filename, this.unitCatalogService.GetUnitTedClass);
                         return true;
                     case ".HPI":
                     case ".UFO":

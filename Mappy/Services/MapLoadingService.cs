@@ -59,6 +59,8 @@
                 {
                     m = this.mapModelFactory.FromTntAndOta(s, attrs);
                 }
+
+                m.ReplaceUseOnlyUnitNames(UseOnlyTdf.ReadLoose(filename, m.Attributes.UseOnlyUnits));
             }
             else
             {
@@ -101,6 +103,8 @@
                 {
                     m = this.mapModelFactory.FromTntAndOta(s, n);
                 }
+
+                m.ReplaceUseOnlyUnitNames(UseOnlyTdf.ReadHpi(hpi, m.Attributes.UseOnlyUnits));
             }
 
             return new UndoableMapModel(m, hpipath, readOnly);

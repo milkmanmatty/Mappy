@@ -25,6 +25,7 @@ namespace Mappy.IO
             var side = UnitCatalogSide.Unknown;
             string displayName = null;
             string objectName = null;
+            string tedClass = null;
             if (file.Size > 0 && file.Size < 10_000_000)
             {
                 try
@@ -38,6 +39,7 @@ namespace Mappy.IO
                         side = UnitCatalogSide.Normalize(FindSideRaw(root));
                         displayName = FindUnitNameEntryFromTdf(root);
                         objectName = FindObjectNameFromTdf(root);
+                        tedClass = FindTedClassFromTdf(root);
                     }
                 }
                 catch (Exception)
@@ -45,7 +47,7 @@ namespace Mappy.IO
                 }
             }
 
-            this.Records.Add(new UnitCatalogLoadRecord(name, side, displayName, objectName));
+            this.Records.Add(new UnitCatalogLoadRecord(name, side, displayName, objectName, tedClass));
         }
 
         protected override IEnumerable<HpiArchive.FileInfo> EnumerateFiles(HpiArchive r)
@@ -184,6 +186,30 @@ namespace Mappy.IO
             foreach (var child in node.Keys.Values)
             {
                 var t = FindObjectNameFromTdf(child);
+                if (t != null)
+                {
+                    return t;
+                }
+            }
+
+            return null;
+        }
+
+        private static string FindTedClassFromTdf(TdfNode node)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+
+            if (node.Entries.TryGetValue("TEDClass", out var tedClass))
+            {
+                return tedClass;
+            }
+
+            foreach (var child in node.Keys.Values)
+            {
+                var t = FindTedClassFromTdf(child);
                 if (t != null)
                 {
                     return t;

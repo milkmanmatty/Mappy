@@ -75,6 +75,7 @@ namespace Mappy.UI.Forms
 	        this.fillSelectionMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.tilesetsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.mapAttributesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+	        this.useOnlyUnitsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.generateMinimapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.generateMinimapHighQualityMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 	        this.generateMinimapEnhancedColoursMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -357,7 +358,7 @@ namespace Mappy.UI.Forms
 	        // 
 	        // editMenuItem
 	        // 
-	        this.editMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.undoMenuItem, this.redoMenuItem, toolStripSeparator7, this.cutMenuItem, this.copyMenuItem, this.pasteMenuItem, this.fillMenuItem, this.resizeMapMenuItem, this.exportSectionMenuItem, this.flipMenuItem, this.tilesetsMenuItem, toolStripSeparator9, this.mapAttributesMenuItem, toolStripSeparator3, this.generateMinimapMenuItem, this.generateMinimapHighQualityMenuItem, this.generateMinimapEnhancedColoursMenuItem, toolStripSeparator4, this.preferencesMenuItem });
+	        this.editMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.undoMenuItem, this.redoMenuItem, toolStripSeparator7, this.cutMenuItem, this.copyMenuItem, this.pasteMenuItem, this.fillMenuItem, this.resizeMapMenuItem, this.exportSectionMenuItem, this.flipMenuItem, this.tilesetsMenuItem, toolStripSeparator9, this.mapAttributesMenuItem, this.useOnlyUnitsMenuItem, toolStripSeparator3, this.generateMinimapMenuItem, this.generateMinimapHighQualityMenuItem, this.generateMinimapEnhancedColoursMenuItem, toolStripSeparator4, this.preferencesMenuItem });
 	        this.editMenuItem.DropDown.ShowItemToolTips = true;
 	        this.editMenuItem.Name = "editMenuItem";
 	        this.editMenuItem.Size = new System.Drawing.Size(54, 29);
@@ -498,6 +499,14 @@ namespace Mappy.UI.Forms
 	        this.mapAttributesMenuItem.Size = new System.Drawing.Size(343, 30);
 	        this.mapAttributesMenuItem.Text = "Map Attributes...";
 	        this.mapAttributesMenuItem.Click += new System.EventHandler(this.MapAttributesMenuItemClick);
+	        // 
+	        // useOnlyUnitsMenuItem
+	        // 
+	        this.useOnlyUnitsMenuItem.Enabled = false;
+	        this.useOnlyUnitsMenuItem.Name = "useOnlyUnitsMenuItem";
+	        this.useOnlyUnitsMenuItem.Size = new System.Drawing.Size(343, 30);
+	        this.useOnlyUnitsMenuItem.Text = "Edit Use Only Units...";
+	        this.useOnlyUnitsMenuItem.Click += new System.EventHandler(this.UseOnlyUnitsMenuItemClick);
 	        // 
 	        // generateMinimapMenuItem
 	        // 
@@ -1277,6 +1286,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripMenuItem player10MenuItem;
         private System.Windows.Forms.ToolStripMenuItem player11MenuItem;
         private System.Windows.Forms.ToolStripMenuItem mapAttributesMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem useOnlyUnitsMenuItem;
         private System.Windows.Forms.TabPage startPositionsTab;
         private StartPositionsView startPositionsView1;
         private System.Windows.Forms.TabPage heightTab;

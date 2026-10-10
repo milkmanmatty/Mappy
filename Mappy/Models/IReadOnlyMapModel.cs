@@ -21,6 +21,8 @@ namespace Mappy.Models
 
         MapAttributes Attributes { get; }
 
+        IReadOnlyList<string> UseOnlyUnitNames { get; }
+
         /// <summary>
         /// Gets the width of the feature grid space.
         /// </summary>

@@ -47,5 +47,7 @@ namespace Mappy.Models
         void RemoveSchemaUnit(int schemaIndex, Guid unitId);
 
         void UpdateSchemaUnit(int schemaIndex, SchemaUnit unit);
+
+        void ReplaceUseOnlyUnitNames(IEnumerable<string> names);
     }
 }
