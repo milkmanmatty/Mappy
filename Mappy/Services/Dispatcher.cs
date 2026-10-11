@@ -51,7 +51,7 @@ namespace Mappy.Services
         private readonly Dictionary<Guid, UI.Forms.UnitPropertiesForm> openUnitPropertyForms =
             new Dictionary<Guid, UI.Forms.UnitPropertiesForm>();
 
-        private object stickyPasteBuffer;
+        private readonly Dictionary<GUITab, object> stickyPasteBuffers = new Dictionary<GUITab, object>();
 
         private Action<int, int> missionCoordinatePick;
 
@@ -1459,30 +1459,50 @@ namespace Mappy.Services
         private void SetClipboardData(object data)
         {
             Clipboard.SetData(DataFormats.Serializable, data);
-            this.stickyPasteBuffer = CloneClipboardData(data);
+            this.stickyPasteBuffers[this.model.SelectedGUITab] = CloneClipboardData(data);
         }
 
         private object GetClipboardDataForPaste()
         {
+            GUITab tab = this.model.SelectedGUITab;
             object clipboardData = Clipboard.GetData(DataFormats.Serializable);
             object mappyData = CloneClipboardData(clipboardData);
-            if (mappyData != null)
+            if (mappyData != null && IsClipboardDataCompatible(mappyData, tab))
             {
                 if (MappySettings.Settings.StickyClipboard)
                 {
-                    this.stickyPasteBuffer = mappyData;
-                    return CloneClipboardData(this.stickyPasteBuffer);
+                    this.stickyPasteBuffers[tab] = mappyData;
+                    return CloneClipboardData(mappyData);
                 }
 
                 return mappyData;
             }
 
-            if (MappySettings.Settings.StickyClipboard && this.stickyPasteBuffer != null)
+            object tabBuffer;
+            if (this.stickyPasteBuffers.TryGetValue(tab, out tabBuffer) && tabBuffer != null)
             {
-                return CloneClipboardData(this.stickyPasteBuffer);
+                return CloneClipboardData(tabBuffer);
             }
 
             return null;
+        }
+
+        private static bool IsClipboardDataCompatible(object data, GUITab tab)
+        {
+            if (data == null)
+            {
+                return false;
+            }
+
+            switch (tab)
+            {
+                case GUITab.Features:
+                    return data is FeatureClipboardRecord || data is List<FeatureClipboardRecord>;
+                case GUITab.Mission:
+                    return data is SchemaUnitClipboardRecord || data is List<SchemaUnitClipboardRecord>;
+                default:
+                    return data is IMapTile;
+            }
         }
 
         private static object CloneClipboardData(object data)
@@ -1606,7 +1626,7 @@ namespace Mappy.Services
         {
             if (!MappySettings.Settings.StickyClipboard)
             {
-                this.stickyPasteBuffer = null;
+                this.stickyPasteBuffers.Remove(this.model.SelectedGUITab);
                 Clipboard.Clear();
             }
         }
