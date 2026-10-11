@@ -153,6 +153,12 @@
   <metadata name="topMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>126, 17</value>
   </metadata>
+  <data name="generateMinimapEnhancedColoursMenuItem.ToolTipText" xml:space="preserve">
+    <value>Uses perceptual palette matching and dithering to preserve colours such as greens, 
+but results vary by map and can occasionally look worse. TA's built-in minimap 
+displays enhanced colours correctly only with a TADR version that includes 
+enhanced-colour minimap support; older versions may shift colours.</value>
+  </data>
   <metadata name="statusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>

@@ -7,6 +7,8 @@
     {
         private readonly Stack<IReplayableOperation> undoStack = new Stack<IReplayableOperation>();
         private readonly Stack<IReplayableOperation> redoStack = new Stack<IReplayableOperation>();
+        private readonly Stack<bool> undoAffectsMark = new Stack<bool>();
+        private readonly Stack<bool> redoAffectsMark = new Stack<bool>();
 
         private bool canUndo;
         private bool canRedo;
@@ -82,16 +84,31 @@
 
         public void Execute(IReplayableOperation op)
         {
+            this.Execute(op, true);
+        }
+
+        public void Execute(IReplayableOperation op, bool affectsMark)
+        {
             op.Execute();
-            this.Push(op);
+            this.Push(op, affectsMark);
         }
 
         public void Push(IReplayableOperation op)
         {
-            this.redoStack.Clear();
-            this.undoStack.Push(op);
+            this.Push(op, true);
+        }
 
-            this.MarkCounter += 1;
+        public void Push(IReplayableOperation op, bool affectsMark)
+        {
+            this.redoStack.Clear();
+            this.redoAffectsMark.Clear();
+            this.undoStack.Push(op);
+            this.undoAffectsMark.Push(affectsMark);
+
+            if (affectsMark)
+            {
+                this.MarkCounter += 1;
+            }
 
             this.RefreshProperties();
         }
@@ -99,10 +116,15 @@
         public void Undo()
         {
             var op = this.undoStack.Pop();
+            var affectsMark = this.undoAffectsMark.Pop();
             op.Undo();
             this.redoStack.Push(op);
+            this.redoAffectsMark.Push(affectsMark);
 
-            this.MarkCounter -= 1;
+            if (affectsMark)
+            {
+                this.MarkCounter -= 1;
+            }
 
             this.RefreshProperties();
         }
@@ -110,10 +132,15 @@
         public void Redo()
         {
             var op = this.redoStack.Pop();
+            var affectsMark = this.redoAffectsMark.Pop();
             op.Execute();
             this.undoStack.Push(op);
+            this.undoAffectsMark.Push(affectsMark);
 
-            this.MarkCounter += 1;
+            if (affectsMark)
+            {
+                this.MarkCounter += 1;
+            }
 
             this.RefreshProperties();
         }
@@ -122,6 +149,8 @@
         {
             this.undoStack.Clear();
             this.redoStack.Clear();
+            this.undoAffectsMark.Clear();
+            this.redoAffectsMark.Clear();
 
             this.RefreshProperties();
 

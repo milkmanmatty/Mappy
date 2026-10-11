@@ -74,10 +74,17 @@ namespace Mappy.UI.Forms
             this.calculatedMetalDepositValueCheckBox = new System.Windows.Forms.CheckBox();
             this.featureReclaimAmountsCheckBox = new System.Windows.Forms.CheckBox();
             this.fullResourceNamesCheckBox = new System.Windows.Forms.CheckBox();
+            this.resourceMarkersGroupBox = new System.Windows.Forms.GroupBox();
+            this.resourceMarkerLineColorButton = new System.Windows.Forms.Button();
+            this.resourceMarkerLineColorLabel = new System.Windows.Forms.Label();
+            this.saveResourceMarkersCheckBox = new System.Windows.Forms.CheckBox();
             this.miscGroupBox = new System.Windows.Forms.GroupBox();
             this.doNotPromptToSaveUnsavedChangesCheckBox = new System.Windows.Forms.CheckBox();
             this.preferencesTabControl = new System.Windows.Forms.TabControl();
             this.miscTabPage = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.updateRepositoryTextBox = new System.Windows.Forms.TextBox();
+            this.updateRepositoryLabel = new System.Windows.Forms.Label();
             this.missionTabPage = new System.Windows.Forms.TabPage();
             this.adjustmentsTabPage = new System.Windows.Forms.TabPage();
             this.adjustmentsMiscGroupBox = new System.Windows.Forms.GroupBox();
@@ -99,8 +106,8 @@ namespace Mappy.UI.Forms
             this.viewDefaultsGroupBox = new System.Windows.Forms.GroupBox();
             this.defaultGridSizeComboBox = new System.Windows.Forms.ComboBox();
             this.defaultGridSizeLabel = new System.Windows.Forms.Label();
-            this.defaultFeaturesVisibleCheckBox = new System.Windows.Forms.CheckBox();
             this.defaultOrdersVisibleCheckBox = new System.Windows.Forms.CheckBox();
+            this.defaultFeaturesVisibleCheckBox = new System.Windows.Forms.CheckBox();
             this.defaultGridVisibleCheckBox = new System.Windows.Forms.CheckBox();
             this.defaultVoidsVisibleCheckBox = new System.Windows.Forms.CheckBox();
             this.defaultMinimapVisibleCheckBox = new System.Windows.Forms.CheckBox();
@@ -111,9 +118,6 @@ namespace Mappy.UI.Forms
             this.defaultNewMapHeightLabel = new System.Windows.Forms.Label();
             this.defaultNewMapWidthNumeric = new System.Windows.Forms.NumericUpDown();
             this.defaultNewMapWidthLabel = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.updateRepositoryTextBox = new System.Windows.Forms.TextBox();
-            this.updateRepositoryLabel = new System.Windows.Forms.Label();
             this.sidePanel.SuspendLayout();
             this.bottomPanel.SuspendLayout();
             this.searchPathsPanel.SuspendLayout();
@@ -125,9 +129,11 @@ namespace Mappy.UI.Forms
             ((System.ComponentModel.ISupportInitialize)(this.inactiveSchemaOpacityNumeric)).BeginInit();
             this.missionUiGroupBox.SuspendLayout();
             this.resourceNamesGroupBox.SuspendLayout();
+            this.resourceMarkersGroupBox.SuspendLayout();
             this.miscGroupBox.SuspendLayout();
             this.preferencesTabControl.SuspendLayout();
             this.miscTabPage.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.missionTabPage.SuspendLayout();
             this.adjustmentsTabPage.SuspendLayout();
             this.adjustmentsMiscGroupBox.SuspendLayout();
@@ -142,7 +148,6 @@ namespace Mappy.UI.Forms
             this.newMapDefaultsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.defaultNewMapHeightNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.defaultNewMapWidthNumeric)).BeginInit();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // searchPathsListView
@@ -152,7 +157,7 @@ namespace Mappy.UI.Forms
             this.searchPathsListView.Location = new System.Drawing.Point(0, 0);
             this.searchPathsListView.MultiSelect = false;
             this.searchPathsListView.Name = "searchPathsListView";
-            this.searchPathsListView.Size = new System.Drawing.Size(332, 190);
+            this.searchPathsListView.Size = new System.Drawing.Size(332, 151);
             this.searchPathsListView.TabIndex = 0;
             this.searchPathsListView.UseCompatibleStateImageBehavior = false;
             this.searchPathsListView.View = System.Windows.Forms.View.List;
@@ -229,7 +234,7 @@ namespace Mappy.UI.Forms
             this.sidePanel.Dock = System.Windows.Forms.DockStyle.Right;
             this.sidePanel.Location = new System.Drawing.Point(332, 0);
             this.sidePanel.Name = "sidePanel";
-            this.sidePanel.Size = new System.Drawing.Size(82, 190);
+            this.sidePanel.Size = new System.Drawing.Size(82, 151);
             this.sidePanel.TabIndex = 7;
             // 
             // bottomPanel
@@ -237,7 +242,7 @@ namespace Mappy.UI.Forms
             this.bottomPanel.Controls.Add(this.cancelButton);
             this.bottomPanel.Controls.Add(this.okButton);
             this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.bottomPanel.Location = new System.Drawing.Point(0, 461);
+            this.bottomPanel.Location = new System.Drawing.Point(0, 504);
             this.bottomPanel.Name = "bottomPanel";
             this.bottomPanel.Size = new System.Drawing.Size(450, 30);
             this.bottomPanel.TabIndex = 8;
@@ -251,7 +256,7 @@ namespace Mappy.UI.Forms
             this.searchPathsPanel.Controls.Add(this.sidePanel);
             this.searchPathsPanel.Location = new System.Drawing.Point(6, 19);
             this.searchPathsPanel.Name = "searchPathsPanel";
-            this.searchPathsPanel.Size = new System.Drawing.Size(414, 190);
+            this.searchPathsPanel.Size = new System.Drawing.Size(414, 151);
             this.searchPathsPanel.TabIndex = 9;
             // 
             // mainGroupBox
@@ -261,7 +266,7 @@ namespace Mappy.UI.Forms
             this.mainGroupBox.Controls.Add(this.searchPathsPanel);
             this.mainGroupBox.Location = new System.Drawing.Point(12, 12);
             this.mainGroupBox.Name = "mainGroupBox";
-            this.mainGroupBox.Size = new System.Drawing.Size(426, 215);
+            this.mainGroupBox.Size = new System.Drawing.Size(426, 176);
             this.mainGroupBox.TabIndex = 0;
             this.mainGroupBox.TabStop = false;
             this.mainGroupBox.Text = "Search Paths";
@@ -618,7 +623,7 @@ namespace Mappy.UI.Forms
             this.resourceNamesGroupBox.Controls.Add(this.calculatedMetalDepositValueCheckBox);
             this.resourceNamesGroupBox.Controls.Add(this.featureReclaimAmountsCheckBox);
             this.resourceNamesGroupBox.Controls.Add(this.fullResourceNamesCheckBox);
-            this.resourceNamesGroupBox.Location = new System.Drawing.Point(12, 233);
+            this.resourceNamesGroupBox.Location = new System.Drawing.Point(12, 193);
             this.resourceNamesGroupBox.Name = "resourceNamesGroupBox";
             this.resourceNamesGroupBox.Size = new System.Drawing.Size(426, 72);
             this.resourceNamesGroupBox.TabIndex = 1;
@@ -665,15 +670,58 @@ namespace Mappy.UI.Forms
             this.fullResourceNamesCheckBox.Text = "Full resource names";
             this.fullResourceNamesCheckBox.UseVisualStyleBackColor = true;
             // 
+            // resourceMarkersGroupBox
+            // 
+            this.resourceMarkersGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.resourceMarkersGroupBox.Controls.Add(this.resourceMarkerLineColorButton);
+            this.resourceMarkersGroupBox.Controls.Add(this.resourceMarkerLineColorLabel);
+            this.resourceMarkersGroupBox.Controls.Add(this.saveResourceMarkersCheckBox);
+            this.resourceMarkersGroupBox.Location = new System.Drawing.Point(12, 270);
+            this.resourceMarkersGroupBox.Name = "resourceMarkersGroupBox";
+            this.resourceMarkersGroupBox.Size = new System.Drawing.Size(426, 78);
+            this.resourceMarkersGroupBox.TabIndex = 2;
+            this.resourceMarkersGroupBox.TabStop = false;
+            this.resourceMarkersGroupBox.Text = "Resource markers";
+            // 
+            // resourceMarkerLineColorButton
+            // 
+            this.resourceMarkerLineColorButton.Location = new System.Drawing.Point(132, 43);
+            this.resourceMarkerLineColorButton.Name = "resourceMarkerLineColorButton";
+            this.resourceMarkerLineColorButton.Size = new System.Drawing.Size(85, 23);
+            this.resourceMarkerLineColorButton.TabIndex = 2;
+            this.resourceMarkerLineColorButton.Text = "Customize...";
+            this.resourceMarkerLineColorButton.UseVisualStyleBackColor = true;
+            this.resourceMarkerLineColorButton.Click += new System.EventHandler(this.ResourceMarkerLineColorButtonClick);
+            // 
+            // resourceMarkerLineColorLabel
+            // 
+            this.resourceMarkerLineColorLabel.AutoSize = true;
+            this.resourceMarkerLineColorLabel.Location = new System.Drawing.Point(14, 48);
+            this.resourceMarkerLineColorLabel.Name = "resourceMarkerLineColorLabel";
+            this.resourceMarkerLineColorLabel.Size = new System.Drawing.Size(62, 13);
+            this.resourceMarkerLineColorLabel.TabIndex = 1;
+            this.resourceMarkerLineColorLabel.Text = "Line colour:";
+            // 
+            // saveResourceMarkersCheckBox
+            // 
+            this.saveResourceMarkersCheckBox.AutoSize = true;
+            this.saveResourceMarkersCheckBox.Location = new System.Drawing.Point(17, 22);
+            this.saveResourceMarkersCheckBox.Name = "saveResourceMarkersCheckBox";
+            this.saveResourceMarkersCheckBox.Size = new System.Drawing.Size(198, 17);
+            this.saveResourceMarkersCheckBox.TabIndex = 0;
+            this.saveResourceMarkersCheckBox.Text = "Save resource markers with the map";
+            this.saveResourceMarkersCheckBox.UseVisualStyleBackColor = true;
+            // 
             // miscGroupBox
             // 
             this.miscGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.miscGroupBox.Controls.Add(this.doNotPromptToSaveUnsavedChangesCheckBox);
-            this.miscGroupBox.Location = new System.Drawing.Point(12, 311);
+            this.miscGroupBox.Location = new System.Drawing.Point(12, 354);
             this.miscGroupBox.Name = "miscGroupBox";
             this.miscGroupBox.Size = new System.Drawing.Size(426, 52);
-            this.miscGroupBox.TabIndex = 2;
+            this.miscGroupBox.TabIndex = 3;
             this.miscGroupBox.TabStop = false;
             this.miscGroupBox.Text = "Misc";
             // 
@@ -697,7 +745,7 @@ namespace Mappy.UI.Forms
             this.preferencesTabControl.Location = new System.Drawing.Point(0, 0);
             this.preferencesTabControl.Name = "preferencesTabControl";
             this.preferencesTabControl.SelectedIndex = 0;
-            this.preferencesTabControl.Size = new System.Drawing.Size(450, 461);
+            this.preferencesTabControl.Size = new System.Drawing.Size(450, 504);
             this.preferencesTabControl.TabIndex = 0;
             // 
             // miscTabPage
@@ -705,15 +753,47 @@ namespace Mappy.UI.Forms
             this.miscTabPage.AutoScroll = true;
             this.miscTabPage.Controls.Add(this.groupBox1);
             this.miscTabPage.Controls.Add(this.miscGroupBox);
+            this.miscTabPage.Controls.Add(this.resourceMarkersGroupBox);
             this.miscTabPage.Controls.Add(this.resourceNamesGroupBox);
             this.miscTabPage.Controls.Add(this.mainGroupBox);
             this.miscTabPage.Location = new System.Drawing.Point(4, 22);
             this.miscTabPage.Name = "miscTabPage";
             this.miscTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.miscTabPage.Size = new System.Drawing.Size(442, 435);
+            this.miscTabPage.Size = new System.Drawing.Size(442, 478);
             this.miscTabPage.TabIndex = 0;
             this.miscTabPage.Text = "Misc";
             this.miscTabPage.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.updateRepositoryTextBox);
+            this.groupBox1.Controls.Add(this.updateRepositoryLabel);
+            this.groupBox1.Location = new System.Drawing.Point(13, 412);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(426, 53);
+            this.groupBox1.TabIndex = 4;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Updates";
+            // 
+            // updateRepositoryTextBox
+            // 
+            this.updateRepositoryTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.updateRepositoryTextBox.Location = new System.Drawing.Point(112, 17);
+            this.updateRepositoryTextBox.Name = "updateRepositoryTextBox";
+            this.updateRepositoryTextBox.Size = new System.Drawing.Size(262, 20);
+            this.updateRepositoryTextBox.TabIndex = 4;
+            // 
+            // updateRepositoryLabel
+            // 
+            this.updateRepositoryLabel.AutoSize = true;
+            this.updateRepositoryLabel.Location = new System.Drawing.Point(13, 20);
+            this.updateRepositoryLabel.Name = "updateRepositoryLabel";
+            this.updateRepositoryLabel.Size = new System.Drawing.Size(93, 13);
+            this.updateRepositoryLabel.TabIndex = 3;
+            this.updateRepositoryLabel.Text = "Update repository:";
             // 
             // missionTabPage
             // 
@@ -970,7 +1050,7 @@ namespace Mappy.UI.Forms
             this.defaultsTabPage.Location = new System.Drawing.Point(4, 22);
             this.defaultsTabPage.Name = "defaultsTabPage";
             this.defaultsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.defaultsTabPage.Size = new System.Drawing.Size(442, 411);
+            this.defaultsTabPage.Size = new System.Drawing.Size(442, 435);
             this.defaultsTabPage.TabIndex = 3;
             this.defaultsTabPage.Text = "Defaults";
             this.defaultsTabPage.UseVisualStyleBackColor = true;
@@ -1021,6 +1101,16 @@ namespace Mappy.UI.Forms
             this.defaultGridSizeLabel.TabIndex = 5;
             this.defaultGridSizeLabel.Text = "Size:";
             // 
+            // defaultOrdersVisibleCheckBox
+            // 
+            this.defaultOrdersVisibleCheckBox.AutoSize = true;
+            this.defaultOrdersVisibleCheckBox.Location = new System.Drawing.Point(17, 160);
+            this.defaultOrdersVisibleCheckBox.Name = "defaultOrdersVisibleCheckBox";
+            this.defaultOrdersVisibleCheckBox.Size = new System.Drawing.Size(57, 17);
+            this.defaultOrdersVisibleCheckBox.TabIndex = 8;
+            this.defaultOrdersVisibleCheckBox.Text = "Orders";
+            this.defaultOrdersVisibleCheckBox.UseVisualStyleBackColor = true;
+            // 
             // defaultFeaturesVisibleCheckBox
             // 
             this.defaultFeaturesVisibleCheckBox.AutoSize = true;
@@ -1032,16 +1122,6 @@ namespace Mappy.UI.Forms
             this.defaultFeaturesVisibleCheckBox.TabIndex = 7;
             this.defaultFeaturesVisibleCheckBox.Text = "Features";
             this.defaultFeaturesVisibleCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // defaultOrdersVisibleCheckBox
-            // 
-            this.defaultOrdersVisibleCheckBox.AutoSize = true;
-            this.defaultOrdersVisibleCheckBox.Location = new System.Drawing.Point(17, 160);
-            this.defaultOrdersVisibleCheckBox.Name = "defaultOrdersVisibleCheckBox";
-            this.defaultOrdersVisibleCheckBox.Size = new System.Drawing.Size(57, 17);
-            this.defaultOrdersVisibleCheckBox.TabIndex = 8;
-            this.defaultOrdersVisibleCheckBox.Text = "Orders";
-            this.defaultOrdersVisibleCheckBox.UseVisualStyleBackColor = true;
             // 
             // defaultGridVisibleCheckBox
             // 
@@ -1170,44 +1250,13 @@ namespace Mappy.UI.Forms
             this.defaultNewMapWidthLabel.TabIndex = 0;
             this.defaultNewMapWidthLabel.Text = "Width:";
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.updateRepositoryTextBox);
-            this.groupBox1.Controls.Add(this.updateRepositoryLabel);
-            this.groupBox1.Location = new System.Drawing.Point(13, 369);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(426, 53);
-            this.groupBox1.TabIndex = 3;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Updates";
-            // 
-            // updateRepositoryTextBox
-            // 
-            this.updateRepositoryTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.updateRepositoryTextBox.Location = new System.Drawing.Point(112, 17);
-            this.updateRepositoryTextBox.Name = "updateRepositoryTextBox";
-            this.updateRepositoryTextBox.Size = new System.Drawing.Size(262, 20);
-            this.updateRepositoryTextBox.TabIndex = 4;
-            // 
-            // updateRepositoryLabel
-            // 
-            this.updateRepositoryLabel.AutoSize = true;
-            this.updateRepositoryLabel.Location = new System.Drawing.Point(13, 20);
-            this.updateRepositoryLabel.Name = "updateRepositoryLabel";
-            this.updateRepositoryLabel.Size = new System.Drawing.Size(93, 13);
-            this.updateRepositoryLabel.TabIndex = 3;
-            this.updateRepositoryLabel.Text = "Update repository:";
-            // 
             // PreferencesForm
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(450, 491);
+            this.ClientSize = new System.Drawing.Size(450, 534);
             this.Controls.Add(this.preferencesTabControl);
             this.Controls.Add(this.bottomPanel);
             this.Name = "PreferencesForm";
@@ -1230,10 +1279,14 @@ namespace Mappy.UI.Forms
             this.missionUiGroupBox.PerformLayout();
             this.resourceNamesGroupBox.ResumeLayout(false);
             this.resourceNamesGroupBox.PerformLayout();
+            this.resourceMarkersGroupBox.ResumeLayout(false);
+            this.resourceMarkersGroupBox.PerformLayout();
             this.miscGroupBox.ResumeLayout(false);
             this.miscGroupBox.PerformLayout();
             this.preferencesTabControl.ResumeLayout(false);
             this.miscTabPage.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.missionTabPage.ResumeLayout(false);
             this.adjustmentsTabPage.ResumeLayout(false);
             this.adjustmentsMiscGroupBox.ResumeLayout(false);
@@ -1252,8 +1305,6 @@ namespace Mappy.UI.Forms
             this.newMapDefaultsGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.defaultNewMapHeightNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.defaultNewMapWidthNumeric)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1305,6 +1356,10 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.CheckBox fullResourceNamesCheckBox;
         private System.Windows.Forms.CheckBox featureReclaimAmountsCheckBox;
         private System.Windows.Forms.CheckBox calculatedMetalDepositValueCheckBox;
+        private System.Windows.Forms.GroupBox resourceMarkersGroupBox;
+        private System.Windows.Forms.CheckBox saveResourceMarkersCheckBox;
+        private System.Windows.Forms.Label resourceMarkerLineColorLabel;
+        private System.Windows.Forms.Button resourceMarkerLineColorButton;
         private System.Windows.Forms.GroupBox miscGroupBox;
         private System.Windows.Forms.CheckBox splitTilesCheckBox;
         private System.Windows.Forms.CheckBox doNotPromptToSaveUnsavedChangesCheckBox;

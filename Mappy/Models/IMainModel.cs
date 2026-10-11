@@ -19,6 +19,8 @@ namespace Mappy.Models
 
         event EventHandler<FeatureInstanceEventArgs> FeatureInstanceChanged;
 
+        event EventHandler MarkerLinesChanged;
+
         event EventHandler<StartPositionChangedEventArgs> StartPositionChanged;
 
         int? SelectedTile { get; }
@@ -30,6 +32,10 @@ namespace Mappy.Models
         ObservableCollection<Guid> SelectedFeatures { get; }
 
         ObservableCollection<MapUnitRef> SelectedUnits { get; }
+
+        IReadOnlyList<MarkerLine> MarkerLines { get; }
+
+        Guid? SelectedMarkerLine { get; }
 
         Rectangle BandboxRectangle { get; }
 

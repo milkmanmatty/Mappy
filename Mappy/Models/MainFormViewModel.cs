@@ -507,6 +507,11 @@ namespace Mappy.Models
             this.dispatcher.ChangeSelectedTab(tabType);
         }
 
+        public void ClearMarkerLines()
+        {
+            this.dispatcher.ClearMarkerLines();
+        }
+
         public void CenterViewOnStartPosition(int index)
         {
             this.dispatcher.CenterViewOnStartPosition(index);

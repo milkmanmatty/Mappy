@@ -92,6 +92,8 @@ namespace Mappy.Models
 
         public event EventHandler<FeatureInstanceEventArgs> FeatureInstanceChanged;
 
+        public event EventHandler MarkerLinesChanged;
+
         public bool CanCopy
         {
             get => this.canCopy;
@@ -181,6 +183,10 @@ namespace Mappy.Models
         public ObservableCollection<Guid> SelectedFeatures => this.model.SelectedFeatures;
 
         public int? SelectedTile => this.model.SelectedTile;
+
+        public IReadOnlyList<MarkerLine> MarkerLines => this.model.MarkerLines;
+
+        public Guid? SelectedMarkerLine => this.model.SelectedMarkerLine;
 
         public Maybe<Point> MousePosition
         {
@@ -960,11 +966,59 @@ namespace Mappy.Models
             this.deltaY = 0;
         }
 
+        public bool AddMarkerLine(IReadOnlyList<Point> points)
+        {
+            if (!IsMarkerStrokeLongEnough(points))
+            {
+                return false;
+            }
+
+            var line = new MarkerLine(Guid.NewGuid(), points);
+            var mergesTile = this.SelectedTile.HasValue;
+            var op = new CompositeOperation(
+                OperationFactory.CreateDeselectAndMergeOperation(this.model),
+                new AddMarkerLineOperation(this.model, line),
+                new SelectMarkerLineOperation(this.model, line.Id));
+            this.ExecuteMarkerAware(op, mergesTile);
+            return true;
+        }
+
+        public void SelectMarkerLine(Guid id)
+        {
+            var mergesTile = this.SelectedTile.HasValue;
+            var op = new CompositeOperation(
+                OperationFactory.CreateDeselectAndMergeOperation(this.model),
+                new SelectMarkerLineOperation(this.model, id));
+            this.ExecuteMarkerAware(op, mergesTile);
+        }
+
+        public void ClearMarkerLines()
+        {
+            if (this.MarkerLines.Count == 0)
+            {
+                return;
+            }
+
+            var mergesTile = this.SelectedTile.HasValue;
+            var op = new CompositeOperation(
+                new DeselectOperation(this.model),
+                new ClearMarkerLinesOperation(this.model));
+            this.ExecuteMarkerAware(op, mergesTile);
+        }
+
+        public void LoadMarkerLines(IEnumerable<MarkerLine> lines)
+        {
+            this.model.ReplaceMarkerLines(lines);
+        }
+
         public void ClearSelection()
         {
-            if (this.SelectedTile == null && (this.SelectedFeatures == null || this.SelectedFeatures.Count == 0)
-                && (this.SelectedStartPosition == null || this.SelectedStartSchemaIndex == null)
-                && (this.SelectedUnits == null || this.SelectedUnits.Count == 0))
+            var hasTile = this.SelectedTile.HasValue;
+            var hasFeatures = this.SelectedFeatures != null && this.SelectedFeatures.Count > 0;
+            var hasStart = this.SelectedStartPosition.HasValue && this.SelectedStartSchemaIndex.HasValue;
+            var hasUnits = this.SelectedUnits != null && this.SelectedUnits.Count > 0;
+            var hasMarker = this.SelectedMarkerLine.HasValue;
+            if (!hasTile && !hasFeatures && !hasStart && !hasUnits && !hasMarker)
             {
                 return;
             }
@@ -980,6 +1034,10 @@ namespace Mappy.Models
             {
                 var mergeOp = OperationFactory.CreateMergeSectionOperation(this.model, this.SelectedTile.Value);
                 this.undoManager.Execute(new CompositeOperation(deselectOp, mergeOp));
+            }
+            else if (hasMarker && !hasFeatures && !hasStart && !hasUnits)
+            {
+                this.ExecuteMarkerAware(deselectOp, false);
             }
             else
             {
@@ -1022,6 +1080,15 @@ namespace Mappy.Models
                 ops.AddRange(unitRefs.Select(u => new RemoveSchemaUnitOperation(this.model, u.SchemaIndex, u.UnitId)));
                 this.undoManager.Execute(new CompositeOperation(ops));
             }
+
+            if (this.SelectedMarkerLine.HasValue)
+            {
+                var id = this.SelectedMarkerLine.Value;
+                var op = new CompositeOperation(
+                    new DeselectOperation(this.model),
+                    new RemoveMarkerLineOperation(this.model, id));
+                this.ExecuteMarkerAware(op, false);
+            }
         }
 
         public void UpdateSelectedGUITab(GUITab newTab)
@@ -1037,6 +1104,7 @@ namespace Mappy.Models
                 case GUITab.Starts:
                 case GUITab.Height:
                 case GUITab.Void:
+                case GUITab.Markers:
                 case GUITab.Attributes:
                 case GUITab.Other:
                 default:
@@ -1498,6 +1566,18 @@ namespace Mappy.Models
 
             resizedModel.Attributes.CopyFrom(source.Attributes);
             resizedModel.ReplaceUseOnlyUnitNames(source.UseOnlyUnitNames);
+            foreach (var line in source.MarkerLines)
+            {
+                var moved = new Point[line.Points.Count];
+                for (var i = 0; i < line.Points.Count; i++)
+                {
+                    var point = line.Points[i];
+                    moved[i] = GetResizedLocation(point, originalSize, newSize, tileOffset, moveStandardBorder, 32)
+                        ?? new Point(point.X + (tileOffset.X * 32), point.Y + (tileOffset.Y * 32));
+                }
+
+                resizedModel.AddMarkerLine(new MarkerLine(line.Id, moved));
+            }
             resizedModel.ActiveSchemaIndex = Math.Min(source.ActiveSchemaIndex, Math.Max(0, resizedModel.Attributes.Schemas.Count - 1));
 
             for (var si = 0; si < resizedModel.Attributes.Schemas.Count; si++)
@@ -1709,7 +1789,10 @@ namespace Mappy.Models
             this.OnPropertyChanged(nameof(this.SelectedStartPosition));
             this.OnPropertyChanged(nameof(this.SelectedStartSchemaIndex));
             this.OnPropertyChanged(nameof(this.SelectedUnits));
+            this.OnPropertyChanged(nameof(this.SelectedMarkerLine));
+            this.OnPropertyChanged(nameof(this.MarkerLines));
             this.OnPropertyChanged(nameof(this.ActiveSchemaIndex));
+            this.MarkerLinesChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void PasteMapTileNoDeduplicate(IMapTile tile, int x, int y)
@@ -2051,6 +2134,7 @@ namespace Mappy.Models
             selectionModel.FeatureInstanceChanged += this.ModelOnFeatureInstanceChanged;
             selectionModel.SelectedFeatures.CollectionChanged += this.SelectedFeaturesCollectionChanged;
             selectionModel.SelectedUnits.CollectionChanged += this.SelectedUnitsCollectionChanged;
+            selectionModel.MarkerLinesChanged += this.ModelOnMarkerLinesChanged;
         }
 
         private void DetachModelHandlers(ISelectionModel selectionModel)
@@ -2063,6 +2147,36 @@ namespace Mappy.Models
             selectionModel.FeatureInstanceChanged -= this.ModelOnFeatureInstanceChanged;
             selectionModel.SelectedFeatures.CollectionChanged -= this.SelectedFeaturesCollectionChanged;
             selectionModel.SelectedUnits.CollectionChanged -= this.SelectedUnitsCollectionChanged;
+            selectionModel.MarkerLinesChanged -= this.ModelOnMarkerLinesChanged;
+        }
+
+        private static bool IsMarkerStrokeLongEnough(IReadOnlyList<Point> points)
+        {
+            if (points == null || points.Count < 2)
+            {
+                return false;
+            }
+
+            double length = 0;
+            for (var i = 1; i < points.Count; i++)
+            {
+                var dx = points[i].X - points[i - 1].X;
+                var dy = points[i].Y - points[i - 1].Y;
+                length += Math.Sqrt((dx * dx) + (dy * dy));
+            }
+
+            return length >= 8;
+        }
+
+        private void ExecuteMarkerAware(IReplayableOperation op, bool forceDirty)
+        {
+            var affectsMark = forceDirty || MappySettings.Settings.SaveResourceMarkersWithMap;
+            this.undoManager.Execute(op, affectsMark);
+        }
+
+        private void ModelOnMarkerLinesChanged(object sender, EventArgs e)
+        {
+            this.MarkerLinesChanged?.Invoke(this, e);
         }
 
         private void ModelOnFeatureInstanceChanged(object sender, FeatureInstanceEventArgs e)

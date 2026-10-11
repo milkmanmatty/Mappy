@@ -105,9 +105,10 @@
                 }
 
                 m.ReplaceUseOnlyUnitNames(UseOnlyTdf.ReadHpi(hpi, m.Attributes.UseOnlyUnits));
+                var mapModel = new UndoableMapModel(m, hpipath, readOnly);
+                ResourceMarkerSidecar.TryLoadFromArchive(mapModel, hpi, mappath);
+                return mapModel;
             }
-
-            return new UndoableMapModel(m, hpipath, readOnly);
         }
     }
 }

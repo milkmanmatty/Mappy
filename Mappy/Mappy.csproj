@@ -165,6 +165,7 @@
     <Compile Include="IO\FeatureRenderLoader.cs" />
     <Compile Include="IO\FeatureTdfLoader.cs" />
     <Compile Include="IO\FeatureLoadingUtils.cs" />
+    <Compile Include="IO\ResourceMarkerSidecar.cs" />
     <Compile Include="IO\GafTextureLoader.cs" />
     <Compile Include="IO\UnitLoadingUtils.cs" />
     <Compile Include="IO\UseOnlyTdf.cs" />
@@ -206,6 +207,7 @@
     <Compile Include="Models\FeatureClipboardRecord.cs" />
     <Compile Include="Models\SchemaUnitClipboardRecord.cs" />
     <Compile Include="Models\FeatureInstance.cs" />
+    <Compile Include="Models\MarkerLine.cs" />
     <Compile Include="Models\FeatureInstanceEventArgs.cs" />
     <Compile Include="Models\FeatureViewViewModel.cs" />
     <Compile Include="Models\FillFeaturesOptions.cs" />
@@ -230,6 +232,8 @@
     <Compile Include="Models\SectionViewViewModel.cs" />
     <Compile Include="Models\UndoableMapModel.cs" />
     <Compile Include="Operations\AddFeatureOperation.cs" />
+    <Compile Include="Operations\AddMarkerLineOperation.cs" />
+    <Compile Include="Operations\ClearMarkerLinesOperation.cs" />
     <Compile Include="Operations\ClearAllFeaturesOperation.cs" />
     <Compile Include="Operations\FillFeaturesOperation.cs" />
     <Compile Include="Operations\AddSchemaUnitOperation.cs" />
@@ -243,10 +247,12 @@
     <Compile Include="Operations\VoidBrushOperation.cs" />
     <Compile Include="Operations\MoveFeatureOperation.cs" />
     <Compile Include="Operations\RemoveFeatureOperation.cs" />
+    <Compile Include="Operations\RemoveMarkerLineOperation.cs" />
     <Compile Include="Operations\ReplaceFeatureOperation.cs" />
     <Compile Include="Operations\RemoveSchemaUnitOperation.cs" />
     <Compile Include="Operations\RemoveStartPositionOperation.cs" />
     <Compile Include="Operations\SelectionModel\DeselectOperation.cs" />
+    <Compile Include="Operations\SelectionModel\SelectMarkerLineOperation.cs" />
     <Compile Include="Operations\SelectionModel\SelectFeatureOperation.cs" />
     <Compile Include="Operations\SelectionModel\SelectStartPositionOperation.cs" />
     <Compile Include="Operations\SelectionModel\SelectTileOperation.cs" />
@@ -302,6 +308,7 @@
       <DependentUpon>MapViewPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\MissionPathLayer.cs" />
+    <Compile Include="UI\Controls\ResourceMarkerLayer.cs" />
     <Compile Include="UI\Controls\MinimapControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -430,6 +437,8 @@
     <Compile Include="Util\InitialMissionCommands.cs" />
     <Compile Include="Util\InitialMissionPath.cs" />
     <Compile Include="Util\MetalSpotDisplayFormat.cs" />
+    <Compile Include="Util\ResourceMarkerRegions.cs" />
+    <Compile Include="Util\ResourceRegionLabel.cs" />
     <Compile Include="Util\PlayerSlotVisuals.cs" />
     <Compile Include="Util\TaTeamColorRemap.cs" />
     <Compile Include="Util\Notifier.cs" />

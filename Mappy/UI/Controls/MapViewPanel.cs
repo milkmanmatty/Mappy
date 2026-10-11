@@ -28,12 +28,15 @@ namespace Mappy.UI.Controls
 
         private bool voidEditMode;
 
+        private bool markerEditMode;
+
         private bool missionPickPrecisionCursor;
 
         public MapViewPanel()
         {
             this.InitializeComponent();
 
+            this.mapView.Layers.Add(new DummyLayer());
             this.mapView.Layers.Add(new DummyLayer());
             this.mapView.Layers.Add(new DummyLayer());
             this.mapView.Layers.Add(new DummyLayer());
@@ -65,6 +68,7 @@ namespace Mappy.UI.Controls
             newModel.ViewportLocation.Subscribe(x => this.mapView.ScrollToVirtualLocation(x));
             newModel.HeightEditMode.Subscribe(this.OnHeightEditModeChanged);
             newModel.VoidEditMode.Subscribe(this.OnVoidEditModeChanged);
+            newModel.MarkerEditMode.Subscribe(this.OnMarkerEditModeChanged);
             newModel.MissionPickPrecisionCursor.Subscribe(this.OnMissionPickPrecisionCursorChanged);
 
             newModel.ItemsLayer.Subscribe(x => this.mapView.Layers[0] = x);
@@ -72,6 +76,7 @@ namespace Mappy.UI.Controls
             this.mapView.Layers[2] = newModel.GridLayer;
             this.mapView.Layers[3] = newModel.GuidesLayer;
             this.mapView.Layers[4] = newModel.MissionPathLayer;
+            this.mapView.Layers[5] = newModel.ResourceMarkerLayer;
 
             this.model = newModel;
         }
@@ -79,6 +84,11 @@ namespace Mappy.UI.Controls
         public void SetMissionPathsVisible(bool visible)
         {
             this.model?.SetMissionPathsVisible(visible);
+        }
+
+        public void SetMarkerDrawFreehand(bool freehand)
+        {
+            this.model?.SetMarkerDrawFreehand(freehand);
         }
 
         private bool ShiftMouseWheel(int delta, bool ctrlPressed)
@@ -414,6 +424,12 @@ namespace Mappy.UI.Controls
             return Math.Max(min, Math.Min(max, value));
         }
 
+        private void OnMarkerEditModeChanged(bool enabled)
+        {
+            this.markerEditMode = enabled;
+            this.ApplyMapCursor();
+        }
+
         private void OnHeightEditModeChanged(bool enabled)
         {
             this.heightEditMode = enabled;
@@ -447,7 +463,7 @@ namespace Mappy.UI.Controls
             {
                 this.mapView.Cursor = Cursors.UpArrow;
             }
-            else if (this.voidEditMode)
+            else if (this.voidEditMode || this.markerEditMode)
             {
                 this.mapView.Cursor = Cursors.Cross;
             }

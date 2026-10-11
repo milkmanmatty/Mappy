@@ -31,7 +31,11 @@
             }
         }
 
-        public static void SaveHpi(IReadOnlyMapModel map, string filename, Func<string, string> useOnlyTedClass = null)
+        public static void SaveHpi(
+            IReadOnlyMapModel map,
+            string filename,
+            Func<string, string> useOnlyTedClass = null,
+            string markersTempFile = null)
         {
             var namePart = Path.GetFileNameWithoutExtension(filename);
 
@@ -69,6 +73,11 @@
                 {
                     wr.AddFile(fname + ".tnt", tmpTntName);
                     wr.AddFile(fname + ".ota", tmpOtaName);
+                    if (!string.IsNullOrEmpty(markersTempFile))
+                    {
+                        wr.AddFile(fname + ".markers.json", markersTempFile);
+                    }
+
                     if (tmpUseOnlyName != null)
                     {
                         wr.AddFile(UseOnlyTdf.GetArchivePath(useOnlyName), tmpUseOnlyName);
