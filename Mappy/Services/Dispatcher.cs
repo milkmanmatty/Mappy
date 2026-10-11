@@ -1582,20 +1582,7 @@ namespace Mappy.Services
             var featureList = data as List<FeatureClipboardRecord>;
             if (featureList != null)
             {
-                map.ClearSelection();
-                foreach (var feature in featureList)
-                {
-                    // Split these up so they can be debugged better
-                    // force locs between 0 and MapWidth/Height
-                    int xLocUnsafe = map.ViewportLocation.X + feature.VPOffsetX;
-                    int xLoc = Math.Min(map.MapWidth * 32, Math.Max(0, xLocUnsafe));
-
-                    int yLocUnsafe = map.ViewportLocation.Y + feature.VPOffsetY;
-                    int yLoc = Math.Min(map.MapHeight * 32, Math.Max(0, yLocUnsafe));
-
-                    map.DragDropFeature(feature.FeatureName, xLoc, yLoc, false);
-                }
-
+                map.PasteFeatureCopies(featureList);
                 return true;
             }
 
