@@ -44,6 +44,8 @@ namespace Mappy.UI.Controls
             this.mapView.SizeChanged += new System.EventHandler(this.MapViewSizeChanged);
             this.mapView.DragDrop += new System.Windows.Forms.DragEventHandler(this.MapViewDragDrop);
             this.mapView.DragEnter += new System.Windows.Forms.DragEventHandler(this.MapViewDragEnter);
+            this.mapView.DragOver += new System.Windows.Forms.DragEventHandler(this.MapViewDragOver);
+            this.mapView.DragLeave += new System.EventHandler(this.MapViewDragLeave);
             this.mapView.Paint += new System.Windows.Forms.PaintEventHandler(this.MapViewPaint);
             this.mapView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MapViewKeyDown);
             this.mapView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MapViewKeyUp);

@@ -98,6 +98,7 @@ namespace Mappy.UI.Controls
 
         private void MapViewDragDrop(object sender, DragEventArgs e)
         {
+            this.model?.ClearDragPreview();
             var loc = this.mapView.ToVirtualPoint(this.mapView.PointToClient(new Point(e.X, e.Y)));
             this.model.DragDrop(e.Data, loc, new Point(e.X, e.Y));
         }
@@ -233,6 +234,18 @@ namespace Mappy.UI.Controls
         private void MapViewDragEnter(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.Copy;
+        }
+
+        private void MapViewDragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Copy;
+            var loc = this.mapView.ToVirtualPoint(this.mapView.PointToClient(new Point(e.X, e.Y)));
+            this.model?.UpdateDragPreview(e.Data, loc);
+        }
+
+        private void MapViewDragLeave(object sender, EventArgs e)
+        {
+            this.model?.ClearDragPreview();
         }
 
         private void MapViewPaint(object sender, PaintEventArgs e)

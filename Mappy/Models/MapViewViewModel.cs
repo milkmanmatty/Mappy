@@ -29,6 +29,8 @@ namespace Mappy.Models
 
         private const int HeightCursorDepth = BandboxDepth + 1;
 
+        private const int DragPreviewDepth = HeightCursorDepth + 1;
+
         private static readonly Color BandboxFillColor = Color.FromArgb(127, Color.Blue);
 
         private static readonly Color BandboxBorderColor = Color.FromArgb(127, Color.Black);
@@ -84,6 +86,8 @@ namespace Mappy.Models
 
         private readonly FeatureService featureService;
 
+        private readonly SectionService sectionService;
+
         private readonly BehaviorSubject<bool> heightEditModeObservable = new BehaviorSubject<bool>(false);
 
         private readonly BehaviorSubject<bool> missionPickPrecisionCursor = new BehaviorSubject<bool>(false);
@@ -103,6 +107,10 @@ namespace Mappy.Models
         private bool bandboxMode;
 
         private DrawableItem bandboxMapping;
+
+        private DrawableItem dragPreviewMapping;
+
+        private Rectangle dragPreviewRect = Rectangle.Empty;
 
         private DrawableItem heightCursorMapping;
 
@@ -162,7 +170,12 @@ namespace Mappy.Models
 
         private ObservableCollection<Guid> selectedFeaturesCollection;
 
-        public MapViewViewModel(IReadOnlyApplicationModel model, Dispatcher dispatcher, FeatureService featureService, UnitCatalogService unitCatalogService)
+        public MapViewViewModel(
+            IReadOnlyApplicationModel model,
+            Dispatcher dispatcher,
+            FeatureService featureService,
+            UnitCatalogService unitCatalogService,
+            SectionService sectionService)
         {
             var heightmapVisible = model.PropertyAsObservable(x => x.HeightmapVisible, nameof(model.HeightmapVisible));
             var heightGridVisible = model.PropertyAsObservable(x => x.HeightGridVisible, nameof(model.HeightGridVisible));
@@ -234,6 +247,7 @@ namespace Mappy.Models
             this.model = model;
             this.dispatcher = dispatcher;
             this.featureService = featureService;
+            this.sectionService = sectionService;
             this.unitCatalogService = unitCatalogService;
             this.dispatcher.MissionCoordinatePickChanged += (s, e) =>
                 this.missionPickPrecisionCursor.OnNext(this.dispatcher.MissionPickPrecisionCursor);
@@ -318,6 +332,40 @@ namespace Mappy.Models
                     }
                 }
             }
+        }
+
+        public void UpdateDragPreview(IDataObject data, Point location)
+        {
+            var rect = this.TryGetDragPreviewRect(data, location);
+            if (!rect.HasValue)
+            {
+                this.ClearDragPreview();
+                return;
+            }
+
+            if (this.dragPreviewMapping != null && this.dragPreviewRect == rect.Value)
+            {
+                return;
+            }
+
+            this.ReplaceDragPreview(rect.Value);
+        }
+
+        public void ClearDragPreview()
+        {
+            if (this.dragPreviewMapping == null)
+            {
+                return;
+            }
+
+            this.itemsLayer.Value.Items.Remove(this.dragPreviewMapping);
+            if (this.dragPreviewMapping.Drawable is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
+
+            this.dragPreviewMapping = null;
+            this.dragPreviewRect = Rectangle.Empty;
         }
 
         public void ClientSizeChanged(Size size)
@@ -781,6 +829,7 @@ namespace Mappy.Models
 
         private void UpdateItemsLayer()
         {
+            this.ClearDragPreview();
             this.heightCursorMapping = null;
             this.voidCursorMapping = null;
             if (this.mapModel == null)
@@ -1136,6 +1185,128 @@ namespace Mappy.Models
             {
                 this.selectedFeaturesCollection.CollectionChanged += this.SelectedFeaturesCollectionChanged;
             }
+        }
+
+        private Rectangle? TryGetDragPreviewRect(IDataObject data, Point location)
+        {
+            if (this.mapModel == null || !data.GetDataPresent(DataFormats.Text))
+            {
+                return null;
+            }
+
+            var dataString = (string)data.GetData(DataFormats.Text);
+            if (string.IsNullOrEmpty(dataString) || dataString.StartsWith("MAPPYUNIT|", StringComparison.Ordinal))
+            {
+                return null;
+            }
+
+            int id;
+            if (int.TryParse(dataString, out id))
+            {
+                return this.GetSectionPreviewRect(id, location);
+            }
+
+            return this.GetFeaturePreviewRect(dataString, location);
+        }
+
+        private Rectangle? GetSectionPreviewRect(int id, Point location)
+        {
+            if (this.mapModel.MapWidth <= 0 || this.mapModel.MapHeight <= 0)
+            {
+                return null;
+            }
+
+            var section = this.sectionService.TryGetCachedSection(id);
+            if (section.IsNone)
+            {
+                return null;
+            }
+
+            var quantX = location.X / 32;
+            var quantY = location.Y / 32;
+            if (quantX < 0)
+            {
+                quantX = 0;
+            }
+
+            if (quantY < 0)
+            {
+                quantY = 0;
+            }
+
+            if (quantX >= this.mapModel.MapWidth)
+            {
+                quantX = this.mapModel.MapWidth - 1;
+            }
+
+            if (quantY >= this.mapModel.MapHeight)
+            {
+                quantY = this.mapModel.MapHeight - 1;
+            }
+
+            return section.Match(
+                s =>
+                    {
+                        if (s.PixelWidth <= 0 || s.PixelHeight <= 0)
+                        {
+                            return (Rectangle?)null;
+                        }
+
+                        return new Rectangle(quantX * 32, quantY * 32, s.PixelWidth, s.PixelHeight);
+                    },
+                () => (Rectangle?)null);
+        }
+
+        private Rectangle? GetFeaturePreviewRect(string name, Point location)
+        {
+            var feature = this.featureService.TryGetFeature(name);
+            if (feature.IsNone)
+            {
+                return null;
+            }
+
+            var cell = Util.ScreenToHeightIndex(this.mapModel.BaseTile.HeightGrid, location);
+            if (!cell.HasValue)
+            {
+                return null;
+            }
+
+            return feature.Match(
+                f =>
+                    {
+                        if (f.Image == null)
+                        {
+                            return (Rectangle?)null;
+                        }
+
+                        var bounds = f.GetDrawBounds(this.mapModel.BaseTile.HeightGrid, cell.Value.X, cell.Value.Y);
+                        if (bounds.Width <= 0 || bounds.Height <= 0)
+                        {
+                            return (Rectangle?)null;
+                        }
+
+                        return bounds;
+                    },
+                () => (Rectangle?)null);
+        }
+
+        private void ReplaceDragPreview(Rectangle rect)
+        {
+            this.ClearDragPreview();
+
+            var bandbox = DrawableBandbox.CreateSimple(
+                rect.Size,
+                BandboxFillColor,
+                BandboxBorderColor);
+
+            this.dragPreviewMapping = new DrawableItem(
+                rect.X,
+                rect.Y,
+                DragPreviewDepth,
+                bandbox);
+            this.dragPreviewMapping.Locked = true;
+            this.dragPreviewRect = rect;
+            this.itemsLayer.Value.Items.Add(this.dragPreviewMapping);
         }
 
         private void UpdateBandbox()
