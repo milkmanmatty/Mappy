@@ -63,6 +63,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CompositeHeightGridTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ErrorDiffusionPaletteQuantizerTest.cs" />
     <Compile Include="InitialMissionCommandsTest.cs" />

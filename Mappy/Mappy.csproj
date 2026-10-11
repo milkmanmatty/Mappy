@@ -130,6 +130,7 @@
   <ItemGroup>
     <Compile Include="Collections\BindingGrid.cs" />
     <Compile Include="Collections\BindingSparseGrid.cs" />
+    <Compile Include="Collections\CompositeHeightGrid.cs" />
     <Compile Include="Collections\Grid.cs" />
     <Compile Include="Collections\GridCoordinates.cs" />
     <Compile Include="Collections\GridEventArgs.cs" />
