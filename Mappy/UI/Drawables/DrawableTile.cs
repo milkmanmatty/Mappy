@@ -2,6 +2,7 @@ namespace Mappy.UI.Drawables
 {
     using System.Drawing;
 
+    using Mappy.Collections;
     using Mappy.Data;
     using Mappy.UI.Painters;
 
@@ -16,13 +17,18 @@ namespace Mappy.UI.Drawables
         private bool drawHeightGrid;
 
         public DrawableTile(IMapTile tile)
+            : this(tile, tile.HeightGrid)
+        {
+        }
+
+        public DrawableTile(IMapTile tile, IGrid<int> heightGrid)
         {
             this.tile = tile;
             this.painter = new BitmapGridPainter(tile.TileGrid, 32);
-            this.heightPainter = new ContourHeightPainter(tile.HeightGrid, 16);
+            this.heightPainter = new ContourHeightPainter(heightGrid, 16);
             this.heightPainter.ShowSeaLevel = true;
 
-            this.heightGridPainter = new HeightGridPainter(tile.HeightGrid, 16);
+            this.heightGridPainter = new HeightGridPainter(heightGrid, 16);
         }
 
         public override Size Size => new Size(this.Width, this.Height);

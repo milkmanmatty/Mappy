@@ -952,7 +952,10 @@ namespace Mappy.Models
                 return;
             }
 
-            this.baseTile = new DrawableTile(this.mapModel.BaseTile);
+            var heightView = new CompositeHeightGrid(
+                this.mapModel.BaseTile.HeightGrid,
+                this.mapModel.FloatingTiles);
+            this.baseTile = new DrawableTile(this.mapModel.BaseTile, heightView);
             this.baseTile.BackgroundColor = Color.CornflowerBlue;
             this.baseTile.DrawHeightMap = this.model.HeightmapVisible;
             this.baseTile.DrawHeightGrid = this.model.HeightGridVisible;
@@ -1952,6 +1955,7 @@ namespace Mappy.Models
 
             this.RemoveTile(index);
             this.InsertTile(item, index);
+            this.InvalidateBaseHeightOverlays();
         }
 
         private void StartPositionChanged(object sender, StartPositionChangedEventArgs e)
@@ -2288,6 +2292,16 @@ namespace Mappy.Models
                     break;
                 default:
                     throw new ArgumentException("unknown list changed type: " + e.ListChangedType);
+            }
+
+            this.InvalidateBaseHeightOverlays();
+        }
+
+        private void InvalidateBaseHeightOverlays()
+        {
+            if (this.baseTile != null)
+            {
+                this.baseTile.Invalidate();
             }
         }
 
