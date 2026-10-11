@@ -54,6 +54,10 @@ namespace Mappy.Models
 
         void DragDrop(IDataObject item, Point location, Point screenLocation);
 
+        void UpdateDragPreview(IDataObject item, Point location);
+
+        void ClearDragPreview();
+
         void ClientSizeChanged(Size size);
 
         void ScrollPositionChanged(Point position);

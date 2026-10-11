@@ -34,6 +34,13 @@ namespace Mappy.Services
 
         public SectionInfo Get(int id) => this.sections[id];
 
+        public Maybe<Section> TryGetCachedSection(int id)
+        {
+            return this.sectionsCache.TryGetValue(id, out var section)
+                ? Maybe.Return(section)
+                : Maybe.None<Section>();
+        }
+
         public void AddSections(IEnumerable<SectionInfo> sectionsEnumer)
         {
             foreach (var s in sectionsEnumer)

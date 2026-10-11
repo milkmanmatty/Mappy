@@ -82,7 +82,7 @@ namespace Mappy
             mainForm.SectionView.SetModel(new SectionViewViewModel(sectionsService));
             mainForm.FeatureView.SetModel(new FeatureViewViewModel(featureService, dispatcher));
 
-            mainForm.MapViewPanel.SetModel(new MapViewViewModel(model, dispatcher, featureService, unitCatalogService));
+            mainForm.MapViewPanel.SetModel(new MapViewViewModel(model, dispatcher, featureService, unitCatalogService, sectionsService));
             mainForm.SetMissionPathsVisible(MappySettings.Settings.GetDefaultOrdersVisibleOrDefault());
             mainForm.SetMissionServices(model, dispatcher, unitCatalogService);
 
