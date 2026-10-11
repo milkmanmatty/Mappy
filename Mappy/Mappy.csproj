@@ -326,6 +326,7 @@
       <DependentUpon>SectionView.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\SelectableItemsLayer.cs" />
+    <Compile Include="UI\Controls\SelectionOutlineLayer.cs" />
     <Compile Include="UI\Controls\StartPositionDragData.cs" />
     <Compile Include="UI\Controls\StartPositionsView.cs">
       <SubType>UserControl</SubType>

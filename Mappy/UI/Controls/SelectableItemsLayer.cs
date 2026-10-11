@@ -74,12 +74,10 @@
             return this.SelectedItemsContains(item);
         }
 
-        protected override void DoDraw(Graphics graphics, Rectangle clipRectangle)
+        public void DrawSelectionOutlines(Graphics graphics, Rectangle clipRectangle)
         {
-            // draw items
             foreach (var i in this.Items.EnumerateIntersecting(clipRectangle))
             {
-                i.Draw(graphics, clipRectangle);
                 if (this.selectedItems.Contains(i))
                 {
                     graphics.DrawRectangle(
@@ -89,6 +87,14 @@
                         i.Drawable.Width,
                         i.Drawable.Height);
                 }
+            }
+        }
+
+        protected override void DoDraw(Graphics graphics, Rectangle clipRectangle)
+        {
+            foreach (var i in this.Items.EnumerateIntersecting(clipRectangle))
+            {
+                i.Draw(graphics, clipRectangle);
             }
         }
 

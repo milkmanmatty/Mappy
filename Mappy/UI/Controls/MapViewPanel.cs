@@ -42,6 +42,7 @@ namespace Mappy.UI.Controls
             this.mapView.Layers.Add(new DummyLayer());
             this.mapView.Layers.Add(new DummyLayer());
             this.mapView.Layers.Add(new DummyLayer());
+            this.mapView.Layers.Add(new DummyLayer());
             this.mapView.ShiftMouseWheelHandler = this.ShiftMouseWheel;
             this.mapView.ZoomFactorChanged += this.MapViewZoomFactorChanged;
 
@@ -74,9 +75,10 @@ namespace Mappy.UI.Controls
             newModel.ItemsLayer.Subscribe(x => this.mapView.Layers[0] = x);
             newModel.VoidLayer.Subscribe(x => this.mapView.Layers[1] = x);
             this.mapView.Layers[2] = newModel.GridLayer;
-            this.mapView.Layers[3] = newModel.GuidesLayer;
-            this.mapView.Layers[4] = newModel.MissionPathLayer;
-            this.mapView.Layers[5] = newModel.ResourceMarkerLayer;
+            this.mapView.Layers[3] = newModel.SelectionOutlineLayer;
+            this.mapView.Layers[4] = newModel.GuidesLayer;
+            this.mapView.Layers[5] = newModel.MissionPathLayer;
+            this.mapView.Layers[6] = newModel.ResourceMarkerLayer;
 
             this.model = newModel;
         }

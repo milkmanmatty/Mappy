@@ -18,6 +18,8 @@ namespace Mappy.Models
 
         ILayer GridLayer { get; }
 
+        ILayer SelectionOutlineLayer { get; }
+
         ILayer MissionPathLayer { get; }
 
         ILayer ResourceMarkerLayer { get; }
