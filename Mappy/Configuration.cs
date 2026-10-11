@@ -56,6 +56,10 @@ namespace Mappy
 
         public bool ShowCalculatedMetalDepositValue { get; set; }
 
+        public bool SaveResourceMarkersWithMap { get; set; }
+
+        public int? ResourceMarkerLineColorArgb { get; set; }
+
         public bool ShowUnitFriendlyNameFirst { get; set; }
 
         public bool ShowUnitFriendlyNameOnMap { get; set; }
@@ -178,11 +182,20 @@ namespace Mappy
 
         public static Color DefaultBlobFeatureBaseColor { get; } = Color.FromArgb(255, 220, 80);
 
+        public static Color DefaultResourceMarkerLineColor { get; } = Color.Yellow;
+
         [XmlIgnore]
         public Color BlobFeatureBaseColor
         {
             get => this.GetBlobFeatureBaseColorOrDefault();
             set => this.BlobFeatureBaseColorArgb = value.ToArgb();
+        }
+
+        public Color GetResourceMarkerLineColorOrDefault()
+        {
+            return this.ResourceMarkerLineColorArgb.HasValue
+                ? Color.FromArgb(this.ResourceMarkerLineColorArgb.Value)
+                : DefaultResourceMarkerLineColor;
         }
 
         public Color GetBlobFeatureBaseColorOrDefault()

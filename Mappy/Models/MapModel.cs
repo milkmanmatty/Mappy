@@ -41,6 +41,10 @@ namespace Mappy.Models
 
         private readonly List<string> useOnlyUnitNames = new List<string>();
 
+        private readonly List<MarkerLine> markerLines = new List<MarkerLine>();
+
+        private Guid? selectedMarkerLine;
+
         public MapModel(int width, int height)
             : this(width, height, new MapAttributes())
         {
@@ -79,6 +83,8 @@ namespace Mappy.Models
         }
 
         public event EventHandler<FeatureInstanceEventArgs> FeatureInstanceChanged;
+
+        public event EventHandler MarkerLinesChanged;
 
         public event EventHandler<GridEventArgs> TileGridChanged
         {
@@ -162,6 +168,14 @@ namespace Mappy.Models
         }
 
         public ObservableCollection<Guid> SelectedFeatures => this.selectedFeatures;
+
+        public IReadOnlyList<MarkerLine> MarkerLines => this.markerLines;
+
+        public Guid? SelectedMarkerLine
+        {
+            get => this.selectedMarkerLine;
+            private set => this.SetField(ref this.selectedMarkerLine, value, nameof(this.SelectedMarkerLine));
+        }
 
         /// <summary>
         /// <see cref="IMapModel.AddFeatureInstance"/>.
@@ -438,6 +452,70 @@ namespace Mappy.Models
             this.DeselectStartPosition();
             this.DeselectTile();
             this.DeselectUnits();
+            this.DeselectMarkerLine();
+        }
+
+        public void AddMarkerLine(MarkerLine line)
+        {
+            if (line == null)
+            {
+                throw new ArgumentNullException(nameof(line));
+            }
+
+            if (this.FindMarkerLine(line.Id) != null)
+            {
+                throw new ArgumentException("A marker line with the given ID already exists.");
+            }
+
+            this.markerLines.Add(line);
+            this.OnMarkerLinesChanged();
+        }
+
+        public void RemoveMarkerLine(Guid id)
+        {
+            var index = this.markerLines.FindIndex(line => line.Id == id);
+            if (index < 0)
+            {
+                return;
+            }
+
+            this.markerLines.RemoveAt(index);
+            if (this.SelectedMarkerLine == id)
+            {
+                this.SelectedMarkerLine = null;
+            }
+
+            this.OnMarkerLinesChanged();
+        }
+
+        public MarkerLine FindMarkerLine(Guid id)
+        {
+            return this.markerLines.Find(line => line.Id == id);
+        }
+
+        public void ReplaceMarkerLines(IEnumerable<MarkerLine> lines)
+        {
+            this.markerLines.Clear();
+            this.SelectedMarkerLine = null;
+            if (lines != null)
+            {
+                this.markerLines.AddRange(lines);
+            }
+
+            this.OnMarkerLinesChanged();
+        }
+
+        public void SelectMarkerLine(Guid id)
+        {
+            if (this.FindMarkerLine(id) != null)
+            {
+                this.SelectedMarkerLine = id;
+            }
+        }
+
+        public void DeselectMarkerLine()
+        {
+            this.SelectedMarkerLine = null;
         }
 
         private void AddFeatureInstanceInternal(FeatureInstance instance, ISet<Guid> featureIgnoreList = null)
@@ -527,6 +605,11 @@ namespace Mappy.Models
 
                     break;
             }
+        }
+
+        private void OnMarkerLinesChanged()
+        {
+            this.MarkerLinesChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnFeatureInstanceChanged(FeatureInstanceEventArgs e)

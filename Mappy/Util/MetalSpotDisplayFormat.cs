@@ -15,10 +15,29 @@ namespace Mappy.Util
                 return raw.ToString(CultureInfo.CurrentCulture);
             }
 
+            return FormatCalculatedTotal(GetCalculatedValue(feature));
+        }
+
+        public static double GetCalculatedValue(Feature feature)
+        {
+            if (feature == null || feature.MetalSpotValue <= 0)
+            {
+                return 0;
+            }
+
             var footprintTiles = feature.Footprint.Width * feature.Footprint.Height;
+            if (footprintTiles < 1)
+            {
+                footprintTiles = 1;
+            }
+
             // Apparently TA adds 1 to the base metal value (this fixes e.g. SlateMetal5)
-            var value = (raw + 1) * 0.001 * footprintTiles;
-            return Math.Round(value, 1, MidpointRounding.AwayFromZero).ToString("0.0", CultureInfo.CurrentCulture);
+            return (feature.MetalSpotValue + 1) * 0.001 * footprintTiles;
+        }
+
+        public static string FormatCalculatedTotal(double sum)
+        {
+            return Math.Round(sum, 1, MidpointRounding.AwayFromZero).ToString("0.0", CultureInfo.CurrentCulture);
         }
     }
 }

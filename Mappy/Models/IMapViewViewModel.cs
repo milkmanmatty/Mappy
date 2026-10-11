@@ -20,11 +20,15 @@ namespace Mappy.Models
 
         ILayer MissionPathLayer { get; }
 
+        ILayer ResourceMarkerLayer { get; }
+
         IObservable<Point> ViewportLocation { get; }
 
         IObservable<bool> HeightEditMode { get; }
 
         IObservable<bool> VoidEditMode { get; }
+
+        IObservable<bool> MarkerEditMode { get; }
 
         IObservable<bool> MissionPickPrecisionCursor { get; }
 
@@ -41,6 +45,8 @@ namespace Mappy.Models
         void KeyDown(Keys key);
 
         void SetMissionPathsVisible(bool visible);
+
+        void SetMarkerDrawFreehand(bool freehand);
 
         bool ShiftMouseWheel(int delta, bool ctrlPressed);
 

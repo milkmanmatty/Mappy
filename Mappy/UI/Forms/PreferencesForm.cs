@@ -13,6 +13,10 @@ namespace Mappy.UI.Forms
 
         private bool blobFeatureBaseColorCustomized;
 
+        private Color resourceMarkerLineColor = Configuration.DefaultResourceMarkerLineColor;
+
+        private bool resourceMarkerLineColorCustomized;
+
         private Color unitNameTextColor = Configuration.DefaultUnitNameTextColor;
 
         private bool unitNameTextColorCustomized;
@@ -66,6 +70,9 @@ namespace Mappy.UI.Forms
             this.fullResourceNamesCheckBox.Checked = MappySettings.Settings.FullResourceNames;
             this.featureReclaimAmountsCheckBox.Checked = MappySettings.Settings.ShowFeatureReclaimAmounts;
             this.calculatedMetalDepositValueCheckBox.Checked = MappySettings.Settings.ShowCalculatedMetalDepositValue;
+            this.saveResourceMarkersCheckBox.Checked = MappySettings.Settings.SaveResourceMarkersWithMap;
+            this.resourceMarkerLineColor = MappySettings.Settings.GetResourceMarkerLineColorOrDefault();
+            this.resourceMarkerLineColorCustomized = MappySettings.Settings.ResourceMarkerLineColorArgb.HasValue;
             this.showUnitFriendlyNameFirstCheckBox.Checked = MappySettings.Settings.ShowUnitFriendlyNameFirst;
             this.showUnitFriendlyNameOnMapCheckBox.Checked = MappySettings.Settings.ShowUnitFriendlyNameOnMap;
             this.unitsFolderNameTextBox.Text = MappySettings.Settings.GetUnitsFolderNameOrDefault();
@@ -119,6 +126,22 @@ namespace Mappy.UI.Forms
             var gridSizeText = gridSize + "x" + gridSize;
             var gridSizeIndex = this.defaultGridSizeComboBox.Items.IndexOf(gridSizeText);
             this.defaultGridSizeComboBox.SelectedIndex = gridSizeIndex >= 0 ? gridSizeIndex : 0;
+        }
+
+        private void ResourceMarkerLineColorButtonClick(object sender, EventArgs e)
+        {
+            using (var colorDialog = new ColorDialog())
+            {
+                colorDialog.Color = this.resourceMarkerLineColor;
+                colorDialog.FullOpen = true;
+                if (colorDialog.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                this.resourceMarkerLineColor = colorDialog.Color;
+                this.resourceMarkerLineColorCustomized = true;
+            }
         }
 
         private void BlobFeatureBaseCustomizeButtonClick(object sender, EventArgs e)
@@ -310,6 +333,10 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.FullResourceNames = this.fullResourceNamesCheckBox.Checked;
             MappySettings.Settings.ShowFeatureReclaimAmounts = this.featureReclaimAmountsCheckBox.Checked;
             MappySettings.Settings.ShowCalculatedMetalDepositValue = this.calculatedMetalDepositValueCheckBox.Checked;
+            MappySettings.Settings.SaveResourceMarkersWithMap = this.saveResourceMarkersCheckBox.Checked;
+            MappySettings.Settings.ResourceMarkerLineColorArgb = this.resourceMarkerLineColorCustomized
+                ? (int?)this.resourceMarkerLineColor.ToArgb()
+                : null;
             MappySettings.Settings.ShowUnitFriendlyNameFirst = this.showUnitFriendlyNameFirstCheckBox.Checked;
             MappySettings.Settings.ShowUnitFriendlyNameOnMap = this.showUnitFriendlyNameOnMapCheckBox.Checked;
             MappySettings.Settings.UnitsFolderName = string.IsNullOrWhiteSpace(this.unitsFolderNameTextBox.Text)

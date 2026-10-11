@@ -1,6 +1,7 @@
 namespace Mappy.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
 
@@ -9,6 +10,8 @@ namespace Mappy.Models
     public interface ISelectionModel : IMapModel, INotifyPropertyChanged
     {
         event EventHandler<FeatureInstanceEventArgs> FeatureInstanceChanged;
+
+        event EventHandler MarkerLinesChanged;
 
         event EventHandler<GridEventArgs> TileGridChanged;
 
@@ -27,6 +30,10 @@ namespace Mappy.Models
         ObservableCollection<Guid> SelectedFeatures { get; }
 
         ObservableCollection<MapUnitRef> SelectedUnits { get; }
+
+        IReadOnlyList<MarkerLine> MarkerLines { get; }
+
+        Guid? SelectedMarkerLine { get; }
 
         void SelectTile(int index);
 
@@ -63,5 +70,17 @@ namespace Mappy.Models
         void DeleteSelectedStartPosition();
 
         void DeselectAll();
+
+        void AddMarkerLine(MarkerLine line);
+
+        void RemoveMarkerLine(Guid id);
+
+        MarkerLine FindMarkerLine(Guid id);
+
+        void ReplaceMarkerLines(IEnumerable<MarkerLine> lines);
+
+        void SelectMarkerLine(Guid id);
+
+        void DeselectMarkerLine();
     }
 }

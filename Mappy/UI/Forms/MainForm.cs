@@ -854,6 +854,19 @@ namespace Mappy.UI.Forms
             this.model.ToggleHeightGridMenuItemClick();
         }
 
+        private void ClearMarkersButtonClick(object sender, EventArgs e)
+        {
+            this.model?.ClearMarkerLines();
+        }
+
+        private void MarkerDrawModeChanged(object sender, EventArgs e)
+        {
+            if (sender is RadioButton button && button.Checked)
+            {
+                this.mapViewPanel.SetMarkerDrawFreehand(button == this.markerFreehandRadioButton);
+            }
+        }
+
         private void GUITabs_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (this.sidebarTabs.SelectedTab == null)

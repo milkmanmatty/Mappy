@@ -19,6 +19,8 @@ namespace Mappy.Operations.SelectionModel
 
         private List<MapUnitRef> units;
 
+        private Guid? prevMarker;
+
         public DeselectOperation(ISelectionModel model)
         {
             this.model = model;
@@ -31,6 +33,7 @@ namespace Mappy.Operations.SelectionModel
             this.units = new List<MapUnitRef>(this.model.SelectedUnits);
             this.prevStartSchema = this.model.SelectedStartSchemaIndex;
             this.prevStartSlot = this.model.SelectedStartPosition;
+            this.prevMarker = this.model.SelectedMarkerLine;
 
             this.model.DeselectAll();
         }
@@ -55,6 +58,11 @@ namespace Mappy.Operations.SelectionModel
             foreach (var u in this.units)
             {
                 this.model.SelectUnit(u);
+            }
+
+            if (this.prevMarker.HasValue)
+            {
+                this.model.SelectMarkerLine(this.prevMarker.Value);
             }
         }
     }

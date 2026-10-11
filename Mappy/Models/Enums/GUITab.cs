@@ -7,6 +7,7 @@ namespace Mappy.Models.Enums
         Starts,
         Height,
         Void,
+        Markers,
         Attributes,
         Mission,
         Other,

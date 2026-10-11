@@ -1004,6 +1004,23 @@ namespace Mappy.Services
             this.model.Map.IfSome(x => x.DeleteSelection());
         }
 
+        public bool AddMarkerLine(IReadOnlyList<System.Drawing.Point> points)
+        {
+            var added = false;
+            this.model.Map.IfSome(map => added = map.AddMarkerLine(points));
+            return added;
+        }
+
+        public void SelectMarkerLine(Guid id)
+        {
+            this.model.Map.IfSome(map => map.SelectMarkerLine(id));
+        }
+
+        public void ClearMarkerLines()
+        {
+            this.model.Map.IfSome(map => map.ClearMarkerLines());
+        }
+
         public void ClearSelection()
         {
             this.model.Map.IfSome(x => x.ClearSelection());
@@ -1351,6 +1368,7 @@ namespace Mappy.Services
                 File.Move(tmpTntName, tntName);
                 File.Move(tmpOtaName, otaName);
                 UseOnlyTdf.WriteLoose(tntName, map.Attributes.UseOnlyUnits, map.UseOnlyUnitNames, useOnlyTedClass);
+                ResourceMarkerSidecar.TrySave(map, tntName);
             }
             catch
             {
@@ -1627,11 +1645,27 @@ namespace Mappy.Services
             var tmpExtension = $".mappytemp-{randomValue}";
 
             var tmpFileName = Path.ChangeExtension(filename, tmpExtension);
+            var markersTemp = ResourceMarkerSidecar.TryCreateTempFile(map);
+            if (markersTemp == null
+                && !MappySettings.Settings.SaveResourceMarkersWithMap
+                && string.Equals(map.FilePath, filename, StringComparison.OrdinalIgnoreCase))
+            {
+                markersTemp = ResourceMarkerSidecar.TryExtractArchiveEntry(filename);
+            }
+
             try
             {
-                MapSaver.SaveHpi(map, tmpFileName, this.unitCatalogService.GetUnitTedClass);
+                MapSaver.SaveHpi(map, tmpFileName, this.unitCatalogService.GetUnitTedClass, markersTemp);
                 File.Delete(filename);
                 File.Move(tmpFileName, filename);
+                if (MappySettings.Settings.SaveResourceMarkersWithMap)
+                {
+                    var sidecar = ResourceMarkerSidecar.GetSidecarPath(filename);
+                    if (sidecar != null && File.Exists(sidecar))
+                    {
+                        File.Delete(sidecar);
+                    }
+                }
             }
             catch
             {
@@ -1639,6 +1673,13 @@ namespace Mappy.Services
                 // Ensure that it is always deleted if an error occurs.
                 File.Delete(tmpFileName);
                 throw;
+            }
+            finally
+            {
+                if (markersTemp != null)
+                {
+                    File.Delete(markersTemp);
+                }
             }
 
             map.MarkSaved(filename);
@@ -1829,6 +1870,7 @@ namespace Mappy.Services
         private void OpenTnt(string filename)
         {
             var mapModel = this.mapLoadingService.CreateFromTnt(filename);
+            ResourceMarkerSidecar.TryLoad(mapModel);
             this.model.Map = Maybe.Some(mapModel);
             this.IngestOtaUnitNames(mapModel);
             this.SetSelectedGUITabForMap();

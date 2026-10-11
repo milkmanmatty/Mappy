@@ -71,6 +71,8 @@ namespace Mappy.Models
 
         private readonly MissionPathLayer missionPaths = new MissionPathLayer();
 
+        private readonly ResourceMarkerLayer resourceMarkers = new ResourceMarkerLayer();
+
         private readonly BehaviorSubject<SelectableItemsLayer> itemsLayer =
             new BehaviorSubject<SelectableItemsLayer>(new SelectableItemsLayer(0, 0));
 
@@ -87,6 +89,8 @@ namespace Mappy.Models
         private readonly BehaviorSubject<bool> missionPickPrecisionCursor = new BehaviorSubject<bool>(false);
 
         private readonly BehaviorSubject<bool> voidEditModeObservable = new BehaviorSubject<bool>(false);
+
+        private readonly BehaviorSubject<bool> markerEditModeObservable = new BehaviorSubject<bool>(false);
 
         private IMainModel mapModel;
 
@@ -115,6 +119,16 @@ namespace Mappy.Models
         private bool heightEditMode;
 
         private bool voidEditMode;
+
+        private bool markerEditMode;
+
+        private bool markerDrawing;
+
+        private bool markerSelecting;
+
+        private bool markerFreehand;
+
+        private readonly List<Point> markerStroke = new List<Point>();
 
         private int heightEditInterval = 4;
 
@@ -250,6 +264,8 @@ namespace Mappy.Models
 
         public IObservable<bool> VoidEditMode => this.voidEditModeObservable;
 
+        public IObservable<bool> MarkerEditMode => this.markerEditModeObservable;
+
         public IObservable<bool> MissionPickPrecisionCursor => this.missionPickPrecisionCursor;
 
         public IObservable<ILayer> ItemsLayer => this.itemsLayer;
@@ -261,6 +277,8 @@ namespace Mappy.Models
         public ILayer GuidesLayer => this.guides;
 
         public ILayer MissionPathLayer => this.missionPaths;
+
+        public ILayer ResourceMarkerLayer => this.resourceMarkers;
 
         public void DragDrop(IDataObject data, Point location, Point screenLocation)
         {
@@ -361,6 +379,12 @@ namespace Mappy.Models
                 return;
             }
 
+            if (this.markerEditMode)
+            {
+                this.HandleMarkerMouseDown(location);
+                return;
+            }
+
             if (!this.itemsLayer.Value.IsInSelection(location.X, location.Y, this.IsSelectableMapItem))
             {
                 var hit = this.itemsLayer.Value.HitTest(location.X, location.Y, this.IsSelectableMapItem);
@@ -418,6 +442,12 @@ namespace Mappy.Models
                 return;
             }
 
+            if (this.markerEditMode)
+            {
+                this.mouseDown = false;
+                return;
+            }
+
             if (!this.itemsLayer.Value.IsInSelection(location.X, location.Y, this.IsSelectableMapItem)
                 && this.model.SelectedGUITab == GUITab.Mission
                 && !string.IsNullOrEmpty(this.unitCatalogService.SelectedUnitName))
@@ -463,6 +493,17 @@ namespace Mappy.Models
                     return;
                 }
 
+                if (this.markerEditMode && (this.markerDrawing || this.markerSelecting))
+                {
+                    if (this.markerDrawing)
+                    {
+                        this.ExtendMarkerStroke(location);
+                        this.resourceMarkers.SetPreview(this.markerStroke);
+                    }
+
+                    return;
+                }
+
                 if (this.bandboxMode)
                 {
                     this.dispatcher.GrowBandbox(
@@ -504,6 +545,25 @@ namespace Mappy.Models
                 return;
             }
 
+            if (this.markerEditMode && (this.markerDrawing || this.markerSelecting))
+            {
+                if (this.markerDrawing)
+                {
+                    this.ExtendMarkerStroke(this.lastMousePos);
+                    var stroke = this.markerStroke.ToArray();
+                    this.markerDrawing = false;
+                    this.markerStroke.Clear();
+                    this.resourceMarkers.SetPreview(null);
+                    if (!this.dispatcher.AddMarkerLine(stroke))
+                    {
+                        this.dispatcher.ClearSelection();
+                    }
+                }
+
+                this.markerSelecting = false;
+                return;
+            }
+
             if (this.bandboxMode)
             {
                 this.dispatcher.CommitBandbox();
@@ -526,6 +586,19 @@ namespace Mappy.Models
             {
                 this.dispatcher.DeleteSelection();
             }
+        }
+
+        public void SetMarkerDrawFreehand(bool freehand)
+        {
+            if (this.markerFreehand == freehand)
+            {
+                return;
+            }
+
+            this.markerFreehand = freehand;
+            this.markerDrawing = false;
+            this.markerStroke.Clear();
+            this.resourceMarkers.SetPreview(null);
         }
 
         public void SetMissionPathsVisible(bool visible)
@@ -660,6 +733,7 @@ namespace Mappy.Models
             this.UnwireMapModel();
             this.mapModel = undoModel.Or(null);
             this.missionPaths.SetMap(this.mapModel);
+            this.resourceMarkers.SetMap(this.mapModel);
             this.WireMapModel();
             this.ResetView();
         }
@@ -681,6 +755,7 @@ namespace Mappy.Models
             }
 
             this.mapModel.FeatureInstanceChanged -= this.FeatureInstanceChanged;
+            this.mapModel.MarkerLinesChanged -= this.MarkerLinesChanged;
             this.mapModel.StartPositionChanged -= this.StartPositionChanged;
             this.mapModel.Attributes.SchemaUnitsChanged -= this.SchemaUnitsChangedHandler;
             this.mapModel.Attributes.SchemasChanged -= this.SchemasChangedHandler;
@@ -898,6 +973,7 @@ namespace Mappy.Models
             }
 
             this.mapModel.FeatureInstanceChanged += this.FeatureInstanceChanged;
+            this.mapModel.MarkerLinesChanged += this.MarkerLinesChanged;
 
             this.mapModel.StartPositionChanged += this.StartPositionChanged;
 
@@ -1036,6 +1112,9 @@ namespace Mappy.Models
                     this.RefreshSelection();
                     this.missionPaths.InvalidatePaths();
                     break;
+                case "SelectedMarkerLine":
+                    this.resourceMarkers.InvalidateAppearance();
+                    break;
             }
         }
 
@@ -1096,15 +1175,22 @@ namespace Mappy.Models
         {
             var heightEnabled = tab == GUITab.Height;
             var voidEnabled = tab == GUITab.Void;
-            if (this.heightEditMode == heightEnabled && this.voidEditMode == voidEnabled)
+            var markerEnabled = tab == GUITab.Markers;
+            if (this.heightEditMode == heightEnabled && this.voidEditMode == voidEnabled && this.markerEditMode == markerEnabled)
             {
                 return;
             }
 
             this.heightEditMode = heightEnabled;
             this.voidEditMode = voidEnabled;
+            this.markerEditMode = markerEnabled;
             this.heightEditModeObservable.OnNext(heightEnabled);
             this.voidEditModeObservable.OnNext(voidEnabled);
+            this.markerEditModeObservable.OnNext(markerEnabled);
+            this.markerDrawing = false;
+            this.markerSelecting = false;
+            this.markerStroke.Clear();
+            this.resourceMarkers.SetPreview(null);
 
             this.mouseDown = false;
             this.bandboxMode = false;
@@ -2034,8 +2120,68 @@ namespace Mappy.Models
             }
         }
 
+        private void MarkerLinesChanged(object sender, EventArgs e)
+        {
+            this.resourceMarkers.InvalidateMarkers();
+        }
+
+        private void HandleMarkerMouseDown(Point location)
+        {
+            this.markerSelecting = false;
+            this.markerDrawing = false;
+            var hit = this.resourceMarkers.HitTestLine(location);
+            if (hit.HasValue)
+            {
+                this.dispatcher.SelectMarkerLine(hit.Value);
+                this.markerSelecting = true;
+                return;
+            }
+
+            this.markerDrawing = true;
+            this.markerStroke.Clear();
+            this.markerStroke.Add(location);
+            if (!this.markerFreehand)
+            {
+                this.markerStroke.Add(location);
+            }
+
+            this.resourceMarkers.SetPreview(this.markerStroke);
+        }
+
+        private void ExtendMarkerStroke(Point location)
+        {
+            if (this.markerStroke.Count == 0)
+            {
+                this.markerStroke.Add(location);
+                return;
+            }
+
+            if (!this.markerFreehand)
+            {
+                if (this.markerStroke.Count == 1)
+                {
+                    this.markerStroke.Add(location);
+                }
+                else
+                {
+                    this.markerStroke[1] = location;
+                }
+
+                return;
+            }
+
+            var last = this.markerStroke[this.markerStroke.Count - 1];
+            var dx = location.X - last.X;
+            var dy = location.Y - last.Y;
+            if ((dx * dx) + (dy * dy) >= 16)
+            {
+                this.markerStroke.Add(location);
+            }
+        }
+
         private void FeatureInstanceChanged(object sender, FeatureInstanceEventArgs e)
         {
+            this.resourceMarkers.InvalidateMarkers();
             switch (e.Action)
             {
                 case FeatureInstanceEventArgs.ActionType.Add:
