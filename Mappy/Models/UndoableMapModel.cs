@@ -895,6 +895,53 @@ namespace Mappy.Models
             }
         }
 
+        public void PasteFeatureCopies(IReadOnlyList<FeatureClipboardRecord> features)
+        {
+            if (features == null || features.Count == 0)
+            {
+                return;
+            }
+
+            var mw = this.MapWidth * 32;
+            var mh = this.MapHeight * 32;
+            var vp = this.ViewportLocation;
+            var placed = new List<FeatureInstance>();
+            var occupied = new HashSet<Point>();
+
+            foreach (var feature in features)
+            {
+                var xLoc = Math.Min(mw, Math.Max(0, vp.X + feature.VPOffsetX));
+                var yLoc = Math.Min(mh, Math.Max(0, vp.Y + feature.VPOffsetY));
+                var featurePos = this.ScreenToHeightIndex(xLoc, yLoc);
+                if (!featurePos.HasValue
+                    || occupied.Contains(featurePos.Value)
+                    || this.HasFeatureInstanceAt(featurePos.Value.X, featurePos.Value.Y))
+                {
+                    continue;
+                }
+
+                occupied.Add(featurePos.Value);
+                placed.Add(new FeatureInstance(
+                    Guid.NewGuid(),
+                    feature.FeatureName,
+                    featurePos.Value.X,
+                    featurePos.Value.Y));
+            }
+
+            var ops = new List<IReplayableOperation>();
+            ops.Add(OperationFactory.CreateDeselectAndMergeOperation(this.model));
+            if (placed.Count > 0)
+            {
+                ops.Add(new FillFeaturesOperation(this.model, placed));
+                foreach (var inst in placed)
+                {
+                    ops.Add(new SelectFeatureOperation(this.model, inst.Id));
+                }
+            }
+
+            this.undoManager.Execute(new CompositeOperation(ops));
+        }
+
         public void TranslateSelection(int x, int y)
         {
             if (this.SelectedStartPosition.HasValue && this.SelectedStartSchemaIndex.HasValue)
