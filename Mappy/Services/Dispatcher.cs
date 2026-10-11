@@ -1464,12 +1464,25 @@ namespace Mappy.Services
 
         private object GetClipboardDataForPaste()
         {
+            object clipboardData = Clipboard.GetData(DataFormats.Serializable);
+            object mappyData = CloneClipboardData(clipboardData);
+            if (mappyData != null)
+            {
+                if (MappySettings.Settings.StickyClipboard)
+                {
+                    this.stickyPasteBuffer = mappyData;
+                    return CloneClipboardData(this.stickyPasteBuffer);
+                }
+
+                return mappyData;
+            }
+
             if (MappySettings.Settings.StickyClipboard && this.stickyPasteBuffer != null)
             {
                 return CloneClipboardData(this.stickyPasteBuffer);
             }
 
-            return Clipboard.GetData(DataFormats.Serializable);
+            return null;
         }
 
         private static object CloneClipboardData(object data)
