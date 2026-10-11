@@ -180,7 +180,13 @@ namespace Mappy
 
         public int? BlobFeatureBaseColorArgb { get; set; }
 
+        public bool AlwaysShowFeatureBoundingBox { get; set; }
+
+        public int? FeatureBoundingBoxColorArgb { get; set; }
+
         public static Color DefaultBlobFeatureBaseColor { get; } = Color.FromArgb(255, 220, 80);
+
+        public static Color DefaultFeatureBoundingBoxColor { get; } = Color.Yellow;
 
         public static Color DefaultResourceMarkerLineColor { get; } = Color.Yellow;
 
@@ -203,6 +209,13 @@ namespace Mappy
             return this.BlobFeatureBaseColorArgb.HasValue
                 ? Color.FromArgb(this.BlobFeatureBaseColorArgb.Value)
                 : DefaultBlobFeatureBaseColor;
+        }
+
+        public Color GetFeatureBoundingBoxColorOrDefault()
+        {
+            return this.FeatureBoundingBoxColorArgb.HasValue
+                ? Color.FromArgb(this.FeatureBoundingBoxColorArgb.Value)
+                : DefaultFeatureBoundingBoxColor;
         }
 
         public void GetFeatureBaseBlobFillAndBorderColors(out Color fill, out Color border)

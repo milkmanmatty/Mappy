@@ -88,6 +88,8 @@ namespace Mappy.UI.Forms
             this.missionTabPage = new System.Windows.Forms.TabPage();
             this.adjustmentsTabPage = new System.Windows.Forms.TabPage();
             this.adjustmentsMiscGroupBox = new System.Windows.Forms.GroupBox();
+            this.featureBoundingBoxCustomizeButton = new System.Windows.Forms.Button();
+            this.alwaysShowFeatureBoundingBoxCheckBox = new System.Windows.Forms.CheckBox();
             this.blobFeatureBaseCustomizeButton = new System.Windows.Forms.Button();
             this.blobFeatureBaseCheckBox = new System.Windows.Forms.CheckBox();
             this.stickyClipboardCheckBox = new System.Windows.Forms.CheckBox();
@@ -826,12 +828,14 @@ namespace Mappy.UI.Forms
             // 
             this.adjustmentsMiscGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.adjustmentsMiscGroupBox.Controls.Add(this.featureBoundingBoxCustomizeButton);
+            this.adjustmentsMiscGroupBox.Controls.Add(this.alwaysShowFeatureBoundingBoxCheckBox);
             this.adjustmentsMiscGroupBox.Controls.Add(this.blobFeatureBaseCustomizeButton);
             this.adjustmentsMiscGroupBox.Controls.Add(this.blobFeatureBaseCheckBox);
             this.adjustmentsMiscGroupBox.Controls.Add(this.stickyClipboardCheckBox);
             this.adjustmentsMiscGroupBox.Location = new System.Drawing.Point(12, 309);
             this.adjustmentsMiscGroupBox.Name = "adjustmentsMiscGroupBox";
-            this.adjustmentsMiscGroupBox.Size = new System.Drawing.Size(426, 95);
+            this.adjustmentsMiscGroupBox.Size = new System.Drawing.Size(426, 120);
             this.adjustmentsMiscGroupBox.TabIndex = 2;
             this.adjustmentsMiscGroupBox.TabStop = false;
             this.adjustmentsMiscGroupBox.Text = "Misc";
@@ -845,6 +849,26 @@ namespace Mappy.UI.Forms
             this.blobFeatureBaseCustomizeButton.Text = "Customize...";
             this.blobFeatureBaseCustomizeButton.UseVisualStyleBackColor = true;
             this.blobFeatureBaseCustomizeButton.Click += new System.EventHandler(this.BlobFeatureBaseCustomizeButtonClick);
+            // 
+            // featureBoundingBoxCustomizeButton
+            // 
+            this.featureBoundingBoxCustomizeButton.Location = new System.Drawing.Point(240, 64);
+            this.featureBoundingBoxCustomizeButton.Name = "featureBoundingBoxCustomizeButton";
+            this.featureBoundingBoxCustomizeButton.Size = new System.Drawing.Size(85, 23);
+            this.featureBoundingBoxCustomizeButton.TabIndex = 4;
+            this.featureBoundingBoxCustomizeButton.Text = "Customize...";
+            this.featureBoundingBoxCustomizeButton.UseVisualStyleBackColor = true;
+            this.featureBoundingBoxCustomizeButton.Click += new System.EventHandler(this.FeatureBoundingBoxCustomizeButtonClick);
+            // 
+            // alwaysShowFeatureBoundingBoxCheckBox
+            // 
+            this.alwaysShowFeatureBoundingBoxCheckBox.AutoSize = true;
+            this.alwaysShowFeatureBoundingBoxCheckBox.Location = new System.Drawing.Point(17, 68);
+            this.alwaysShowFeatureBoundingBoxCheckBox.Name = "alwaysShowFeatureBoundingBoxCheckBox";
+            this.alwaysShowFeatureBoundingBoxCheckBox.Size = new System.Drawing.Size(197, 17);
+            this.alwaysShowFeatureBoundingBoxCheckBox.TabIndex = 3;
+            this.alwaysShowFeatureBoundingBoxCheckBox.Text = "Always show feature bounding box";
+            this.alwaysShowFeatureBoundingBoxCheckBox.UseVisualStyleBackColor = true;
             // 
             // blobFeatureBaseCheckBox
             // 
@@ -1379,6 +1403,8 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.Label seaLevelWheelStepLabel;
         private System.Windows.Forms.NumericUpDown seaLevelWheelStepNumeric;
         private System.Windows.Forms.GroupBox adjustmentsMiscGroupBox;
+        private System.Windows.Forms.Button featureBoundingBoxCustomizeButton;
+        private System.Windows.Forms.CheckBox alwaysShowFeatureBoundingBoxCheckBox;
         private System.Windows.Forms.Button blobFeatureBaseCustomizeButton;
         private System.Windows.Forms.CheckBox blobFeatureBaseCheckBox;
         private System.Windows.Forms.CheckBox stickyClipboardCheckBox;
