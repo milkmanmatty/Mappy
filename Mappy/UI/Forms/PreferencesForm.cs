@@ -13,6 +13,10 @@ namespace Mappy.UI.Forms
 
         private bool blobFeatureBaseColorCustomized;
 
+        private Color featureBoundingBoxColor = Configuration.DefaultFeatureBoundingBoxColor;
+
+        private bool featureBoundingBoxColorCustomized;
+
         private Color resourceMarkerLineColor = Configuration.DefaultResourceMarkerLineColor;
 
         private bool resourceMarkerLineColorCustomized;
@@ -109,6 +113,9 @@ namespace Mappy.UI.Forms
             this.blobFeatureBaseCheckBox.Checked = settings.BlobFeatureBase;
             this.blobFeatureBaseColor = settings.GetBlobFeatureBaseColorOrDefault();
             this.blobFeatureBaseColorCustomized = settings.BlobFeatureBaseColorArgb.HasValue;
+            this.alwaysShowFeatureBoundingBoxCheckBox.Checked = settings.AlwaysShowFeatureBoundingBox;
+            this.featureBoundingBoxColor = settings.GetFeatureBoundingBoxColorOrDefault();
+            this.featureBoundingBoxColorCustomized = settings.FeatureBoundingBoxColorArgb.HasValue;
 
             this.defaultHeightmapVisibleCheckBox.Checked = settings.GetDefaultHeightmapVisibleOrDefault();
             this.defaultHeightGridVisibleCheckBox.Checked = settings.GetDefaultHeightGridVisibleOrDefault();
@@ -157,6 +164,22 @@ namespace Mappy.UI.Forms
 
                 this.blobFeatureBaseColor = colorDialog.Color;
                 this.blobFeatureBaseColorCustomized = true;
+            }
+        }
+
+        private void FeatureBoundingBoxCustomizeButtonClick(object sender, EventArgs e)
+        {
+            using (var colorDialog = new ColorDialog())
+            {
+                colorDialog.Color = this.featureBoundingBoxColor;
+                colorDialog.FullOpen = true;
+                if (colorDialog.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                this.featureBoundingBoxColor = colorDialog.Color;
+                this.featureBoundingBoxColorCustomized = true;
             }
         }
 
@@ -381,6 +404,10 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.BlobFeatureBase = this.blobFeatureBaseCheckBox.Checked;
             MappySettings.Settings.BlobFeatureBaseColorArgb = this.blobFeatureBaseColorCustomized
                 ? (int?)this.blobFeatureBaseColor.ToArgb()
+                : null;
+            MappySettings.Settings.AlwaysShowFeatureBoundingBox = this.alwaysShowFeatureBoundingBoxCheckBox.Checked;
+            MappySettings.Settings.FeatureBoundingBoxColorArgb = this.featureBoundingBoxColorCustomized
+                ? (int?)this.featureBoundingBoxColor.ToArgb()
                 : null;
             MappySettings.Settings.DefaultHeightmapVisible = this.defaultHeightmapVisibleCheckBox.Checked;
             MappySettings.Settings.DefaultHeightGridVisible = this.defaultHeightGridVisibleCheckBox.Checked;

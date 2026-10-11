@@ -59,6 +59,9 @@ namespace Mappy.Models
         private readonly IDictionary<Guid, DrawableItem> featureBaseBlobMapping =
             new Dictionary<Guid, DrawableItem>();
 
+        private readonly IDictionary<Guid, DrawableItem> featureBoundingBoxMapping =
+            new Dictionary<Guid, DrawableItem>();
+
         private readonly IDictionary<string, DrawableItem> startPositionItems =
             new Dictionary<string, DrawableItem>(StringComparer.Ordinal);
 
@@ -269,6 +272,7 @@ namespace Mappy.Models
             this.UpdateStartPositions();
             this.UpdateAllSchemaUnits();
             this.RefreshFeatureBaseBlobs();
+            this.RefreshFeatureBoundingBoxes();
             this.RefreshSelection();
             this.missionPaths.InvalidatePaths();
         }
@@ -914,6 +918,11 @@ namespace Mappy.Models
 
             this.featureBaseBlobMapping.Clear();
 
+            foreach (var id in this.featureBoundingBoxMapping.Keys.ToList())
+            {
+                this.RemoveFeatureBoundingBox(id);
+            }
+
             if (this.mapModel == null)
             {
                 return;
@@ -940,6 +949,24 @@ namespace Mappy.Models
             foreach (var f in this.mapModel.EnumerateFeatureInstances())
             {
                 this.InsertFeatureBaseBlob(f.Id);
+            }
+        }
+
+        private void RefreshFeatureBoundingBoxes()
+        {
+            foreach (var id in this.featureBoundingBoxMapping.Keys.ToList())
+            {
+                this.RemoveFeatureBoundingBox(id);
+            }
+
+            if (this.mapModel == null || !MappySettings.Settings.AlwaysShowFeatureBoundingBox)
+            {
+                return;
+            }
+
+            foreach (var f in this.mapModel.EnumerateFeatureInstances())
+            {
+                this.InsertFeatureBoundingBox(f.Id);
             }
         }
 
@@ -1138,6 +1165,8 @@ namespace Mappy.Models
             {
                 this.itemsLayer.Value.AddToSelection(this.featureMapping[id]);
             }
+
+            this.SetFeatureBoundingBoxVisible(id, false);
         }
 
         private void TryRemoveFeatureSelection(Guid id)
@@ -1146,6 +1175,8 @@ namespace Mappy.Models
             {
                 this.itemsLayer.Value.RemoveFromSelection(this.featureMapping[id]);
             }
+
+            this.SetFeatureBoundingBoxVisible(id, true);
         }
 
         private void MapModelPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -1945,6 +1976,8 @@ namespace Mappy.Models
                     }
                 }
             }
+
+            this.SyncFeatureBoundingBoxSelectionVisibility();
         }
 
         private void BaseTileChanged(object sender, EventArgs e)
@@ -2475,6 +2508,73 @@ namespace Mappy.Models
             }
 
             this.InsertFeatureBaseBlob(f.Id);
+            this.InsertFeatureBoundingBox(f.Id);
+        }
+
+        private void InsertFeatureBoundingBox(Guid id)
+        {
+            if (!MappySettings.Settings.AlwaysShowFeatureBoundingBox || this.featureBoundingBoxMapping.ContainsKey(id))
+            {
+                return;
+            }
+
+            var f = this.mapModel.GetFeatureInstance(id);
+            var coords = f.Location;
+            var index = this.ToFeatureIndex(coords);
+            var featureRecord = this.featureService.TryGetFeature(f.FeatureName).Or(DefaultFeatureRecord);
+            var bounds = featureRecord.GetDrawBounds(this.mapModel.BaseTile.HeightGrid, coords.X, coords.Y);
+            var mapBounds = new Rectangle(0, 0, this.mapModel.MapWidth * 32, this.mapModel.MapHeight * 32);
+            if (!bounds.IntersectsWith(mapBounds))
+            {
+                return;
+            }
+
+            var color = MappySettings.Settings.GetFeatureBoundingBoxColorOrDefault();
+            var box = new DrawableItem(
+                bounds.X,
+                bounds.Y,
+                index + 1001,
+                DrawableBandbox.CreateSimple(
+                    bounds.Size,
+                    Color.FromArgb(0, color),
+                    color));
+            box.Locked = true;
+            box.Visible = this.featuresVisible && !this.mapModel.SelectedFeatures.Contains(id);
+            this.featureBoundingBoxMapping[id] = box;
+            this.itemsLayer.Value.Items.Add(box);
+        }
+
+        private void SetFeatureBoundingBoxVisible(Guid id, bool visible)
+        {
+            if (this.featureBoundingBoxMapping.TryGetValue(id, out var box))
+            {
+                box.Visible = visible && this.featuresVisible;
+            }
+        }
+
+        private void SyncFeatureBoundingBoxSelectionVisibility()
+        {
+            if (this.mapModel == null)
+            {
+                return;
+            }
+
+            foreach (var pair in this.featureBoundingBoxMapping)
+            {
+                pair.Value.Visible = this.featuresVisible && !this.mapModel.SelectedFeatures.Contains(pair.Key);
+            }
+        }
+
+        private void RemoveFeatureBoundingBox(Guid id)
+        {
+            if (!this.featureBoundingBoxMapping.TryGetValue(id, out var box))
+            {
+                return;
+            }
+
+            this.itemsLayer.Value.Items.Remove(box);
+            this.featureBoundingBoxMapping.Remove(id);
+            (box.Drawable as IDisposable)?.Dispose();
         }
 
         private void InsertFeatureBaseBlob(Guid id)
@@ -2526,6 +2626,7 @@ namespace Mappy.Models
         private void RemoveFeature(Guid id)
         {
             this.RemoveFeatureBaseBlob(id);
+            this.RemoveFeatureBoundingBox(id);
 
             if (this.featureMapping.ContainsKey(id))
             {
