@@ -69,6 +69,8 @@ namespace Mappy.Models
 
         private readonly GridLayer grid = new GridLayer(16, Color.Black);
 
+        private readonly SelectionOutlineLayer selectionOutline = new SelectionOutlineLayer();
+
         private readonly GuideLayer guides = new GuideLayer();
 
         private readonly MissionPathLayer missionPaths = new MissionPathLayer();
@@ -202,6 +204,7 @@ namespace Mappy.Models
                 Point.Empty);
 
             map.Subscribe(this.SetMapModel);
+            this.itemsLayer.Subscribe(x => this.selectionOutline.Source = x);
             gridVisible.Subscribe(x => this.grid.Enabled = x);
             gridColor.Subscribe(x => this.grid.Color = x);
 
@@ -287,6 +290,8 @@ namespace Mappy.Models
         public IObservable<ILayer> VoidLayer => this.voidLayer;
 
         public ILayer GridLayer => this.grid;
+
+        public ILayer SelectionOutlineLayer => this.selectionOutline;
 
         public ILayer GuidesLayer => this.guides;
 
