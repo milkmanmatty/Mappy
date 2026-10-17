@@ -453,6 +453,8 @@ namespace Mappy.Util
                     return GUITab.Void;
                 case "markersTab":
                     return GUITab.Markers;
+                case "exportsTab":
+                    return GUITab.Exports;
                 case "missionTab":
                 case "otaMissionTab":
                     return GUITab.Mission;

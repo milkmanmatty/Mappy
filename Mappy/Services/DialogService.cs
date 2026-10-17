@@ -51,6 +51,39 @@ namespace Mappy.Services
             };
         }
 
+        public SectionArchiveLocation AskUserForSectionExportWorldCategory()
+        {
+            using (var dlg = new ExportSectionWorldCategoryForm())
+            {
+                if (dlg.ShowDialog(this.owner) != DialogResult.OK)
+                {
+                    return null;
+                }
+
+                return new SectionArchiveLocation
+                {
+                    World = dlg.World,
+                    Category = dlg.Category,
+                };
+            }
+        }
+
+        public string AskUserToSaveSectionArchive()
+        {
+            var d = new SaveFileDialog();
+            d.Title = @"Export Sections";
+            d.Filter = @"HPI files|*.hpi;*.ufo;*.ccx;*.gpf;*.gp3|All files|*.*";
+            d.AddExtension = true;
+            d.DefaultExt = "hpi";
+            var result = d.ShowDialog(this.owner);
+            if (result == DialogResult.OK)
+            {
+                return d.FileName;
+            }
+
+            return null;
+        }
+
         public string AskUserToChooseMap(IList<string> maps, Func<string, Bitmap> previewLoader)
         {
             var f = new MapSelectionForm(previewLoader);

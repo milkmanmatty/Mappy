@@ -42,6 +42,7 @@ namespace Mappy.UI.Forms
             MappySettings.SettingsSaved += this.OnSettingsSaved;
             this.ApplyAdjustmentWheelSteps();
             this.dockedSidebarWidth = this.sidebarTabs.Width;
+            this.InitializeExportsTab();
         }
 
         private void ConfigureMinimapModeToolTips()
@@ -202,6 +203,7 @@ namespace Mappy.UI.Forms
             {
                 this.flipMenuItem.Enabled = x;
                 this.exportSectionMenuItem.Enabled = x;
+                this.exportAddButton.Enabled = x;
             });
             model.CanResizeMap.Subscribe(x => this.resizeMapMenuItem.Enabled = x);
             model.CanReplaceFeature.Subscribe(x => this.replaceFeatureMenuItem.Enabled = x);
@@ -958,6 +960,14 @@ namespace Mappy.UI.Forms
             else if (e.KeyCode == Keys.D7 && this.missionTab != null)
             {
                 target = this.missionTab;
+            }
+            else if (e.KeyCode == Keys.D8)
+            {
+                target = this.markersTab;
+            }
+            else if (e.KeyCode == Keys.D9)
+            {
+                target = this.exportsTab;
             }
 
             if (target == null)

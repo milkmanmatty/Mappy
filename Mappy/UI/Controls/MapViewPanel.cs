@@ -50,6 +50,8 @@ namespace Mappy.UI.Controls
             this.Disposed += this.MapViewPanelDisposed;
         }
 
+        public Func<bool> PreserveSelectionOnLeave { get; set; }
+
         public event EventHandler ZoomChanged;
 
         public static int ZoomLevelCount => LayerView.ZoomLevelCount;
@@ -211,7 +213,8 @@ namespace Mappy.UI.Controls
             }
 
             this.ApplyMapCursor();
-            this.model.LeaveFocus();
+            var preserveSelection = this.PreserveSelectionOnLeave != null && this.PreserveSelectionOnLeave();
+            this.model.LeaveFocus(preserveSelection);
         }
 
         private void MapViewSizeChanged(object sender, EventArgs e)

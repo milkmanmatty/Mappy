@@ -10,6 +10,7 @@ namespace Mappy.Models.Enums
         Markers,
         Attributes,
         Mission,
+        Exports,
         Other,
     }
 }

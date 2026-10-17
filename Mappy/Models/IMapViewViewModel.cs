@@ -52,7 +52,7 @@ namespace Mappy.Models
 
         bool ShiftMouseWheel(int delta, bool ctrlPressed);
 
-        void LeaveFocus();
+        void LeaveFocus(bool preserveSelection);
 
         void DragDrop(IDataObject item, Point location, Point screenLocation);
 

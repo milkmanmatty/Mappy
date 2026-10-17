@@ -1153,6 +1153,7 @@ namespace Mappy.Models
                 case GUITab.Void:
                 case GUITab.Markers:
                 case GUITab.Attributes:
+                case GUITab.Exports:
                 case GUITab.Other:
                 default:
                     this.currentBandboxBehaviour = this.tileBandboxBehaviour;
