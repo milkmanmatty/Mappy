@@ -1,6 +1,8 @@
 namespace Mappy.Models
 {
+    using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
 
     using Mappy.Data;
 
@@ -26,10 +28,6 @@ namespace Mappy.Models
 
         public bool NoMovie { get; set; }
 
-        public string AiProfile { get; set; }
-
-        public string SchemaType { get; set; }
-
         public string Planet { get; set; }
 
         public string Players { get; set; }
@@ -50,27 +48,7 @@ namespace Mappy.Models
 
         public int Gravity { get; set; }
 
-        public int SurfaceMetal { get; set; }
-
-        public int MohoMetal { get; set; }
-
-        public int HumanMetal { get; set; }
-
-        public int ComputerMetal { get; set; }
-
-        public int HumanEnergy { get; set; }
-
-        public int ComputerEnergy { get; set; }
-
-        public string MeteorWeapon { get; set; }
-
-        public int MeteorRadius { get; set; }
-
-        public int MeteorDuration { get; set; }
-
-        public double MeteorDensity { get; set; }
-
-        public int MeteorInterval { get; set; }
+        public BindingList<SchemaAttributesResult> Schemas { get; } = new BindingList<SchemaAttributesResult>();
 
         public int WaterDamage { get; set; }
 
@@ -119,18 +97,9 @@ namespace Mappy.Models
         public static MapAttributesResult FromModel(IMapModel map)
         {
             var attrs = map.Attributes;
-            var si = map.ActiveSchemaIndex;
-            if (si < 0 || si >= attrs.Schemas.Count)
-            {
-                si = 0;
-            }
-
-            var sch = attrs.Schemas[si];
             var conditions = attrs.VictoryConditions;
-            return new MapAttributesResult
+            var result = new MapAttributesResult
                 {
-                    AiProfile = sch.AiProfile,
-                    SchemaType = sch.SchemaType,
                     Description = attrs.Description,
                     Gravity = attrs.Gravity,
                     ImpassibleWater = attrs.LavaWorld,
@@ -143,17 +112,7 @@ namespace Mappy.Models
                     GlamourSound = attrs.GlamourSound,
                     UseOnlyUnits = attrs.UseOnlyUnits,
                     NoMovie = attrs.NoMovie,
-                    MeteorDensity = sch.MeteorDensity,
-                    MeteorDuration = sch.MeteorDuration,
-                    MeteorInterval = sch.MeteorInterval,
-                    MeteorRadius = sch.MeteorRadius,
-                    MeteorWeapon = sch.MeteorWeapon,
                     MinWindSpeed = attrs.MinWindSpeed,
-                    MohoMetal = sch.MohoMetal,
-                    HumanMetal = sch.HumanMetal,
-                    ComputerMetal = sch.ComputerMetal,
-                    HumanEnergy = sch.HumanEnergy,
-                    ComputerEnergy = sch.ComputerEnergy,
                     Name = attrs.Name,
                     Planet = attrs.Planet,
                     Players = attrs.NumPlayers,
@@ -161,7 +120,6 @@ namespace Mappy.Models
                     SolarStrength = attrs.SolarStrength,
                     LineOfSight = attrs.LineOfSight,
                     Mapping = attrs.Mapping,
-                    SurfaceMetal = sch.SurfaceMetal,
                     TidalStrength = attrs.TidalStrength,
                     WaterDamage = attrs.WaterDamage,
                     WaterDoesDamage = attrs.WaterDoesDamage,
@@ -184,18 +142,18 @@ namespace Mappy.Models
                     AnyUnitPassesX = GetValue(conditions, "AnyUnitPassesX"),
                     AnyUnitPassesZ = GetValue(conditions, "AnyUnitPassesZ"),
                 };
+
+            foreach (var sch in attrs.Schemas)
+            {
+                result.Schemas.Add(SchemaAttributesResult.FromSchema(sch));
+            }
+
+            return result;
         }
 
         public void MergeInto(IMapModel map)
         {
             var attrs = map.Attributes;
-            var si = map.ActiveSchemaIndex;
-            if (si < 0 || si >= attrs.Schemas.Count)
-            {
-                si = 0;
-            }
-
-            var sch = attrs.Schemas[si];
 
             attrs.Description = this.Description;
             attrs.Gravity = this.Gravity;
@@ -221,19 +179,11 @@ namespace Mappy.Models
             attrs.WaterDamage = this.WaterDamage;
             attrs.WaterDoesDamage = this.WaterDoesDamage;
 
-            sch.AiProfile = this.AiProfile;
-            sch.SchemaType = this.SchemaType ?? sch.SchemaType;
-            sch.SurfaceMetal = this.SurfaceMetal;
-            sch.MohoMetal = this.MohoMetal;
-            sch.HumanMetal = this.HumanMetal;
-            sch.ComputerMetal = this.ComputerMetal;
-            sch.HumanEnergy = this.HumanEnergy;
-            sch.ComputerEnergy = this.ComputerEnergy;
-            sch.MeteorWeapon = this.MeteorWeapon ?? string.Empty;
-            sch.MeteorRadius = this.MeteorRadius;
-            sch.MeteorDensity = this.MeteorDensity;
-            sch.MeteorDuration = this.MeteorDuration;
-            sch.MeteorInterval = this.MeteorInterval;
+            var count = Math.Min(this.Schemas.Count, attrs.Schemas.Count);
+            for (var i = 0; i < count; i++)
+            {
+                this.Schemas[i].ApplyTo(attrs.Schemas[i]);
+            }
 
             var conditions = attrs.VictoryConditions;
             MergeFlag(conditions, "KillEnemyCommander", this.KillEnemyCommander);

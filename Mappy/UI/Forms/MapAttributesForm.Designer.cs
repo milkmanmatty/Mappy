@@ -35,16 +35,43 @@ namespace Mappy.UI.Forms
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.label15 = new System.Windows.Forms.Label();
             this.textBox7 = new System.Windows.Forms.TextBox();
+            this.mapAttributesResultBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label14 = new System.Windows.Forms.Label();
             this.textBox6 = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
+            this.tabPageSchema = new System.Windows.Forms.TabPage();
+            this.labelSchema = new System.Windows.Forms.Label();
+            this.comboSchema = new System.Windows.Forms.ComboBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.schemaAttributesBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.label8 = new System.Windows.Forms.Label();
+            this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
+            this.numericUpDown8 = new System.Windows.Forms.NumericUpDown();
+            this.labelHumanMetal = new System.Windows.Forms.Label();
+            this.numericUpDownHumanMetal = new System.Windows.Forms.NumericUpDown();
+            this.labelComputerMetal = new System.Windows.Forms.Label();
+            this.numericUpDownComputerMetal = new System.Windows.Forms.NumericUpDown();
+            this.labelHumanEnergy = new System.Windows.Forms.Label();
+            this.numericUpDownHumanEnergy = new System.Windows.Forms.NumericUpDown();
+            this.labelComputerEnergy = new System.Windows.Forms.Label();
+            this.numericUpDownComputerEnergy = new System.Windows.Forms.NumericUpDown();
+            this.label16 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.numericUpDown10 = new System.Windows.Forms.NumericUpDown();
+            this.label18 = new System.Windows.Forms.Label();
+            this.numericUpDown11 = new System.Windows.Forms.NumericUpDown();
+            this.label19 = new System.Windows.Forms.Label();
+            this.numericUpDown12 = new System.Windows.Forms.NumericUpDown();
+            this.label20 = new System.Windows.Forms.Label();
+            this.numericUpDown13 = new System.Windows.Forms.NumericUpDown();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.comboBoxMapping = new System.Windows.Forms.ComboBox();
             this.labelMapping = new System.Windows.Forms.Label();
@@ -52,10 +79,6 @@ namespace Mappy.UI.Forms
             this.labelLineOfSight = new System.Windows.Forms.Label();
             this.maxWindInGameLabel = new System.Windows.Forms.Label();
             this.minWindInGameLabel = new System.Windows.Forms.Label();
-            this.numericUpDown8 = new System.Windows.Forms.NumericUpDown();
-            this.label9 = new System.Windows.Forms.Label();
-            this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
-            this.label8 = new System.Windows.Forms.Label();
             this.numericUpDown6 = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
@@ -69,16 +92,6 @@ namespace Mappy.UI.Forms
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.numericUpDown13 = new System.Windows.Forms.NumericUpDown();
-            this.label20 = new System.Windows.Forms.Label();
-            this.numericUpDown12 = new System.Windows.Forms.NumericUpDown();
-            this.label19 = new System.Windows.Forms.Label();
-            this.numericUpDown11 = new System.Windows.Forms.NumericUpDown();
-            this.label18 = new System.Windows.Forms.Label();
-            this.numericUpDown10 = new System.Windows.Forms.NumericUpDown();
-            this.label17 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
             this.numericUpDown9 = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
@@ -132,12 +145,22 @@ namespace Mappy.UI.Forms
             this.checkBoxCommanderKilled = new System.Windows.Forms.CheckBox();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.mapAttributesResultBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mapAttributesResultBindingSource)).BeginInit();
+            this.tabPageSchema.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.schemaAttributesBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHumanMetal)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownComputerMetal)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHumanEnergy)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownComputerEnergy)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown12)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown13)).BeginInit();
+            this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
@@ -145,15 +168,10 @@ namespace Mappy.UI.Forms
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown13)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown12)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown9)).BeginInit();
             this.tabPage4.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mapAttributesResultBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -162,6 +180,7 @@ namespace Mappy.UI.Forms
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPageSchema);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
@@ -170,7 +189,7 @@ namespace Mappy.UI.Forms
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(442, 330);
+            this.tabControl1.Size = new System.Drawing.Size(442, 430);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -179,8 +198,6 @@ namespace Mappy.UI.Forms
             this.tabPage1.Controls.Add(this.textBox7);
             this.tabPage1.Controls.Add(this.label14);
             this.tabPage1.Controls.Add(this.textBox6);
-            this.tabPage1.Controls.Add(this.label13);
-            this.tabPage1.Controls.Add(this.textBox5);
             this.tabPage1.Controls.Add(this.label12);
             this.tabPage1.Controls.Add(this.textBox4);
             this.tabPage1.Controls.Add(this.label11);
@@ -190,7 +207,7 @@ namespace Mappy.UI.Forms
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(434, 304);
+            this.tabPage1.Size = new System.Drawing.Size(434, 404);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Map";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -198,7 +215,7 @@ namespace Mappy.UI.Forms
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(271, 44);
+            this.label15.Location = new System.Drawing.Point(6, 86);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(41, 13);
             this.label15.TabIndex = 16;
@@ -207,15 +224,19 @@ namespace Mappy.UI.Forms
             // textBox7
             // 
             this.textBox7.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "Players", true));
-            this.textBox7.Location = new System.Drawing.Point(274, 60);
+            this.textBox7.Location = new System.Drawing.Point(6, 102);
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(136, 20);
             this.textBox7.TabIndex = 15;
             // 
+            // mapAttributesResultBindingSource
+            // 
+            this.mapAttributesResultBindingSource.DataSource = typeof(Mappy.Models.MapAttributesResult);
+            // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(133, 43);
+            this.label14.Location = new System.Drawing.Point(145, 86);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(37, 13);
             this.label14.TabIndex = 14;
@@ -224,32 +245,15 @@ namespace Mappy.UI.Forms
             // textBox6
             // 
             this.textBox6.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "Planet", true));
-            this.textBox6.Location = new System.Drawing.Point(136, 60);
+            this.textBox6.Location = new System.Drawing.Point(148, 102);
             this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(132, 20);
+            this.textBox6.Size = new System.Drawing.Size(135, 20);
             this.textBox6.TabIndex = 13;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(6, 44);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(49, 13);
-            this.label13.TabIndex = 12;
-            this.label13.Text = "AI Profile";
-            // 
-            // textBox5
-            // 
-            this.textBox5.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "AiProfile", true));
-            this.textBox5.Location = new System.Drawing.Point(6, 60);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(124, 20);
-            this.textBox5.TabIndex = 11;
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(271, 4);
+            this.label12.Location = new System.Drawing.Point(286, 86);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(44, 13);
             this.label12.TabIndex = 10;
@@ -258,7 +262,7 @@ namespace Mappy.UI.Forms
             // textBox4
             // 
             this.textBox4.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "Memory", true));
-            this.textBox4.Location = new System.Drawing.Point(274, 20);
+            this.textBox4.Location = new System.Drawing.Point(289, 102);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(136, 20);
             this.textBox4.TabIndex = 9;
@@ -266,7 +270,7 @@ namespace Mappy.UI.Forms
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(133, 4);
+            this.label11.Location = new System.Drawing.Point(6, 47);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(60, 13);
             this.label11.TabIndex = 8;
@@ -275,9 +279,9 @@ namespace Mappy.UI.Forms
             // textBox3
             // 
             this.textBox3.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "Description", true));
-            this.textBox3.Location = new System.Drawing.Point(136, 20);
+            this.textBox3.Location = new System.Drawing.Point(6, 63);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(132, 20);
+            this.textBox3.Size = new System.Drawing.Size(419, 20);
             this.textBox3.TabIndex = 7;
             // 
             // label10
@@ -294,8 +298,322 @@ namespace Mappy.UI.Forms
             this.textBox2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "Name", true));
             this.textBox2.Location = new System.Drawing.Point(6, 20);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(124, 20);
+            this.textBox2.Size = new System.Drawing.Size(422, 20);
             this.textBox2.TabIndex = 4;
+            // 
+            // tabPageSchema
+            // 
+            this.tabPageSchema.Controls.Add(this.labelSchema);
+            this.tabPageSchema.Controls.Add(this.comboSchema);
+            this.tabPageSchema.Controls.Add(this.label13);
+            this.tabPageSchema.Controls.Add(this.textBox5);
+            this.tabPageSchema.Controls.Add(this.label8);
+            this.tabPageSchema.Controls.Add(this.numericUpDown7);
+            this.tabPageSchema.Controls.Add(this.label9);
+            this.tabPageSchema.Controls.Add(this.numericUpDown8);
+            this.tabPageSchema.Controls.Add(this.labelHumanMetal);
+            this.tabPageSchema.Controls.Add(this.numericUpDownHumanMetal);
+            this.tabPageSchema.Controls.Add(this.labelComputerMetal);
+            this.tabPageSchema.Controls.Add(this.numericUpDownComputerMetal);
+            this.tabPageSchema.Controls.Add(this.labelHumanEnergy);
+            this.tabPageSchema.Controls.Add(this.numericUpDownHumanEnergy);
+            this.tabPageSchema.Controls.Add(this.labelComputerEnergy);
+            this.tabPageSchema.Controls.Add(this.numericUpDownComputerEnergy);
+            this.tabPageSchema.Controls.Add(this.label16);
+            this.tabPageSchema.Controls.Add(this.textBox1);
+            this.tabPageSchema.Controls.Add(this.label17);
+            this.tabPageSchema.Controls.Add(this.numericUpDown10);
+            this.tabPageSchema.Controls.Add(this.label18);
+            this.tabPageSchema.Controls.Add(this.numericUpDown11);
+            this.tabPageSchema.Controls.Add(this.label19);
+            this.tabPageSchema.Controls.Add(this.numericUpDown12);
+            this.tabPageSchema.Controls.Add(this.label20);
+            this.tabPageSchema.Controls.Add(this.numericUpDown13);
+            this.tabPageSchema.Location = new System.Drawing.Point(4, 22);
+            this.tabPageSchema.Name = "tabPageSchema";
+            this.tabPageSchema.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageSchema.Size = new System.Drawing.Size(434, 404);
+            this.tabPageSchema.TabIndex = 6;
+            this.tabPageSchema.Text = "Schema";
+            this.tabPageSchema.UseVisualStyleBackColor = true;
+            // 
+            // labelSchema
+            // 
+            this.labelSchema.AutoSize = true;
+            this.labelSchema.Location = new System.Drawing.Point(8, 8);
+            this.labelSchema.Name = "labelSchema";
+            this.labelSchema.Size = new System.Drawing.Size(46, 13);
+            this.labelSchema.TabIndex = 0;
+            this.labelSchema.Text = "Schema";
+            // 
+            // comboSchema
+            // 
+            this.comboSchema.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboSchema.FormattingEnabled = true;
+            this.comboSchema.Location = new System.Drawing.Point(8, 24);
+            this.comboSchema.Name = "comboSchema";
+            this.comboSchema.Size = new System.Drawing.Size(280, 21);
+            this.comboSchema.TabIndex = 1;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(8, 56);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(49, 13);
+            this.label13.TabIndex = 2;
+            this.label13.Text = "AI Profile";
+            // 
+            // textBox5
+            // 
+            this.textBox5.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.schemaAttributesBindingSource, "AiProfile", true));
+            this.textBox5.Location = new System.Drawing.Point(8, 72);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(280, 20);
+            this.textBox5.TabIndex = 3;
+            // 
+            // schemaAttributesBindingSource
+            // 
+            this.schemaAttributesBindingSource.DataMember = "Schemas";
+            this.schemaAttributesBindingSource.DataSource = this.mapAttributesResultBindingSource;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(8, 108);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(73, 13);
+            this.label8.TabIndex = 20;
+            this.label8.Text = "Surface Metal";
+            // 
+            // numericUpDown7
+            // 
+            this.numericUpDown7.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.schemaAttributesBindingSource, "SurfaceMetal", true));
+            this.numericUpDown7.Location = new System.Drawing.Point(8, 124);
+            this.numericUpDown7.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.numericUpDown7.Name = "numericUpDown7";
+            this.numericUpDown7.Size = new System.Drawing.Size(160, 20);
+            this.numericUpDown7.TabIndex = 21;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(220, 108);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(63, 13);
+            this.label9.TabIndex = 22;
+            this.label9.Text = "Moho Metal";
+            // 
+            // numericUpDown8
+            // 
+            this.numericUpDown8.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.schemaAttributesBindingSource, "MohoMetal", true));
+            this.numericUpDown8.Location = new System.Drawing.Point(220, 124);
+            this.numericUpDown8.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.numericUpDown8.Name = "numericUpDown8";
+            this.numericUpDown8.Size = new System.Drawing.Size(160, 20);
+            this.numericUpDown8.TabIndex = 23;
+            // 
+            // labelHumanMetal
+            // 
+            this.labelHumanMetal.AutoSize = true;
+            this.labelHumanMetal.Location = new System.Drawing.Point(8, 156);
+            this.labelHumanMetal.Name = "labelHumanMetal";
+            this.labelHumanMetal.Size = new System.Drawing.Size(70, 13);
+            this.labelHumanMetal.TabIndex = 4;
+            this.labelHumanMetal.Text = "Human Metal";
+            // 
+            // numericUpDownHumanMetal
+            // 
+            this.numericUpDownHumanMetal.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.schemaAttributesBindingSource, "HumanMetal", true));
+            this.numericUpDownHumanMetal.Location = new System.Drawing.Point(8, 172);
+            this.numericUpDownHumanMetal.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.numericUpDownHumanMetal.Name = "numericUpDownHumanMetal";
+            this.numericUpDownHumanMetal.Size = new System.Drawing.Size(160, 20);
+            this.numericUpDownHumanMetal.TabIndex = 5;
+            // 
+            // labelComputerMetal
+            // 
+            this.labelComputerMetal.AutoSize = true;
+            this.labelComputerMetal.Location = new System.Drawing.Point(220, 156);
+            this.labelComputerMetal.Name = "labelComputerMetal";
+            this.labelComputerMetal.Size = new System.Drawing.Size(81, 13);
+            this.labelComputerMetal.TabIndex = 6;
+            this.labelComputerMetal.Text = "Computer Metal";
+            // 
+            // numericUpDownComputerMetal
+            // 
+            this.numericUpDownComputerMetal.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.schemaAttributesBindingSource, "ComputerMetal", true));
+            this.numericUpDownComputerMetal.Location = new System.Drawing.Point(220, 172);
+            this.numericUpDownComputerMetal.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.numericUpDownComputerMetal.Name = "numericUpDownComputerMetal";
+            this.numericUpDownComputerMetal.Size = new System.Drawing.Size(160, 20);
+            this.numericUpDownComputerMetal.TabIndex = 7;
+            // 
+            // labelHumanEnergy
+            // 
+            this.labelHumanEnergy.AutoSize = true;
+            this.labelHumanEnergy.Location = new System.Drawing.Point(8, 204);
+            this.labelHumanEnergy.Name = "labelHumanEnergy";
+            this.labelHumanEnergy.Size = new System.Drawing.Size(77, 13);
+            this.labelHumanEnergy.TabIndex = 8;
+            this.labelHumanEnergy.Text = "Human Energy";
+            // 
+            // numericUpDownHumanEnergy
+            // 
+            this.numericUpDownHumanEnergy.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.schemaAttributesBindingSource, "HumanEnergy", true));
+            this.numericUpDownHumanEnergy.Location = new System.Drawing.Point(8, 220);
+            this.numericUpDownHumanEnergy.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.numericUpDownHumanEnergy.Name = "numericUpDownHumanEnergy";
+            this.numericUpDownHumanEnergy.Size = new System.Drawing.Size(160, 20);
+            this.numericUpDownHumanEnergy.TabIndex = 9;
+            // 
+            // labelComputerEnergy
+            // 
+            this.labelComputerEnergy.AutoSize = true;
+            this.labelComputerEnergy.Location = new System.Drawing.Point(220, 204);
+            this.labelComputerEnergy.Name = "labelComputerEnergy";
+            this.labelComputerEnergy.Size = new System.Drawing.Size(88, 13);
+            this.labelComputerEnergy.TabIndex = 10;
+            this.labelComputerEnergy.Text = "Computer Energy";
+            // 
+            // numericUpDownComputerEnergy
+            // 
+            this.numericUpDownComputerEnergy.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.schemaAttributesBindingSource, "ComputerEnergy", true));
+            this.numericUpDownComputerEnergy.Location = new System.Drawing.Point(220, 220);
+            this.numericUpDownComputerEnergy.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.numericUpDownComputerEnergy.Name = "numericUpDownComputerEnergy";
+            this.numericUpDownComputerEnergy.Size = new System.Drawing.Size(160, 20);
+            this.numericUpDownComputerEnergy.TabIndex = 11;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(8, 256);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(84, 13);
+            this.label16.TabIndex = 8;
+            this.label16.Text = "Meteor Weapon";
+            // 
+            // textBox1
+            // 
+            this.textBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.schemaAttributesBindingSource, "MeteorWeapon", true));
+            this.textBox1.Location = new System.Drawing.Point(8, 272);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(160, 20);
+            this.textBox1.TabIndex = 20;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(220, 256);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(76, 13);
+            this.label17.TabIndex = 10;
+            this.label17.Text = "Meteor Radius";
+            // 
+            // numericUpDown10
+            // 
+            this.numericUpDown10.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.schemaAttributesBindingSource, "MeteorRadius", true));
+            this.numericUpDown10.Location = new System.Drawing.Point(220, 272);
+            this.numericUpDown10.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.numericUpDown10.Name = "numericUpDown10";
+            this.numericUpDown10.Size = new System.Drawing.Size(160, 20);
+            this.numericUpDown10.TabIndex = 21;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(8, 304);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(78, 13);
+            this.label18.TabIndex = 12;
+            this.label18.Text = "Meteor Density";
+            // 
+            // numericUpDown11
+            // 
+            this.numericUpDown11.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.schemaAttributesBindingSource, "MeteorDensity", true));
+            this.numericUpDown11.DecimalPlaces = 2;
+            this.numericUpDown11.Location = new System.Drawing.Point(8, 320);
+            this.numericUpDown11.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.numericUpDown11.Name = "numericUpDown11";
+            this.numericUpDown11.Size = new System.Drawing.Size(160, 20);
+            this.numericUpDown11.TabIndex = 22;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(220, 304);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(83, 13);
+            this.label19.TabIndex = 14;
+            this.label19.Text = "Meteor Duration";
+            // 
+            // numericUpDown12
+            // 
+            this.numericUpDown12.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.schemaAttributesBindingSource, "MeteorDuration", true));
+            this.numericUpDown12.Location = new System.Drawing.Point(220, 320);
+            this.numericUpDown12.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.numericUpDown12.Name = "numericUpDown12";
+            this.numericUpDown12.Size = new System.Drawing.Size(160, 20);
+            this.numericUpDown12.TabIndex = 23;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(8, 352);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(78, 13);
+            this.label20.TabIndex = 16;
+            this.label20.Text = "Meteor Interval";
+            // 
+            // numericUpDown13
+            // 
+            this.numericUpDown13.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.schemaAttributesBindingSource, "MeteorInterval", true));
+            this.numericUpDown13.Location = new System.Drawing.Point(8, 368);
+            this.numericUpDown13.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.numericUpDown13.Name = "numericUpDown13";
+            this.numericUpDown13.Size = new System.Drawing.Size(160, 20);
+            this.numericUpDown13.TabIndex = 27;
             // 
             // tabPage2
             // 
@@ -305,10 +623,6 @@ namespace Mappy.UI.Forms
             this.tabPage2.Controls.Add(this.labelLineOfSight);
             this.tabPage2.Controls.Add(this.maxWindInGameLabel);
             this.tabPage2.Controls.Add(this.minWindInGameLabel);
-            this.tabPage2.Controls.Add(this.numericUpDown8);
-            this.tabPage2.Controls.Add(this.label9);
-            this.tabPage2.Controls.Add(this.numericUpDown7);
-            this.tabPage2.Controls.Add(this.label8);
             this.tabPage2.Controls.Add(this.numericUpDown6);
             this.tabPage2.Controls.Add(this.label7);
             this.tabPage2.Controls.Add(this.numericUpDown5);
@@ -324,99 +638,75 @@ namespace Mappy.UI.Forms
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(434, 304);
+            this.tabPage2.Size = new System.Drawing.Size(434, 404);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // comboBoxMapping
             // 
+            this.comboBoxMapping.DataBindings.Add(new System.Windows.Forms.Binding("SelectedIndex", this.mapAttributesResultBindingSource, "Mapping", true));
             this.comboBoxMapping.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxMapping.FormattingEnabled = true;
             this.comboBoxMapping.Items.AddRange(new object[] {
             "Mapped",
             "Unmapped"});
-            this.comboBoxMapping.Location = new System.Drawing.Point(108, 136);
+            this.comboBoxMapping.Location = new System.Drawing.Point(311, 78);
             this.comboBoxMapping.Name = "comboBoxMapping";
             this.comboBoxMapping.Size = new System.Drawing.Size(92, 21);
             this.comboBoxMapping.TabIndex = 29;
-            this.comboBoxMapping.DataBindings.Add(new System.Windows.Forms.Binding("SelectedIndex", this.mapAttributesResultBindingSource, "Mapping", true));
             // 
             // labelMapping
             // 
             this.labelMapping.AutoSize = true;
-            this.labelMapping.Location = new System.Drawing.Point(105, 120);
+            this.labelMapping.Location = new System.Drawing.Point(308, 62);
             this.labelMapping.Name = "labelMapping";
-            this.labelMapping.Size = new System.Drawing.Size(45, 13);
+            this.labelMapping.Size = new System.Drawing.Size(48, 13);
             this.labelMapping.TabIndex = 28;
             this.labelMapping.Text = "Mapping";
             // 
             // comboBoxLineOfSight
             // 
+            this.comboBoxLineOfSight.DataBindings.Add(new System.Windows.Forms.Binding("SelectedIndex", this.mapAttributesResultBindingSource, "LineOfSight", true));
             this.comboBoxLineOfSight.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxLineOfSight.FormattingEnabled = true;
             this.comboBoxLineOfSight.Items.AddRange(new object[] {
             "Permanent",
             "Line of Sight",
             "Circular"});
-            this.comboBoxLineOfSight.Location = new System.Drawing.Point(10, 136);
+            this.comboBoxLineOfSight.Location = new System.Drawing.Point(311, 23);
             this.comboBoxLineOfSight.Name = "comboBoxLineOfSight";
             this.comboBoxLineOfSight.Size = new System.Drawing.Size(92, 21);
             this.comboBoxLineOfSight.TabIndex = 27;
-            this.comboBoxLineOfSight.DataBindings.Add(new System.Windows.Forms.Binding("SelectedIndex", this.mapAttributesResultBindingSource, "LineOfSight", true));
             // 
             // labelLineOfSight
             // 
             this.labelLineOfSight.AutoSize = true;
-            this.labelLineOfSight.Location = new System.Drawing.Point(7, 120);
+            this.labelLineOfSight.Location = new System.Drawing.Point(308, 7);
             this.labelLineOfSight.Name = "labelLineOfSight";
-            this.labelLineOfSight.Size = new System.Drawing.Size(70, 13);
+            this.labelLineOfSight.Size = new System.Drawing.Size(66, 13);
             this.labelLineOfSight.TabIndex = 26;
             this.labelLineOfSight.Text = "Line of Sight";
             // 
-            // numericUpDown8
+            // maxWindInGameLabel
             // 
-            this.numericUpDown8.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.mapAttributesResultBindingSource, "MohoMetal", true));
-            this.numericUpDown8.Location = new System.Drawing.Point(304, 78);
-            this.numericUpDown8.Maximum = new decimal(new int[] {
-            20000,
-            0,
-            0,
-            0});
-            this.numericUpDown8.Name = "numericUpDown8";
-            this.numericUpDown8.Size = new System.Drawing.Size(92, 20);
-            this.numericUpDown8.TabIndex = 23;
+            this.maxWindInGameLabel.AutoSize = true;
+            this.maxWindInGameLabel.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.maxWindInGameLabel.Location = new System.Drawing.Point(8, 99);
+            this.maxWindInGameLabel.Name = "maxWindInGameLabel";
+            this.maxWindInGameLabel.Size = new System.Drawing.Size(62, 13);
+            this.maxWindInGameLabel.TabIndex = 25;
+            this.maxWindInGameLabel.Text = "0.0 in-game";
             // 
-            // label9
+            // minWindInGameLabel
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(301, 62);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(63, 13);
-            this.label9.TabIndex = 22;
-            this.label9.Text = "Moho Metal";
-            // 
-            // numericUpDown7
-            // 
-            this.numericUpDown7.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.mapAttributesResultBindingSource, "SurfaceMetal", true));
-            this.numericUpDown7.Location = new System.Drawing.Point(304, 22);
-            this.numericUpDown7.Maximum = new decimal(new int[] {
-            20000,
-            0,
-            0,
-            0});
-            this.numericUpDown7.Name = "numericUpDown7";
-            this.numericUpDown7.Size = new System.Drawing.Size(92, 20);
-            this.numericUpDown7.TabIndex = 21;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(301, 7);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(73, 13);
-            this.label8.TabIndex = 20;
-            this.label8.Text = "Surface Metal";
+            this.minWindInGameLabel.AutoSize = true;
+            this.minWindInGameLabel.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.minWindInGameLabel.Location = new System.Drawing.Point(8, 44);
+            this.minWindInGameLabel.Name = "minWindInGameLabel";
+            this.minWindInGameLabel.Size = new System.Drawing.Size(62, 13);
+            this.minWindInGameLabel.TabIndex = 24;
+            this.minWindInGameLabel.Text = "0.0 in-game";
             // 
             // numericUpDown6
             // 
@@ -550,38 +840,8 @@ namespace Mappy.UI.Forms
             this.label2.TabIndex = 8;
             this.label2.Text = "Min Wind Speed";
             // 
-            // minWindInGameLabel
-            // 
-            this.minWindInGameLabel.AutoSize = true;
-            this.minWindInGameLabel.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.minWindInGameLabel.Location = new System.Drawing.Point(8, 44);
-            this.minWindInGameLabel.Name = "minWindInGameLabel";
-            this.minWindInGameLabel.Size = new System.Drawing.Size(79, 13);
-            this.minWindInGameLabel.TabIndex = 24;
-            this.minWindInGameLabel.Text = "0.0 in-game";
-            // 
-            // maxWindInGameLabel
-            // 
-            this.maxWindInGameLabel.AutoSize = true;
-            this.maxWindInGameLabel.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.maxWindInGameLabel.Location = new System.Drawing.Point(8, 99);
-            this.maxWindInGameLabel.Name = "maxWindInGameLabel";
-            this.maxWindInGameLabel.Size = new System.Drawing.Size(79, 13);
-            this.maxWindInGameLabel.TabIndex = 25;
-            this.maxWindInGameLabel.Text = "0.0 in-game";
-            // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.numericUpDown13);
-            this.tabPage3.Controls.Add(this.label20);
-            this.tabPage3.Controls.Add(this.numericUpDown12);
-            this.tabPage3.Controls.Add(this.label19);
-            this.tabPage3.Controls.Add(this.numericUpDown11);
-            this.tabPage3.Controls.Add(this.label18);
-            this.tabPage3.Controls.Add(this.numericUpDown10);
-            this.tabPage3.Controls.Add(this.label17);
-            this.tabPage3.Controls.Add(this.textBox1);
-            this.tabPage3.Controls.Add(this.label16);
             this.tabPage3.Controls.Add(this.numericUpDown9);
             this.tabPage3.Controls.Add(this.label1);
             this.tabPage3.Controls.Add(this.checkBox2);
@@ -589,121 +849,15 @@ namespace Mappy.UI.Forms
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(434, 304);
+            this.tabPage3.Size = new System.Drawing.Size(434, 404);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Special";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // numericUpDown13
-            // 
-            this.numericUpDown13.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.mapAttributesResultBindingSource, "MeteorInterval", true));
-            this.numericUpDown13.Location = new System.Drawing.Point(309, 62);
-            this.numericUpDown13.Maximum = new decimal(new int[] {
-            20000,
-            0,
-            0,
-            0});
-            this.numericUpDown13.Name = "numericUpDown13";
-            this.numericUpDown13.Size = new System.Drawing.Size(94, 20);
-            this.numericUpDown13.TabIndex = 27;
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(306, 46);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(42, 13);
-            this.label20.TabIndex = 16;
-            this.label20.Text = "Interval";
-            // 
-            // numericUpDown12
-            // 
-            this.numericUpDown12.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.mapAttributesResultBindingSource, "MeteorDuration", true));
-            this.numericUpDown12.Location = new System.Drawing.Point(309, 19);
-            this.numericUpDown12.Maximum = new decimal(new int[] {
-            20000,
-            0,
-            0,
-            0});
-            this.numericUpDown12.Name = "numericUpDown12";
-            this.numericUpDown12.Size = new System.Drawing.Size(94, 20);
-            this.numericUpDown12.TabIndex = 23;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(306, 3);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(47, 13);
-            this.label19.TabIndex = 14;
-            this.label19.Text = "Duration";
-            // 
-            // numericUpDown11
-            // 
-            this.numericUpDown11.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.mapAttributesResultBindingSource, "MeteorDensity", true));
-            this.numericUpDown11.DecimalPlaces = 2;
-            this.numericUpDown11.Location = new System.Drawing.Point(209, 19);
-            this.numericUpDown11.Maximum = new decimal(new int[] {
-            20000,
-            0,
-            0,
-            0});
-            this.numericUpDown11.Name = "numericUpDown11";
-            this.numericUpDown11.Size = new System.Drawing.Size(94, 20);
-            this.numericUpDown11.TabIndex = 22;
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(206, 3);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(42, 13);
-            this.label18.TabIndex = 12;
-            this.label18.Text = "Density";
-            // 
-            // numericUpDown10
-            // 
-            this.numericUpDown10.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.mapAttributesResultBindingSource, "MeteorRadius", true));
-            this.numericUpDown10.Location = new System.Drawing.Point(109, 19);
-            this.numericUpDown10.Maximum = new decimal(new int[] {
-            20000,
-            0,
-            0,
-            0});
-            this.numericUpDown10.Name = "numericUpDown10";
-            this.numericUpDown10.Size = new System.Drawing.Size(94, 20);
-            this.numericUpDown10.TabIndex = 21;
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(106, 3);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(40, 13);
-            this.label17.TabIndex = 10;
-            this.label17.Text = "Radius";
-            // 
-            // textBox1
-            // 
-            this.textBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mapAttributesResultBindingSource, "MeteorWeapon", true));
-            this.textBox1.Location = new System.Drawing.Point(3, 19);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 20;
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(3, 3);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(48, 13);
-            this.label16.TabIndex = 8;
-            this.label16.Text = "Weapon";
-            // 
             // numericUpDown9
             // 
             this.numericUpDown9.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.mapAttributesResultBindingSource, "WaterDamage", true));
-            this.numericUpDown9.Location = new System.Drawing.Point(140, 62);
+            this.numericUpDown9.Location = new System.Drawing.Point(180, 28);
             this.numericUpDown9.Maximum = new decimal(new int[] {
             20000,
             0,
@@ -716,7 +870,7 @@ namespace Mappy.UI.Forms
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(137, 46);
+            this.label1.Location = new System.Drawing.Point(177, 12);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(79, 13);
             this.label1.TabIndex = 2;
@@ -726,7 +880,7 @@ namespace Mappy.UI.Forms
             // 
             this.checkBox2.AutoSize = true;
             this.checkBox2.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "WaterDoesDamage", true));
-            this.checkBox2.Location = new System.Drawing.Point(3, 68);
+            this.checkBox2.Location = new System.Drawing.Point(8, 36);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(126, 17);
             this.checkBox2.TabIndex = 25;
@@ -737,7 +891,7 @@ namespace Mappy.UI.Forms
             // 
             this.checkBox1.AutoSize = true;
             this.checkBox1.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "ImpassibleWater", true));
-            this.checkBox1.Location = new System.Drawing.Point(3, 45);
+            this.checkBox1.Location = new System.Drawing.Point(8, 12);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(107, 17);
             this.checkBox1.TabIndex = 24;
@@ -762,7 +916,7 @@ namespace Mappy.UI.Forms
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(434, 304);
+            this.tabPage4.Size = new System.Drawing.Size(434, 404);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Mission";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -905,7 +1059,7 @@ namespace Mappy.UI.Forms
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(434, 304);
+            this.tabPage5.Size = new System.Drawing.Size(434, 404);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Victory";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -1097,7 +1251,7 @@ namespace Mappy.UI.Forms
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(434, 304);
+            this.tabPage6.Size = new System.Drawing.Size(434, 404);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "Defeat";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -1213,7 +1367,7 @@ namespace Mappy.UI.Forms
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point(379, 348);
+            this.button2.Location = new System.Drawing.Point(379, 448);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 1;
@@ -1224,22 +1378,18 @@ namespace Mappy.UI.Forms
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(298, 348);
+            this.button1.Location = new System.Drawing.Point(298, 448);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
             this.button1.Text = "OK";
             this.button1.UseVisualStyleBackColor = true;
             // 
-            // mapAttributesResultBindingSource
-            // 
-            this.mapAttributesResultBindingSource.DataSource = typeof(Mappy.Models.MapAttributesResult);
-            // 
             // MapAttributesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(466, 383);
+            this.ClientSize = new System.Drawing.Size(466, 483);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.button1);
@@ -1250,10 +1400,22 @@ namespace Mappy.UI.Forms
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mapAttributesResultBindingSource)).EndInit();
+            this.tabPageSchema.ResumeLayout(false);
+            this.tabPageSchema.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.schemaAttributesBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHumanMetal)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownComputerMetal)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHumanEnergy)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownComputerEnergy)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown12)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown13)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
@@ -1262,10 +1424,6 @@ namespace Mappy.UI.Forms
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown13)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown12)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown9)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
@@ -1273,7 +1431,6 @@ namespace Mappy.UI.Forms
             this.tabPage5.PerformLayout();
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mapAttributesResultBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1282,7 +1439,18 @@ namespace Mappy.UI.Forms
 
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPageSchema;
+        private System.Windows.Forms.Label labelSchema;
+        private System.Windows.Forms.ComboBox comboSchema;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.NumericUpDown numericUpDownHumanMetal;
+        private System.Windows.Forms.Label labelHumanMetal;
+        private System.Windows.Forms.NumericUpDown numericUpDownComputerMetal;
+        private System.Windows.Forms.Label labelComputerMetal;
+        private System.Windows.Forms.NumericUpDown numericUpDownHumanEnergy;
+        private System.Windows.Forms.Label labelHumanEnergy;
+        private System.Windows.Forms.NumericUpDown numericUpDownComputerEnergy;
+        private System.Windows.Forms.Label labelComputerEnergy;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TabPage tabPage3;
@@ -1382,5 +1550,6 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.Label labelAnyUnitPassesZ;
         private System.Windows.Forms.TextBox textBoxAnyUnitPassesZ;
         public System.Windows.Forms.BindingSource mapAttributesResultBindingSource;
+        private System.Windows.Forms.BindingSource schemaAttributesBindingSource;
     }
 }

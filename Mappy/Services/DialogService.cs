@@ -289,11 +289,12 @@ namespace Mappy.Services
             return null;
         }
 
-        public MapAttributesResult AskUserForMapAttributes(MapAttributesResult r, Func<string, string> editUseOnlyUnits)
+        public MapAttributesResult AskUserForMapAttributes(MapAttributesResult r, Func<string, string> editUseOnlyUnits, int initialSchemaIndex)
         {
             var f = new MapAttributesForm();
 
             f.mapAttributesResultBindingSource.Add(r);
+            f.SetInitialSchemaIndex(initialSchemaIndex);
             f.EditUseOnlyUnitsClick += (s, e) =>
             {
                 if (editUseOnlyUnits == null)

@@ -55,7 +55,7 @@ namespace Mappy.Services
 
         bool AskUserToRemoveMissingRecentFile();
 
-        MapAttributesResult AskUserForMapAttributes(MapAttributesResult r, Func<string, string> editUseOnlyUnits);
+        MapAttributesResult AskUserForMapAttributes(MapAttributesResult r, Func<string, string> editUseOnlyUnits, int initialSchemaIndex);
 
         IList<string> AskUserToEditUseOnlyUnits(UnitCatalogService catalog, IList<string> currentNames);
 
