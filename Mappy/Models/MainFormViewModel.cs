@@ -1,6 +1,7 @@
 namespace Mappy.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
     using System.Reactive;
@@ -465,6 +466,16 @@ namespace Mappy.Models
         public void ExportSectionMenuItemClick()
         {
             this.dispatcher.ExportSelectedSection();
+        }
+
+        public IMapTile CopySelectedFloatingTile()
+        {
+            return this.dispatcher.CopySelectedFloatingTile();
+        }
+
+        public void ExportSectionAmendments(IReadOnlyList<SectionExportEntry> entries)
+        {
+            this.dispatcher.ExportSectionAmendments(entries);
         }
 
         public void ImportMinimapMenuItemClick()

@@ -759,6 +759,77 @@ namespace Mappy.Services
             });
         }
 
+        public IMapTile CopySelectedFloatingTile()
+        {
+            IMapTile copy = null;
+            this.model.Map.IfSome(
+                map =>
+                {
+                    if (!map.SelectedTile.HasValue || map.FloatingTiles.Count == 0)
+                    {
+                        return;
+                    }
+
+                    var source = map.FloatingTiles[map.SelectedTile.Value].Item;
+                    if (source == null || source.TileGrid.Width <= 0 || source.TileGrid.Height <= 0)
+                    {
+                        return;
+                    }
+
+                    var dest = new MapTile(source.TileGrid.Width, source.TileGrid.Height);
+                    GridMethods.Copy(
+                        source.TileGrid,
+                        dest.TileGrid,
+                        0,
+                        0,
+                        0,
+                        0,
+                        source.TileGrid.Width,
+                        source.TileGrid.Height);
+                    GridMethods.Copy(
+                        source.HeightGrid,
+                        dest.HeightGrid,
+                        0,
+                        0,
+                        0,
+                        0,
+                        source.HeightGrid.Width,
+                        source.HeightGrid.Height);
+                    copy = dest;
+                });
+
+            return copy;
+        }
+
+        public void ExportSectionAmendments(IReadOnlyList<SectionExportEntry> entries)
+        {
+            if (entries == null || entries.Count == 0)
+            {
+                return;
+            }
+
+            var location = this.dialogService.AskUserForSectionExportWorldCategory();
+            if (location == null)
+            {
+                return;
+            }
+
+            var path = this.dialogService.AskUserToSaveSectionArchive();
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            try
+            {
+                SectionArchiveSaver.Save(path, location.World, location.Category, entries);
+            }
+            catch (Exception)
+            {
+                this.dialogService.ShowError("There was a problem saving the section archive.");
+            }
+        }
+
         public void RefreshMinimap()
         {
             this.model.Map.IfSome(

@@ -709,7 +709,7 @@ namespace Mappy.Models
             return false;
         }
 
-        public void LeaveFocus()
+        public void LeaveFocus(bool preserveSelection)
         {
             if (this.activeHeightSetBrush || this.activeHeightSmoothBrush || this.activeHeightBrushDelta != 0)
             {
@@ -729,7 +729,10 @@ namespace Mappy.Models
 
             this.ClearHeightCursor();
             this.ClearVoidCursor();
-            this.dispatcher.ClearSelection();
+            if (!preserveSelection)
+            {
+                this.dispatcher.ClearSelection();
+            }
         }
 
         private static Point ProjectHeightPoint(IGrid<int> heightGrid, int x, int y)

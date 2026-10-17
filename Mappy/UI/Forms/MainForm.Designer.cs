@@ -139,6 +139,12 @@ namespace Mappy.UI.Forms
             this.markerStraightRadioButton = new System.Windows.Forms.RadioButton();
             this.markerFreehandRadioButton = new System.Windows.Forms.RadioButton();
             this.clearMarkersButton = new System.Windows.Forms.Button();
+            this.exportsTab = new System.Windows.Forms.TabPage();
+            this.exportsButtonsPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.exportAddButton = new System.Windows.Forms.Button();
+            this.exportRemoveButton = new System.Windows.Forms.Button();
+            this.exportExportButton = new System.Windows.Forms.Button();
+            this.exportsListView = new System.Windows.Forms.ListView();
             this.attributesTab = new System.Windows.Forms.TabPage();
             this.seaLevelValueLabel = new System.Windows.Forms.Label();
             this.seaLevelLabel = new System.Windows.Forms.Label();
@@ -177,6 +183,8 @@ namespace Mappy.UI.Forms
             this.voidTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.voidCursorSizeNumericUpDown)).BeginInit();
             this.markersTab.SuspendLayout();
+            this.exportsTab.SuspendLayout();
+            this.exportsButtonsPanel.SuspendLayout();
             this.attributesTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.seaLevelTrackbar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.zoomTrackBar)).BeginInit();
@@ -915,6 +923,7 @@ namespace Mappy.UI.Forms
             this.sidebarTabs.Controls.Add(this.attributesTab);
             this.sidebarTabs.Controls.Add(this.otaMissionTab);
             this.sidebarTabs.Controls.Add(this.markersTab);
+            this.sidebarTabs.Controls.Add(this.exportsTab);
             this.sidebarTabs.Dock = System.Windows.Forms.DockStyle.Left;
             this.sidebarTabs.Location = new System.Drawing.Point(0, 24);
             this.sidebarTabs.Multiline = true;
@@ -1225,6 +1234,85 @@ namespace Mappy.UI.Forms
             this.clearMarkersButton.UseVisualStyleBackColor = true;
             this.clearMarkersButton.Click += new System.EventHandler(this.ClearMarkersButtonClick);
             // 
+            // exportsTab
+            // 
+            this.exportsTab.Controls.Add(this.exportsListView);
+            this.exportsTab.Controls.Add(this.exportsButtonsPanel);
+            this.exportsTab.Location = new System.Drawing.Point(4, 40);
+            this.exportsTab.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.exportsTab.Name = "exportsTab";
+            this.exportsTab.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.exportsTab.Size = new System.Drawing.Size(207, 494);
+            this.exportsTab.TabIndex = 6;
+            this.exportsTab.Text = "Exports";
+            this.exportsTab.UseVisualStyleBackColor = true;
+            // 
+            // exportsButtonsPanel
+            // 
+            this.exportsButtonsPanel.AutoSize = true;
+            this.exportsButtonsPanel.Controls.Add(this.exportAddButton);
+            this.exportsButtonsPanel.Controls.Add(this.exportRemoveButton);
+            this.exportsButtonsPanel.Controls.Add(this.exportExportButton);
+            this.exportsButtonsPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.exportsButtonsPanel.Location = new System.Drawing.Point(2, 2);
+            this.exportsButtonsPanel.Name = "exportsButtonsPanel";
+            this.exportsButtonsPanel.Padding = new System.Windows.Forms.Padding(4, 4, 4, 0);
+            this.exportsButtonsPanel.Size = new System.Drawing.Size(203, 33);
+            this.exportsButtonsPanel.TabIndex = 0;
+            this.exportsButtonsPanel.WrapContents = false;
+            // 
+            // exportAddButton
+            // 
+            this.exportAddButton.AutoSize = true;
+            this.exportAddButton.Enabled = false;
+            this.exportAddButton.Location = new System.Drawing.Point(7, 7);
+            this.exportAddButton.Margin = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.exportAddButton.Name = "exportAddButton";
+            this.exportAddButton.Size = new System.Drawing.Size(40, 23);
+            this.exportAddButton.TabIndex = 0;
+            this.exportAddButton.Text = "Add";
+            this.exportAddButton.UseVisualStyleBackColor = true;
+            this.exportAddButton.Click += new System.EventHandler(this.ExportAddButtonClick);
+            // 
+            // exportRemoveButton
+            // 
+            this.exportRemoveButton.AutoSize = true;
+            this.exportRemoveButton.Enabled = false;
+            this.exportRemoveButton.Location = new System.Drawing.Point(53, 7);
+            this.exportRemoveButton.Margin = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.exportRemoveButton.Name = "exportRemoveButton";
+            this.exportRemoveButton.Size = new System.Drawing.Size(62, 23);
+            this.exportRemoveButton.TabIndex = 1;
+            this.exportRemoveButton.Text = "Remove";
+            this.exportRemoveButton.UseVisualStyleBackColor = true;
+            this.exportRemoveButton.Click += new System.EventHandler(this.ExportRemoveButtonClick);
+            // 
+            // exportExportButton
+            // 
+            this.exportExportButton.AutoSize = true;
+            this.exportExportButton.Enabled = false;
+            this.exportExportButton.Location = new System.Drawing.Point(121, 7);
+            this.exportExportButton.Margin = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.exportExportButton.Name = "exportExportButton";
+            this.exportExportButton.Size = new System.Drawing.Size(55, 23);
+            this.exportExportButton.TabIndex = 2;
+            this.exportExportButton.Text = "Export";
+            this.exportExportButton.UseVisualStyleBackColor = true;
+            this.exportExportButton.Click += new System.EventHandler(this.ExportExportButtonClick);
+            // 
+            // exportsListView
+            // 
+            this.exportsListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.exportsListView.HideSelection = false;
+            this.exportsListView.Location = new System.Drawing.Point(2, 35);
+            this.exportsListView.MultiSelect = false;
+            this.exportsListView.Name = "exportsListView";
+            this.exportsListView.Size = new System.Drawing.Size(203, 457);
+            this.exportsListView.TabIndex = 1;
+            this.exportsListView.UseCompatibleStateImageBehavior = false;
+            this.exportsListView.ItemActivate += new System.EventHandler(this.ExportsListViewItemActivate);
+            this.exportsListView.SelectedIndexChanged += new System.EventHandler(this.ExportsListViewSelectedIndexChanged);
+            // 
             // attributesTab
             // 
             this.attributesTab.Controls.Add(this.seaLevelValueLabel);
@@ -1408,6 +1496,10 @@ namespace Mappy.UI.Forms
             this.voidTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.voidCursorSizeNumericUpDown)).EndInit();
             this.markersTab.ResumeLayout(false);
+            this.exportsButtonsPanel.ResumeLayout(false);
+            this.exportsButtonsPanel.PerformLayout();
+            this.exportsTab.ResumeLayout(false);
+            this.exportsTab.PerformLayout();
             this.attributesTab.ResumeLayout(false);
             this.attributesTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.seaLevelTrackbar)).EndInit();
@@ -1492,6 +1584,12 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.RadioButton markerStraightRadioButton;
         private System.Windows.Forms.RadioButton markerFreehandRadioButton;
         private System.Windows.Forms.Button clearMarkersButton;
+        private System.Windows.Forms.TabPage exportsTab;
+        private System.Windows.Forms.FlowLayoutPanel exportsButtonsPanel;
+        private System.Windows.Forms.Button exportAddButton;
+        private System.Windows.Forms.Button exportRemoveButton;
+        private System.Windows.Forms.Button exportExportButton;
+        private System.Windows.Forms.ListView exportsListView;
         private StepNumericUpDown voidCursorSizeNumericUpDown;
         private System.Windows.Forms.Label voidCursorSizeLabel;
         private System.Windows.Forms.TabPage attributesTab;

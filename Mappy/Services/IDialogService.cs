@@ -39,6 +39,10 @@ namespace Mappy.Services
 
         SectionImportExportPaths AskUserToChooseSectionExportPaths();
 
+        SectionArchiveLocation AskUserForSectionExportWorldCategory();
+
+        string AskUserToSaveSectionArchive();
+
         bool CapturePreferences();
 
         Size AskUserNewMapSize();

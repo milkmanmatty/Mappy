@@ -1,7 +1,9 @@
 namespace Mappy.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.Drawing;
+    using Mappy.Data;
     using Mappy.Models.Enums;
 
     public interface IMainFormViewModel
@@ -189,6 +191,10 @@ namespace Mappy.Models
         void TilesetsMenuItemClick();
 
         void ExportSectionMenuItemClick();
+
+        IMapTile CopySelectedFloatingTile();
+
+        void ExportSectionAmendments(IReadOnlyList<SectionExportEntry> entries);
 
         void ImportMinimapMenuItemClick();
 
