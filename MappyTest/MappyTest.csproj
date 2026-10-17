@@ -72,6 +72,7 @@
     <Compile Include="MinimapControlTest.cs" />
     <Compile Include="QuadTreeTest.cs" />
     <Compile Include="ResizeMapAnchorTest.cs" />
+    <Compile Include="SchemaAttributesRoundTripTest.cs" />
     <Compile Include="SectionServiceTest.cs" />
     <Compile Include="TreeItem.cs" />
   </ItemGroup>
@@ -79,6 +80,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TAUtil\TAUtil\TAUtil.csproj">
+      <Project>{71AE8770-7794-4CF8-88F1-1D7429F24EB4}</Project>
+      <Name>TAUtil</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mappy\Mappy.csproj">
       <Project>{ea26a863-f126-4809-8b32-09829d21b4ce}</Project>
       <Name>Mappy</Name>

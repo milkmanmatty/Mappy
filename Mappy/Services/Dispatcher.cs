@@ -930,7 +930,8 @@ namespace Mappy.Services
                     {
                         var r = this.dialogService.AskUserForMapAttributes(
                             map.GetAttributes(),
-                            currentFileName => this.ApplyUseOnlyEdit(map, currentFileName));
+                            currentFileName => this.ApplyUseOnlyEdit(map, currentFileName),
+                            map.ActiveSchemaIndex);
                         if (r != null)
                         {
                             map.UpdateAttributes(r);
