@@ -52,9 +52,17 @@ namespace Mappy.Models
 
         public int WaterDamage { get; set; }
 
-        public bool ImpassibleWater { get; set; }
+        public bool LavaWorld { get; set; }
 
         public bool WaterDoesDamage { get; set; }
+
+        public int KillMul { get; set; }
+
+        public int TimeMul { get; set; }
+
+        public int MaxUnits { get; set; }
+
+        public bool NoSeaLevelTrigger { get; set; }
 
         // Victory (flag conditions write "1" when enabled)
         public bool KillEnemyCommander { get; set; }
@@ -102,7 +110,7 @@ namespace Mappy.Models
                 {
                     Description = attrs.Description,
                     Gravity = attrs.Gravity,
-                    ImpassibleWater = attrs.LavaWorld,
+                    LavaWorld = attrs.LavaWorld,
                     MaxWindSpeed = attrs.MaxWindSpeed,
                     Memory = attrs.Memory,
                     MissionHint = attrs.MissionHint,
@@ -123,6 +131,10 @@ namespace Mappy.Models
                     TidalStrength = attrs.TidalStrength,
                     WaterDamage = attrs.WaterDamage,
                     WaterDoesDamage = attrs.WaterDoesDamage,
+                    KillMul = attrs.KillMul,
+                    TimeMul = attrs.TimeMul,
+                    MaxUnits = attrs.MaxUnits,
+                    NoSeaLevelTrigger = attrs.NoSeaLevelTrigger,
                     KillEnemyCommander = HasFlag(conditions, "KillEnemyCommander"),
                     DestroyAllUnits = HasFlag(conditions, "DestroyAllUnits"),
                     BuildUnitType = GetValue(conditions, "BuildUnitType"),
@@ -157,7 +169,7 @@ namespace Mappy.Models
 
             attrs.Description = this.Description;
             attrs.Gravity = this.Gravity;
-            attrs.LavaWorld = this.ImpassibleWater;
+            attrs.LavaWorld = this.LavaWorld;
             attrs.MaxWindSpeed = this.MaxWindSpeed;
             attrs.Memory = this.Memory;
             attrs.MissionHint = this.MissionHint ?? string.Empty;
@@ -178,6 +190,10 @@ namespace Mappy.Models
             attrs.TidalStrength = this.TidalStrength;
             attrs.WaterDamage = this.WaterDamage;
             attrs.WaterDoesDamage = this.WaterDoesDamage;
+            attrs.KillMul = this.KillMul;
+            attrs.TimeMul = this.TimeMul;
+            attrs.MaxUnits = this.MaxUnits;
+            attrs.NoSeaLevelTrigger = this.NoSeaLevelTrigger;
 
             var count = Math.Min(this.Schemas.Count, attrs.Schemas.Count);
             for (var i = 0; i < count; i++)

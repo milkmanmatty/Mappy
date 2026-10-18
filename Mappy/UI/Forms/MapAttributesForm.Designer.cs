@@ -92,6 +92,13 @@ namespace Mappy.UI.Forms
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.numericUpDownMaxUnits = new System.Windows.Forms.NumericUpDown();
+            this.labelMaxUnits = new System.Windows.Forms.Label();
+            this.numericUpDownTimeMul = new System.Windows.Forms.NumericUpDown();
+            this.labelTimeMul = new System.Windows.Forms.Label();
+            this.numericUpDownKillMul = new System.Windows.Forms.NumericUpDown();
+            this.labelKillMul = new System.Windows.Forms.Label();
+            this.checkBoxNoSeaLevelTrigger = new System.Windows.Forms.CheckBox();
             this.numericUpDown9 = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
@@ -168,6 +175,9 @@ namespace Mappy.UI.Forms
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxUnits)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTimeMul)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKillMul)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown9)).BeginInit();
             this.tabPage4.SuspendLayout();
             this.tabPage5.SuspendLayout();
@@ -842,6 +852,13 @@ namespace Mappy.UI.Forms
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.numericUpDownMaxUnits);
+            this.tabPage3.Controls.Add(this.labelMaxUnits);
+            this.tabPage3.Controls.Add(this.numericUpDownTimeMul);
+            this.tabPage3.Controls.Add(this.labelTimeMul);
+            this.tabPage3.Controls.Add(this.numericUpDownKillMul);
+            this.tabPage3.Controls.Add(this.labelKillMul);
+            this.tabPage3.Controls.Add(this.checkBoxNoSeaLevelTrigger);
             this.tabPage3.Controls.Add(this.numericUpDown9);
             this.tabPage3.Controls.Add(this.label1);
             this.tabPage3.Controls.Add(this.checkBox2);
@@ -853,6 +870,93 @@ namespace Mappy.UI.Forms
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Special";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDownMaxUnits
+            // 
+            this.numericUpDownMaxUnits.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.mapAttributesResultBindingSource, "MaxUnits", true));
+            this.numericUpDownMaxUnits.Location = new System.Drawing.Point(274, 106);
+            this.numericUpDownMaxUnits.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.numericUpDownMaxUnits.Name = "numericUpDownMaxUnits";
+            this.numericUpDownMaxUnits.Size = new System.Drawing.Size(92, 20);
+            this.numericUpDownMaxUnits.TabIndex = 33;
+            // 
+            // labelMaxUnits
+            // 
+            this.labelMaxUnits.AutoSize = true;
+            this.labelMaxUnits.Location = new System.Drawing.Point(271, 90);
+            this.labelMaxUnits.Name = "labelMaxUnits";
+            this.labelMaxUnits.Size = new System.Drawing.Size(56, 13);
+            this.labelMaxUnits.TabIndex = 32;
+            this.labelMaxUnits.Text = "Max Units";
+            // 
+            // numericUpDownTimeMul
+            // 
+            this.numericUpDownTimeMul.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.mapAttributesResultBindingSource, "TimeMul", true));
+            this.numericUpDownTimeMul.Location = new System.Drawing.Point(141, 106);
+            this.numericUpDownTimeMul.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.numericUpDownTimeMul.Minimum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownTimeMul.Name = "numericUpDownTimeMul";
+            this.numericUpDownTimeMul.Size = new System.Drawing.Size(92, 20);
+            this.numericUpDownTimeMul.TabIndex = 31;
+            // 
+            // labelTimeMul
+            // 
+            this.labelTimeMul.AutoSize = true;
+            this.labelTimeMul.Location = new System.Drawing.Point(138, 90);
+            this.labelTimeMul.Name = "labelTimeMul";
+            this.labelTimeMul.Size = new System.Drawing.Size(51, 13);
+            this.labelTimeMul.TabIndex = 30;
+            this.labelTimeMul.Text = "Time Mul";
+            // 
+            // numericUpDownKillMul
+            // 
+            this.numericUpDownKillMul.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.mapAttributesResultBindingSource, "KillMul", true));
+            this.numericUpDownKillMul.Location = new System.Drawing.Point(8, 106);
+            this.numericUpDownKillMul.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.numericUpDownKillMul.Minimum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownKillMul.Name = "numericUpDownKillMul";
+            this.numericUpDownKillMul.Size = new System.Drawing.Size(92, 20);
+            this.numericUpDownKillMul.TabIndex = 29;
+            // 
+            // labelKillMul
+            // 
+            this.labelKillMul.AutoSize = true;
+            this.labelKillMul.Location = new System.Drawing.Point(5, 90);
+            this.labelKillMul.Name = "labelKillMul";
+            this.labelKillMul.Size = new System.Drawing.Size(42, 13);
+            this.labelKillMul.TabIndex = 28;
+            this.labelKillMul.Text = "Kill Mul";
+            // 
+            // checkBoxNoSeaLevelTrigger
+            // 
+            this.checkBoxNoSeaLevelTrigger.AutoSize = true;
+            this.checkBoxNoSeaLevelTrigger.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "NoSeaLevelTrigger", true));
+            this.checkBoxNoSeaLevelTrigger.Location = new System.Drawing.Point(8, 60);
+            this.checkBoxNoSeaLevelTrigger.Name = "checkBoxNoSeaLevelTrigger";
+            this.checkBoxNoSeaLevelTrigger.Size = new System.Drawing.Size(133, 17);
+            this.checkBoxNoSeaLevelTrigger.TabIndex = 27;
+            this.checkBoxNoSeaLevelTrigger.Text = "No Sea Level Trigger";
+            this.checkBoxNoSeaLevelTrigger.UseVisualStyleBackColor = true;
             // 
             // numericUpDown9
             // 
@@ -890,12 +994,12 @@ namespace Mappy.UI.Forms
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "ImpassibleWater", true));
+            this.checkBox1.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.mapAttributesResultBindingSource, "LavaWorld", true));
             this.checkBox1.Location = new System.Drawing.Point(8, 12);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(107, 17);
+            this.checkBox1.Size = new System.Drawing.Size(79, 17);
             this.checkBox1.TabIndex = 24;
-            this.checkBox1.Text = "Impassible Water";
+            this.checkBox1.Text = "Lava World";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // tabPage4
@@ -1424,6 +1528,9 @@ namespace Mappy.UI.Forms
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxUnits)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTimeMul)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKillMul)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown9)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
@@ -1454,6 +1561,13 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.NumericUpDown numericUpDownMaxUnits;
+        private System.Windows.Forms.Label labelMaxUnits;
+        private System.Windows.Forms.NumericUpDown numericUpDownTimeMul;
+        private System.Windows.Forms.Label labelTimeMul;
+        private System.Windows.Forms.NumericUpDown numericUpDownKillMul;
+        private System.Windows.Forms.Label labelKillMul;
+        private System.Windows.Forms.CheckBox checkBoxNoSeaLevelTrigger;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.NumericUpDown numericUpDown8;

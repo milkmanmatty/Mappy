@@ -45,7 +45,7 @@ namespace Mappy.Data
             "glamoursound", "nomovie",
             "lineofsight", "mapping", "tidalstrength", "solarstrength", "lavaworld", "killmul", "timemul",
             "minwindspeed", "maxwindspeed", "gravity", "waterdoesdamage", "waterdamage", "numplayers",
-            "size", "memory", "useonlyunits", "SCHEMACOUNT",
+            "size", "memory", "useonlyunits", "maxunits", "nosealeveltrigger", "SCHEMACOUNT",
             "AllUnitsKilled", "AllUnitsKilledOfType", "AnyUnitPassesX", "AnyUnitPassesZ",
             "BuildUnitType", "CaptureUnitType", "CommanderKilled", "DeathTimerRunsOut",
             "DestroyAllUnits", "KillAllMobileUnits", "KillAllOfType", "KillEnemyCommander",
@@ -84,6 +84,10 @@ namespace Mappy.Data
         private int mapping;
 
         private bool lavaWorld;
+        private int killMul;
+        private int timeMul;
+        private int maxUnits;
+        private bool noSeaLevelTrigger;
 
         private bool waterDoesDamage;
         private int waterDamage;
@@ -116,6 +120,10 @@ namespace Mappy.Data
             this.Mapping = 0;
 
             this.LavaWorld = false;
+            this.KillMul = 50;
+            this.TimeMul = 0;
+            this.MaxUnits = 250;
+            this.NoSeaLevelTrigger = false;
 
             this.WaterDoesDamage = false;
             this.WaterDamage = 0;
@@ -242,6 +250,30 @@ namespace Mappy.Data
             set => this.SetField(ref this.lavaWorld, value, nameof(this.LavaWorld));
         }
 
+        public int KillMul
+        {
+            get => this.killMul;
+            set => this.SetField(ref this.killMul, value, nameof(this.KillMul));
+        }
+
+        public int TimeMul
+        {
+            get => this.timeMul;
+            set => this.SetField(ref this.timeMul, value, nameof(this.TimeMul));
+        }
+
+        public int MaxUnits
+        {
+            get => this.maxUnits;
+            set => this.SetField(ref this.maxUnits, value, nameof(this.MaxUnits));
+        }
+
+        public bool NoSeaLevelTrigger
+        {
+            get => this.noSeaLevelTrigger;
+            set => this.SetField(ref this.noSeaLevelTrigger, value, nameof(this.NoSeaLevelTrigger));
+        }
+
         public bool WaterDoesDamage
         {
             get => this.waterDoesDamage;
@@ -360,6 +392,10 @@ namespace Mappy.Data
             m.LineOfSight = ClampInt(TdfConvert.ToInt32(gh.Entries.GetOrDefault("lineofsight", "0")), 0, 2);
             m.Mapping = ClampInt(TdfConvert.ToInt32(gh.Entries.GetOrDefault("mapping", "0")), 0, 1);
             m.LavaWorld = TdfConvert.ToBool(gh.Entries.GetOrDefault("lavaworld", "0"));
+            m.KillMul = TdfConvert.ToInt32(gh.Entries.GetOrDefault("killmul", "50"));
+            m.TimeMul = TdfConvert.ToInt32(gh.Entries.GetOrDefault("timemul", "0"));
+            m.MaxUnits = TdfConvert.ToInt32(gh.Entries.GetOrDefault("maxunits", "250"));
+            m.NoSeaLevelTrigger = TdfConvert.ToBool(gh.Entries.GetOrDefault("nosealeveltrigger", "0"));
             m.MinWindSpeed = TdfConvert.ToInt32(gh.Entries.GetOrDefault("minwindspeed", "0"));
             m.MaxWindSpeed = TdfConvert.ToInt32(gh.Entries.GetOrDefault("maxwindspeed", "0"));
             m.Gravity = TdfConvert.ToInt32(gh.Entries.GetOrDefault("gravity", "0"));
@@ -434,8 +470,8 @@ namespace Mappy.Data
             r.Entries["tidalstrength"] = TdfConvert.ToString(this.TidalStrength);
             r.Entries["solarstrength"] = TdfConvert.ToString(this.SolarStrength);
             r.Entries["lavaworld"] = TdfConvert.ToString(this.LavaWorld);
-            r.Entries["killmul"] = "50";
-            r.Entries["timemul"] = "0";
+            r.Entries["killmul"] = TdfConvert.ToString(this.KillMul);
+            r.Entries["timemul"] = TdfConvert.ToString(this.TimeMul);
             r.Entries["minwindspeed"] = TdfConvert.ToString(this.MinWindSpeed);
             r.Entries["maxwindspeed"] = TdfConvert.ToString(this.MaxWindSpeed);
             r.Entries["gravity"] = TdfConvert.ToString(this.Gravity);
@@ -445,6 +481,8 @@ namespace Mappy.Data
             r.Entries["size"] = $"{mapWidthIn512Tiles} x {mapHeightIn512Tiles}";
             r.Entries["memory"] = this.memory;
             r.Entries["useonlyunits"] = this.UseOnlyUnits;
+            r.Entries["maxunits"] = TdfConvert.ToString(this.MaxUnits);
+            r.Entries["nosealeveltrigger"] = TdfConvert.ToString(this.NoSeaLevelTrigger);
             r.Entries["SCHEMACOUNT"] = TdfConvert.ToString(this.schemaList.Count);
 
             foreach (var key in VictoryConditionKeys)
@@ -526,6 +564,10 @@ namespace Mappy.Data
             this.MinWindSpeed = source.MinWindSpeed;
             this.MaxWindSpeed = source.MaxWindSpeed;
             this.LavaWorld = source.LavaWorld;
+            this.KillMul = source.KillMul;
+            this.TimeMul = source.TimeMul;
+            this.MaxUnits = source.MaxUnits;
+            this.NoSeaLevelTrigger = source.NoSeaLevelTrigger;
             this.WaterDoesDamage = source.WaterDoesDamage;
             this.WaterDamage = source.WaterDamage;
 
