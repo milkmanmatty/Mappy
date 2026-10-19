@@ -75,6 +75,7 @@ namespace Mappy.UI.Forms
             this.featureReclaimAmountsCheckBox.Checked = MappySettings.Settings.ShowFeatureReclaimAmounts;
             this.calculatedMetalDepositValueCheckBox.Checked = MappySettings.Settings.ShowCalculatedMetalDepositValue;
             this.saveResourceMarkersCheckBox.Checked = MappySettings.Settings.SaveResourceMarkersWithMap;
+            this.saveOamapInfoCheckBox.Checked = MappySettings.Settings.SaveOamapInfoWithHpi;
             this.resourceMarkerLineColor = MappySettings.Settings.GetResourceMarkerLineColorOrDefault();
             this.resourceMarkerLineColorCustomized = MappySettings.Settings.ResourceMarkerLineColorArgb.HasValue;
             this.showUnitFriendlyNameFirstCheckBox.Checked = MappySettings.Settings.ShowUnitFriendlyNameFirst;
@@ -357,6 +358,7 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.ShowFeatureReclaimAmounts = this.featureReclaimAmountsCheckBox.Checked;
             MappySettings.Settings.ShowCalculatedMetalDepositValue = this.calculatedMetalDepositValueCheckBox.Checked;
             MappySettings.Settings.SaveResourceMarkersWithMap = this.saveResourceMarkersCheckBox.Checked;
+            MappySettings.Settings.SaveOamapInfoWithHpi = this.saveOamapInfoCheckBox.Checked;
             MappySettings.Settings.ResourceMarkerLineColorArgb = this.resourceMarkerLineColorCustomized
                 ? (int?)this.resourceMarkerLineColor.ToArgb()
                 : null;

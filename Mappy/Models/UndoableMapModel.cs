@@ -130,6 +130,8 @@ namespace Mappy.Models
             private set => this.SetField(ref this.isFileReadOnly, value, nameof(this.IsFileReadOnly));
         }
 
+        public OamapPackInfo OamapInfo { get; set; }
+
         public bool CanUndo => this.undoManager.CanUndo;
 
         public bool CanRedo => this.undoManager.CanRedo;
@@ -1457,6 +1459,11 @@ namespace Mappy.Models
             this.FilePath = filename;
             this.IsFileReadOnly = false;
             this.undoManager.SetNowAsMark();
+        }
+
+        public void MarkUnsaved()
+        {
+            this.undoManager.MarkDirty();
         }
 
         public void PasteMapTile(IMapTile tile, int x, int y)

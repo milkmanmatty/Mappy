@@ -78,6 +78,7 @@ namespace Mappy.UI.Forms
             this.resourceMarkerLineColorButton = new System.Windows.Forms.Button();
             this.resourceMarkerLineColorLabel = new System.Windows.Forms.Label();
             this.saveResourceMarkersCheckBox = new System.Windows.Forms.CheckBox();
+            this.saveOamapInfoCheckBox = new System.Windows.Forms.CheckBox();
             this.miscGroupBox = new System.Windows.Forms.GroupBox();
             this.doNotPromptToSaveUnsavedChangesCheckBox = new System.Windows.Forms.CheckBox();
             this.preferencesTabControl = new System.Windows.Forms.TabControl();
@@ -678,10 +679,11 @@ namespace Mappy.UI.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.resourceMarkersGroupBox.Controls.Add(this.resourceMarkerLineColorButton);
             this.resourceMarkersGroupBox.Controls.Add(this.resourceMarkerLineColorLabel);
+            this.resourceMarkersGroupBox.Controls.Add(this.saveOamapInfoCheckBox);
             this.resourceMarkersGroupBox.Controls.Add(this.saveResourceMarkersCheckBox);
             this.resourceMarkersGroupBox.Location = new System.Drawing.Point(12, 270);
             this.resourceMarkersGroupBox.Name = "resourceMarkersGroupBox";
-            this.resourceMarkersGroupBox.Size = new System.Drawing.Size(426, 78);
+            this.resourceMarkersGroupBox.Size = new System.Drawing.Size(426, 100);
             this.resourceMarkersGroupBox.TabIndex = 2;
             this.resourceMarkersGroupBox.TabStop = false;
             this.resourceMarkersGroupBox.Text = "Resource markers";
@@ -715,12 +717,22 @@ namespace Mappy.UI.Forms
             this.saveResourceMarkersCheckBox.Text = "Save resource markers with the map";
             this.saveResourceMarkersCheckBox.UseVisualStyleBackColor = true;
             // 
+            // saveOamapInfoCheckBox
+            // 
+            this.saveOamapInfoCheckBox.AutoSize = true;
+            this.saveOamapInfoCheckBox.Location = new System.Drawing.Point(17, 70);
+            this.saveOamapInfoCheckBox.Name = "saveOamapInfoCheckBox";
+            this.saveOamapInfoCheckBox.Size = new System.Drawing.Size(210, 17);
+            this.saveOamapInfoCheckBox.TabIndex = 3;
+            this.saveOamapInfoCheckBox.Text = "Save oamap info in HPI file";
+            this.saveOamapInfoCheckBox.UseVisualStyleBackColor = true;
+            // 
             // miscGroupBox
             // 
             this.miscGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.miscGroupBox.Controls.Add(this.doNotPromptToSaveUnsavedChangesCheckBox);
-            this.miscGroupBox.Location = new System.Drawing.Point(12, 354);
+            this.miscGroupBox.Location = new System.Drawing.Point(12, 376);
             this.miscGroupBox.Name = "miscGroupBox";
             this.miscGroupBox.Size = new System.Drawing.Size(426, 52);
             this.miscGroupBox.TabIndex = 3;
@@ -1382,6 +1394,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.CheckBox calculatedMetalDepositValueCheckBox;
         private System.Windows.Forms.GroupBox resourceMarkersGroupBox;
         private System.Windows.Forms.CheckBox saveResourceMarkersCheckBox;
+        private System.Windows.Forms.CheckBox saveOamapInfoCheckBox;
         private System.Windows.Forms.Label resourceMarkerLineColorLabel;
         private System.Windows.Forms.Button resourceMarkerLineColorButton;
         private System.Windows.Forms.GroupBox miscGroupBox;

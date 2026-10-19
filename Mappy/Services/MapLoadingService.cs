@@ -1,6 +1,9 @@
 ﻿namespace Mappy.Services
 {
+    using System;
     using System.IO;
+    using System.Linq;
+    using System.Text;
 
     using Mappy.Collections;
     using Mappy.Data;
@@ -107,7 +110,53 @@
                 m.ReplaceUseOnlyUnitNames(UseOnlyTdf.ReadHpi(hpi, m.Attributes.UseOnlyUnits));
                 var mapModel = new UndoableMapModel(m, hpipath, readOnly);
                 ResourceMarkerSidecar.TryLoadFromArchive(mapModel, hpi, mappath);
+                TryAttachOamapInfo(hpi, mappath, mapModel);
                 return mapModel;
+            }
+        }
+
+        public UndoableMapModel CreateFromTntAndOtaBytes(byte[] tntBytes, byte[] otaBytes, string filename)
+        {
+            TdfNode attrs;
+            using (var ota = new MemoryStream(otaBytes))
+            {
+                attrs = TdfNode.LoadTdf(ota);
+            }
+
+            MapModel model;
+            using (var tnt = new TntReader(new MemoryStream(tntBytes)))
+            {
+                model = this.mapModelFactory.FromTntAndOta(tnt, attrs);
+            }
+
+            return new UndoableMapModel(model, filename, false);
+        }
+
+        private static void TryAttachOamapInfo(HpiArchive hpi, string mappath, UndoableMapModel mapModel)
+        {
+            try
+            {
+                var info = hpi.FindFile("oamap.yaml");
+                if (info == null || info.Size <= 0)
+                {
+                    return;
+                }
+
+                var buffer = new byte[info.Size];
+                hpi.Extract(info, buffer);
+                var yaml = Encoding.UTF8.GetString(buffer);
+                var manifest = OamapManifestReader.TryRead(yaml);
+                if (manifest == null)
+                {
+                    return;
+                }
+
+                var mapName = HpiPath.GetFileNameWithoutExtension(mappath);
+                var mapCount = hpi.GetFiles("maps").Count(file => file.Name.EndsWith(".tnt", StringComparison.OrdinalIgnoreCase));
+                mapModel.OamapInfo = manifest.ToPackInfo(mapName, mapCount);
+            }
+            catch (Exception)
+            {
             }
         }
     }

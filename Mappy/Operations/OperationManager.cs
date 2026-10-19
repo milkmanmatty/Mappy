@@ -82,6 +82,14 @@
             this.MarkCounter = 0;
         }
 
+        public void MarkDirty()
+        {
+            if (this.IsMarked)
+            {
+                this.MarkCounter = 1;
+            }
+        }
+
         public void Execute(IReplayableOperation op)
         {
             this.Execute(op, true);

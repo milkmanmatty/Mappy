@@ -6,7 +6,9 @@ namespace Mappy.Services
     using System.Drawing;
     using System.Drawing.Imaging;
     using System.IO;
+    using System.IO.Compression;
     using System.Linq;
+    using System.Text;
     using System.Windows.Forms;
     using Mappy;
     using Mappy.Collections;
@@ -384,6 +386,9 @@ namespace Mappy.Services
                     case ".SCT":
                         this.OpenSct(entry.FilePath);
                         return;
+                    case ".OAMAP":
+                        this.OpenFromOamap(entry.FilePath, entry.MapName);
+                        return;
                     default:
                         this.dialogService.ShowError($"Mappy doesn't know how to open {ext} files");
                         return;
@@ -436,7 +441,17 @@ namespace Mappy.Services
                             return false;
                         }
 
-                        return this.SaveHelper(map, path);
+                        OamapPackInfo packInfo = null;
+                        if (IsOamapPath(path) && map.OamapInfo == null)
+                        {
+                            packInfo = this.AskUserForOamapPackInfo(map, path);
+                            if (packInfo == null)
+                            {
+                                return false;
+                            }
+                        }
+
+                        return this.SaveHelper(map, path, packInfo);
                     },
                 none: () => false);
         }
@@ -937,6 +952,23 @@ namespace Mappy.Services
                             map.UpdateAttributes(r);
                         }
                     });
+        }
+
+        public void EditOamapProperties()
+        {
+            this.model.Map.IfSome(map =>
+            {
+                var defaults = map.OamapInfo
+                    ?? OamapPackInfo.CreateDefaults(map, map.FilePath, "Mappy " + Application.ProductVersion);
+                var result = this.dialogService.AskUserForOamapPackInfo(defaults);
+                if (result == null)
+                {
+                    return;
+                }
+
+                map.OamapInfo = result;
+                map.MarkUnsaved();
+            });
         }
 
         public void OpenUseOnlyUnitsEditor()
@@ -1745,9 +1777,11 @@ namespace Mappy.Services
                 markersTemp = ResourceMarkerSidecar.TryExtractArchiveEntry(filename);
             }
 
+            var oamapTemp = this.TryCreateOamapManifestTemp(map);
+
             try
             {
-                MapSaver.SaveHpi(map, tmpFileName, this.unitCatalogService.GetUnitTedClass, markersTemp);
+                MapSaver.SaveHpi(map, tmpFileName, this.unitCatalogService.GetUnitTedClass, markersTemp, oamapTemp);
                 File.Delete(filename);
                 File.Move(tmpFileName, filename);
                 if (MappySettings.Settings.SaveResourceMarkersWithMap)
@@ -1772,9 +1806,89 @@ namespace Mappy.Services
                 {
                     File.Delete(markersTemp);
                 }
+
+                if (oamapTemp != null)
+                {
+                    File.Delete(oamapTemp);
+                }
             }
 
             map.MarkSaved(filename);
+        }
+
+        private void SaveOamap(UndoableMapModel map, string filename, OamapPackInfo packInfo)
+        {
+            map.ClearSelection();
+
+            var randomValue = this.rng.Next(1000);
+            var tmpFileName = Path.ChangeExtension(filename, ".mappytemp-" + randomValue);
+            try
+            {
+                var warnings = MapSaver.SaveOamap(map, tmpFileName, packInfo, this.featureService);
+                if (File.Exists(filename))
+                {
+                    File.Delete(filename);
+                }
+
+                File.Move(tmpFileName, filename);
+                map.MarkSaved(filename);
+                if (warnings != null && warnings.Count > 0)
+                {
+                    var shown = warnings.Count > 20 ? warnings.Take(20).ToList() : warnings;
+                    var message = "Saved the map pack, but some feature files were left out:\n\n" + string.Join("\n", shown);
+                    if (warnings.Count > shown.Count)
+                    {
+                        message += "\n... and " + (warnings.Count - shown.Count) + " more.";
+                    }
+
+                    this.dialogService.ShowMessage(message, "Open Annihilation map pack");
+                }
+            }
+            catch
+            {
+                if (File.Exists(tmpFileName))
+                {
+                    File.Delete(tmpFileName);
+                }
+
+                throw;
+            }
+        }
+
+        private string TryCreateOamapManifestTemp(UndoableMapModel map)
+        {
+            if (!MappySettings.Settings.SaveOamapInfoWithHpi || map?.OamapInfo == null)
+            {
+                return null;
+            }
+
+            var info = map.OamapInfo;
+            var stem = (info.Stem ?? string.Empty).Trim();
+            var width = map.MapWidth;
+            var height = map.MapHeight;
+            var size = width.ToString(System.Globalization.CultureInfo.InvariantCulture)
+                + "x"
+                + height.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            var files = new List<string>
+            {
+                "maps/" + stem + ".ota",
+                "maps/" + stem + ".tnt",
+            };
+            var yaml = OamapManifestWriter.Write(info, size, null, files);
+            var path = Path.GetTempFileName();
+            File.WriteAllText(path, yaml, new UTF8Encoding(false));
+            return path;
+        }
+
+        private OamapPackInfo AskUserForOamapPackInfo(UndoableMapModel map, string filename)
+        {
+            var defaults = OamapPackInfo.CreateDefaults(map, filename, "Mappy " + Application.ProductVersion);
+            return this.dialogService.AskUserForOamapPackInfo(defaults);
+        }
+
+        private bool IsOamapPath(string filename)
+        {
+            return string.Equals(Path.GetExtension(filename), ".oamap", StringComparison.OrdinalIgnoreCase);
         }
 
         private void DeduplicateTiles(IGrid<Bitmap> tiles)
@@ -1786,7 +1900,7 @@ namespace Mappy.Services
             }
         }
 
-        private bool SaveHelper(UndoableMapModel map, string filename)
+        private bool SaveHelper(UndoableMapModel map, string filename, OamapPackInfo packInfo = null)
         {
             if (filename == null)
             {
@@ -1807,8 +1921,36 @@ namespace Mappy.Services
                     case ".CCX":
                     case ".GPF":
                     case ".GP3":
+                        if (MappySettings.Settings.SaveOamapInfoWithHpi && map.OamapInfo == null)
+                        {
+                            var hpiInfo = this.AskUserForOamapPackInfo(map, filename);
+                            if (hpiInfo == null)
+                            {
+                                return false;
+                            }
+
+                            map.OamapInfo = hpiInfo;
+                        }
+
                         this.SaveHpi(map, filename);
                         return true;
+                    case ".OAMAP":
+                        {
+                            var packInfoToSave = packInfo ?? map.OamapInfo;
+                            if (packInfoToSave == null)
+                            {
+                                packInfoToSave = this.AskUserForOamapPackInfo(map, filename);
+                                if (packInfoToSave == null)
+                                {
+                                    return false;
+                                }
+                            }
+
+                            map.OamapInfo = packInfoToSave;
+                            this.SaveOamap(map, filename, packInfoToSave);
+                            return true;
+                        }
+
                     default:
                         this.dialogService.ShowError("Unrecognized file extension: " + extension);
                         return false;
@@ -1842,6 +1984,9 @@ namespace Mappy.Services
                         return;
                     case ".SCT":
                         this.OpenSct(filename);
+                        return;
+                    case ".OAMAP":
+                        this.OpenFromOamap(filename, null);
                         return;
                     default:
                         this.dialogService.ShowError($"Mappy doesn't know how to open {ext} files");
@@ -1953,6 +2098,7 @@ namespace Mappy.Services
         {
             var tntPath = HpiPath.Combine("maps", mapName + ".tnt");
             var mapModel = this.mapLoadingService.CreateFromHpi(filename, tntPath, readOnly);
+            this.featureService.ClearSupplementalHpi();
             this.model.Map = Maybe.Some(mapModel);
             this.IngestOtaUnitNames(mapModel);
             this.SetSelectedGUITabForMap();
@@ -1963,6 +2109,7 @@ namespace Mappy.Services
         {
             var mapModel = this.mapLoadingService.CreateFromTnt(filename);
             ResourceMarkerSidecar.TryLoad(mapModel);
+            this.featureService.ClearSupplementalHpi();
             this.model.Map = Maybe.Some(mapModel);
             this.IngestOtaUnitNames(mapModel);
             this.SetSelectedGUITabForMap();
@@ -2143,6 +2290,7 @@ namespace Mappy.Services
         private void New(int width, int height)
         {
             var mapModel = MapLoadingService.CreateMap(width, height);
+            this.featureService.ClearSupplementalHpi();
             this.model.Map = Maybe.Some(mapModel);
             this.IngestOtaUnitNames(mapModel);
             this.SetSelectedGUITabForMap();
@@ -2151,9 +2299,113 @@ namespace Mappy.Services
         private void OpenSct(string filename)
         {
             var mapModel = this.mapLoadingService.CreateFromSct(filename);
+            this.featureService.ClearSupplementalHpi();
             this.model.Map = Maybe.Some(mapModel);
             this.IngestOtaUnitNames(mapModel);
             RecentFiles.Add(filename);
+        }
+
+        private void OpenFromOamap(string filename, string preferredStem)
+        {
+            using (var zip = ZipFile.OpenRead(filename))
+            {
+                var manifestEntry = OamapFeatureOverlay.FindEntry(zip, "oamap.yaml");
+                if (manifestEntry == null)
+                {
+                    this.dialogService.ShowError("No oamap.yaml was found in " + filename);
+                    return;
+                }
+
+                string yaml;
+                using (var reader = new StreamReader(manifestEntry.Open(), Encoding.UTF8, true))
+                {
+                    yaml = reader.ReadToEnd();
+                }
+
+                var manifest = OamapManifestReader.TryRead(yaml);
+                if (manifest == null || manifest.Maps.Count == 0)
+                {
+                    this.dialogService.ShowError("Cannot read the map list in " + filename);
+                    return;
+                }
+
+                string stem = null;
+                if (!string.IsNullOrWhiteSpace(preferredStem)
+                    && manifest.Maps.Any(map => string.Equals(map.Stem, preferredStem, StringComparison.OrdinalIgnoreCase)))
+                {
+                    stem = manifest.Maps.First(map => string.Equals(map.Stem, preferredStem, StringComparison.OrdinalIgnoreCase)).Stem;
+                }
+                else if (manifest.Maps.Count == 1)
+                {
+                    stem = manifest.Maps[0].Stem;
+                }
+                else
+                {
+                    var names = manifest.Maps.Select(map => map.Stem).ToList();
+                    stem = this.dialogService.AskUserToChooseMap(names, name => this.LoadOamapPreview(zip, name));
+                }
+
+                if (string.IsNullOrWhiteSpace(stem))
+                {
+                    return;
+                }
+
+                var entry = manifest.Maps.First(map => string.Equals(map.Stem, stem, StringComparison.OrdinalIgnoreCase));
+                var tntEntry = OamapFeatureOverlay.FindEntry(zip, "maps/" + entry.Stem + ".tnt");
+                var otaEntry = OamapFeatureOverlay.FindEntry(zip, "maps/" + entry.Stem + ".ota");
+                if (tntEntry == null || otaEntry == null)
+                {
+                    this.dialogService.ShowError("The pack does not contain maps/" + entry.Stem + ".tnt and .ota");
+                    return;
+                }
+
+                var tntBytes = ReadEntryBytes(tntEntry);
+                var otaBytes = ReadEntryBytes(otaEntry);
+                var mapModel = this.mapLoadingService.CreateFromTntAndOtaBytes(tntBytes, otaBytes, filename);
+                mapModel.OamapInfo = manifest.ToPackInfo(entry.Stem, manifest.Maps.Count);
+                this.featureService.ClearSupplementalHpi();
+                OamapFeatureOverlay.Mount(this.featureService, zip, entry.Files);
+                this.model.Map = Maybe.Some(mapModel);
+                this.IngestOtaUnitNames(mapModel);
+                this.SetSelectedGUITabForMap();
+                RecentFiles.Add(filename, entry.Stem);
+            }
+        }
+
+        private Bitmap LoadOamapPreview(ZipArchive zip, string stem)
+        {
+            var preview = OamapFeatureOverlay.FindEntry(zip, "previews/" + stem + ".png");
+            if (preview != null)
+            {
+                using (var stream = new MemoryStream(ReadEntryBytes(preview)))
+                using (var image = Image.FromStream(stream))
+                {
+                    return new Bitmap(image);
+                }
+            }
+
+            var tntEntry = OamapFeatureOverlay.FindEntry(zip, "maps/" + stem + ".tnt");
+            if (tntEntry == null)
+            {
+                return null;
+            }
+
+            using (var stream = new MemoryStream(ReadEntryBytes(tntEntry)))
+            using (var tnt = new TntReader(stream))
+            {
+                var minimap = tnt.GetMinimap();
+                return BitmapConvert.ToBitmap(minimap.Data, minimap.Width, minimap.Height);
+            }
+        }
+
+        private static byte[] ReadEntryBytes(ZipArchiveEntry entry)
+        {
+            using (var stream = entry.Open())
+            using (var memory = new MemoryStream())
+            {
+                stream.CopyTo(memory);
+                return memory.ToArray();
+            }
         }
 
         /// <summary>

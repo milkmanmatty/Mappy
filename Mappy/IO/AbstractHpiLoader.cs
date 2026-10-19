@@ -47,6 +47,11 @@
             return true;
         }
 
+        public void LoadArchive(string hpiPath)
+        {
+            this.LoadHpi(hpiPath);
+        }
+
         public LoadResult<T> GetResult()
         {
             return new LoadResult<T>

@@ -182,6 +182,13 @@
     <Compile Include="IO\MapModelTntAdapter.cs" />
     <Compile Include="IO\MapTileSctAdapter.cs" />
     <Compile Include="IO\MapSaver.cs" />
+    <Compile Include="IO\OamapDependencyResult.cs" />
+    <Compile Include="IO\OamapFeatureDependencyCollector.cs" />
+    <Compile Include="IO\OamapManifest.cs" />
+    <Compile Include="IO\OamapManifestReader.cs" />
+    <Compile Include="IO\OamapManifestWriter.cs" />
+    <Compile Include="IO\OamapFeatureOverlay.cs" />
+    <Compile Include="IO\OamapPackedFile.cs" />
     <Compile Include="IO\SectionArchiveSaver.cs" />
     <Compile Include="IO\ModelEdgeReaderAdapter.cs" />
     <Compile Include="IO\ModelPrimitiveCollectorAdapter.cs" />
@@ -478,8 +485,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Models\MapImageExportOptions.cs" />
+    <Compile Include="Models\OamapPackInfo.cs" />
     <Compile Include="Models\Enums\FeatureExportMode.cs" />
     <Compile Include="UI\Forms\UnitPlayerPromptForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\OamapPackInfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Forms\NewSchemaTypePromptForm.cs">

@@ -70,6 +70,7 @@ namespace Mappy.UI.Forms
             this.flipMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tilesetsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mapAttributesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.oamapPropertiesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useOnlyUnitsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generateMinimapMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generateMinimapHighQualityMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -414,6 +415,7 @@ namespace Mappy.UI.Forms
             this.tilesetsMenuItem,
             toolStripSeparator9,
             this.mapAttributesMenuItem,
+            this.oamapPropertiesMenuItem,
             this.useOnlyUnitsMenuItem,
             toolStripSeparator3,
             this.generateMinimapMenuItem,
@@ -517,6 +519,14 @@ namespace Mappy.UI.Forms
             this.mapAttributesMenuItem.Size = new System.Drawing.Size(288, 22);
             this.mapAttributesMenuItem.Text = "Map Attributes...";
             this.mapAttributesMenuItem.Click += new System.EventHandler(this.MapAttributesMenuItemClick);
+            // 
+            // oamapPropertiesMenuItem
+            // 
+            this.oamapPropertiesMenuItem.Enabled = false;
+            this.oamapPropertiesMenuItem.Name = "oamapPropertiesMenuItem";
+            this.oamapPropertiesMenuItem.Size = new System.Drawing.Size(288, 22);
+            this.oamapPropertiesMenuItem.Text = "OAMAP Properties...";
+            this.oamapPropertiesMenuItem.Click += new System.EventHandler(this.OamapPropertiesMenuItemClick);
             // 
             // useOnlyUnitsMenuItem
             // 
@@ -1566,6 +1576,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.ToolStripMenuItem player10MenuItem;
         private System.Windows.Forms.ToolStripMenuItem player11MenuItem;
         private System.Windows.Forms.ToolStripMenuItem mapAttributesMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem oamapPropertiesMenuItem;
         private System.Windows.Forms.ToolStripMenuItem useOnlyUnitsMenuItem;
         private System.Windows.Forms.TabPage startPositionsTab;
         private StartPositionsView startPositionsView1;
