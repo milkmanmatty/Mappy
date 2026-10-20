@@ -1864,11 +1864,7 @@ namespace Mappy.Services
 
             var info = map.OamapInfo;
             var stem = (info.Stem ?? string.Empty).Trim();
-            var width = map.MapWidth;
-            var height = map.MapHeight;
-            var size = width.ToString(System.Globalization.CultureInfo.InvariantCulture)
-                + "x"
-                + height.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            var size = OamapManifestWriter.MapSize(map.MapWidth, map.MapHeight);
             var files = new List<string>
             {
                 "maps/" + stem + ".ota",

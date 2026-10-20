@@ -9,6 +9,13 @@ namespace Mappy.IO
 
     public static class OamapManifestWriter
     {
+        public static string MapSize(int tileWidth, int tileHeight)
+        {
+            return MapSide(tileWidth).ToString(CultureInfo.InvariantCulture)
+                + "x"
+                + MapSide(tileHeight).ToString(CultureInfo.InvariantCulture);
+        }
+
         public static string Write(OamapPackInfo info, string size, string previewPath, IList<string> files)
         {
             if (info == null)
@@ -63,6 +70,11 @@ namespace Mappy.IO
             }
 
             return sb.ToString();
+        }
+
+        private static int MapSide(int tiles)
+        {
+            return Math.Max(1, tiles / 16);
         }
 
         private static string Quote(string value)

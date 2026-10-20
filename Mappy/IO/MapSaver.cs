@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Drawing;
     using System.Drawing.Imaging;
-    using System.Globalization;
     using System.IO;
     using System.IO.Compression;
     using System.Linq;
@@ -142,9 +141,7 @@
             }
 
             var stem = info.Stem.Trim();
-            var width = map.Tile.TileGrid.Width;
-            var height = map.Tile.TileGrid.Height;
-            var size = width.ToString(CultureInfo.InvariantCulture) + "x" + height.ToString(CultureInfo.InvariantCulture);
+            var size = OamapManifestWriter.MapSize(map.Tile.TileGrid.Width, map.Tile.TileGrid.Height);
             var featureNames = map.EnumerateFeatureInstances()
                 .Select(feature => feature.FeatureName)
                 .Where(name => !string.IsNullOrWhiteSpace(name));
