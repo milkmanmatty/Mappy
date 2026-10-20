@@ -215,6 +215,7 @@ namespace Mappy.UI.Forms
             model.CanGenerateMinimapEnhancedColours.Subscribe(x => this.generateMinimapEnhancedColoursMenuItem.Enabled = x);
 
             model.CanOpenAttributes.Subscribe(x => this.mapAttributesMenuItem.Enabled = x);
+            model.CanOpenAttributes.Subscribe(x => this.oamapPropertiesMenuItem.Enabled = x);
             model.CanOpenAttributes.Subscribe(x => this.useOnlyUnitsMenuItem.Enabled = x);
 
             // view menu bindings
@@ -429,6 +430,11 @@ namespace Mappy.UI.Forms
         private void MapAttributesMenuItemClick(object sender, EventArgs e)
         {
             this.model.MapAttributesMenuItemClick();
+        }
+
+        private void OamapPropertiesMenuItemClick(object sender, EventArgs e)
+        {
+            this.model.OamapPropertiesMenuItemClick();
         }
 
         private void UseOnlyUnitsMenuItemClick(object sender, EventArgs e)

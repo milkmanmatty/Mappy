@@ -77,6 +77,7 @@ namespace Mappy.UI.Forms
             this.resourceMarkersGroupBox = new System.Windows.Forms.GroupBox();
             this.resourceMarkerLineColorButton = new System.Windows.Forms.Button();
             this.resourceMarkerLineColorLabel = new System.Windows.Forms.Label();
+            this.saveOamapInfoCheckBox = new System.Windows.Forms.CheckBox();
             this.saveResourceMarkersCheckBox = new System.Windows.Forms.CheckBox();
             this.miscGroupBox = new System.Windows.Forms.GroupBox();
             this.doNotPromptToSaveUnsavedChangesCheckBox = new System.Windows.Forms.CheckBox();
@@ -678,13 +679,14 @@ namespace Mappy.UI.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.resourceMarkersGroupBox.Controls.Add(this.resourceMarkerLineColorButton);
             this.resourceMarkersGroupBox.Controls.Add(this.resourceMarkerLineColorLabel);
+            this.resourceMarkersGroupBox.Controls.Add(this.saveOamapInfoCheckBox);
             this.resourceMarkersGroupBox.Controls.Add(this.saveResourceMarkersCheckBox);
             this.resourceMarkersGroupBox.Location = new System.Drawing.Point(12, 270);
             this.resourceMarkersGroupBox.Name = "resourceMarkersGroupBox";
-            this.resourceMarkersGroupBox.Size = new System.Drawing.Size(426, 78);
+            this.resourceMarkersGroupBox.Size = new System.Drawing.Size(426, 100);
             this.resourceMarkersGroupBox.TabIndex = 2;
             this.resourceMarkersGroupBox.TabStop = false;
-            this.resourceMarkersGroupBox.Text = "Resource markers";
+            this.resourceMarkersGroupBox.Text = "Additional saving";
             // 
             // resourceMarkerLineColorButton
             // 
@@ -705,6 +707,16 @@ namespace Mappy.UI.Forms
             this.resourceMarkerLineColorLabel.TabIndex = 1;
             this.resourceMarkerLineColorLabel.Text = "Line colour:";
             // 
+            // saveOamapInfoCheckBox
+            // 
+            this.saveOamapInfoCheckBox.AutoSize = true;
+            this.saveOamapInfoCheckBox.Location = new System.Drawing.Point(17, 70);
+            this.saveOamapInfoCheckBox.Name = "saveOamapInfoCheckBox";
+            this.saveOamapInfoCheckBox.Size = new System.Drawing.Size(169, 17);
+            this.saveOamapInfoCheckBox.TabIndex = 3;
+            this.saveOamapInfoCheckBox.Text = "Save oamap info with the map";
+            this.saveOamapInfoCheckBox.UseVisualStyleBackColor = true;
+            // 
             // saveResourceMarkersCheckBox
             // 
             this.saveResourceMarkersCheckBox.AutoSize = true;
@@ -720,7 +732,7 @@ namespace Mappy.UI.Forms
             this.miscGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.miscGroupBox.Controls.Add(this.doNotPromptToSaveUnsavedChangesCheckBox);
-            this.miscGroupBox.Location = new System.Drawing.Point(12, 354);
+            this.miscGroupBox.Location = new System.Drawing.Point(12, 376);
             this.miscGroupBox.Name = "miscGroupBox";
             this.miscGroupBox.Size = new System.Drawing.Size(426, 52);
             this.miscGroupBox.TabIndex = 3;
@@ -805,7 +817,7 @@ namespace Mappy.UI.Forms
             this.missionTabPage.Location = new System.Drawing.Point(4, 22);
             this.missionTabPage.Name = "missionTabPage";
             this.missionTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.missionTabPage.Size = new System.Drawing.Size(442, 435);
+            this.missionTabPage.Size = new System.Drawing.Size(442, 478);
             this.missionTabPage.TabIndex = 1;
             this.missionTabPage.Text = "Mission";
             this.missionTabPage.UseVisualStyleBackColor = true;
@@ -819,7 +831,7 @@ namespace Mappy.UI.Forms
             this.adjustmentsTabPage.Location = new System.Drawing.Point(4, 22);
             this.adjustmentsTabPage.Name = "adjustmentsTabPage";
             this.adjustmentsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.adjustmentsTabPage.Size = new System.Drawing.Size(442, 435);
+            this.adjustmentsTabPage.Size = new System.Drawing.Size(442, 478);
             this.adjustmentsTabPage.TabIndex = 2;
             this.adjustmentsTabPage.Text = "Adjustments";
             this.adjustmentsTabPage.UseVisualStyleBackColor = true;
@@ -840,16 +852,6 @@ namespace Mappy.UI.Forms
             this.adjustmentsMiscGroupBox.TabStop = false;
             this.adjustmentsMiscGroupBox.Text = "Misc";
             // 
-            // blobFeatureBaseCustomizeButton
-            // 
-            this.blobFeatureBaseCustomizeButton.Location = new System.Drawing.Point(132, 41);
-            this.blobFeatureBaseCustomizeButton.Name = "blobFeatureBaseCustomizeButton";
-            this.blobFeatureBaseCustomizeButton.Size = new System.Drawing.Size(85, 23);
-            this.blobFeatureBaseCustomizeButton.TabIndex = 2;
-            this.blobFeatureBaseCustomizeButton.Text = "Customize...";
-            this.blobFeatureBaseCustomizeButton.UseVisualStyleBackColor = true;
-            this.blobFeatureBaseCustomizeButton.Click += new System.EventHandler(this.BlobFeatureBaseCustomizeButtonClick);
-            // 
             // featureBoundingBoxCustomizeButton
             // 
             this.featureBoundingBoxCustomizeButton.Location = new System.Drawing.Point(240, 64);
@@ -865,10 +867,20 @@ namespace Mappy.UI.Forms
             this.alwaysShowFeatureBoundingBoxCheckBox.AutoSize = true;
             this.alwaysShowFeatureBoundingBoxCheckBox.Location = new System.Drawing.Point(17, 68);
             this.alwaysShowFeatureBoundingBoxCheckBox.Name = "alwaysShowFeatureBoundingBoxCheckBox";
-            this.alwaysShowFeatureBoundingBoxCheckBox.Size = new System.Drawing.Size(197, 17);
+            this.alwaysShowFeatureBoundingBoxCheckBox.Size = new System.Drawing.Size(190, 17);
             this.alwaysShowFeatureBoundingBoxCheckBox.TabIndex = 3;
             this.alwaysShowFeatureBoundingBoxCheckBox.Text = "Always show feature bounding box";
             this.alwaysShowFeatureBoundingBoxCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // blobFeatureBaseCustomizeButton
+            // 
+            this.blobFeatureBaseCustomizeButton.Location = new System.Drawing.Point(132, 41);
+            this.blobFeatureBaseCustomizeButton.Name = "blobFeatureBaseCustomizeButton";
+            this.blobFeatureBaseCustomizeButton.Size = new System.Drawing.Size(85, 23);
+            this.blobFeatureBaseCustomizeButton.TabIndex = 2;
+            this.blobFeatureBaseCustomizeButton.Text = "Customize...";
+            this.blobFeatureBaseCustomizeButton.UseVisualStyleBackColor = true;
+            this.blobFeatureBaseCustomizeButton.Click += new System.EventHandler(this.BlobFeatureBaseCustomizeButtonClick);
             // 
             // blobFeatureBaseCheckBox
             // 
@@ -1074,7 +1086,7 @@ namespace Mappy.UI.Forms
             this.defaultsTabPage.Location = new System.Drawing.Point(4, 22);
             this.defaultsTabPage.Name = "defaultsTabPage";
             this.defaultsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.defaultsTabPage.Size = new System.Drawing.Size(442, 435);
+            this.defaultsTabPage.Size = new System.Drawing.Size(442, 478);
             this.defaultsTabPage.TabIndex = 3;
             this.defaultsTabPage.Text = "Defaults";
             this.defaultsTabPage.UseVisualStyleBackColor = true;
@@ -1382,6 +1394,7 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.CheckBox calculatedMetalDepositValueCheckBox;
         private System.Windows.Forms.GroupBox resourceMarkersGroupBox;
         private System.Windows.Forms.CheckBox saveResourceMarkersCheckBox;
+        private System.Windows.Forms.CheckBox saveOamapInfoCheckBox;
         private System.Windows.Forms.Label resourceMarkerLineColorLabel;
         private System.Windows.Forms.Button resourceMarkerLineColorButton;
         private System.Windows.Forms.GroupBox miscGroupBox;

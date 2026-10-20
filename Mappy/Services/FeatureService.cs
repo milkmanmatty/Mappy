@@ -19,6 +19,15 @@ namespace Mappy.Services
 
         private readonly Dictionary<string, Feature> featureCache;
 
+        private readonly List<string> supplementalNames = new List<string>();
+
+        private readonly Dictionary<string, FeatureInfo> supplementalReplaced =
+            new Dictionary<string, FeatureInfo>(StringComparer.OrdinalIgnoreCase);
+
+        private string supplementalHpiPath;
+
+        private string supplementalDirectory;
+
         public FeatureService()
         {
             this.records = new Dictionary<string, FeatureInfo>();
@@ -28,6 +37,8 @@ namespace Mappy.Services
         public event EventHandler FeaturesChanged;
 
         public Feature SelectedFeature { get; set; }
+
+        public string SupplementalHpiPath => this.supplementalHpiPath;
 
         public void AddFeatures(IEnumerable<FeatureInfo> features)
         {
@@ -54,6 +65,104 @@ namespace Mappy.Services
             return Maybe.From(
                 this.EnumerateFeaturesFromInternal(new[] { new KeyValuePair<string, FeatureInfo>(name, info) })
                     .FirstOrDefault());
+        }
+
+        public bool TryGetFeatureInfo(string name, out FeatureInfo info)
+        {
+            info = null;
+            if (string.IsNullOrEmpty(name))
+            {
+                return false;
+            }
+
+            if (this.records.TryGetValue(name, out info))
+            {
+                return true;
+            }
+
+            foreach (var pair in this.records)
+            {
+                if (string.Equals(pair.Key, name, StringComparison.OrdinalIgnoreCase))
+                {
+                    info = pair.Value;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void SetSupplementalHpi(string hpiPath, string directory, IEnumerable<FeatureInfo> features)
+        {
+            this.ClearSupplementalHpi();
+            this.supplementalHpiPath = hpiPath;
+            this.supplementalDirectory = directory;
+            if (features != null)
+            {
+                foreach (var feature in features)
+                {
+                    if (feature == null || string.IsNullOrWhiteSpace(feature.Name))
+                    {
+                        continue;
+                    }
+
+                    if (this.TryGetFeatureInfo(feature.Name, out var existing))
+                    {
+                        this.supplementalReplaced[feature.Name] = existing;
+                    }
+
+                    this.records[feature.Name] = feature;
+                    this.RemoveCached(feature.Name);
+                    this.supplementalNames.Add(feature.Name);
+                }
+            }
+
+            this.FeaturesChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void ClearSupplementalHpi()
+        {
+            if (this.supplementalNames.Count == 0
+                && this.supplementalHpiPath == null
+                && this.supplementalDirectory == null)
+            {
+                return;
+            }
+
+            foreach (var name in this.supplementalNames)
+            {
+                if (this.supplementalReplaced.TryGetValue(name, out var previous))
+                {
+                    this.records[previous.Name] = previous;
+                }
+                else
+                {
+                    this.RemoveRecord(name);
+                }
+
+                this.RemoveCached(name);
+            }
+
+            this.supplementalNames.Clear();
+            this.supplementalReplaced.Clear();
+            this.supplementalHpiPath = null;
+            var directory = this.supplementalDirectory;
+            this.supplementalDirectory = null;
+            if (!string.IsNullOrEmpty(directory) && Directory.Exists(directory))
+            {
+                try
+                {
+                    Directory.Delete(directory, true);
+                }
+                catch (IOException)
+                {
+                }
+                catch (UnauthorizedAccessException)
+                {
+                }
+            }
+
+            this.FeaturesChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public IEnumerable<string> EnumerateWorlds() =>
@@ -161,6 +270,11 @@ namespace Mappy.Services
             }
 
             var hpis = LoadingUtils.EnumerateSearchHpis().ToList();
+            if (!string.IsNullOrEmpty(this.supplementalHpiPath))
+            {
+                hpis.Add(this.supplementalHpiPath);
+            }
+
             hpis.Reverse();
 
             if (uncachedFeatures.Count == 0)
@@ -250,6 +364,42 @@ namespace Mappy.Services
         private void AddFeature(FeatureInfo f)
         {
             this.records[f.Name] = f;
+        }
+
+        private void RemoveRecord(string name)
+        {
+            string match = null;
+            foreach (var key in this.records.Keys)
+            {
+                if (string.Equals(key, name, StringComparison.OrdinalIgnoreCase))
+                {
+                    match = key;
+                    break;
+                }
+            }
+
+            if (match != null)
+            {
+                this.records.Remove(match);
+            }
+        }
+
+        private void RemoveCached(string name)
+        {
+            string match = null;
+            foreach (var key in this.featureCache.Keys)
+            {
+                if (string.Equals(key, name, StringComparison.OrdinalIgnoreCase))
+                {
+                    match = key;
+                    break;
+                }
+            }
+
+            if (match != null)
+            {
+                this.featureCache.Remove(match);
+            }
         }
     }
 }

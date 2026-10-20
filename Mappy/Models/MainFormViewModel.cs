@@ -278,6 +278,11 @@ namespace Mappy.Models
             this.dispatcher.OpenMapAttributes();
         }
 
+        public void OamapPropertiesMenuItemClick()
+        {
+            this.dispatcher.EditOamapProperties();
+        }
+
         public void UseOnlyUnitsMenuItemClick()
         {
             this.dispatcher.OpenUseOnlyUnitsEditor();

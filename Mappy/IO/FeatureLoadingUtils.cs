@@ -33,6 +33,13 @@ namespace Mappy.IO
             return true;
         }
 
+        public static IList<FeatureInfo> LoadFromHpi(string hpiPath)
+        {
+            var recordLoader = new FeatureTdfLoader();
+            recordLoader.LoadArchive(hpiPath);
+            return LoadFeatureObjects(recordLoader.Records).ToList();
+        }
+
         private static IEnumerable<FeatureInfo> LoadFeatureObjects(
             IEnumerable<FeatureRecord> records)
         {

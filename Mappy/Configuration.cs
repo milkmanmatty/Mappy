@@ -58,6 +58,8 @@ namespace Mappy
 
         public bool SaveResourceMarkersWithMap { get; set; }
 
+        public bool SaveOamapInfoWithHpi { get; set; }
+
         public int? ResourceMarkerLineColorArgb { get; set; }
 
         public bool ShowUnitFriendlyNameFirst { get; set; }

@@ -104,7 +104,7 @@ namespace Mappy.Services
         public string AskUserToOpenFile()
         {
             var d = new OpenFileDialog();
-            d.Filter = @"TA Map Files|*.hpi;*.ufo;*.ccx;*.gpf;*.gp3;*.tnt|All files|*.*";
+            d.Filter = @"TA Map Files|*.hpi;*.ufo;*.ccx;*.gpf;*.gp3;*.tnt;*.oamap|All files|*.*";
             if (d.ShowDialog(this.owner) == DialogResult.OK)
             {
                 return d.FileName;
@@ -128,7 +128,7 @@ namespace Mappy.Services
         public string AskUserToSaveFile()
         {
             var d = new SaveFileDialog();
-            d.Filter = @"HPI files|*.hpi;*.ufo;*.ccx;*.gpf;*.gp3|TNT files|*.tnt|All files|*.*";
+            d.Filter = @"HPI files|*.hpi;*.ufo;*.ccx;*.gpf;*.gp3|TNT files|*.tnt|Open Annihilation map packs|*.oamap|All files|*.*";
             d.AddExtension = true;
             d.DefaultExt = "ufo";
             var result = d.ShowDialog(this.owner);
@@ -138,6 +138,19 @@ namespace Mappy.Services
             }
 
             return null;
+        }
+
+        public OamapPackInfo AskUserForOamapPackInfo(OamapPackInfo defaults)
+        {
+            using (var form = new OamapPackInfoForm(defaults))
+            {
+                if (form.ShowDialog(this.owner) != DialogResult.OK)
+                {
+                    return null;
+                }
+
+                return form.Result;
+            }
         }
 
         public string AskUserToSaveMinimap()

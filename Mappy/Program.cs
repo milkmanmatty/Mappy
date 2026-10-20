@@ -21,7 +21,7 @@ namespace Mappy
 
         private static readonly string[] SupportedMapExtensions =
         {
-            ".hpi", ".ufo", ".ccx", ".gpf", ".gp3", ".tnt", ".sct",
+            ".hpi", ".ufo", ".ccx", ".gpf", ".gp3", ".tnt", ".sct", ".oamap",
         };
 
         private static Bugsnag.Client bugsnagClient;

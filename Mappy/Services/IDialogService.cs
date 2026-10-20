@@ -23,6 +23,8 @@ namespace Mappy.Services
 
         string AskUserToSaveFile();
 
+        OamapPackInfo AskUserForOamapPackInfo(OamapPackInfo defaults);
+
         string AskUserToSaveMinimap();
 
         string AskUserToSaveMapImage();
