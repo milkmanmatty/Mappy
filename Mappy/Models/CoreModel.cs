@@ -37,6 +37,18 @@ namespace Mappy.Models
 
         private int voidEditCursorSize = 1;
 
+        private string terrainWorldName = string.Empty;
+
+        private int terrainBaseIndex;
+
+        private int terrainBrushSize = 16;
+
+        private string terrainStatus = string.Empty;
+
+        private string terrainTool = string.Empty;
+
+        private bool terrainUseSlopes;
+
         private UnitPlacementPlayerMenuChoice unitPlacementPlayerMenuChoice = UnitPlacementPlayerMenuChoice.Prompt;
 
         public Maybe<UndoableMapModel> Map
@@ -153,6 +165,51 @@ namespace Mappy.Models
                 ref this.voidEditCursorSize,
                 Math.Min(MaxBrushCursorSize, Math.Max(1, value)),
                 nameof(this.VoidEditCursorSize));
+        }
+
+        public string TerrainWorldName
+        {
+            get => this.terrainWorldName;
+            set => this.SetField(ref this.terrainWorldName, value ?? string.Empty, nameof(this.TerrainWorldName));
+        }
+
+        public int TerrainBaseIndex
+        {
+            get => this.terrainBaseIndex;
+            set => this.SetField(ref this.terrainBaseIndex, Math.Max(0, value), nameof(this.TerrainBaseIndex));
+        }
+
+        public int TerrainBrushSize
+        {
+            get => this.terrainBrushSize;
+            set
+            {
+                if (Array.IndexOf(TerrainBrush.TerrainPlanner.BrushSizes, value) >= 0)
+                {
+                    this.SetField(ref this.terrainBrushSize, value, nameof(this.TerrainBrushSize));
+                }
+            }
+        }
+
+        public string TerrainStatus
+        {
+            get => this.terrainStatus;
+            set => this.SetField(ref this.terrainStatus, value ?? string.Empty, nameof(this.TerrainStatus));
+        }
+
+        /// <summary>
+        /// The river or ridge style the terrain brush draws, or empty for bases.
+        /// </summary>
+        public string TerrainTool
+        {
+            get => this.terrainTool;
+            set => this.SetField(ref this.terrainTool, value ?? string.Empty, nameof(this.TerrainTool));
+        }
+
+        public bool TerrainUseSlopes
+        {
+            get => this.terrainUseSlopes;
+            set => this.SetField(ref this.terrainUseSlopes, value, nameof(this.TerrainUseSlopes));
         }
 
         public UnitPlacementPlayerMenuChoice UnitPlacementPlayerMenuChoice

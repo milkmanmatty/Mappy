@@ -10,6 +10,7 @@ namespace Mappy.Services
     using Mappy;
     using Mappy.Data;
     using Mappy.IO;
+    using Mappy.TerrainBrush;
 
     using TAUtil.Hpi;
     using TAUtil.Sct;
@@ -33,6 +34,11 @@ namespace Mappy.Services
         public event EventHandler SectionsChanged;
 
         public SectionInfo Get(int id) => this.sections[id];
+
+        public IEnumerable<SectionInfo> EnumerateAll()
+        {
+            return this.sections.Values.ToArray();
+        }
 
         public Maybe<Section> TryGetCachedSection(int id)
         {
@@ -64,6 +70,8 @@ namespace Mappy.Services
             {
                 this.EnsureSplitIndex();
                 return this.splitLabels
+                    .Where(x => !TerrainCatalog.IsBrushFolder(x.Key.World))
+                    .Where(x => !BrushTiles.IsExcludedFromSectionList(x.Key.HpiFileName))
                     .Where(x => this.worldFilter == null || this.worldFilter.Contains(x.Key.World))
                     .Select(x => x.Value)
                     .OrderBy(x => x, StringComparer.InvariantCultureIgnoreCase);
@@ -107,7 +115,9 @@ namespace Mappy.Services
 
         private IEnumerable<string> EnumerateWorldsUnfiltered() =>
             this.sections
-                .Select(x => x.Value.World)
+                .Select(x => x.Value)
+                .Where(x => !TerrainCatalog.IsBrushFolder(x.World) && !BrushTiles.IsExcludedFromSectionList(x.HpiFileName))
+                .Select(x => x.World)
                 .Distinct(StringComparer.InvariantCultureIgnoreCase)
                 .OrderBy(x => x, StringComparer.InvariantCultureIgnoreCase);
 
@@ -186,7 +196,8 @@ namespace Mappy.Services
             if (!MappySettings.Settings.SplitTiles)
             {
                 return this.sections.Where(
-                    x => string.Equals(x.Value.World, selectedWorld, StringComparison.InvariantCultureIgnoreCase));
+                    x => string.Equals(x.Value.World, selectedWorld, StringComparison.InvariantCultureIgnoreCase)
+                        && !BrushTiles.IsExcludedFromSectionList(x.Value.HpiFileName));
             }
 
             this.EnsureSplitIndex();
@@ -196,7 +207,7 @@ namespace Mappy.Services
                 return Enumerable.Empty<KeyValuePair<int, SectionInfo>>();
             }
 
-            return matches;
+            return matches.Where(x => !BrushTiles.IsExcludedFromSectionList(x.Value.HpiFileName));
         }
 
         private void EnsureSplitIndex()

@@ -12,3 +12,5 @@ Thanks to JoeD, Saruman, Bobban, Bizmut, Kinboat and Manu for the GAF file forma
 Thanks to Kinboat for the SCT file format documentation.
 Thanks to me22, Saruman and Bobban for the TNT file format documentation.
 Thanks to Dan Melchione and Dark Rain for the 3DO file format documentation.
+
+Thanks to MattA9K / https://github.com/MattA9K/Total-Annihilation-Galaxy-Editor for tile painting code and GE-Favorites-RandomMapGeneratorTiles.hpi file.

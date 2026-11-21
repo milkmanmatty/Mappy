@@ -16,6 +16,8 @@ namespace Mappy.Services
     using Mappy.IO;
     using Mappy.Models;
     using Mappy.Models.Enums;
+    using Mappy.Operations;
+    using Mappy.TerrainBrush;
     using Mappy.Util;
     using Mappy.Util.ImageSampling;
     using TAUtil;
@@ -45,6 +47,10 @@ namespace Mappy.Services
         private readonly BitmapCache tileCache;
 
         private readonly Random rng = new Random();
+
+        private TerrainCatalog terrainCatalog;
+
+        private Point? terrainPathPrevious;
 
         private FillFeaturesOptions fillFeaturesOptions = new FillFeaturesOptions();
 
@@ -81,6 +87,7 @@ namespace Mappy.Services
             this.mapLoadingService = mapLoadingService;
             this.imageImportingService = imageImportingService;
             this.tileCache = tileCache;
+            this.sectionService.SectionsChanged += (sender, args) => this.terrainCatalog = null;
         }
 
         public void Initialize()
@@ -458,7 +465,13 @@ namespace Mappy.Services
 
         public void OpenPreferences()
         {
-            if (!this.dialogService.CapturePreferences())
+            var accepted = this.dialogService.CapturePreferences(out var brushTilesChanged);
+            if (brushTilesChanged)
+            {
+                this.EnsureBrushArchiveLoaded();
+            }
+
+            if (!accepted)
             {
                 return;
             }
@@ -466,6 +479,60 @@ namespace Mappy.Services
             this.sectionService.NotifySectionsChanged();
             this.featureService.NotifyFeaturesChanged();
             this.unitCatalogService.NotifyUnitPickerLabelsChanged();
+        }
+
+        private void EnsureBrushArchiveLoaded()
+        {
+            string path;
+            string error;
+            if (!BrushTiles.TryGetDestinationPath(MappySettings.Settings.GetBrushTilesUrlOrDefault(), out path, out error)
+                || string.IsNullOrEmpty(path)
+                || !File.Exists(path))
+            {
+                return;
+            }
+
+            var fullPath = Path.GetFullPath(path);
+            foreach (var section in this.sectionService.EnumerateAll())
+            {
+                if (string.IsNullOrEmpty(section.HpiFileName))
+                {
+                    continue;
+                }
+
+                string loadedPath;
+                try
+                {
+                    loadedPath = Path.GetFullPath(section.HpiFileName);
+                }
+                catch (ArgumentException)
+                {
+                    continue;
+                }
+                catch (NotSupportedException)
+                {
+                    continue;
+                }
+
+                if (string.Equals(loadedPath, fullPath, StringComparison.OrdinalIgnoreCase))
+                {
+                    return;
+                }
+            }
+
+            var loader = new SectionLoader();
+            loader.LoadArchive(fullPath);
+            var result = loader.GetResult();
+            if (result.Records.Count > 0)
+            {
+                this.sectionService.AddSections(result.Records);
+            }
+
+            if (result.Errors.Count > 0)
+            {
+                this.dialogService.ShowError(
+                    "Failed to load the brush tileset:\n\n" + result.Errors[0].HpiPath);
+            }
         }
 
         public void OpenTilesetsDialog()
@@ -1438,10 +1505,394 @@ namespace Mappy.Services
             this.model.Map.IfSome(map => map.FlushVoidBrush());
         }
 
+        public void SetTerrainWorld(string worldName)
+        {
+            this.model.TerrainWorldName = worldName ?? string.Empty;
+            this.model.TerrainBaseIndex = 0;
+            this.terrainPathPrevious = null;
+        }
+
+        public void SetTerrainBase(int baseIndex)
+        {
+            this.model.TerrainBaseIndex = Math.Max(0, baseIndex);
+            this.model.TerrainTool = string.Empty;
+        }
+
+        /// <summary>
+        /// Selects a river or ridge style by name, or the base brush when empty.
+        /// </summary>
+        public void SetTerrainTool(string pathStyle)
+        {
+            this.model.TerrainTool = pathStyle ?? string.Empty;
+            this.terrainPathPrevious = null;
+        }
+
+        public void SetTerrainUseSlopes(bool useSlopes)
+        {
+            this.model.TerrainUseSlopes = useSlopes;
+        }
+
+        public void SetTerrainBrushSize(int tiles)
+        {
+            this.model.TerrainBrushSize = tiles;
+        }
+
+        public TerrainCatalog LoadTerrainCatalog()
+        {
+            if (this.terrainCatalog == null)
+            {
+                using (var reader = new TerrainSampleReader())
+                {
+                    this.terrainCatalog = TerrainCatalog.Build(this.sectionService.EnumerateAll(), reader.Read);
+                }
+            }
+
+            return this.terrainCatalog;
+        }
+
+        public void PaintTerrain(int tileX, int tileY)
+        {
+            this.model.Map.IfSome(map => this.PaintTerrainOn(map, tileX, tileY));
+        }
+
+        public void FlushTerrainBrush()
+        {
+            this.terrainPathPrevious = null;
+            this.model.Map.IfSome(map => map.FlushTerrainBrush());
+        }
+
+        public MapTile LoadTerrainSection(string hpiFileName, string sctFileName)
+        {
+            return this.sectionBitmapService.LoadSection(hpiFileName, sctFileName);
+        }
+
         public void ChangeSelectedTab(GUITab tab)
         {
             this.model.SelectedGUITab = tab;
             this.SetSelectedGUITabForMap();
+        }
+
+        /// <summary>
+        /// Plans a click at the given tile without changing the map,
+        /// and shows the refusal reason, if any, in the terrain status.
+        /// </summary>
+        public TerrainStroke PreviewTerrain(int tileX, int tileY)
+        {
+            if (this.model.Map.IsNone)
+            {
+                return null;
+            }
+
+            var stroke = this.BuildTerrainStroke(this.model.Map.UnsafeValue, tileX, tileY, false);
+            this.model.TerrainStatus = stroke.Refusal ?? string.Empty;
+            return stroke;
+        }
+
+        private void PaintTerrainOn(UndoableMapModel map, int tileX, int tileY)
+        {
+            var stroke = this.BuildTerrainStroke(map, tileX, tileY, true);
+            if (!stroke.Accepted)
+            {
+                this.model.TerrainStatus = stroke.Refusal;
+                return;
+            }
+
+            map.ApplyTerrainBrush(stroke.Stamps, stroke.ClearedAreas);
+            this.model.TerrainStatus = string.Empty;
+        }
+
+        private TerrainStroke BuildTerrainStroke(UndoableMapModel map, int tileX, int tileY, bool painting)
+        {
+            var catalog = this.LoadTerrainCatalog();
+            if (catalog.Worlds.Count == 0)
+            {
+                return TerrainStroke.Refuse(TerrainCatalog.MissingTilesetMessage);
+            }
+
+            var world = catalog.Find(this.model.TerrainWorldName) ?? catalog.Worlds[0];
+            if (!string.Equals(world.Name, this.model.TerrainWorldName, StringComparison.OrdinalIgnoreCase))
+            {
+                this.model.TerrainWorldName = world.Name;
+            }
+
+            var level = this.model.TerrainBaseIndex;
+            if (level >= world.Bases.Count)
+            {
+                level = 0;
+                this.model.TerrainBaseIndex = 0;
+            }
+
+            var cellsX = (map.MapWidth + TerrainPlanner.CellTiles - 1) / TerrainPlanner.CellTiles;
+            var cellsY = (map.MapHeight + TerrainPlanner.CellTiles - 1) / TerrainPlanner.CellTiles;
+            var heights = map.BaseTile.HeightGrid;
+            var tiles = map.BaseTile.TileGrid;
+            Func<int, int, int> readCorner = (x, y) => TerrainCornerReader.Read(world, heights, tiles, x, y);
+            if (!string.IsNullOrEmpty(this.model.TerrainTool))
+            {
+                var style = world.FindPathStyle(this.model.TerrainTool);
+                if (style != null)
+                {
+                    var cell = new Point(tileX / TerrainPlanner.CellTiles, tileY / TerrainPlanner.CellTiles);
+                    var stroke = this.BuildPathStroke(
+                        map,
+                        world,
+                        style,
+                        cellsX,
+                        cellsY,
+                        painting ? this.terrainPathPrevious : null,
+                        cell,
+                        readCorner);
+                    if (painting)
+                    {
+                        this.terrainPathPrevious = cell;
+                    }
+
+                    return stroke;
+                }
+
+                this.model.TerrainTool = string.Empty;
+            }
+
+            var half = TerrainPlanner.CellTiles / 2;
+            var plan = this.model.TerrainBrushSize == TerrainPlanner.CornerBrush
+                ? TerrainPlanner.PlanCorners(
+                    world,
+                    cellsX,
+                    cellsY,
+                    (tileX + half) / TerrainPlanner.CellTiles,
+                    (tileY + half) / TerrainPlanner.CellTiles,
+                    1,
+                    level,
+                    readCorner)
+                : TerrainPlanner.Plan(
+                    world,
+                    cellsX,
+                    cellsY,
+                    tileX / TerrainPlanner.CellTiles,
+                    tileY / TerrainPlanner.CellTiles,
+                    Math.Max(1, this.model.TerrainBrushSize / TerrainPlanner.CellTiles),
+                    level,
+                    readCorner);
+            if (!plan.Accepted)
+            {
+                return TerrainStroke.Refuse(plan.Refusal);
+            }
+
+            var chosen = this.ChooseSections(world, plan, heights);
+            var stamps = new List<TerrainBrushStamp>(plan.Cells.Count);
+            var clearedCells = new List<Rectangle>();
+            foreach (var cell in plan.Cells)
+            {
+                TerrainSectionRef pick;
+                chosen.TryGetValue(new Point(cell.X, cell.Y), out pick);
+                var section = this.LoadTerrainSection(pick);
+                if (section == null)
+                {
+                    return TerrainStroke.Refuse("The tileset has no section for this cell.");
+                }
+
+                var stamp = TerrainBrushStamp.FromSection(
+                    section,
+                    cell.X * TerrainPlanner.CellTiles,
+                    cell.Y * TerrainPlanner.CellTiles);
+                if (stamp.Matches(map.BaseTile.TileGrid, heights))
+                {
+                    continue;
+                }
+
+                stamps.Add(stamp);
+                if (CornersChanged(cell, readCorner))
+                {
+                    clearedCells.Add(new Rectangle(
+                        stamp.TileX * 2,
+                        stamp.TileY * 2,
+                        stamp.Heights.Width,
+                        stamp.Heights.Height));
+                }
+            }
+
+            return TerrainStroke.Accept(stamps, clearedCells);
+        }
+
+        private static bool CornersChanged(TerrainCell cell, Func<int, int, int> readCorner)
+        {
+            return cell.TopLeft != readCorner(cell.X, cell.Y)
+                || cell.TopRight != readCorner(cell.X + 1, cell.Y)
+                || cell.BottomLeft != readCorner(cell.X, cell.Y + 1)
+                || cell.BottomRight != readCorner(cell.X + 1, cell.Y + 1);
+        }
+
+        private static int VariationHash(int x, int y, int a, int b, int c, int d)
+        {
+            unchecked
+            {
+                var hash = (x * 73856093) ^ (y * 19349663);
+                hash = (hash * 397) ^ a;
+                hash = (hash * 397) ^ b;
+                hash = (hash * 397) ^ c;
+                hash = (hash * 397) ^ d;
+                hash ^= hash >> 13;
+                hash *= 1274126177;
+                return hash & 0x7fffffff;
+            }
+        }
+
+        private static int VariationHash(TerrainCell cell)
+        {
+            return VariationHash(cell.X, cell.Y, cell.TopLeft, cell.TopRight, cell.BottomLeft, cell.BottomRight);
+        }
+
+        private static bool IsFlat(TerrainCell cell)
+        {
+            return cell.TopLeft == cell.TopRight
+                && cell.TopLeft == cell.BottomLeft
+                && cell.TopLeft == cell.BottomRight;
+        }
+
+        /// <summary>
+        /// Picks a section for each planned cell. With slopes on, cells whose
+        /// layout has slope pieces are chosen last, matching the edges of the
+        /// cells around them, so a slope meets a neighbouring cliff with a
+        /// piece made for it.
+        /// </summary>
+        private Dictionary<Point, TerrainSectionRef> ChooseSections(TerrainWorld world, TerrainPlan plan, IGrid<int> heights)
+        {
+            var useSlopes = this.model.TerrainUseSlopes && world.HasSlopes;
+            var planned = new Dictionary<Point, TerrainCell>();
+            foreach (var cell in plan.Cells)
+            {
+                planned[new Point(cell.X, cell.Y)] = cell;
+            }
+
+            Func<TerrainCell, IReadOnlyList<TerrainSectionRef>> slopesFor = cell =>
+                useSlopes && !IsFlat(cell)
+                    ? world.SlopeSections(cell.TopLeft, cell.TopRight, cell.BottomLeft, cell.BottomRight, false)
+                    : null;
+
+            var chosen = new Dictionary<Point, TerrainSectionRef>();
+            foreach (var cell in plan.Cells)
+            {
+                if (slopesFor(cell) != null)
+                {
+                    continue;
+                }
+
+                var sections = IsFlat(cell)
+                    ? world.Bases[cell.TopLeft].Sections
+                    : world.TransitionSections(cell.TopLeft, cell.TopRight, cell.BottomLeft, cell.BottomRight);
+                if (sections != null && sections.Count > 0)
+                {
+                    chosen[new Point(cell.X, cell.Y)] = sections[VariationHash(cell) % sections.Count];
+                }
+            }
+
+            foreach (var cell in plan.Cells)
+            {
+                var candidates = slopesFor(cell);
+                if (candidates == null)
+                {
+                    continue;
+                }
+
+                var facing = new int[TerrainSides.All.Length][];
+                for (var sideIndex = 0; sideIndex < TerrainSides.All.Length; sideIndex++)
+                {
+                    var side = TerrainSides.All[sideIndex];
+                    var opposite = TerrainSides.Opposite(side);
+                    var neighbour = new Point(cell.X + TerrainSides.OffsetX(side), cell.Y + TerrainSides.OffsetY(side));
+                    TerrainSectionRef neighbourPick;
+                    TerrainCell neighbourCell;
+                    if (chosen.TryGetValue(neighbour, out neighbourPick))
+                    {
+                        facing[sideIndex] = neighbourPick.Edges?.Edge(opposite);
+                    }
+                    else if (planned.TryGetValue(neighbour, out neighbourCell))
+                    {
+                        var plain = world.SlopeSections(
+                            neighbourCell.TopLeft,
+                            neighbourCell.TopRight,
+                            neighbourCell.BottomLeft,
+                            neighbourCell.BottomRight,
+                            true) ?? slopesFor(neighbourCell);
+                        facing[sideIndex] = plain != null && plain.Count > 0 ? plain[0].Edges?.Edge(opposite) : null;
+                    }
+                    else
+                    {
+                        facing[sideIndex] = TerrainEdges.ReadCell(heights, neighbour.X, neighbour.Y)?.Edge(opposite);
+                    }
+                }
+
+                chosen[new Point(cell.X, cell.Y)] = candidates[TerrainEdgeMatch.Pick(candidates, facing, VariationHash(cell))];
+            }
+
+            return chosen;
+        }
+
+        private MapTile LoadTerrainSection(TerrainSectionRef pick)
+        {
+            if (pick == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                return this.sectionBitmapService.LoadSection(pick.HpiFileName, pick.SctFileName);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private TerrainStroke BuildPathStroke(
+            UndoableMapModel map,
+            TerrainWorld world,
+            TerrainPathStyle style,
+            int cellsX,
+            int cellsY,
+            Point? from,
+            Point to,
+            Func<int, int, int> readCorner)
+        {
+            var heights = map.BaseTile.HeightGrid;
+            Func<int, int, TerrainPathCell> readCell = (x, y) =>
+            {
+                var corners = new[] { readCorner(x, y), readCorner(x + 1, y), readCorner(x, y + 1), readCorner(x + 1, y + 1) };
+                var edges = TerrainEdges.ReadCell(heights, x, y);
+                return new TerrainPathCell(corners, TerrainPathShape.Measure(world.Bases, style.Kind, corners, edges));
+            };
+            var plan = TerrainPathPlanner.Plan(style, cellsX, cellsY, from, to, readCell);
+            if (!plan.Accepted)
+            {
+                return TerrainStroke.Refuse(plan.Refusal);
+            }
+
+            var stamps = new List<TerrainBrushStamp>(plan.Steps.Count);
+            var clearedCells = new List<Rectangle>();
+            foreach (var step in plan.Steps)
+            {
+                var pick = step.Sections[VariationHash(step.X, step.Y, step.Mask, 0, 0, 0) % step.Sections.Count];
+                var section = this.LoadTerrainSection(pick);
+                if (section == null)
+                {
+                    return TerrainStroke.Refuse("The tileset has no section for this cell.");
+                }
+
+                var stamp = TerrainBrushStamp.FromSection(
+                    section,
+                    step.X * TerrainPlanner.CellTiles,
+                    step.Y * TerrainPlanner.CellTiles);
+                if (stamp.Matches(map.BaseTile.TileGrid, heights))
+                {
+                    continue;
+                }
+
+                stamps.Add(stamp);
+                clearedCells.Add(new Rectangle(stamp.TileX * 2, stamp.TileY * 2, stamp.Heights.Width, stamp.Heights.Height));
+            }
+
+            return TerrainStroke.Accept(stamps, clearedCells);
         }
 
         private static IEnumerable<string> GetMapNames(HpiArchive hpi)

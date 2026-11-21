@@ -28,1094 +28,1107 @@ namespace Mappy.UI.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.searchPathsListView = new System.Windows.Forms.ListView();
-            this.addButton = new System.Windows.Forms.Button();
-            this.removeButton = new System.Windows.Forms.Button();
-            this.upButton = new System.Windows.Forms.Button();
-            this.downButton = new System.Windows.Forms.Button();
-            this.okButton = new System.Windows.Forms.Button();
-            this.cancelButton = new System.Windows.Forms.Button();
-            this.sidePanel = new System.Windows.Forms.Panel();
-            this.bottomPanel = new System.Windows.Forms.Panel();
-            this.searchPathsPanel = new System.Windows.Forms.Panel();
-            this.mainGroupBox = new System.Windows.Forms.GroupBox();
-            this.scrollSpeedGroupBox = new System.Windows.Forms.GroupBox();
-            this.dragScrollSpeedYNumeric = new System.Windows.Forms.NumericUpDown();
-            this.dragScrollSpeedXNumeric = new System.Windows.Forms.NumericUpDown();
-            this.dragScrollSpeedYLabel = new System.Windows.Forms.Label();
-            this.dragScrollSpeedXLabel = new System.Windows.Forms.Label();
-            this.missionGroupBox = new System.Windows.Forms.GroupBox();
-            this.unitsFolderNameTextBox = new System.Windows.Forms.TextBox();
-            this.unitsFolderNameLabel = new System.Windows.Forms.Label();
-            this.unitNameBackplateColorCustomizeButton = new System.Windows.Forms.Button();
-            this.showUnitNameBackplateCheckBox = new System.Windows.Forms.CheckBox();
-            this.unitNameTextColorCustomizeButton = new System.Windows.Forms.Button();
-            this.unitNameTextColorLabel = new System.Windows.Forms.Label();
-            this.showUnitFriendlyNameOnMapCheckBox = new System.Windows.Forms.CheckBox();
-            this.showUnitFriendlyNameFirstCheckBox = new System.Windows.Forms.CheckBox();
-            this.onlySelectActiveSchemaCheckBox = new System.Windows.Forms.CheckBox();
-            this.inactiveSchemaOpacityNumeric = new System.Windows.Forms.NumericUpDown();
-            this.inactiveSchemaOpacityLabel = new System.Windows.Forms.Label();
-            this.missionUiGroupBox = new System.Windows.Forms.GroupBox();
-            this.missionWaitBackplateCustomizeButton = new System.Windows.Forms.Button();
-            this.missionWaitBackplateLabel = new System.Windows.Forms.Label();
-            this.missionWaitTextCustomizeButton = new System.Windows.Forms.Button();
-            this.missionWaitTextLabel = new System.Windows.Forms.Label();
-            this.missionPatrolDashCustomizeButton = new System.Windows.Forms.Button();
-            this.missionPatrolDashLabel = new System.Windows.Forms.Label();
-            this.missionPatrolPathCustomizeButton = new System.Windows.Forms.Button();
-            this.missionPatrolPathLabel = new System.Windows.Forms.Label();
-            this.missionAttackPathCustomizeButton = new System.Windows.Forms.Button();
-            this.missionAttackPathLabel = new System.Windows.Forms.Label();
-            this.missionMovePathCustomizeButton = new System.Windows.Forms.Button();
-            this.missionMovePathLabel = new System.Windows.Forms.Label();
-            this.resourceNamesGroupBox = new System.Windows.Forms.GroupBox();
-            this.splitTilesCheckBox = new System.Windows.Forms.CheckBox();
-            this.calculatedMetalDepositValueCheckBox = new System.Windows.Forms.CheckBox();
-            this.featureReclaimAmountsCheckBox = new System.Windows.Forms.CheckBox();
-            this.fullResourceNamesCheckBox = new System.Windows.Forms.CheckBox();
-            this.resourceMarkersGroupBox = new System.Windows.Forms.GroupBox();
-            this.resourceMarkerLineColorButton = new System.Windows.Forms.Button();
-            this.resourceMarkerLineColorLabel = new System.Windows.Forms.Label();
-            this.saveOamapInfoCheckBox = new System.Windows.Forms.CheckBox();
-            this.saveResourceMarkersCheckBox = new System.Windows.Forms.CheckBox();
-            this.miscGroupBox = new System.Windows.Forms.GroupBox();
-            this.doNotPromptToSaveUnsavedChangesCheckBox = new System.Windows.Forms.CheckBox();
-            this.preferencesTabControl = new System.Windows.Forms.TabControl();
-            this.miscTabPage = new System.Windows.Forms.TabPage();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.updateRepositoryTextBox = new System.Windows.Forms.TextBox();
-            this.updateRepositoryLabel = new System.Windows.Forms.Label();
-            this.missionTabPage = new System.Windows.Forms.TabPage();
-            this.adjustmentsTabPage = new System.Windows.Forms.TabPage();
-            this.adjustmentsMiscGroupBox = new System.Windows.Forms.GroupBox();
-            this.featureBoundingBoxCustomizeButton = new System.Windows.Forms.Button();
-            this.alwaysShowFeatureBoundingBoxCheckBox = new System.Windows.Forms.CheckBox();
-            this.blobFeatureBaseCustomizeButton = new System.Windows.Forms.Button();
-            this.blobFeatureBaseCheckBox = new System.Windows.Forms.CheckBox();
-            this.stickyClipboardCheckBox = new System.Windows.Forms.CheckBox();
-            this.wheelStepGroupBox = new System.Windows.Forms.GroupBox();
-            this.seaLevelWheelStepNumeric = new System.Windows.Forms.NumericUpDown();
-            this.seaLevelWheelStepLabel = new System.Windows.Forms.Label();
-            this.voidCursorSizeWheelStepNumeric = new System.Windows.Forms.NumericUpDown();
-            this.voidCursorSizeWheelStepLabel = new System.Windows.Forms.Label();
-            this.heightCursorSizeWheelStepNumeric = new System.Windows.Forms.NumericUpDown();
-            this.heightCursorSizeWheelStepLabel = new System.Windows.Forms.Label();
-            this.heightIntervalWheelStepNumeric = new System.Windows.Forms.NumericUpDown();
-            this.heightIntervalWheelStepLabel = new System.Windows.Forms.Label();
-            this.heightSelectedHeightWheelStepNumeric = new System.Windows.Forms.NumericUpDown();
-            this.heightSelectedHeightWheelStepLabel = new System.Windows.Forms.Label();
-            this.defaultsTabPage = new System.Windows.Forms.TabPage();
-            this.viewDefaultsGroupBox = new System.Windows.Forms.GroupBox();
-            this.defaultGridSizeComboBox = new System.Windows.Forms.ComboBox();
-            this.defaultGridSizeLabel = new System.Windows.Forms.Label();
-            this.defaultOrdersVisibleCheckBox = new System.Windows.Forms.CheckBox();
-            this.defaultFeaturesVisibleCheckBox = new System.Windows.Forms.CheckBox();
-            this.defaultGridVisibleCheckBox = new System.Windows.Forms.CheckBox();
-            this.defaultVoidsVisibleCheckBox = new System.Windows.Forms.CheckBox();
-            this.defaultMinimapVisibleCheckBox = new System.Windows.Forms.CheckBox();
-            this.defaultHeightGridVisibleCheckBox = new System.Windows.Forms.CheckBox();
-            this.defaultHeightmapVisibleCheckBox = new System.Windows.Forms.CheckBox();
-            this.newMapDefaultsGroupBox = new System.Windows.Forms.GroupBox();
-            this.defaultNewMapHeightNumeric = new System.Windows.Forms.NumericUpDown();
-            this.defaultNewMapHeightLabel = new System.Windows.Forms.Label();
-            this.defaultNewMapWidthNumeric = new System.Windows.Forms.NumericUpDown();
-            this.defaultNewMapWidthLabel = new System.Windows.Forms.Label();
-            this.sidePanel.SuspendLayout();
-            this.bottomPanel.SuspendLayout();
-            this.searchPathsPanel.SuspendLayout();
-            this.mainGroupBox.SuspendLayout();
-            this.scrollSpeedGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedYNumeric)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).BeginInit();
-            this.missionGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.inactiveSchemaOpacityNumeric)).BeginInit();
-            this.missionUiGroupBox.SuspendLayout();
-            this.resourceNamesGroupBox.SuspendLayout();
-            this.resourceMarkersGroupBox.SuspendLayout();
-            this.miscGroupBox.SuspendLayout();
-            this.preferencesTabControl.SuspendLayout();
-            this.miscTabPage.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.missionTabPage.SuspendLayout();
-            this.adjustmentsTabPage.SuspendLayout();
-            this.adjustmentsMiscGroupBox.SuspendLayout();
-            this.wheelStepGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.seaLevelWheelStepNumeric)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.voidCursorSizeWheelStepNumeric)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.heightCursorSizeWheelStepNumeric)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.heightIntervalWheelStepNumeric)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.heightSelectedHeightWheelStepNumeric)).BeginInit();
-            this.defaultsTabPage.SuspendLayout();
-            this.viewDefaultsGroupBox.SuspendLayout();
-            this.newMapDefaultsGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.defaultNewMapHeightNumeric)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.defaultNewMapWidthNumeric)).BeginInit();
-            this.SuspendLayout();
-            // 
-            // searchPathsListView
-            // 
-            this.searchPathsListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.searchPathsListView.HideSelection = false;
-            this.searchPathsListView.Location = new System.Drawing.Point(0, 0);
-            this.searchPathsListView.MultiSelect = false;
-            this.searchPathsListView.Name = "searchPathsListView";
-            this.searchPathsListView.Size = new System.Drawing.Size(332, 151);
-            this.searchPathsListView.TabIndex = 0;
-            this.searchPathsListView.UseCompatibleStateImageBehavior = false;
-            this.searchPathsListView.View = System.Windows.Forms.View.List;
-            // 
-            // addButton
-            // 
-            this.addButton.Location = new System.Drawing.Point(3, 83);
-            this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(75, 21);
-            this.addButton.TabIndex = 1;
-            this.addButton.Text = "Add...";
-            this.addButton.UseVisualStyleBackColor = true;
-            this.addButton.Click += new System.EventHandler(this.AddButtonClick);
-            // 
-            // removeButton
-            // 
-            this.removeButton.Location = new System.Drawing.Point(3, 112);
-            this.removeButton.Name = "removeButton";
-            this.removeButton.Size = new System.Drawing.Size(75, 21);
-            this.removeButton.TabIndex = 2;
-            this.removeButton.Text = "Remove";
-            this.removeButton.UseVisualStyleBackColor = true;
-            this.removeButton.Click += new System.EventHandler(this.RemoveButtonClick);
-            // 
-            // upButton
-            // 
-            this.upButton.Location = new System.Drawing.Point(3, 3);
-            this.upButton.Name = "upButton";
-            this.upButton.Size = new System.Drawing.Size(75, 23);
-            this.upButton.TabIndex = 3;
-            this.upButton.Text = "Move Up";
-            this.upButton.UseVisualStyleBackColor = true;
-            this.upButton.Click += new System.EventHandler(this.UpButtonClick);
-            // 
-            // downButton
-            // 
-            this.downButton.Location = new System.Drawing.Point(3, 32);
-            this.downButton.Name = "downButton";
-            this.downButton.Size = new System.Drawing.Size(75, 23);
-            this.downButton.TabIndex = 4;
-            this.downButton.Text = "Move Down";
-            this.downButton.UseVisualStyleBackColor = true;
-            this.downButton.Click += new System.EventHandler(this.DownButtonClick);
-            // 
-            // okButton
-            // 
-            this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(291, 4);
-            this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 5;
-            this.okButton.Text = "OK";
-            this.okButton.UseVisualStyleBackColor = true;
-            this.okButton.Click += new System.EventHandler(this.OkButtonClick);
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(372, 4);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 6;
-            this.cancelButton.Text = "Cancel";
-            this.cancelButton.UseVisualStyleBackColor = true;
-            // 
-            // sidePanel
-            // 
-            this.sidePanel.Controls.Add(this.upButton);
-            this.sidePanel.Controls.Add(this.downButton);
-            this.sidePanel.Controls.Add(this.addButton);
-            this.sidePanel.Controls.Add(this.removeButton);
-            this.sidePanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.sidePanel.Location = new System.Drawing.Point(332, 0);
-            this.sidePanel.Name = "sidePanel";
-            this.sidePanel.Size = new System.Drawing.Size(82, 151);
-            this.sidePanel.TabIndex = 7;
-            // 
-            // bottomPanel
-            // 
-            this.bottomPanel.Controls.Add(this.cancelButton);
-            this.bottomPanel.Controls.Add(this.okButton);
-            this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.bottomPanel.Location = new System.Drawing.Point(0, 504);
-            this.bottomPanel.Name = "bottomPanel";
-            this.bottomPanel.Size = new System.Drawing.Size(450, 30);
-            this.bottomPanel.TabIndex = 8;
-            // 
-            // searchPathsPanel
-            // 
-            this.searchPathsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.searchPathsListView = new System.Windows.Forms.ListView();
+			this.addButton = new System.Windows.Forms.Button();
+			this.removeButton = new System.Windows.Forms.Button();
+			this.upButton = new System.Windows.Forms.Button();
+			this.downButton = new System.Windows.Forms.Button();
+			this.okButton = new System.Windows.Forms.Button();
+			this.cancelButton = new System.Windows.Forms.Button();
+			this.sidePanel = new System.Windows.Forms.Panel();
+			this.bottomPanel = new System.Windows.Forms.Panel();
+			this.searchPathsPanel = new System.Windows.Forms.Panel();
+			this.mainGroupBox = new System.Windows.Forms.GroupBox();
+			this.scrollSpeedGroupBox = new System.Windows.Forms.GroupBox();
+			this.dragScrollSpeedYNumeric = new System.Windows.Forms.NumericUpDown();
+			this.dragScrollSpeedXNumeric = new System.Windows.Forms.NumericUpDown();
+			this.dragScrollSpeedYLabel = new System.Windows.Forms.Label();
+			this.dragScrollSpeedXLabel = new System.Windows.Forms.Label();
+			this.missionGroupBox = new System.Windows.Forms.GroupBox();
+			this.unitsFolderNameTextBox = new System.Windows.Forms.TextBox();
+			this.unitsFolderNameLabel = new System.Windows.Forms.Label();
+			this.unitNameBackplateColorCustomizeButton = new System.Windows.Forms.Button();
+			this.showUnitNameBackplateCheckBox = new System.Windows.Forms.CheckBox();
+			this.unitNameTextColorCustomizeButton = new System.Windows.Forms.Button();
+			this.unitNameTextColorLabel = new System.Windows.Forms.Label();
+			this.showUnitFriendlyNameOnMapCheckBox = new System.Windows.Forms.CheckBox();
+			this.showUnitFriendlyNameFirstCheckBox = new System.Windows.Forms.CheckBox();
+			this.onlySelectActiveSchemaCheckBox = new System.Windows.Forms.CheckBox();
+			this.inactiveSchemaOpacityNumeric = new System.Windows.Forms.NumericUpDown();
+			this.inactiveSchemaOpacityLabel = new System.Windows.Forms.Label();
+			this.missionUiGroupBox = new System.Windows.Forms.GroupBox();
+			this.missionWaitBackplateCustomizeButton = new System.Windows.Forms.Button();
+			this.missionWaitBackplateLabel = new System.Windows.Forms.Label();
+			this.missionWaitTextCustomizeButton = new System.Windows.Forms.Button();
+			this.missionWaitTextLabel = new System.Windows.Forms.Label();
+			this.missionPatrolDashCustomizeButton = new System.Windows.Forms.Button();
+			this.missionPatrolDashLabel = new System.Windows.Forms.Label();
+			this.missionPatrolPathCustomizeButton = new System.Windows.Forms.Button();
+			this.missionPatrolPathLabel = new System.Windows.Forms.Label();
+			this.missionAttackPathCustomizeButton = new System.Windows.Forms.Button();
+			this.missionAttackPathLabel = new System.Windows.Forms.Label();
+			this.missionMovePathCustomizeButton = new System.Windows.Forms.Button();
+			this.missionMovePathLabel = new System.Windows.Forms.Label();
+			this.resourceNamesGroupBox = new System.Windows.Forms.GroupBox();
+			this.splitTilesCheckBox = new System.Windows.Forms.CheckBox();
+			this.calculatedMetalDepositValueCheckBox = new System.Windows.Forms.CheckBox();
+			this.featureReclaimAmountsCheckBox = new System.Windows.Forms.CheckBox();
+			this.fullResourceNamesCheckBox = new System.Windows.Forms.CheckBox();
+			this.resourceMarkersGroupBox = new System.Windows.Forms.GroupBox();
+			this.resourceMarkerLineColorButton = new System.Windows.Forms.Button();
+			this.resourceMarkerLineColorLabel = new System.Windows.Forms.Label();
+			this.saveOamapInfoCheckBox = new System.Windows.Forms.CheckBox();
+			this.saveResourceMarkersCheckBox = new System.Windows.Forms.CheckBox();
+			this.miscGroupBox = new System.Windows.Forms.GroupBox();
+			this.doNotPromptToSaveUnsavedChangesCheckBox = new System.Windows.Forms.CheckBox();
+			this.preferencesTabControl = new System.Windows.Forms.TabControl();
+			this.miscTabPage = new System.Windows.Forms.TabPage();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.updateRepositoryTextBox = new System.Windows.Forms.TextBox();
+			this.updateRepositoryLabel = new System.Windows.Forms.Label();
+			this.missionTabPage = new System.Windows.Forms.TabPage();
+			this.adjustmentsTabPage = new System.Windows.Forms.TabPage();
+			this.adjustmentsMiscGroupBox = new System.Windows.Forms.GroupBox();
+			this.featureBoundingBoxCustomizeButton = new System.Windows.Forms.Button();
+			this.alwaysShowFeatureBoundingBoxCheckBox = new System.Windows.Forms.CheckBox();
+			this.blobFeatureBaseCustomizeButton = new System.Windows.Forms.Button();
+			this.blobFeatureBaseCheckBox = new System.Windows.Forms.CheckBox();
+			this.stickyClipboardCheckBox = new System.Windows.Forms.CheckBox();
+			this.wheelStepGroupBox = new System.Windows.Forms.GroupBox();
+			this.seaLevelWheelStepNumeric = new System.Windows.Forms.NumericUpDown();
+			this.seaLevelWheelStepLabel = new System.Windows.Forms.Label();
+			this.voidCursorSizeWheelStepNumeric = new System.Windows.Forms.NumericUpDown();
+			this.voidCursorSizeWheelStepLabel = new System.Windows.Forms.Label();
+			this.heightCursorSizeWheelStepNumeric = new System.Windows.Forms.NumericUpDown();
+			this.heightCursorSizeWheelStepLabel = new System.Windows.Forms.Label();
+			this.heightIntervalWheelStepNumeric = new System.Windows.Forms.NumericUpDown();
+			this.heightIntervalWheelStepLabel = new System.Windows.Forms.Label();
+			this.heightSelectedHeightWheelStepNumeric = new System.Windows.Forms.NumericUpDown();
+			this.heightSelectedHeightWheelStepLabel = new System.Windows.Forms.Label();
+			this.defaultsTabPage = new System.Windows.Forms.TabPage();
+			this.viewDefaultsGroupBox = new System.Windows.Forms.GroupBox();
+			this.defaultGridSizeComboBox = new System.Windows.Forms.ComboBox();
+			this.defaultGridSizeLabel = new System.Windows.Forms.Label();
+			this.defaultOrdersVisibleCheckBox = new System.Windows.Forms.CheckBox();
+			this.defaultFeaturesVisibleCheckBox = new System.Windows.Forms.CheckBox();
+			this.defaultGridVisibleCheckBox = new System.Windows.Forms.CheckBox();
+			this.defaultVoidsVisibleCheckBox = new System.Windows.Forms.CheckBox();
+			this.defaultMinimapVisibleCheckBox = new System.Windows.Forms.CheckBox();
+			this.defaultHeightGridVisibleCheckBox = new System.Windows.Forms.CheckBox();
+			this.defaultHeightmapVisibleCheckBox = new System.Windows.Forms.CheckBox();
+			this.newMapDefaultsGroupBox = new System.Windows.Forms.GroupBox();
+			this.defaultNewMapHeightNumeric = new System.Windows.Forms.NumericUpDown();
+			this.defaultNewMapHeightLabel = new System.Windows.Forms.Label();
+			this.defaultNewMapWidthNumeric = new System.Windows.Forms.NumericUpDown();
+			this.defaultNewMapWidthLabel = new System.Windows.Forms.Label();
+			this.paintingTabPage = new System.Windows.Forms.TabPage();
+			this.paintingGroupBox = new System.Windows.Forms.GroupBox();
+			this.paintingIntroLabel = new System.Windows.Forms.Label();
+			this.galaxyEditorLinkLabel = new System.Windows.Forms.LinkLabel();
+			this.brushTilesUrlLabel = new System.Windows.Forms.Label();
+			this.brushTilesUrlTextBox = new System.Windows.Forms.TextBox();
+			this.downloadBrushTilesButton = new System.Windows.Forms.Button();
+			this.brushTilesDownloadedLabel = new System.Windows.Forms.Label();
+			this.brushTilesHashLabel = new System.Windows.Forms.Label();
+			this.excludeBrushTilesCheckBox = new System.Windows.Forms.CheckBox();
+			this.sidePanel.SuspendLayout();
+			this.bottomPanel.SuspendLayout();
+			this.searchPathsPanel.SuspendLayout();
+			this.mainGroupBox.SuspendLayout();
+			this.scrollSpeedGroupBox.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedYNumeric)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).BeginInit();
+			this.missionGroupBox.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.inactiveSchemaOpacityNumeric)).BeginInit();
+			this.missionUiGroupBox.SuspendLayout();
+			this.resourceNamesGroupBox.SuspendLayout();
+			this.resourceMarkersGroupBox.SuspendLayout();
+			this.miscGroupBox.SuspendLayout();
+			this.preferencesTabControl.SuspendLayout();
+			this.miscTabPage.SuspendLayout();
+			this.groupBox1.SuspendLayout();
+			this.missionTabPage.SuspendLayout();
+			this.adjustmentsTabPage.SuspendLayout();
+			this.adjustmentsMiscGroupBox.SuspendLayout();
+			this.wheelStepGroupBox.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.seaLevelWheelStepNumeric)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.voidCursorSizeWheelStepNumeric)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.heightCursorSizeWheelStepNumeric)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.heightIntervalWheelStepNumeric)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.heightSelectedHeightWheelStepNumeric)).BeginInit();
+			this.defaultsTabPage.SuspendLayout();
+			this.viewDefaultsGroupBox.SuspendLayout();
+			this.newMapDefaultsGroupBox.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.defaultNewMapHeightNumeric)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.defaultNewMapWidthNumeric)).BeginInit();
+			this.paintingTabPage.SuspendLayout();
+			this.paintingGroupBox.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// searchPathsListView
+			// 
+			this.searchPathsListView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.searchPathsListView.HideSelection = false;
+			this.searchPathsListView.Location = new System.Drawing.Point(0, 0);
+			this.searchPathsListView.MultiSelect = false;
+			this.searchPathsListView.Name = "searchPathsListView";
+			this.searchPathsListView.Size = new System.Drawing.Size(332, 151);
+			this.searchPathsListView.TabIndex = 0;
+			this.searchPathsListView.UseCompatibleStateImageBehavior = false;
+			this.searchPathsListView.View = System.Windows.Forms.View.List;
+			// 
+			// addButton
+			// 
+			this.addButton.Location = new System.Drawing.Point(3, 83);
+			this.addButton.Name = "addButton";
+			this.addButton.Size = new System.Drawing.Size(75, 21);
+			this.addButton.TabIndex = 1;
+			this.addButton.Text = "Add...";
+			this.addButton.UseVisualStyleBackColor = true;
+			this.addButton.Click += new System.EventHandler(this.AddButtonClick);
+			// 
+			// removeButton
+			// 
+			this.removeButton.Location = new System.Drawing.Point(3, 112);
+			this.removeButton.Name = "removeButton";
+			this.removeButton.Size = new System.Drawing.Size(75, 21);
+			this.removeButton.TabIndex = 2;
+			this.removeButton.Text = "Remove";
+			this.removeButton.UseVisualStyleBackColor = true;
+			this.removeButton.Click += new System.EventHandler(this.RemoveButtonClick);
+			// 
+			// upButton
+			// 
+			this.upButton.Location = new System.Drawing.Point(3, 3);
+			this.upButton.Name = "upButton";
+			this.upButton.Size = new System.Drawing.Size(75, 23);
+			this.upButton.TabIndex = 3;
+			this.upButton.Text = "Move Up";
+			this.upButton.UseVisualStyleBackColor = true;
+			this.upButton.Click += new System.EventHandler(this.UpButtonClick);
+			// 
+			// downButton
+			// 
+			this.downButton.Location = new System.Drawing.Point(3, 32);
+			this.downButton.Name = "downButton";
+			this.downButton.Size = new System.Drawing.Size(75, 23);
+			this.downButton.TabIndex = 4;
+			this.downButton.Text = "Move Down";
+			this.downButton.UseVisualStyleBackColor = true;
+			this.downButton.Click += new System.EventHandler(this.DownButtonClick);
+			// 
+			// okButton
+			// 
+			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.okButton.Location = new System.Drawing.Point(291, 4);
+			this.okButton.Name = "okButton";
+			this.okButton.Size = new System.Drawing.Size(75, 23);
+			this.okButton.TabIndex = 5;
+			this.okButton.Text = "OK";
+			this.okButton.UseVisualStyleBackColor = true;
+			this.okButton.Click += new System.EventHandler(this.OkButtonClick);
+			// 
+			// cancelButton
+			// 
+			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.cancelButton.Location = new System.Drawing.Point(372, 4);
+			this.cancelButton.Name = "cancelButton";
+			this.cancelButton.Size = new System.Drawing.Size(75, 23);
+			this.cancelButton.TabIndex = 6;
+			this.cancelButton.Text = "Cancel";
+			this.cancelButton.UseVisualStyleBackColor = true;
+			// 
+			// sidePanel
+			// 
+			this.sidePanel.Controls.Add(this.upButton);
+			this.sidePanel.Controls.Add(this.downButton);
+			this.sidePanel.Controls.Add(this.addButton);
+			this.sidePanel.Controls.Add(this.removeButton);
+			this.sidePanel.Dock = System.Windows.Forms.DockStyle.Right;
+			this.sidePanel.Location = new System.Drawing.Point(332, 0);
+			this.sidePanel.Name = "sidePanel";
+			this.sidePanel.Size = new System.Drawing.Size(82, 151);
+			this.sidePanel.TabIndex = 7;
+			// 
+			// bottomPanel
+			// 
+			this.bottomPanel.Controls.Add(this.cancelButton);
+			this.bottomPanel.Controls.Add(this.okButton);
+			this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.bottomPanel.Location = new System.Drawing.Point(0, 527);
+			this.bottomPanel.Name = "bottomPanel";
+			this.bottomPanel.Size = new System.Drawing.Size(450, 30);
+			this.bottomPanel.TabIndex = 8;
+			// 
+			// searchPathsPanel
+			// 
+			this.searchPathsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchPathsPanel.Controls.Add(this.searchPathsListView);
-            this.searchPathsPanel.Controls.Add(this.sidePanel);
-            this.searchPathsPanel.Location = new System.Drawing.Point(6, 19);
-            this.searchPathsPanel.Name = "searchPathsPanel";
-            this.searchPathsPanel.Size = new System.Drawing.Size(414, 151);
-            this.searchPathsPanel.TabIndex = 9;
-            // 
-            // mainGroupBox
-            // 
-            this.mainGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.searchPathsPanel.Controls.Add(this.searchPathsListView);
+			this.searchPathsPanel.Controls.Add(this.sidePanel);
+			this.searchPathsPanel.Location = new System.Drawing.Point(6, 19);
+			this.searchPathsPanel.Name = "searchPathsPanel";
+			this.searchPathsPanel.Size = new System.Drawing.Size(414, 151);
+			this.searchPathsPanel.TabIndex = 9;
+			// 
+			// mainGroupBox
+			// 
+			this.mainGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.mainGroupBox.Controls.Add(this.searchPathsPanel);
-            this.mainGroupBox.Location = new System.Drawing.Point(12, 12);
-            this.mainGroupBox.Name = "mainGroupBox";
-            this.mainGroupBox.Size = new System.Drawing.Size(426, 176);
-            this.mainGroupBox.TabIndex = 0;
-            this.mainGroupBox.TabStop = false;
-            this.mainGroupBox.Text = "Search Paths";
-            // 
-            // scrollSpeedGroupBox
-            // 
-            this.scrollSpeedGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.mainGroupBox.Controls.Add(this.searchPathsPanel);
+			this.mainGroupBox.Location = new System.Drawing.Point(12, 12);
+			this.mainGroupBox.Name = "mainGroupBox";
+			this.mainGroupBox.Size = new System.Drawing.Size(426, 176);
+			this.mainGroupBox.TabIndex = 0;
+			this.mainGroupBox.TabStop = false;
+			this.mainGroupBox.Text = "Search Paths";
+			// 
+			// scrollSpeedGroupBox
+			// 
+			this.scrollSpeedGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedYNumeric);
-            this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedXNumeric);
-            this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedYLabel);
-            this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedXLabel);
-            this.scrollSpeedGroupBox.Location = new System.Drawing.Point(12, 211);
-            this.scrollSpeedGroupBox.Name = "scrollSpeedGroupBox";
-            this.scrollSpeedGroupBox.Size = new System.Drawing.Size(426, 92);
-            this.scrollSpeedGroupBox.TabIndex = 1;
-            this.scrollSpeedGroupBox.TabStop = false;
-            this.scrollSpeedGroupBox.Text = "Viewport Drag Auto-Scroll";
-            // 
-            // dragScrollSpeedYNumeric
-            // 
-            this.dragScrollSpeedYNumeric.Location = new System.Drawing.Point(233, 52);
-            this.dragScrollSpeedYNumeric.Maximum = new decimal(new int[] {
+			this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedYNumeric);
+			this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedXNumeric);
+			this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedYLabel);
+			this.scrollSpeedGroupBox.Controls.Add(this.dragScrollSpeedXLabel);
+			this.scrollSpeedGroupBox.Location = new System.Drawing.Point(12, 211);
+			this.scrollSpeedGroupBox.Name = "scrollSpeedGroupBox";
+			this.scrollSpeedGroupBox.Size = new System.Drawing.Size(426, 92);
+			this.scrollSpeedGroupBox.TabIndex = 1;
+			this.scrollSpeedGroupBox.TabStop = false;
+			this.scrollSpeedGroupBox.Text = "Viewport Drag Auto-Scroll";
+			// 
+			// dragScrollSpeedYNumeric
+			// 
+			this.dragScrollSpeedYNumeric.Location = new System.Drawing.Point(233, 52);
+			this.dragScrollSpeedYNumeric.Maximum = new decimal(new int[] {
             256,
             0,
             0,
             0});
-            this.dragScrollSpeedYNumeric.Minimum = new decimal(new int[] {
+			this.dragScrollSpeedYNumeric.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.dragScrollSpeedYNumeric.Name = "dragScrollSpeedYNumeric";
-            this.dragScrollSpeedYNumeric.Size = new System.Drawing.Size(82, 20);
-            this.dragScrollSpeedYNumeric.TabIndex = 3;
-            this.dragScrollSpeedYNumeric.Value = new decimal(new int[] {
+			this.dragScrollSpeedYNumeric.Name = "dragScrollSpeedYNumeric";
+			this.dragScrollSpeedYNumeric.Size = new System.Drawing.Size(82, 20);
+			this.dragScrollSpeedYNumeric.TabIndex = 3;
+			this.dragScrollSpeedYNumeric.Value = new decimal(new int[] {
             16,
             0,
             0,
             0});
-            // 
-            // dragScrollSpeedXNumeric
-            // 
-            this.dragScrollSpeedXNumeric.Location = new System.Drawing.Point(233, 23);
-            this.dragScrollSpeedXNumeric.Maximum = new decimal(new int[] {
+			// 
+			// dragScrollSpeedXNumeric
+			// 
+			this.dragScrollSpeedXNumeric.Location = new System.Drawing.Point(233, 23);
+			this.dragScrollSpeedXNumeric.Maximum = new decimal(new int[] {
             256,
             0,
             0,
             0});
-            this.dragScrollSpeedXNumeric.Minimum = new decimal(new int[] {
+			this.dragScrollSpeedXNumeric.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.dragScrollSpeedXNumeric.Name = "dragScrollSpeedXNumeric";
-            this.dragScrollSpeedXNumeric.Size = new System.Drawing.Size(82, 20);
-            this.dragScrollSpeedXNumeric.TabIndex = 1;
-            this.dragScrollSpeedXNumeric.Value = new decimal(new int[] {
+			this.dragScrollSpeedXNumeric.Name = "dragScrollSpeedXNumeric";
+			this.dragScrollSpeedXNumeric.Size = new System.Drawing.Size(82, 20);
+			this.dragScrollSpeedXNumeric.TabIndex = 1;
+			this.dragScrollSpeedXNumeric.Value = new decimal(new int[] {
             16,
             0,
             0,
             0});
-            // 
-            // dragScrollSpeedYLabel
-            // 
-            this.dragScrollSpeedYLabel.AutoSize = true;
-            this.dragScrollSpeedYLabel.Location = new System.Drawing.Point(14, 54);
-            this.dragScrollSpeedYLabel.Name = "dragScrollSpeedYLabel";
-            this.dragScrollSpeedYLabel.Size = new System.Drawing.Size(77, 13);
-            this.dragScrollSpeedYLabel.TabIndex = 2;
-            this.dragScrollSpeedYLabel.Text = "Vertical speed:";
-            // 
-            // dragScrollSpeedXLabel
-            // 
-            this.dragScrollSpeedXLabel.AutoSize = true;
-            this.dragScrollSpeedXLabel.Location = new System.Drawing.Point(14, 25);
-            this.dragScrollSpeedXLabel.Name = "dragScrollSpeedXLabel";
-            this.dragScrollSpeedXLabel.Size = new System.Drawing.Size(89, 13);
-            this.dragScrollSpeedXLabel.TabIndex = 0;
-            this.dragScrollSpeedXLabel.Text = "Horizontal speed:";
-            // 
-            // missionGroupBox
-            // 
-            this.missionGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			// 
+			// dragScrollSpeedYLabel
+			// 
+			this.dragScrollSpeedYLabel.AutoSize = true;
+			this.dragScrollSpeedYLabel.Location = new System.Drawing.Point(14, 54);
+			this.dragScrollSpeedYLabel.Name = "dragScrollSpeedYLabel";
+			this.dragScrollSpeedYLabel.Size = new System.Drawing.Size(77, 13);
+			this.dragScrollSpeedYLabel.TabIndex = 2;
+			this.dragScrollSpeedYLabel.Text = "Vertical speed:";
+			// 
+			// dragScrollSpeedXLabel
+			// 
+			this.dragScrollSpeedXLabel.AutoSize = true;
+			this.dragScrollSpeedXLabel.Location = new System.Drawing.Point(14, 25);
+			this.dragScrollSpeedXLabel.Name = "dragScrollSpeedXLabel";
+			this.dragScrollSpeedXLabel.Size = new System.Drawing.Size(89, 13);
+			this.dragScrollSpeedXLabel.TabIndex = 0;
+			this.dragScrollSpeedXLabel.Text = "Horizontal speed:";
+			// 
+			// missionGroupBox
+			// 
+			this.missionGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.missionGroupBox.Controls.Add(this.unitsFolderNameTextBox);
-            this.missionGroupBox.Controls.Add(this.unitsFolderNameLabel);
-            this.missionGroupBox.Controls.Add(this.unitNameBackplateColorCustomizeButton);
-            this.missionGroupBox.Controls.Add(this.showUnitNameBackplateCheckBox);
-            this.missionGroupBox.Controls.Add(this.unitNameTextColorCustomizeButton);
-            this.missionGroupBox.Controls.Add(this.unitNameTextColorLabel);
-            this.missionGroupBox.Controls.Add(this.showUnitFriendlyNameOnMapCheckBox);
-            this.missionGroupBox.Controls.Add(this.showUnitFriendlyNameFirstCheckBox);
-            this.missionGroupBox.Controls.Add(this.onlySelectActiveSchemaCheckBox);
-            this.missionGroupBox.Controls.Add(this.inactiveSchemaOpacityNumeric);
-            this.missionGroupBox.Controls.Add(this.inactiveSchemaOpacityLabel);
-            this.missionGroupBox.Location = new System.Drawing.Point(12, 12);
-            this.missionGroupBox.Name = "missionGroupBox";
-            this.missionGroupBox.Size = new System.Drawing.Size(426, 212);
-            this.missionGroupBox.TabIndex = 0;
-            this.missionGroupBox.TabStop = false;
-            this.missionGroupBox.Text = "Mission";
-            // 
-            // unitsFolderNameTextBox
-            // 
-            this.unitsFolderNameTextBox.Location = new System.Drawing.Point(233, 149);
-            this.unitsFolderNameTextBox.Name = "unitsFolderNameTextBox";
-            this.unitsFolderNameTextBox.Size = new System.Drawing.Size(85, 20);
-            this.unitsFolderNameTextBox.TabIndex = 9;
-            // 
-            // unitsFolderNameLabel
-            // 
-            this.unitsFolderNameLabel.AutoSize = true;
-            this.unitsFolderNameLabel.Location = new System.Drawing.Point(14, 152);
-            this.unitsFolderNameLabel.Name = "unitsFolderNameLabel";
-            this.unitsFolderNameLabel.Size = new System.Drawing.Size(92, 13);
-            this.unitsFolderNameLabel.TabIndex = 8;
-            this.unitsFolderNameLabel.Text = "Units folder name:";
-            // 
-            // unitNameBackplateColorCustomizeButton
-            // 
-            this.unitNameBackplateColorCustomizeButton.Location = new System.Drawing.Point(233, 120);
-            this.unitNameBackplateColorCustomizeButton.Name = "unitNameBackplateColorCustomizeButton";
-            this.unitNameBackplateColorCustomizeButton.Size = new System.Drawing.Size(85, 23);
-            this.unitNameBackplateColorCustomizeButton.TabIndex = 7;
-            this.unitNameBackplateColorCustomizeButton.Text = "Customize...";
-            this.unitNameBackplateColorCustomizeButton.UseVisualStyleBackColor = true;
-            this.unitNameBackplateColorCustomizeButton.Click += new System.EventHandler(this.UnitNameBackplateColorCustomizeButtonClick);
-            // 
-            // showUnitNameBackplateCheckBox
-            // 
-            this.showUnitNameBackplateCheckBox.AutoSize = true;
-            this.showUnitNameBackplateCheckBox.Location = new System.Drawing.Point(17, 123);
-            this.showUnitNameBackplateCheckBox.Name = "showUnitNameBackplateCheckBox";
-            this.showUnitNameBackplateCheckBox.Size = new System.Drawing.Size(124, 17);
-            this.showUnitNameBackplateCheckBox.TabIndex = 6;
-            this.showUnitNameBackplateCheckBox.Text = "Unit name backplate";
-            this.showUnitNameBackplateCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // unitNameTextColorCustomizeButton
-            // 
-            this.unitNameTextColorCustomizeButton.Location = new System.Drawing.Point(233, 93);
-            this.unitNameTextColorCustomizeButton.Name = "unitNameTextColorCustomizeButton";
-            this.unitNameTextColorCustomizeButton.Size = new System.Drawing.Size(85, 23);
-            this.unitNameTextColorCustomizeButton.TabIndex = 5;
-            this.unitNameTextColorCustomizeButton.Text = "Customize...";
-            this.unitNameTextColorCustomizeButton.UseVisualStyleBackColor = true;
-            this.unitNameTextColorCustomizeButton.Click += new System.EventHandler(this.UnitNameTextColorCustomizeButtonClick);
-            // 
-            // unitNameTextColorLabel
-            // 
-            this.unitNameTextColorLabel.AutoSize = true;
-            this.unitNameTextColorLabel.Location = new System.Drawing.Point(14, 98);
-            this.unitNameTextColorLabel.Name = "unitNameTextColorLabel";
-            this.unitNameTextColorLabel.Size = new System.Drawing.Size(110, 13);
-            this.unitNameTextColorLabel.TabIndex = 4;
-            this.unitNameTextColorLabel.Text = "Unit name text colour:";
-            // 
-            // showUnitFriendlyNameOnMapCheckBox
-            // 
-            this.showUnitFriendlyNameOnMapCheckBox.AutoSize = true;
-            this.showUnitFriendlyNameOnMapCheckBox.Location = new System.Drawing.Point(17, 73);
-            this.showUnitFriendlyNameOnMapCheckBox.Name = "showUnitFriendlyNameOnMapCheckBox";
-            this.showUnitFriendlyNameOnMapCheckBox.Size = new System.Drawing.Size(159, 17);
-            this.showUnitFriendlyNameOnMapCheckBox.TabIndex = 3;
-            this.showUnitFriendlyNameOnMapCheckBox.Text = "Prioritise friendly name (map)";
-            this.showUnitFriendlyNameOnMapCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // showUnitFriendlyNameFirstCheckBox
-            // 
-            this.showUnitFriendlyNameFirstCheckBox.AutoSize = true;
-            this.showUnitFriendlyNameFirstCheckBox.Location = new System.Drawing.Point(17, 50);
-            this.showUnitFriendlyNameFirstCheckBox.Name = "showUnitFriendlyNameFirstCheckBox";
-            this.showUnitFriendlyNameFirstCheckBox.Size = new System.Drawing.Size(154, 17);
-            this.showUnitFriendlyNameFirstCheckBox.TabIndex = 2;
-            this.showUnitFriendlyNameFirstCheckBox.Text = "Prioritise friendly name (tab)";
-            this.showUnitFriendlyNameFirstCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // onlySelectActiveSchemaCheckBox
-            // 
-            this.onlySelectActiveSchemaCheckBox.AutoSize = true;
-            this.onlySelectActiveSchemaCheckBox.Checked = true;
-            this.onlySelectActiveSchemaCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.onlySelectActiveSchemaCheckBox.Location = new System.Drawing.Point(17, 176);
-            this.onlySelectActiveSchemaCheckBox.Name = "onlySelectActiveSchemaCheckBox";
-            this.onlySelectActiveSchemaCheckBox.Size = new System.Drawing.Size(150, 17);
-            this.onlySelectActiveSchemaCheckBox.TabIndex = 10;
-            this.onlySelectActiveSchemaCheckBox.Text = "Only select active schema";
-            this.onlySelectActiveSchemaCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // inactiveSchemaOpacityNumeric
-            // 
-            this.inactiveSchemaOpacityNumeric.Location = new System.Drawing.Point(233, 20);
-            this.inactiveSchemaOpacityNumeric.Name = "inactiveSchemaOpacityNumeric";
-            this.inactiveSchemaOpacityNumeric.Size = new System.Drawing.Size(82, 20);
-            this.inactiveSchemaOpacityNumeric.TabIndex = 1;
-            this.inactiveSchemaOpacityNumeric.Value = new decimal(new int[] {
+			this.missionGroupBox.Controls.Add(this.unitsFolderNameTextBox);
+			this.missionGroupBox.Controls.Add(this.unitsFolderNameLabel);
+			this.missionGroupBox.Controls.Add(this.unitNameBackplateColorCustomizeButton);
+			this.missionGroupBox.Controls.Add(this.showUnitNameBackplateCheckBox);
+			this.missionGroupBox.Controls.Add(this.unitNameTextColorCustomizeButton);
+			this.missionGroupBox.Controls.Add(this.unitNameTextColorLabel);
+			this.missionGroupBox.Controls.Add(this.showUnitFriendlyNameOnMapCheckBox);
+			this.missionGroupBox.Controls.Add(this.showUnitFriendlyNameFirstCheckBox);
+			this.missionGroupBox.Controls.Add(this.onlySelectActiveSchemaCheckBox);
+			this.missionGroupBox.Controls.Add(this.inactiveSchemaOpacityNumeric);
+			this.missionGroupBox.Controls.Add(this.inactiveSchemaOpacityLabel);
+			this.missionGroupBox.Location = new System.Drawing.Point(12, 12);
+			this.missionGroupBox.Name = "missionGroupBox";
+			this.missionGroupBox.Size = new System.Drawing.Size(426, 212);
+			this.missionGroupBox.TabIndex = 0;
+			this.missionGroupBox.TabStop = false;
+			this.missionGroupBox.Text = "Mission";
+			// 
+			// unitsFolderNameTextBox
+			// 
+			this.unitsFolderNameTextBox.Location = new System.Drawing.Point(233, 149);
+			this.unitsFolderNameTextBox.Name = "unitsFolderNameTextBox";
+			this.unitsFolderNameTextBox.Size = new System.Drawing.Size(85, 20);
+			this.unitsFolderNameTextBox.TabIndex = 9;
+			// 
+			// unitsFolderNameLabel
+			// 
+			this.unitsFolderNameLabel.AutoSize = true;
+			this.unitsFolderNameLabel.Location = new System.Drawing.Point(14, 152);
+			this.unitsFolderNameLabel.Name = "unitsFolderNameLabel";
+			this.unitsFolderNameLabel.Size = new System.Drawing.Size(92, 13);
+			this.unitsFolderNameLabel.TabIndex = 8;
+			this.unitsFolderNameLabel.Text = "Units folder name:";
+			// 
+			// unitNameBackplateColorCustomizeButton
+			// 
+			this.unitNameBackplateColorCustomizeButton.Location = new System.Drawing.Point(233, 120);
+			this.unitNameBackplateColorCustomizeButton.Name = "unitNameBackplateColorCustomizeButton";
+			this.unitNameBackplateColorCustomizeButton.Size = new System.Drawing.Size(85, 23);
+			this.unitNameBackplateColorCustomizeButton.TabIndex = 7;
+			this.unitNameBackplateColorCustomizeButton.Text = "Customize...";
+			this.unitNameBackplateColorCustomizeButton.UseVisualStyleBackColor = true;
+			this.unitNameBackplateColorCustomizeButton.Click += new System.EventHandler(this.UnitNameBackplateColorCustomizeButtonClick);
+			// 
+			// showUnitNameBackplateCheckBox
+			// 
+			this.showUnitNameBackplateCheckBox.AutoSize = true;
+			this.showUnitNameBackplateCheckBox.Location = new System.Drawing.Point(17, 123);
+			this.showUnitNameBackplateCheckBox.Name = "showUnitNameBackplateCheckBox";
+			this.showUnitNameBackplateCheckBox.Size = new System.Drawing.Size(124, 17);
+			this.showUnitNameBackplateCheckBox.TabIndex = 6;
+			this.showUnitNameBackplateCheckBox.Text = "Unit name backplate";
+			this.showUnitNameBackplateCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// unitNameTextColorCustomizeButton
+			// 
+			this.unitNameTextColorCustomizeButton.Location = new System.Drawing.Point(233, 93);
+			this.unitNameTextColorCustomizeButton.Name = "unitNameTextColorCustomizeButton";
+			this.unitNameTextColorCustomizeButton.Size = new System.Drawing.Size(85, 23);
+			this.unitNameTextColorCustomizeButton.TabIndex = 5;
+			this.unitNameTextColorCustomizeButton.Text = "Customize...";
+			this.unitNameTextColorCustomizeButton.UseVisualStyleBackColor = true;
+			this.unitNameTextColorCustomizeButton.Click += new System.EventHandler(this.UnitNameTextColorCustomizeButtonClick);
+			// 
+			// unitNameTextColorLabel
+			// 
+			this.unitNameTextColorLabel.AutoSize = true;
+			this.unitNameTextColorLabel.Location = new System.Drawing.Point(14, 98);
+			this.unitNameTextColorLabel.Name = "unitNameTextColorLabel";
+			this.unitNameTextColorLabel.Size = new System.Drawing.Size(110, 13);
+			this.unitNameTextColorLabel.TabIndex = 4;
+			this.unitNameTextColorLabel.Text = "Unit name text colour:";
+			// 
+			// showUnitFriendlyNameOnMapCheckBox
+			// 
+			this.showUnitFriendlyNameOnMapCheckBox.AutoSize = true;
+			this.showUnitFriendlyNameOnMapCheckBox.Location = new System.Drawing.Point(17, 73);
+			this.showUnitFriendlyNameOnMapCheckBox.Name = "showUnitFriendlyNameOnMapCheckBox";
+			this.showUnitFriendlyNameOnMapCheckBox.Size = new System.Drawing.Size(159, 17);
+			this.showUnitFriendlyNameOnMapCheckBox.TabIndex = 3;
+			this.showUnitFriendlyNameOnMapCheckBox.Text = "Prioritise friendly name (map)";
+			this.showUnitFriendlyNameOnMapCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// showUnitFriendlyNameFirstCheckBox
+			// 
+			this.showUnitFriendlyNameFirstCheckBox.AutoSize = true;
+			this.showUnitFriendlyNameFirstCheckBox.Location = new System.Drawing.Point(17, 50);
+			this.showUnitFriendlyNameFirstCheckBox.Name = "showUnitFriendlyNameFirstCheckBox";
+			this.showUnitFriendlyNameFirstCheckBox.Size = new System.Drawing.Size(154, 17);
+			this.showUnitFriendlyNameFirstCheckBox.TabIndex = 2;
+			this.showUnitFriendlyNameFirstCheckBox.Text = "Prioritise friendly name (tab)";
+			this.showUnitFriendlyNameFirstCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// onlySelectActiveSchemaCheckBox
+			// 
+			this.onlySelectActiveSchemaCheckBox.AutoSize = true;
+			this.onlySelectActiveSchemaCheckBox.Checked = true;
+			this.onlySelectActiveSchemaCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.onlySelectActiveSchemaCheckBox.Location = new System.Drawing.Point(17, 176);
+			this.onlySelectActiveSchemaCheckBox.Name = "onlySelectActiveSchemaCheckBox";
+			this.onlySelectActiveSchemaCheckBox.Size = new System.Drawing.Size(150, 17);
+			this.onlySelectActiveSchemaCheckBox.TabIndex = 10;
+			this.onlySelectActiveSchemaCheckBox.Text = "Only select active schema";
+			this.onlySelectActiveSchemaCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// inactiveSchemaOpacityNumeric
+			// 
+			this.inactiveSchemaOpacityNumeric.Location = new System.Drawing.Point(233, 20);
+			this.inactiveSchemaOpacityNumeric.Name = "inactiveSchemaOpacityNumeric";
+			this.inactiveSchemaOpacityNumeric.Size = new System.Drawing.Size(82, 20);
+			this.inactiveSchemaOpacityNumeric.TabIndex = 1;
+			this.inactiveSchemaOpacityNumeric.Value = new decimal(new int[] {
             38,
             0,
             0,
             0});
-            // 
-            // inactiveSchemaOpacityLabel
-            // 
-            this.inactiveSchemaOpacityLabel.AutoSize = true;
-            this.inactiveSchemaOpacityLabel.Location = new System.Drawing.Point(14, 22);
-            this.inactiveSchemaOpacityLabel.Name = "inactiveSchemaOpacityLabel";
-            this.inactiveSchemaOpacityLabel.Size = new System.Drawing.Size(142, 13);
-            this.inactiveSchemaOpacityLabel.TabIndex = 0;
-            this.inactiveSchemaOpacityLabel.Text = "Inactive schema opacity (%):";
-            // 
-            // missionUiGroupBox
-            // 
-            this.missionUiGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			// 
+			// inactiveSchemaOpacityLabel
+			// 
+			this.inactiveSchemaOpacityLabel.AutoSize = true;
+			this.inactiveSchemaOpacityLabel.Location = new System.Drawing.Point(14, 22);
+			this.inactiveSchemaOpacityLabel.Name = "inactiveSchemaOpacityLabel";
+			this.inactiveSchemaOpacityLabel.Size = new System.Drawing.Size(142, 13);
+			this.inactiveSchemaOpacityLabel.TabIndex = 0;
+			this.inactiveSchemaOpacityLabel.Text = "Inactive schema opacity (%):";
+			// 
+			// missionUiGroupBox
+			// 
+			this.missionUiGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.missionUiGroupBox.Controls.Add(this.missionWaitBackplateCustomizeButton);
-            this.missionUiGroupBox.Controls.Add(this.missionWaitBackplateLabel);
-            this.missionUiGroupBox.Controls.Add(this.missionWaitTextCustomizeButton);
-            this.missionUiGroupBox.Controls.Add(this.missionWaitTextLabel);
-            this.missionUiGroupBox.Controls.Add(this.missionPatrolDashCustomizeButton);
-            this.missionUiGroupBox.Controls.Add(this.missionPatrolDashLabel);
-            this.missionUiGroupBox.Controls.Add(this.missionPatrolPathCustomizeButton);
-            this.missionUiGroupBox.Controls.Add(this.missionPatrolPathLabel);
-            this.missionUiGroupBox.Controls.Add(this.missionAttackPathCustomizeButton);
-            this.missionUiGroupBox.Controls.Add(this.missionAttackPathLabel);
-            this.missionUiGroupBox.Controls.Add(this.missionMovePathCustomizeButton);
-            this.missionUiGroupBox.Controls.Add(this.missionMovePathLabel);
-            this.missionUiGroupBox.Location = new System.Drawing.Point(12, 236);
-            this.missionUiGroupBox.Name = "missionUiGroupBox";
-            this.missionUiGroupBox.Size = new System.Drawing.Size(426, 188);
-            this.missionUiGroupBox.TabIndex = 1;
-            this.missionUiGroupBox.TabStop = false;
-            this.missionUiGroupBox.Text = "UI";
-            // 
-            // missionWaitBackplateCustomizeButton
-            // 
-            this.missionWaitBackplateCustomizeButton.Location = new System.Drawing.Point(233, 151);
-            this.missionWaitBackplateCustomizeButton.Name = "missionWaitBackplateCustomizeButton";
-            this.missionWaitBackplateCustomizeButton.Size = new System.Drawing.Size(85, 23);
-            this.missionWaitBackplateCustomizeButton.TabIndex = 11;
-            this.missionWaitBackplateCustomizeButton.Text = "Customize...";
-            this.missionWaitBackplateCustomizeButton.UseVisualStyleBackColor = true;
-            this.missionWaitBackplateCustomizeButton.Click += new System.EventHandler(this.MissionWaitBackplateCustomizeButtonClick);
-            // 
-            // missionWaitBackplateLabel
-            // 
-            this.missionWaitBackplateLabel.AutoSize = true;
-            this.missionWaitBackplateLabel.Location = new System.Drawing.Point(14, 156);
-            this.missionWaitBackplateLabel.Name = "missionWaitBackplateLabel";
-            this.missionWaitBackplateLabel.Size = new System.Drawing.Size(114, 13);
-            this.missionWaitBackplateLabel.TabIndex = 10;
-            this.missionWaitBackplateLabel.Text = "Wait backplate colour:";
-            // 
-            // missionWaitTextCustomizeButton
-            // 
-            this.missionWaitTextCustomizeButton.Location = new System.Drawing.Point(233, 125);
-            this.missionWaitTextCustomizeButton.Name = "missionWaitTextCustomizeButton";
-            this.missionWaitTextCustomizeButton.Size = new System.Drawing.Size(85, 23);
-            this.missionWaitTextCustomizeButton.TabIndex = 9;
-            this.missionWaitTextCustomizeButton.Text = "Customize...";
-            this.missionWaitTextCustomizeButton.UseVisualStyleBackColor = true;
-            this.missionWaitTextCustomizeButton.Click += new System.EventHandler(this.MissionWaitTextCustomizeButtonClick);
-            // 
-            // missionWaitTextLabel
-            // 
-            this.missionWaitTextLabel.AutoSize = true;
-            this.missionWaitTextLabel.Location = new System.Drawing.Point(14, 130);
-            this.missionWaitTextLabel.Name = "missionWaitTextLabel";
-            this.missionWaitTextLabel.Size = new System.Drawing.Size(84, 13);
-            this.missionWaitTextLabel.TabIndex = 8;
-            this.missionWaitTextLabel.Text = "Wait text colour:";
-            // 
-            // missionPatrolDashCustomizeButton
-            // 
-            this.missionPatrolDashCustomizeButton.Location = new System.Drawing.Point(233, 99);
-            this.missionPatrolDashCustomizeButton.Name = "missionPatrolDashCustomizeButton";
-            this.missionPatrolDashCustomizeButton.Size = new System.Drawing.Size(85, 23);
-            this.missionPatrolDashCustomizeButton.TabIndex = 7;
-            this.missionPatrolDashCustomizeButton.Text = "Customize...";
-            this.missionPatrolDashCustomizeButton.UseVisualStyleBackColor = true;
-            this.missionPatrolDashCustomizeButton.Click += new System.EventHandler(this.MissionPatrolDashCustomizeButtonClick);
-            // 
-            // missionPatrolDashLabel
-            // 
-            this.missionPatrolDashLabel.AutoSize = true;
-            this.missionPatrolDashLabel.Location = new System.Drawing.Point(14, 104);
-            this.missionPatrolDashLabel.Name = "missionPatrolDashLabel";
-            this.missionPatrolDashLabel.Size = new System.Drawing.Size(95, 13);
-            this.missionPatrolDashLabel.TabIndex = 6;
-            this.missionPatrolDashLabel.Text = "Patrol dash colour:";
-            // 
-            // missionPatrolPathCustomizeButton
-            // 
-            this.missionPatrolPathCustomizeButton.Location = new System.Drawing.Point(233, 73);
-            this.missionPatrolPathCustomizeButton.Name = "missionPatrolPathCustomizeButton";
-            this.missionPatrolPathCustomizeButton.Size = new System.Drawing.Size(85, 23);
-            this.missionPatrolPathCustomizeButton.TabIndex = 5;
-            this.missionPatrolPathCustomizeButton.Text = "Customize...";
-            this.missionPatrolPathCustomizeButton.UseVisualStyleBackColor = true;
-            this.missionPatrolPathCustomizeButton.Click += new System.EventHandler(this.MissionPatrolPathCustomizeButtonClick);
-            // 
-            // missionPatrolPathLabel
-            // 
-            this.missionPatrolPathLabel.AutoSize = true;
-            this.missionPatrolPathLabel.Location = new System.Drawing.Point(14, 78);
-            this.missionPatrolPathLabel.Name = "missionPatrolPathLabel";
-            this.missionPatrolPathLabel.Size = new System.Drawing.Size(93, 13);
-            this.missionPatrolPathLabel.TabIndex = 4;
-            this.missionPatrolPathLabel.Text = "Patrol path colour:";
-            // 
-            // missionAttackPathCustomizeButton
-            // 
-            this.missionAttackPathCustomizeButton.Location = new System.Drawing.Point(233, 47);
-            this.missionAttackPathCustomizeButton.Name = "missionAttackPathCustomizeButton";
-            this.missionAttackPathCustomizeButton.Size = new System.Drawing.Size(85, 23);
-            this.missionAttackPathCustomizeButton.TabIndex = 3;
-            this.missionAttackPathCustomizeButton.Text = "Customize...";
-            this.missionAttackPathCustomizeButton.UseVisualStyleBackColor = true;
-            this.missionAttackPathCustomizeButton.Click += new System.EventHandler(this.MissionAttackPathCustomizeButtonClick);
-            // 
-            // missionAttackPathLabel
-            // 
-            this.missionAttackPathLabel.AutoSize = true;
-            this.missionAttackPathLabel.Location = new System.Drawing.Point(14, 52);
-            this.missionAttackPathLabel.Name = "missionAttackPathLabel";
-            this.missionAttackPathLabel.Size = new System.Drawing.Size(97, 13);
-            this.missionAttackPathLabel.TabIndex = 2;
-            this.missionAttackPathLabel.Text = "Attack path colour:";
-            // 
-            // missionMovePathCustomizeButton
-            // 
-            this.missionMovePathCustomizeButton.Location = new System.Drawing.Point(233, 21);
-            this.missionMovePathCustomizeButton.Name = "missionMovePathCustomizeButton";
-            this.missionMovePathCustomizeButton.Size = new System.Drawing.Size(85, 23);
-            this.missionMovePathCustomizeButton.TabIndex = 1;
-            this.missionMovePathCustomizeButton.Text = "Customize...";
-            this.missionMovePathCustomizeButton.UseVisualStyleBackColor = true;
-            this.missionMovePathCustomizeButton.Click += new System.EventHandler(this.MissionMovePathCustomizeButtonClick);
-            // 
-            // missionMovePathLabel
-            // 
-            this.missionMovePathLabel.AutoSize = true;
-            this.missionMovePathLabel.Location = new System.Drawing.Point(14, 26);
-            this.missionMovePathLabel.Name = "missionMovePathLabel";
-            this.missionMovePathLabel.Size = new System.Drawing.Size(93, 13);
-            this.missionMovePathLabel.TabIndex = 0;
-            this.missionMovePathLabel.Text = "Move path colour:";
-            // 
-            // resourceNamesGroupBox
-            // 
-            this.resourceNamesGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.missionUiGroupBox.Controls.Add(this.missionWaitBackplateCustomizeButton);
+			this.missionUiGroupBox.Controls.Add(this.missionWaitBackplateLabel);
+			this.missionUiGroupBox.Controls.Add(this.missionWaitTextCustomizeButton);
+			this.missionUiGroupBox.Controls.Add(this.missionWaitTextLabel);
+			this.missionUiGroupBox.Controls.Add(this.missionPatrolDashCustomizeButton);
+			this.missionUiGroupBox.Controls.Add(this.missionPatrolDashLabel);
+			this.missionUiGroupBox.Controls.Add(this.missionPatrolPathCustomizeButton);
+			this.missionUiGroupBox.Controls.Add(this.missionPatrolPathLabel);
+			this.missionUiGroupBox.Controls.Add(this.missionAttackPathCustomizeButton);
+			this.missionUiGroupBox.Controls.Add(this.missionAttackPathLabel);
+			this.missionUiGroupBox.Controls.Add(this.missionMovePathCustomizeButton);
+			this.missionUiGroupBox.Controls.Add(this.missionMovePathLabel);
+			this.missionUiGroupBox.Location = new System.Drawing.Point(12, 236);
+			this.missionUiGroupBox.Name = "missionUiGroupBox";
+			this.missionUiGroupBox.Size = new System.Drawing.Size(426, 188);
+			this.missionUiGroupBox.TabIndex = 1;
+			this.missionUiGroupBox.TabStop = false;
+			this.missionUiGroupBox.Text = "UI";
+			// 
+			// missionWaitBackplateCustomizeButton
+			// 
+			this.missionWaitBackplateCustomizeButton.Location = new System.Drawing.Point(233, 151);
+			this.missionWaitBackplateCustomizeButton.Name = "missionWaitBackplateCustomizeButton";
+			this.missionWaitBackplateCustomizeButton.Size = new System.Drawing.Size(85, 23);
+			this.missionWaitBackplateCustomizeButton.TabIndex = 11;
+			this.missionWaitBackplateCustomizeButton.Text = "Customize...";
+			this.missionWaitBackplateCustomizeButton.UseVisualStyleBackColor = true;
+			this.missionWaitBackplateCustomizeButton.Click += new System.EventHandler(this.MissionWaitBackplateCustomizeButtonClick);
+			// 
+			// missionWaitBackplateLabel
+			// 
+			this.missionWaitBackplateLabel.AutoSize = true;
+			this.missionWaitBackplateLabel.Location = new System.Drawing.Point(14, 156);
+			this.missionWaitBackplateLabel.Name = "missionWaitBackplateLabel";
+			this.missionWaitBackplateLabel.Size = new System.Drawing.Size(114, 13);
+			this.missionWaitBackplateLabel.TabIndex = 10;
+			this.missionWaitBackplateLabel.Text = "Wait backplate colour:";
+			// 
+			// missionWaitTextCustomizeButton
+			// 
+			this.missionWaitTextCustomizeButton.Location = new System.Drawing.Point(233, 125);
+			this.missionWaitTextCustomizeButton.Name = "missionWaitTextCustomizeButton";
+			this.missionWaitTextCustomizeButton.Size = new System.Drawing.Size(85, 23);
+			this.missionWaitTextCustomizeButton.TabIndex = 9;
+			this.missionWaitTextCustomizeButton.Text = "Customize...";
+			this.missionWaitTextCustomizeButton.UseVisualStyleBackColor = true;
+			this.missionWaitTextCustomizeButton.Click += new System.EventHandler(this.MissionWaitTextCustomizeButtonClick);
+			// 
+			// missionWaitTextLabel
+			// 
+			this.missionWaitTextLabel.AutoSize = true;
+			this.missionWaitTextLabel.Location = new System.Drawing.Point(14, 130);
+			this.missionWaitTextLabel.Name = "missionWaitTextLabel";
+			this.missionWaitTextLabel.Size = new System.Drawing.Size(84, 13);
+			this.missionWaitTextLabel.TabIndex = 8;
+			this.missionWaitTextLabel.Text = "Wait text colour:";
+			// 
+			// missionPatrolDashCustomizeButton
+			// 
+			this.missionPatrolDashCustomizeButton.Location = new System.Drawing.Point(233, 99);
+			this.missionPatrolDashCustomizeButton.Name = "missionPatrolDashCustomizeButton";
+			this.missionPatrolDashCustomizeButton.Size = new System.Drawing.Size(85, 23);
+			this.missionPatrolDashCustomizeButton.TabIndex = 7;
+			this.missionPatrolDashCustomizeButton.Text = "Customize...";
+			this.missionPatrolDashCustomizeButton.UseVisualStyleBackColor = true;
+			this.missionPatrolDashCustomizeButton.Click += new System.EventHandler(this.MissionPatrolDashCustomizeButtonClick);
+			// 
+			// missionPatrolDashLabel
+			// 
+			this.missionPatrolDashLabel.AutoSize = true;
+			this.missionPatrolDashLabel.Location = new System.Drawing.Point(14, 104);
+			this.missionPatrolDashLabel.Name = "missionPatrolDashLabel";
+			this.missionPatrolDashLabel.Size = new System.Drawing.Size(95, 13);
+			this.missionPatrolDashLabel.TabIndex = 6;
+			this.missionPatrolDashLabel.Text = "Patrol dash colour:";
+			// 
+			// missionPatrolPathCustomizeButton
+			// 
+			this.missionPatrolPathCustomizeButton.Location = new System.Drawing.Point(233, 73);
+			this.missionPatrolPathCustomizeButton.Name = "missionPatrolPathCustomizeButton";
+			this.missionPatrolPathCustomizeButton.Size = new System.Drawing.Size(85, 23);
+			this.missionPatrolPathCustomizeButton.TabIndex = 5;
+			this.missionPatrolPathCustomizeButton.Text = "Customize...";
+			this.missionPatrolPathCustomizeButton.UseVisualStyleBackColor = true;
+			this.missionPatrolPathCustomizeButton.Click += new System.EventHandler(this.MissionPatrolPathCustomizeButtonClick);
+			// 
+			// missionPatrolPathLabel
+			// 
+			this.missionPatrolPathLabel.AutoSize = true;
+			this.missionPatrolPathLabel.Location = new System.Drawing.Point(14, 78);
+			this.missionPatrolPathLabel.Name = "missionPatrolPathLabel";
+			this.missionPatrolPathLabel.Size = new System.Drawing.Size(93, 13);
+			this.missionPatrolPathLabel.TabIndex = 4;
+			this.missionPatrolPathLabel.Text = "Patrol path colour:";
+			// 
+			// missionAttackPathCustomizeButton
+			// 
+			this.missionAttackPathCustomizeButton.Location = new System.Drawing.Point(233, 47);
+			this.missionAttackPathCustomizeButton.Name = "missionAttackPathCustomizeButton";
+			this.missionAttackPathCustomizeButton.Size = new System.Drawing.Size(85, 23);
+			this.missionAttackPathCustomizeButton.TabIndex = 3;
+			this.missionAttackPathCustomizeButton.Text = "Customize...";
+			this.missionAttackPathCustomizeButton.UseVisualStyleBackColor = true;
+			this.missionAttackPathCustomizeButton.Click += new System.EventHandler(this.MissionAttackPathCustomizeButtonClick);
+			// 
+			// missionAttackPathLabel
+			// 
+			this.missionAttackPathLabel.AutoSize = true;
+			this.missionAttackPathLabel.Location = new System.Drawing.Point(14, 52);
+			this.missionAttackPathLabel.Name = "missionAttackPathLabel";
+			this.missionAttackPathLabel.Size = new System.Drawing.Size(97, 13);
+			this.missionAttackPathLabel.TabIndex = 2;
+			this.missionAttackPathLabel.Text = "Attack path colour:";
+			// 
+			// missionMovePathCustomizeButton
+			// 
+			this.missionMovePathCustomizeButton.Location = new System.Drawing.Point(233, 21);
+			this.missionMovePathCustomizeButton.Name = "missionMovePathCustomizeButton";
+			this.missionMovePathCustomizeButton.Size = new System.Drawing.Size(85, 23);
+			this.missionMovePathCustomizeButton.TabIndex = 1;
+			this.missionMovePathCustomizeButton.Text = "Customize...";
+			this.missionMovePathCustomizeButton.UseVisualStyleBackColor = true;
+			this.missionMovePathCustomizeButton.Click += new System.EventHandler(this.MissionMovePathCustomizeButtonClick);
+			// 
+			// missionMovePathLabel
+			// 
+			this.missionMovePathLabel.AutoSize = true;
+			this.missionMovePathLabel.Location = new System.Drawing.Point(14, 26);
+			this.missionMovePathLabel.Name = "missionMovePathLabel";
+			this.missionMovePathLabel.Size = new System.Drawing.Size(93, 13);
+			this.missionMovePathLabel.TabIndex = 0;
+			this.missionMovePathLabel.Text = "Move path colour:";
+			// 
+			// resourceNamesGroupBox
+			// 
+			this.resourceNamesGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.resourceNamesGroupBox.Controls.Add(this.splitTilesCheckBox);
-            this.resourceNamesGroupBox.Controls.Add(this.calculatedMetalDepositValueCheckBox);
-            this.resourceNamesGroupBox.Controls.Add(this.featureReclaimAmountsCheckBox);
-            this.resourceNamesGroupBox.Controls.Add(this.fullResourceNamesCheckBox);
-            this.resourceNamesGroupBox.Location = new System.Drawing.Point(12, 193);
-            this.resourceNamesGroupBox.Name = "resourceNamesGroupBox";
-            this.resourceNamesGroupBox.Size = new System.Drawing.Size(426, 72);
-            this.resourceNamesGroupBox.TabIndex = 1;
-            this.resourceNamesGroupBox.TabStop = false;
-            this.resourceNamesGroupBox.Text = "Sections / Features";
-            // 
-            // splitTilesCheckBox
-            // 
-            this.splitTilesCheckBox.AutoSize = true;
-            this.splitTilesCheckBox.Location = new System.Drawing.Point(210, 45);
-            this.splitTilesCheckBox.Name = "splitTilesCheckBox";
-            this.splitTilesCheckBox.Size = new System.Drawing.Size(81, 17);
-            this.splitTilesCheckBox.TabIndex = 3;
-            this.splitTilesCheckBox.Text = "Split tilesets";
-            this.splitTilesCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // calculatedMetalDepositValueCheckBox
-            // 
-            this.calculatedMetalDepositValueCheckBox.AutoSize = true;
-            this.calculatedMetalDepositValueCheckBox.Location = new System.Drawing.Point(17, 45);
-            this.calculatedMetalDepositValueCheckBox.Name = "calculatedMetalDepositValueCheckBox";
-            this.calculatedMetalDepositValueCheckBox.Size = new System.Drawing.Size(170, 17);
-            this.calculatedMetalDepositValueCheckBox.TabIndex = 2;
-            this.calculatedMetalDepositValueCheckBox.Text = "Calculated metal deposit value";
-            this.calculatedMetalDepositValueCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // featureReclaimAmountsCheckBox
-            // 
-            this.featureReclaimAmountsCheckBox.AutoSize = true;
-            this.featureReclaimAmountsCheckBox.Location = new System.Drawing.Point(210, 22);
-            this.featureReclaimAmountsCheckBox.Name = "featureReclaimAmountsCheckBox";
-            this.featureReclaimAmountsCheckBox.Size = new System.Drawing.Size(168, 17);
-            this.featureReclaimAmountsCheckBox.TabIndex = 1;
-            this.featureReclaimAmountsCheckBox.Text = "Show feature reclaim amounts";
-            this.featureReclaimAmountsCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // fullResourceNamesCheckBox
-            // 
-            this.fullResourceNamesCheckBox.AutoSize = true;
-            this.fullResourceNamesCheckBox.Location = new System.Drawing.Point(17, 22);
-            this.fullResourceNamesCheckBox.Name = "fullResourceNamesCheckBox";
-            this.fullResourceNamesCheckBox.Size = new System.Drawing.Size(120, 17);
-            this.fullResourceNamesCheckBox.TabIndex = 0;
-            this.fullResourceNamesCheckBox.Text = "Full resource names";
-            this.fullResourceNamesCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // resourceMarkersGroupBox
-            // 
-            this.resourceMarkersGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.resourceNamesGroupBox.Controls.Add(this.splitTilesCheckBox);
+			this.resourceNamesGroupBox.Controls.Add(this.calculatedMetalDepositValueCheckBox);
+			this.resourceNamesGroupBox.Controls.Add(this.featureReclaimAmountsCheckBox);
+			this.resourceNamesGroupBox.Controls.Add(this.fullResourceNamesCheckBox);
+			this.resourceNamesGroupBox.Location = new System.Drawing.Point(12, 193);
+			this.resourceNamesGroupBox.Name = "resourceNamesGroupBox";
+			this.resourceNamesGroupBox.Size = new System.Drawing.Size(426, 72);
+			this.resourceNamesGroupBox.TabIndex = 1;
+			this.resourceNamesGroupBox.TabStop = false;
+			this.resourceNamesGroupBox.Text = "Sections / Features";
+			// 
+			// splitTilesCheckBox
+			// 
+			this.splitTilesCheckBox.AutoSize = true;
+			this.splitTilesCheckBox.Location = new System.Drawing.Point(210, 45);
+			this.splitTilesCheckBox.Name = "splitTilesCheckBox";
+			this.splitTilesCheckBox.Size = new System.Drawing.Size(81, 17);
+			this.splitTilesCheckBox.TabIndex = 3;
+			this.splitTilesCheckBox.Text = "Split tilesets";
+			this.splitTilesCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// calculatedMetalDepositValueCheckBox
+			// 
+			this.calculatedMetalDepositValueCheckBox.AutoSize = true;
+			this.calculatedMetalDepositValueCheckBox.Location = new System.Drawing.Point(17, 45);
+			this.calculatedMetalDepositValueCheckBox.Name = "calculatedMetalDepositValueCheckBox";
+			this.calculatedMetalDepositValueCheckBox.Size = new System.Drawing.Size(170, 17);
+			this.calculatedMetalDepositValueCheckBox.TabIndex = 2;
+			this.calculatedMetalDepositValueCheckBox.Text = "Calculated metal deposit value";
+			this.calculatedMetalDepositValueCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// featureReclaimAmountsCheckBox
+			// 
+			this.featureReclaimAmountsCheckBox.AutoSize = true;
+			this.featureReclaimAmountsCheckBox.Location = new System.Drawing.Point(210, 22);
+			this.featureReclaimAmountsCheckBox.Name = "featureReclaimAmountsCheckBox";
+			this.featureReclaimAmountsCheckBox.Size = new System.Drawing.Size(168, 17);
+			this.featureReclaimAmountsCheckBox.TabIndex = 1;
+			this.featureReclaimAmountsCheckBox.Text = "Show feature reclaim amounts";
+			this.featureReclaimAmountsCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// fullResourceNamesCheckBox
+			// 
+			this.fullResourceNamesCheckBox.AutoSize = true;
+			this.fullResourceNamesCheckBox.Location = new System.Drawing.Point(17, 22);
+			this.fullResourceNamesCheckBox.Name = "fullResourceNamesCheckBox";
+			this.fullResourceNamesCheckBox.Size = new System.Drawing.Size(120, 17);
+			this.fullResourceNamesCheckBox.TabIndex = 0;
+			this.fullResourceNamesCheckBox.Text = "Full resource names";
+			this.fullResourceNamesCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// resourceMarkersGroupBox
+			// 
+			this.resourceMarkersGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.resourceMarkersGroupBox.Controls.Add(this.resourceMarkerLineColorButton);
-            this.resourceMarkersGroupBox.Controls.Add(this.resourceMarkerLineColorLabel);
-            this.resourceMarkersGroupBox.Controls.Add(this.saveOamapInfoCheckBox);
-            this.resourceMarkersGroupBox.Controls.Add(this.saveResourceMarkersCheckBox);
-            this.resourceMarkersGroupBox.Location = new System.Drawing.Point(12, 270);
-            this.resourceMarkersGroupBox.Name = "resourceMarkersGroupBox";
-            this.resourceMarkersGroupBox.Size = new System.Drawing.Size(426, 100);
-            this.resourceMarkersGroupBox.TabIndex = 2;
-            this.resourceMarkersGroupBox.TabStop = false;
-            this.resourceMarkersGroupBox.Text = "Additional saving";
-            // 
-            // resourceMarkerLineColorButton
-            // 
-            this.resourceMarkerLineColorButton.Location = new System.Drawing.Point(132, 43);
-            this.resourceMarkerLineColorButton.Name = "resourceMarkerLineColorButton";
-            this.resourceMarkerLineColorButton.Size = new System.Drawing.Size(85, 23);
-            this.resourceMarkerLineColorButton.TabIndex = 2;
-            this.resourceMarkerLineColorButton.Text = "Customize...";
-            this.resourceMarkerLineColorButton.UseVisualStyleBackColor = true;
-            this.resourceMarkerLineColorButton.Click += new System.EventHandler(this.ResourceMarkerLineColorButtonClick);
-            // 
-            // resourceMarkerLineColorLabel
-            // 
-            this.resourceMarkerLineColorLabel.AutoSize = true;
-            this.resourceMarkerLineColorLabel.Location = new System.Drawing.Point(14, 48);
-            this.resourceMarkerLineColorLabel.Name = "resourceMarkerLineColorLabel";
-            this.resourceMarkerLineColorLabel.Size = new System.Drawing.Size(62, 13);
-            this.resourceMarkerLineColorLabel.TabIndex = 1;
-            this.resourceMarkerLineColorLabel.Text = "Line colour:";
-            // 
-            // saveOamapInfoCheckBox
-            // 
-            this.saveOamapInfoCheckBox.AutoSize = true;
-            this.saveOamapInfoCheckBox.Location = new System.Drawing.Point(17, 70);
-            this.saveOamapInfoCheckBox.Name = "saveOamapInfoCheckBox";
-            this.saveOamapInfoCheckBox.Size = new System.Drawing.Size(169, 17);
-            this.saveOamapInfoCheckBox.TabIndex = 3;
-            this.saveOamapInfoCheckBox.Text = "Save oamap info with the map";
-            this.saveOamapInfoCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // saveResourceMarkersCheckBox
-            // 
-            this.saveResourceMarkersCheckBox.AutoSize = true;
-            this.saveResourceMarkersCheckBox.Location = new System.Drawing.Point(17, 22);
-            this.saveResourceMarkersCheckBox.Name = "saveResourceMarkersCheckBox";
-            this.saveResourceMarkersCheckBox.Size = new System.Drawing.Size(198, 17);
-            this.saveResourceMarkersCheckBox.TabIndex = 0;
-            this.saveResourceMarkersCheckBox.Text = "Save resource markers with the map";
-            this.saveResourceMarkersCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // miscGroupBox
-            // 
-            this.miscGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.resourceMarkersGroupBox.Controls.Add(this.resourceMarkerLineColorButton);
+			this.resourceMarkersGroupBox.Controls.Add(this.resourceMarkerLineColorLabel);
+			this.resourceMarkersGroupBox.Controls.Add(this.saveOamapInfoCheckBox);
+			this.resourceMarkersGroupBox.Controls.Add(this.saveResourceMarkersCheckBox);
+			this.resourceMarkersGroupBox.Location = new System.Drawing.Point(12, 270);
+			this.resourceMarkersGroupBox.Name = "resourceMarkersGroupBox";
+			this.resourceMarkersGroupBox.Size = new System.Drawing.Size(426, 100);
+			this.resourceMarkersGroupBox.TabIndex = 2;
+			this.resourceMarkersGroupBox.TabStop = false;
+			this.resourceMarkersGroupBox.Text = "Additional saving";
+			// 
+			// resourceMarkerLineColorButton
+			// 
+			this.resourceMarkerLineColorButton.Location = new System.Drawing.Point(132, 43);
+			this.resourceMarkerLineColorButton.Name = "resourceMarkerLineColorButton";
+			this.resourceMarkerLineColorButton.Size = new System.Drawing.Size(85, 23);
+			this.resourceMarkerLineColorButton.TabIndex = 2;
+			this.resourceMarkerLineColorButton.Text = "Customize...";
+			this.resourceMarkerLineColorButton.UseVisualStyleBackColor = true;
+			this.resourceMarkerLineColorButton.Click += new System.EventHandler(this.ResourceMarkerLineColorButtonClick);
+			// 
+			// resourceMarkerLineColorLabel
+			// 
+			this.resourceMarkerLineColorLabel.AutoSize = true;
+			this.resourceMarkerLineColorLabel.Location = new System.Drawing.Point(14, 48);
+			this.resourceMarkerLineColorLabel.Name = "resourceMarkerLineColorLabel";
+			this.resourceMarkerLineColorLabel.Size = new System.Drawing.Size(62, 13);
+			this.resourceMarkerLineColorLabel.TabIndex = 1;
+			this.resourceMarkerLineColorLabel.Text = "Line colour:";
+			// 
+			// saveOamapInfoCheckBox
+			// 
+			this.saveOamapInfoCheckBox.AutoSize = true;
+			this.saveOamapInfoCheckBox.Location = new System.Drawing.Point(17, 70);
+			this.saveOamapInfoCheckBox.Name = "saveOamapInfoCheckBox";
+			this.saveOamapInfoCheckBox.Size = new System.Drawing.Size(169, 17);
+			this.saveOamapInfoCheckBox.TabIndex = 3;
+			this.saveOamapInfoCheckBox.Text = "Save oamap info with the map";
+			this.saveOamapInfoCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// saveResourceMarkersCheckBox
+			// 
+			this.saveResourceMarkersCheckBox.AutoSize = true;
+			this.saveResourceMarkersCheckBox.Location = new System.Drawing.Point(17, 22);
+			this.saveResourceMarkersCheckBox.Name = "saveResourceMarkersCheckBox";
+			this.saveResourceMarkersCheckBox.Size = new System.Drawing.Size(198, 17);
+			this.saveResourceMarkersCheckBox.TabIndex = 0;
+			this.saveResourceMarkersCheckBox.Text = "Save resource markers with the map";
+			this.saveResourceMarkersCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// miscGroupBox
+			// 
+			this.miscGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.miscGroupBox.Controls.Add(this.doNotPromptToSaveUnsavedChangesCheckBox);
-            this.miscGroupBox.Location = new System.Drawing.Point(12, 376);
-            this.miscGroupBox.Name = "miscGroupBox";
-            this.miscGroupBox.Size = new System.Drawing.Size(426, 52);
-            this.miscGroupBox.TabIndex = 3;
-            this.miscGroupBox.TabStop = false;
-            this.miscGroupBox.Text = "Misc";
-            // 
-            // doNotPromptToSaveUnsavedChangesCheckBox
-            // 
-            this.doNotPromptToSaveUnsavedChangesCheckBox.AutoSize = true;
-            this.doNotPromptToSaveUnsavedChangesCheckBox.Location = new System.Drawing.Point(17, 22);
-            this.doNotPromptToSaveUnsavedChangesCheckBox.Name = "doNotPromptToSaveUnsavedChangesCheckBox";
-            this.doNotPromptToSaveUnsavedChangesCheckBox.Size = new System.Drawing.Size(219, 17);
-            this.doNotPromptToSaveUnsavedChangesCheckBox.TabIndex = 0;
-            this.doNotPromptToSaveUnsavedChangesCheckBox.Text = "Do not prompt to save unsaved changes";
-            this.doNotPromptToSaveUnsavedChangesCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // preferencesTabControl
-            // 
-            this.preferencesTabControl.Controls.Add(this.miscTabPage);
-            this.preferencesTabControl.Controls.Add(this.missionTabPage);
-            this.preferencesTabControl.Controls.Add(this.adjustmentsTabPage);
-            this.preferencesTabControl.Controls.Add(this.defaultsTabPage);
-            this.preferencesTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.preferencesTabControl.Location = new System.Drawing.Point(0, 0);
-            this.preferencesTabControl.Name = "preferencesTabControl";
-            this.preferencesTabControl.SelectedIndex = 0;
-            this.preferencesTabControl.Size = new System.Drawing.Size(450, 504);
-            this.preferencesTabControl.TabIndex = 0;
-            // 
-            // miscTabPage
-            // 
-            this.miscTabPage.AutoScroll = true;
-            this.miscTabPage.Controls.Add(this.groupBox1);
-            this.miscTabPage.Controls.Add(this.miscGroupBox);
-            this.miscTabPage.Controls.Add(this.resourceMarkersGroupBox);
-            this.miscTabPage.Controls.Add(this.resourceNamesGroupBox);
-            this.miscTabPage.Controls.Add(this.mainGroupBox);
-            this.miscTabPage.Location = new System.Drawing.Point(4, 22);
-            this.miscTabPage.Name = "miscTabPage";
-            this.miscTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.miscTabPage.Size = new System.Drawing.Size(442, 478);
-            this.miscTabPage.TabIndex = 0;
-            this.miscTabPage.Text = "Misc";
-            this.miscTabPage.UseVisualStyleBackColor = true;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.miscGroupBox.Controls.Add(this.doNotPromptToSaveUnsavedChangesCheckBox);
+			this.miscGroupBox.Location = new System.Drawing.Point(12, 376);
+			this.miscGroupBox.Name = "miscGroupBox";
+			this.miscGroupBox.Size = new System.Drawing.Size(426, 52);
+			this.miscGroupBox.TabIndex = 3;
+			this.miscGroupBox.TabStop = false;
+			this.miscGroupBox.Text = "Misc";
+			// 
+			// doNotPromptToSaveUnsavedChangesCheckBox
+			// 
+			this.doNotPromptToSaveUnsavedChangesCheckBox.AutoSize = true;
+			this.doNotPromptToSaveUnsavedChangesCheckBox.Location = new System.Drawing.Point(17, 22);
+			this.doNotPromptToSaveUnsavedChangesCheckBox.Name = "doNotPromptToSaveUnsavedChangesCheckBox";
+			this.doNotPromptToSaveUnsavedChangesCheckBox.Size = new System.Drawing.Size(219, 17);
+			this.doNotPromptToSaveUnsavedChangesCheckBox.TabIndex = 0;
+			this.doNotPromptToSaveUnsavedChangesCheckBox.Text = "Do not prompt to save unsaved changes";
+			this.doNotPromptToSaveUnsavedChangesCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// preferencesTabControl
+			// 
+			this.preferencesTabControl.Controls.Add(this.miscTabPage);
+			this.preferencesTabControl.Controls.Add(this.missionTabPage);
+			this.preferencesTabControl.Controls.Add(this.adjustmentsTabPage);
+			this.preferencesTabControl.Controls.Add(this.defaultsTabPage);
+			this.preferencesTabControl.Controls.Add(this.paintingTabPage);
+			this.preferencesTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.preferencesTabControl.Location = new System.Drawing.Point(0, 0);
+			this.preferencesTabControl.Name = "preferencesTabControl";
+			this.preferencesTabControl.SelectedIndex = 0;
+			this.preferencesTabControl.Size = new System.Drawing.Size(450, 527);
+			this.preferencesTabControl.TabIndex = 0;
+			// 
+			// miscTabPage
+			// 
+			this.miscTabPage.AutoScroll = true;
+			this.miscTabPage.Controls.Add(this.groupBox1);
+			this.miscTabPage.Controls.Add(this.miscGroupBox);
+			this.miscTabPage.Controls.Add(this.resourceMarkersGroupBox);
+			this.miscTabPage.Controls.Add(this.resourceNamesGroupBox);
+			this.miscTabPage.Controls.Add(this.mainGroupBox);
+			this.miscTabPage.Location = new System.Drawing.Point(4, 22);
+			this.miscTabPage.Name = "miscTabPage";
+			this.miscTabPage.Padding = new System.Windows.Forms.Padding(3);
+			this.miscTabPage.Size = new System.Drawing.Size(442, 501);
+			this.miscTabPage.TabIndex = 0;
+			this.miscTabPage.Text = "Misc";
+			this.miscTabPage.UseVisualStyleBackColor = true;
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.updateRepositoryTextBox);
-            this.groupBox1.Controls.Add(this.updateRepositoryLabel);
-            this.groupBox1.Location = new System.Drawing.Point(13, 412);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(426, 53);
-            this.groupBox1.TabIndex = 4;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Updates";
-            // 
-            // updateRepositoryTextBox
-            // 
-            this.updateRepositoryTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.groupBox1.Controls.Add(this.updateRepositoryTextBox);
+			this.groupBox1.Controls.Add(this.updateRepositoryLabel);
+			this.groupBox1.Location = new System.Drawing.Point(13, 432);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(426, 53);
+			this.groupBox1.TabIndex = 4;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Updates";
+			// 
+			// updateRepositoryTextBox
+			// 
+			this.updateRepositoryTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.updateRepositoryTextBox.Location = new System.Drawing.Point(112, 17);
-            this.updateRepositoryTextBox.Name = "updateRepositoryTextBox";
-            this.updateRepositoryTextBox.Size = new System.Drawing.Size(262, 20);
-            this.updateRepositoryTextBox.TabIndex = 4;
-            // 
-            // updateRepositoryLabel
-            // 
-            this.updateRepositoryLabel.AutoSize = true;
-            this.updateRepositoryLabel.Location = new System.Drawing.Point(13, 20);
-            this.updateRepositoryLabel.Name = "updateRepositoryLabel";
-            this.updateRepositoryLabel.Size = new System.Drawing.Size(93, 13);
-            this.updateRepositoryLabel.TabIndex = 3;
-            this.updateRepositoryLabel.Text = "Update repository:";
-            // 
-            // missionTabPage
-            // 
-            this.missionTabPage.AutoScroll = true;
-            this.missionTabPage.Controls.Add(this.missionUiGroupBox);
-            this.missionTabPage.Controls.Add(this.missionGroupBox);
-            this.missionTabPage.Location = new System.Drawing.Point(4, 22);
-            this.missionTabPage.Name = "missionTabPage";
-            this.missionTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.missionTabPage.Size = new System.Drawing.Size(442, 478);
-            this.missionTabPage.TabIndex = 1;
-            this.missionTabPage.Text = "Mission";
-            this.missionTabPage.UseVisualStyleBackColor = true;
-            // 
-            // adjustmentsTabPage
-            // 
-            this.adjustmentsTabPage.AutoScroll = true;
-            this.adjustmentsTabPage.Controls.Add(this.adjustmentsMiscGroupBox);
-            this.adjustmentsTabPage.Controls.Add(this.scrollSpeedGroupBox);
-            this.adjustmentsTabPage.Controls.Add(this.wheelStepGroupBox);
-            this.adjustmentsTabPage.Location = new System.Drawing.Point(4, 22);
-            this.adjustmentsTabPage.Name = "adjustmentsTabPage";
-            this.adjustmentsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.adjustmentsTabPage.Size = new System.Drawing.Size(442, 478);
-            this.adjustmentsTabPage.TabIndex = 2;
-            this.adjustmentsTabPage.Text = "Adjustments";
-            this.adjustmentsTabPage.UseVisualStyleBackColor = true;
-            // 
-            // adjustmentsMiscGroupBox
-            // 
-            this.adjustmentsMiscGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.updateRepositoryTextBox.Location = new System.Drawing.Point(112, 17);
+			this.updateRepositoryTextBox.Name = "updateRepositoryTextBox";
+			this.updateRepositoryTextBox.Size = new System.Drawing.Size(262, 20);
+			this.updateRepositoryTextBox.TabIndex = 4;
+			// 
+			// updateRepositoryLabel
+			// 
+			this.updateRepositoryLabel.AutoSize = true;
+			this.updateRepositoryLabel.Location = new System.Drawing.Point(13, 24);
+			this.updateRepositoryLabel.Name = "updateRepositoryLabel";
+			this.updateRepositoryLabel.Size = new System.Drawing.Size(93, 13);
+			this.updateRepositoryLabel.TabIndex = 3;
+			this.updateRepositoryLabel.Text = "Update repository:";
+			// 
+			// missionTabPage
+			// 
+			this.missionTabPage.AutoScroll = true;
+			this.missionTabPage.Controls.Add(this.missionUiGroupBox);
+			this.missionTabPage.Controls.Add(this.missionGroupBox);
+			this.missionTabPage.Location = new System.Drawing.Point(4, 22);
+			this.missionTabPage.Name = "missionTabPage";
+			this.missionTabPage.Padding = new System.Windows.Forms.Padding(3);
+			this.missionTabPage.Size = new System.Drawing.Size(442, 501);
+			this.missionTabPage.TabIndex = 1;
+			this.missionTabPage.Text = "Mission";
+			this.missionTabPage.UseVisualStyleBackColor = true;
+			// 
+			// adjustmentsTabPage
+			// 
+			this.adjustmentsTabPage.AutoScroll = true;
+			this.adjustmentsTabPage.Controls.Add(this.adjustmentsMiscGroupBox);
+			this.adjustmentsTabPage.Controls.Add(this.scrollSpeedGroupBox);
+			this.adjustmentsTabPage.Controls.Add(this.wheelStepGroupBox);
+			this.adjustmentsTabPage.Location = new System.Drawing.Point(4, 22);
+			this.adjustmentsTabPage.Name = "adjustmentsTabPage";
+			this.adjustmentsTabPage.Padding = new System.Windows.Forms.Padding(3);
+			this.adjustmentsTabPage.Size = new System.Drawing.Size(442, 478);
+			this.adjustmentsTabPage.TabIndex = 2;
+			this.adjustmentsTabPage.Text = "Adjustments";
+			this.adjustmentsTabPage.UseVisualStyleBackColor = true;
+			// 
+			// adjustmentsMiscGroupBox
+			// 
+			this.adjustmentsMiscGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.adjustmentsMiscGroupBox.Controls.Add(this.featureBoundingBoxCustomizeButton);
-            this.adjustmentsMiscGroupBox.Controls.Add(this.alwaysShowFeatureBoundingBoxCheckBox);
-            this.adjustmentsMiscGroupBox.Controls.Add(this.blobFeatureBaseCustomizeButton);
-            this.adjustmentsMiscGroupBox.Controls.Add(this.blobFeatureBaseCheckBox);
-            this.adjustmentsMiscGroupBox.Controls.Add(this.stickyClipboardCheckBox);
-            this.adjustmentsMiscGroupBox.Location = new System.Drawing.Point(12, 309);
-            this.adjustmentsMiscGroupBox.Name = "adjustmentsMiscGroupBox";
-            this.adjustmentsMiscGroupBox.Size = new System.Drawing.Size(426, 120);
-            this.adjustmentsMiscGroupBox.TabIndex = 2;
-            this.adjustmentsMiscGroupBox.TabStop = false;
-            this.adjustmentsMiscGroupBox.Text = "Misc";
-            // 
-            // featureBoundingBoxCustomizeButton
-            // 
-            this.featureBoundingBoxCustomizeButton.Location = new System.Drawing.Point(240, 64);
-            this.featureBoundingBoxCustomizeButton.Name = "featureBoundingBoxCustomizeButton";
-            this.featureBoundingBoxCustomizeButton.Size = new System.Drawing.Size(85, 23);
-            this.featureBoundingBoxCustomizeButton.TabIndex = 4;
-            this.featureBoundingBoxCustomizeButton.Text = "Customize...";
-            this.featureBoundingBoxCustomizeButton.UseVisualStyleBackColor = true;
-            this.featureBoundingBoxCustomizeButton.Click += new System.EventHandler(this.FeatureBoundingBoxCustomizeButtonClick);
-            // 
-            // alwaysShowFeatureBoundingBoxCheckBox
-            // 
-            this.alwaysShowFeatureBoundingBoxCheckBox.AutoSize = true;
-            this.alwaysShowFeatureBoundingBoxCheckBox.Location = new System.Drawing.Point(17, 68);
-            this.alwaysShowFeatureBoundingBoxCheckBox.Name = "alwaysShowFeatureBoundingBoxCheckBox";
-            this.alwaysShowFeatureBoundingBoxCheckBox.Size = new System.Drawing.Size(190, 17);
-            this.alwaysShowFeatureBoundingBoxCheckBox.TabIndex = 3;
-            this.alwaysShowFeatureBoundingBoxCheckBox.Text = "Always show feature bounding box";
-            this.alwaysShowFeatureBoundingBoxCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // blobFeatureBaseCustomizeButton
-            // 
-            this.blobFeatureBaseCustomizeButton.Location = new System.Drawing.Point(132, 41);
-            this.blobFeatureBaseCustomizeButton.Name = "blobFeatureBaseCustomizeButton";
-            this.blobFeatureBaseCustomizeButton.Size = new System.Drawing.Size(85, 23);
-            this.blobFeatureBaseCustomizeButton.TabIndex = 2;
-            this.blobFeatureBaseCustomizeButton.Text = "Customize...";
-            this.blobFeatureBaseCustomizeButton.UseVisualStyleBackColor = true;
-            this.blobFeatureBaseCustomizeButton.Click += new System.EventHandler(this.BlobFeatureBaseCustomizeButtonClick);
-            // 
-            // blobFeatureBaseCheckBox
-            // 
-            this.blobFeatureBaseCheckBox.AutoSize = true;
-            this.blobFeatureBaseCheckBox.Location = new System.Drawing.Point(17, 45);
-            this.blobFeatureBaseCheckBox.Name = "blobFeatureBaseCheckBox";
-            this.blobFeatureBaseCheckBox.Size = new System.Drawing.Size(109, 17);
-            this.blobFeatureBaseCheckBox.TabIndex = 1;
-            this.blobFeatureBaseCheckBox.Text = "Blob feature base";
-            this.blobFeatureBaseCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // stickyClipboardCheckBox
-            // 
-            this.stickyClipboardCheckBox.AutoSize = true;
-            this.stickyClipboardCheckBox.Location = new System.Drawing.Point(17, 22);
-            this.stickyClipboardCheckBox.Name = "stickyClipboardCheckBox";
-            this.stickyClipboardCheckBox.Size = new System.Drawing.Size(101, 17);
-            this.stickyClipboardCheckBox.TabIndex = 0;
-            this.stickyClipboardCheckBox.Text = "Sticky clipboard";
-            this.stickyClipboardCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // wheelStepGroupBox
-            // 
-            this.wheelStepGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.adjustmentsMiscGroupBox.Controls.Add(this.featureBoundingBoxCustomizeButton);
+			this.adjustmentsMiscGroupBox.Controls.Add(this.alwaysShowFeatureBoundingBoxCheckBox);
+			this.adjustmentsMiscGroupBox.Controls.Add(this.blobFeatureBaseCustomizeButton);
+			this.adjustmentsMiscGroupBox.Controls.Add(this.blobFeatureBaseCheckBox);
+			this.adjustmentsMiscGroupBox.Controls.Add(this.stickyClipboardCheckBox);
+			this.adjustmentsMiscGroupBox.Location = new System.Drawing.Point(12, 309);
+			this.adjustmentsMiscGroupBox.Name = "adjustmentsMiscGroupBox";
+			this.adjustmentsMiscGroupBox.Size = new System.Drawing.Size(426, 120);
+			this.adjustmentsMiscGroupBox.TabIndex = 2;
+			this.adjustmentsMiscGroupBox.TabStop = false;
+			this.adjustmentsMiscGroupBox.Text = "Misc";
+			// 
+			// featureBoundingBoxCustomizeButton
+			// 
+			this.featureBoundingBoxCustomizeButton.Location = new System.Drawing.Point(240, 64);
+			this.featureBoundingBoxCustomizeButton.Name = "featureBoundingBoxCustomizeButton";
+			this.featureBoundingBoxCustomizeButton.Size = new System.Drawing.Size(85, 23);
+			this.featureBoundingBoxCustomizeButton.TabIndex = 4;
+			this.featureBoundingBoxCustomizeButton.Text = "Customize...";
+			this.featureBoundingBoxCustomizeButton.UseVisualStyleBackColor = true;
+			this.featureBoundingBoxCustomizeButton.Click += new System.EventHandler(this.FeatureBoundingBoxCustomizeButtonClick);
+			// 
+			// alwaysShowFeatureBoundingBoxCheckBox
+			// 
+			this.alwaysShowFeatureBoundingBoxCheckBox.AutoSize = true;
+			this.alwaysShowFeatureBoundingBoxCheckBox.Location = new System.Drawing.Point(17, 68);
+			this.alwaysShowFeatureBoundingBoxCheckBox.Name = "alwaysShowFeatureBoundingBoxCheckBox";
+			this.alwaysShowFeatureBoundingBoxCheckBox.Size = new System.Drawing.Size(190, 17);
+			this.alwaysShowFeatureBoundingBoxCheckBox.TabIndex = 3;
+			this.alwaysShowFeatureBoundingBoxCheckBox.Text = "Always show feature bounding box";
+			this.alwaysShowFeatureBoundingBoxCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// blobFeatureBaseCustomizeButton
+			// 
+			this.blobFeatureBaseCustomizeButton.Location = new System.Drawing.Point(132, 41);
+			this.blobFeatureBaseCustomizeButton.Name = "blobFeatureBaseCustomizeButton";
+			this.blobFeatureBaseCustomizeButton.Size = new System.Drawing.Size(85, 23);
+			this.blobFeatureBaseCustomizeButton.TabIndex = 2;
+			this.blobFeatureBaseCustomizeButton.Text = "Customize...";
+			this.blobFeatureBaseCustomizeButton.UseVisualStyleBackColor = true;
+			this.blobFeatureBaseCustomizeButton.Click += new System.EventHandler(this.BlobFeatureBaseCustomizeButtonClick);
+			// 
+			// blobFeatureBaseCheckBox
+			// 
+			this.blobFeatureBaseCheckBox.AutoSize = true;
+			this.blobFeatureBaseCheckBox.Location = new System.Drawing.Point(17, 45);
+			this.blobFeatureBaseCheckBox.Name = "blobFeatureBaseCheckBox";
+			this.blobFeatureBaseCheckBox.Size = new System.Drawing.Size(109, 17);
+			this.blobFeatureBaseCheckBox.TabIndex = 1;
+			this.blobFeatureBaseCheckBox.Text = "Blob feature base";
+			this.blobFeatureBaseCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// stickyClipboardCheckBox
+			// 
+			this.stickyClipboardCheckBox.AutoSize = true;
+			this.stickyClipboardCheckBox.Location = new System.Drawing.Point(17, 22);
+			this.stickyClipboardCheckBox.Name = "stickyClipboardCheckBox";
+			this.stickyClipboardCheckBox.Size = new System.Drawing.Size(101, 17);
+			this.stickyClipboardCheckBox.TabIndex = 0;
+			this.stickyClipboardCheckBox.Text = "Sticky clipboard";
+			this.stickyClipboardCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// wheelStepGroupBox
+			// 
+			this.wheelStepGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.wheelStepGroupBox.Controls.Add(this.seaLevelWheelStepNumeric);
-            this.wheelStepGroupBox.Controls.Add(this.seaLevelWheelStepLabel);
-            this.wheelStepGroupBox.Controls.Add(this.voidCursorSizeWheelStepNumeric);
-            this.wheelStepGroupBox.Controls.Add(this.voidCursorSizeWheelStepLabel);
-            this.wheelStepGroupBox.Controls.Add(this.heightCursorSizeWheelStepNumeric);
-            this.wheelStepGroupBox.Controls.Add(this.heightCursorSizeWheelStepLabel);
-            this.wheelStepGroupBox.Controls.Add(this.heightIntervalWheelStepNumeric);
-            this.wheelStepGroupBox.Controls.Add(this.heightIntervalWheelStepLabel);
-            this.wheelStepGroupBox.Controls.Add(this.heightSelectedHeightWheelStepNumeric);
-            this.wheelStepGroupBox.Controls.Add(this.heightSelectedHeightWheelStepLabel);
-            this.wheelStepGroupBox.Location = new System.Drawing.Point(12, 12);
-            this.wheelStepGroupBox.Name = "wheelStepGroupBox";
-            this.wheelStepGroupBox.Size = new System.Drawing.Size(426, 186);
-            this.wheelStepGroupBox.TabIndex = 0;
-            this.wheelStepGroupBox.TabStop = false;
-            this.wheelStepGroupBox.Text = "Mouse wheel step";
-            // 
-            // seaLevelWheelStepNumeric
-            // 
-            this.seaLevelWheelStepNumeric.Location = new System.Drawing.Point(315, 147);
-            this.seaLevelWheelStepNumeric.Maximum = new decimal(new int[] {
+			this.wheelStepGroupBox.Controls.Add(this.seaLevelWheelStepNumeric);
+			this.wheelStepGroupBox.Controls.Add(this.seaLevelWheelStepLabel);
+			this.wheelStepGroupBox.Controls.Add(this.voidCursorSizeWheelStepNumeric);
+			this.wheelStepGroupBox.Controls.Add(this.voidCursorSizeWheelStepLabel);
+			this.wheelStepGroupBox.Controls.Add(this.heightCursorSizeWheelStepNumeric);
+			this.wheelStepGroupBox.Controls.Add(this.heightCursorSizeWheelStepLabel);
+			this.wheelStepGroupBox.Controls.Add(this.heightIntervalWheelStepNumeric);
+			this.wheelStepGroupBox.Controls.Add(this.heightIntervalWheelStepLabel);
+			this.wheelStepGroupBox.Controls.Add(this.heightSelectedHeightWheelStepNumeric);
+			this.wheelStepGroupBox.Controls.Add(this.heightSelectedHeightWheelStepLabel);
+			this.wheelStepGroupBox.Location = new System.Drawing.Point(12, 12);
+			this.wheelStepGroupBox.Name = "wheelStepGroupBox";
+			this.wheelStepGroupBox.Size = new System.Drawing.Size(426, 186);
+			this.wheelStepGroupBox.TabIndex = 0;
+			this.wheelStepGroupBox.TabStop = false;
+			this.wheelStepGroupBox.Text = "Mouse wheel step";
+			// 
+			// seaLevelWheelStepNumeric
+			// 
+			this.seaLevelWheelStepNumeric.Location = new System.Drawing.Point(315, 147);
+			this.seaLevelWheelStepNumeric.Maximum = new decimal(new int[] {
             255,
             0,
             0,
             0});
-            this.seaLevelWheelStepNumeric.Minimum = new decimal(new int[] {
+			this.seaLevelWheelStepNumeric.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.seaLevelWheelStepNumeric.Name = "seaLevelWheelStepNumeric";
-            this.seaLevelWheelStepNumeric.Size = new System.Drawing.Size(70, 20);
-            this.seaLevelWheelStepNumeric.TabIndex = 9;
-            this.seaLevelWheelStepNumeric.Value = new decimal(new int[] {
+			this.seaLevelWheelStepNumeric.Name = "seaLevelWheelStepNumeric";
+			this.seaLevelWheelStepNumeric.Size = new System.Drawing.Size(70, 20);
+			this.seaLevelWheelStepNumeric.TabIndex = 9;
+			this.seaLevelWheelStepNumeric.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            // 
-            // seaLevelWheelStepLabel
-            // 
-            this.seaLevelWheelStepLabel.AutoSize = true;
-            this.seaLevelWheelStepLabel.Location = new System.Drawing.Point(11, 150);
-            this.seaLevelWheelStepLabel.Name = "seaLevelWheelStepLabel";
-            this.seaLevelWheelStepLabel.Size = new System.Drawing.Size(153, 13);
-            this.seaLevelWheelStepLabel.TabIndex = 8;
-            this.seaLevelWheelStepLabel.Text = "Attributes tab — sea level slider:";
-            // 
-            // voidCursorSizeWheelStepNumeric
-            // 
-            this.voidCursorSizeWheelStepNumeric.Location = new System.Drawing.Point(315, 115);
-            this.voidCursorSizeWheelStepNumeric.Maximum = new decimal(new int[] {
+			// 
+			// seaLevelWheelStepLabel
+			// 
+			this.seaLevelWheelStepLabel.AutoSize = true;
+			this.seaLevelWheelStepLabel.Location = new System.Drawing.Point(11, 150);
+			this.seaLevelWheelStepLabel.Name = "seaLevelWheelStepLabel";
+			this.seaLevelWheelStepLabel.Size = new System.Drawing.Size(153, 13);
+			this.seaLevelWheelStepLabel.TabIndex = 8;
+			this.seaLevelWheelStepLabel.Text = "Attributes tab — sea level slider:";
+			// 
+			// voidCursorSizeWheelStepNumeric
+			// 
+			this.voidCursorSizeWheelStepNumeric.Location = new System.Drawing.Point(315, 115);
+			this.voidCursorSizeWheelStepNumeric.Maximum = new decimal(new int[] {
             255,
             0,
             0,
             0});
-            this.voidCursorSizeWheelStepNumeric.Minimum = new decimal(new int[] {
+			this.voidCursorSizeWheelStepNumeric.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.voidCursorSizeWheelStepNumeric.Name = "voidCursorSizeWheelStepNumeric";
-            this.voidCursorSizeWheelStepNumeric.Size = new System.Drawing.Size(70, 20);
-            this.voidCursorSizeWheelStepNumeric.TabIndex = 7;
-            this.voidCursorSizeWheelStepNumeric.Value = new decimal(new int[] {
+			this.voidCursorSizeWheelStepNumeric.Name = "voidCursorSizeWheelStepNumeric";
+			this.voidCursorSizeWheelStepNumeric.Size = new System.Drawing.Size(70, 20);
+			this.voidCursorSizeWheelStepNumeric.TabIndex = 7;
+			this.voidCursorSizeWheelStepNumeric.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            // 
-            // voidCursorSizeWheelStepLabel
-            // 
-            this.voidCursorSizeWheelStepLabel.AutoSize = true;
-            this.voidCursorSizeWheelStepLabel.Location = new System.Drawing.Point(11, 118);
-            this.voidCursorSizeWheelStepLabel.Name = "voidCursorSizeWheelStepLabel";
-            this.voidCursorSizeWheelStepLabel.Size = new System.Drawing.Size(111, 13);
-            this.voidCursorSizeWheelStepLabel.TabIndex = 6;
-            this.voidCursorSizeWheelStepLabel.Text = "Void tab — cursor size:";
-            // 
-            // heightCursorSizeWheelStepNumeric
-            // 
-            this.heightCursorSizeWheelStepNumeric.Location = new System.Drawing.Point(315, 83);
-            this.heightCursorSizeWheelStepNumeric.Maximum = new decimal(new int[] {
+			// 
+			// voidCursorSizeWheelStepLabel
+			// 
+			this.voidCursorSizeWheelStepLabel.AutoSize = true;
+			this.voidCursorSizeWheelStepLabel.Location = new System.Drawing.Point(11, 118);
+			this.voidCursorSizeWheelStepLabel.Name = "voidCursorSizeWheelStepLabel";
+			this.voidCursorSizeWheelStepLabel.Size = new System.Drawing.Size(111, 13);
+			this.voidCursorSizeWheelStepLabel.TabIndex = 6;
+			this.voidCursorSizeWheelStepLabel.Text = "Void tab — cursor size:";
+			// 
+			// heightCursorSizeWheelStepNumeric
+			// 
+			this.heightCursorSizeWheelStepNumeric.Location = new System.Drawing.Point(315, 83);
+			this.heightCursorSizeWheelStepNumeric.Maximum = new decimal(new int[] {
             255,
             0,
             0,
             0});
-            this.heightCursorSizeWheelStepNumeric.Minimum = new decimal(new int[] {
+			this.heightCursorSizeWheelStepNumeric.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.heightCursorSizeWheelStepNumeric.Name = "heightCursorSizeWheelStepNumeric";
-            this.heightCursorSizeWheelStepNumeric.Size = new System.Drawing.Size(70, 20);
-            this.heightCursorSizeWheelStepNumeric.TabIndex = 5;
-            this.heightCursorSizeWheelStepNumeric.Value = new decimal(new int[] {
+			this.heightCursorSizeWheelStepNumeric.Name = "heightCursorSizeWheelStepNumeric";
+			this.heightCursorSizeWheelStepNumeric.Size = new System.Drawing.Size(70, 20);
+			this.heightCursorSizeWheelStepNumeric.TabIndex = 5;
+			this.heightCursorSizeWheelStepNumeric.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            // 
-            // heightCursorSizeWheelStepLabel
-            // 
-            this.heightCursorSizeWheelStepLabel.AutoSize = true;
-            this.heightCursorSizeWheelStepLabel.Location = new System.Drawing.Point(11, 86);
-            this.heightCursorSizeWheelStepLabel.Name = "heightCursorSizeWheelStepLabel";
-            this.heightCursorSizeWheelStepLabel.Size = new System.Drawing.Size(121, 13);
-            this.heightCursorSizeWheelStepLabel.TabIndex = 4;
-            this.heightCursorSizeWheelStepLabel.Text = "Height tab — cursor size:";
-            // 
-            // heightIntervalWheelStepNumeric
-            // 
-            this.heightIntervalWheelStepNumeric.Location = new System.Drawing.Point(315, 51);
-            this.heightIntervalWheelStepNumeric.Maximum = new decimal(new int[] {
+			// 
+			// heightCursorSizeWheelStepLabel
+			// 
+			this.heightCursorSizeWheelStepLabel.AutoSize = true;
+			this.heightCursorSizeWheelStepLabel.Location = new System.Drawing.Point(11, 86);
+			this.heightCursorSizeWheelStepLabel.Name = "heightCursorSizeWheelStepLabel";
+			this.heightCursorSizeWheelStepLabel.Size = new System.Drawing.Size(121, 13);
+			this.heightCursorSizeWheelStepLabel.TabIndex = 4;
+			this.heightCursorSizeWheelStepLabel.Text = "Height tab — cursor size:";
+			// 
+			// heightIntervalWheelStepNumeric
+			// 
+			this.heightIntervalWheelStepNumeric.Location = new System.Drawing.Point(315, 51);
+			this.heightIntervalWheelStepNumeric.Maximum = new decimal(new int[] {
             255,
             0,
             0,
             0});
-            this.heightIntervalWheelStepNumeric.Minimum = new decimal(new int[] {
+			this.heightIntervalWheelStepNumeric.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.heightIntervalWheelStepNumeric.Name = "heightIntervalWheelStepNumeric";
-            this.heightIntervalWheelStepNumeric.Size = new System.Drawing.Size(70, 20);
-            this.heightIntervalWheelStepNumeric.TabIndex = 3;
-            this.heightIntervalWheelStepNumeric.Value = new decimal(new int[] {
+			this.heightIntervalWheelStepNumeric.Name = "heightIntervalWheelStepNumeric";
+			this.heightIntervalWheelStepNumeric.Size = new System.Drawing.Size(70, 20);
+			this.heightIntervalWheelStepNumeric.TabIndex = 3;
+			this.heightIntervalWheelStepNumeric.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            // 
-            // heightIntervalWheelStepLabel
-            // 
-            this.heightIntervalWheelStepLabel.AutoSize = true;
-            this.heightIntervalWheelStepLabel.Location = new System.Drawing.Point(11, 54);
-            this.heightIntervalWheelStepLabel.Name = "heightIntervalWheelStepLabel";
-            this.heightIntervalWheelStepLabel.Size = new System.Drawing.Size(105, 13);
-            this.heightIntervalWheelStepLabel.TabIndex = 2;
-            this.heightIntervalWheelStepLabel.Text = "Height tab — interval:";
-            // 
-            // heightSelectedHeightWheelStepNumeric
-            // 
-            this.heightSelectedHeightWheelStepNumeric.Location = new System.Drawing.Point(315, 19);
-            this.heightSelectedHeightWheelStepNumeric.Maximum = new decimal(new int[] {
+			// 
+			// heightIntervalWheelStepLabel
+			// 
+			this.heightIntervalWheelStepLabel.AutoSize = true;
+			this.heightIntervalWheelStepLabel.Location = new System.Drawing.Point(11, 54);
+			this.heightIntervalWheelStepLabel.Name = "heightIntervalWheelStepLabel";
+			this.heightIntervalWheelStepLabel.Size = new System.Drawing.Size(105, 13);
+			this.heightIntervalWheelStepLabel.TabIndex = 2;
+			this.heightIntervalWheelStepLabel.Text = "Height tab — interval:";
+			// 
+			// heightSelectedHeightWheelStepNumeric
+			// 
+			this.heightSelectedHeightWheelStepNumeric.Location = new System.Drawing.Point(315, 19);
+			this.heightSelectedHeightWheelStepNumeric.Maximum = new decimal(new int[] {
             255,
             0,
             0,
             0});
-            this.heightSelectedHeightWheelStepNumeric.Minimum = new decimal(new int[] {
+			this.heightSelectedHeightWheelStepNumeric.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.heightSelectedHeightWheelStepNumeric.Name = "heightSelectedHeightWheelStepNumeric";
-            this.heightSelectedHeightWheelStepNumeric.Size = new System.Drawing.Size(70, 20);
-            this.heightSelectedHeightWheelStepNumeric.TabIndex = 1;
-            this.heightSelectedHeightWheelStepNumeric.Value = new decimal(new int[] {
+			this.heightSelectedHeightWheelStepNumeric.Name = "heightSelectedHeightWheelStepNumeric";
+			this.heightSelectedHeightWheelStepNumeric.Size = new System.Drawing.Size(70, 20);
+			this.heightSelectedHeightWheelStepNumeric.TabIndex = 1;
+			this.heightSelectedHeightWheelStepNumeric.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            // 
-            // heightSelectedHeightWheelStepLabel
-            // 
-            this.heightSelectedHeightWheelStepLabel.AutoSize = true;
-            this.heightSelectedHeightWheelStepLabel.Location = new System.Drawing.Point(11, 22);
-            this.heightSelectedHeightWheelStepLabel.Name = "heightSelectedHeightWheelStepLabel";
-            this.heightSelectedHeightWheelStepLabel.Size = new System.Drawing.Size(143, 13);
-            this.heightSelectedHeightWheelStepLabel.TabIndex = 0;
-            this.heightSelectedHeightWheelStepLabel.Text = "Height tab — selected height:";
-            // 
-            // defaultsTabPage
-            // 
-            this.defaultsTabPage.AutoScroll = true;
-            this.defaultsTabPage.Controls.Add(this.viewDefaultsGroupBox);
-            this.defaultsTabPage.Controls.Add(this.newMapDefaultsGroupBox);
-            this.defaultsTabPage.Location = new System.Drawing.Point(4, 22);
-            this.defaultsTabPage.Name = "defaultsTabPage";
-            this.defaultsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.defaultsTabPage.Size = new System.Drawing.Size(442, 478);
-            this.defaultsTabPage.TabIndex = 3;
-            this.defaultsTabPage.Text = "Defaults";
-            this.defaultsTabPage.UseVisualStyleBackColor = true;
-            // 
-            // viewDefaultsGroupBox
-            // 
-            this.viewDefaultsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			// 
+			// heightSelectedHeightWheelStepLabel
+			// 
+			this.heightSelectedHeightWheelStepLabel.AutoSize = true;
+			this.heightSelectedHeightWheelStepLabel.Location = new System.Drawing.Point(11, 22);
+			this.heightSelectedHeightWheelStepLabel.Name = "heightSelectedHeightWheelStepLabel";
+			this.heightSelectedHeightWheelStepLabel.Size = new System.Drawing.Size(143, 13);
+			this.heightSelectedHeightWheelStepLabel.TabIndex = 0;
+			this.heightSelectedHeightWheelStepLabel.Text = "Height tab — selected height:";
+			// 
+			// defaultsTabPage
+			// 
+			this.defaultsTabPage.AutoScroll = true;
+			this.defaultsTabPage.Controls.Add(this.viewDefaultsGroupBox);
+			this.defaultsTabPage.Controls.Add(this.newMapDefaultsGroupBox);
+			this.defaultsTabPage.Location = new System.Drawing.Point(4, 22);
+			this.defaultsTabPage.Name = "defaultsTabPage";
+			this.defaultsTabPage.Padding = new System.Windows.Forms.Padding(3);
+			this.defaultsTabPage.Size = new System.Drawing.Size(442, 478);
+			this.defaultsTabPage.TabIndex = 3;
+			this.defaultsTabPage.Text = "Defaults";
+			this.defaultsTabPage.UseVisualStyleBackColor = true;
+			// 
+			// viewDefaultsGroupBox
+			// 
+			this.viewDefaultsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.viewDefaultsGroupBox.Controls.Add(this.defaultGridSizeComboBox);
-            this.viewDefaultsGroupBox.Controls.Add(this.defaultGridSizeLabel);
-            this.viewDefaultsGroupBox.Controls.Add(this.defaultOrdersVisibleCheckBox);
-            this.viewDefaultsGroupBox.Controls.Add(this.defaultFeaturesVisibleCheckBox);
-            this.viewDefaultsGroupBox.Controls.Add(this.defaultGridVisibleCheckBox);
-            this.viewDefaultsGroupBox.Controls.Add(this.defaultVoidsVisibleCheckBox);
-            this.viewDefaultsGroupBox.Controls.Add(this.defaultMinimapVisibleCheckBox);
-            this.viewDefaultsGroupBox.Controls.Add(this.defaultHeightGridVisibleCheckBox);
-            this.viewDefaultsGroupBox.Controls.Add(this.defaultHeightmapVisibleCheckBox);
-            this.viewDefaultsGroupBox.Location = new System.Drawing.Point(12, 84);
-            this.viewDefaultsGroupBox.Name = "viewDefaultsGroupBox";
-            this.viewDefaultsGroupBox.Size = new System.Drawing.Size(426, 201);
-            this.viewDefaultsGroupBox.TabIndex = 1;
-            this.viewDefaultsGroupBox.TabStop = false;
-            this.viewDefaultsGroupBox.Text = "View menu items visible at startup";
-            // 
-            // defaultGridSizeComboBox
-            // 
-            this.defaultGridSizeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.defaultGridSizeComboBox.FormattingEnabled = true;
-            this.defaultGridSizeComboBox.Items.AddRange(new object[] {
+			this.viewDefaultsGroupBox.Controls.Add(this.defaultGridSizeComboBox);
+			this.viewDefaultsGroupBox.Controls.Add(this.defaultGridSizeLabel);
+			this.viewDefaultsGroupBox.Controls.Add(this.defaultOrdersVisibleCheckBox);
+			this.viewDefaultsGroupBox.Controls.Add(this.defaultFeaturesVisibleCheckBox);
+			this.viewDefaultsGroupBox.Controls.Add(this.defaultGridVisibleCheckBox);
+			this.viewDefaultsGroupBox.Controls.Add(this.defaultVoidsVisibleCheckBox);
+			this.viewDefaultsGroupBox.Controls.Add(this.defaultMinimapVisibleCheckBox);
+			this.viewDefaultsGroupBox.Controls.Add(this.defaultHeightGridVisibleCheckBox);
+			this.viewDefaultsGroupBox.Controls.Add(this.defaultHeightmapVisibleCheckBox);
+			this.viewDefaultsGroupBox.Location = new System.Drawing.Point(12, 84);
+			this.viewDefaultsGroupBox.Name = "viewDefaultsGroupBox";
+			this.viewDefaultsGroupBox.Size = new System.Drawing.Size(426, 201);
+			this.viewDefaultsGroupBox.TabIndex = 1;
+			this.viewDefaultsGroupBox.TabStop = false;
+			this.viewDefaultsGroupBox.Text = "View menu items visible at startup";
+			// 
+			// defaultGridSizeComboBox
+			// 
+			this.defaultGridSizeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.defaultGridSizeComboBox.FormattingEnabled = true;
+			this.defaultGridSizeComboBox.Items.AddRange(new object[] {
             "16x16",
             "32x32",
             "64x64",
@@ -1123,225 +1136,339 @@ namespace Mappy.UI.Forms
             "256x256",
             "512x512",
             "1024x1024"});
-            this.defaultGridSizeComboBox.Location = new System.Drawing.Point(104, 112);
-            this.defaultGridSizeComboBox.Name = "defaultGridSizeComboBox";
-            this.defaultGridSizeComboBox.Size = new System.Drawing.Size(90, 21);
-            this.defaultGridSizeComboBox.TabIndex = 6;
-            // 
-            // defaultGridSizeLabel
-            // 
-            this.defaultGridSizeLabel.AutoSize = true;
-            this.defaultGridSizeLabel.Location = new System.Drawing.Point(68, 115);
-            this.defaultGridSizeLabel.Name = "defaultGridSizeLabel";
-            this.defaultGridSizeLabel.Size = new System.Drawing.Size(30, 13);
-            this.defaultGridSizeLabel.TabIndex = 5;
-            this.defaultGridSizeLabel.Text = "Size:";
-            // 
-            // defaultOrdersVisibleCheckBox
-            // 
-            this.defaultOrdersVisibleCheckBox.AutoSize = true;
-            this.defaultOrdersVisibleCheckBox.Location = new System.Drawing.Point(17, 160);
-            this.defaultOrdersVisibleCheckBox.Name = "defaultOrdersVisibleCheckBox";
-            this.defaultOrdersVisibleCheckBox.Size = new System.Drawing.Size(57, 17);
-            this.defaultOrdersVisibleCheckBox.TabIndex = 8;
-            this.defaultOrdersVisibleCheckBox.Text = "Orders";
-            this.defaultOrdersVisibleCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // defaultFeaturesVisibleCheckBox
-            // 
-            this.defaultFeaturesVisibleCheckBox.AutoSize = true;
-            this.defaultFeaturesVisibleCheckBox.Checked = true;
-            this.defaultFeaturesVisibleCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.defaultFeaturesVisibleCheckBox.Location = new System.Drawing.Point(17, 137);
-            this.defaultFeaturesVisibleCheckBox.Name = "defaultFeaturesVisibleCheckBox";
-            this.defaultFeaturesVisibleCheckBox.Size = new System.Drawing.Size(67, 17);
-            this.defaultFeaturesVisibleCheckBox.TabIndex = 7;
-            this.defaultFeaturesVisibleCheckBox.Text = "Features";
-            this.defaultFeaturesVisibleCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // defaultGridVisibleCheckBox
-            // 
-            this.defaultGridVisibleCheckBox.AutoSize = true;
-            this.defaultGridVisibleCheckBox.Location = new System.Drawing.Point(17, 114);
-            this.defaultGridVisibleCheckBox.Name = "defaultGridVisibleCheckBox";
-            this.defaultGridVisibleCheckBox.Size = new System.Drawing.Size(45, 17);
-            this.defaultGridVisibleCheckBox.TabIndex = 4;
-            this.defaultGridVisibleCheckBox.Text = "Grid";
-            this.defaultGridVisibleCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // defaultVoidsVisibleCheckBox
-            // 
-            this.defaultVoidsVisibleCheckBox.AutoSize = true;
-            this.defaultVoidsVisibleCheckBox.Location = new System.Drawing.Point(17, 91);
-            this.defaultVoidsVisibleCheckBox.Name = "defaultVoidsVisibleCheckBox";
-            this.defaultVoidsVisibleCheckBox.Size = new System.Drawing.Size(52, 17);
-            this.defaultVoidsVisibleCheckBox.TabIndex = 3;
-            this.defaultVoidsVisibleCheckBox.Text = "Voids";
-            this.defaultVoidsVisibleCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // defaultMinimapVisibleCheckBox
-            // 
-            this.defaultMinimapVisibleCheckBox.AutoSize = true;
-            this.defaultMinimapVisibleCheckBox.Location = new System.Drawing.Point(17, 68);
-            this.defaultMinimapVisibleCheckBox.Name = "defaultMinimapVisibleCheckBox";
-            this.defaultMinimapVisibleCheckBox.Size = new System.Drawing.Size(65, 17);
-            this.defaultMinimapVisibleCheckBox.TabIndex = 2;
-            this.defaultMinimapVisibleCheckBox.Text = "Minimap";
-            this.defaultMinimapVisibleCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // defaultHeightGridVisibleCheckBox
-            // 
-            this.defaultHeightGridVisibleCheckBox.AutoSize = true;
-            this.defaultHeightGridVisibleCheckBox.Location = new System.Drawing.Point(17, 45);
-            this.defaultHeightGridVisibleCheckBox.Name = "defaultHeightGridVisibleCheckBox";
-            this.defaultHeightGridVisibleCheckBox.Size = new System.Drawing.Size(99, 17);
-            this.defaultHeightGridVisibleCheckBox.TabIndex = 1;
-            this.defaultHeightGridVisibleCheckBox.Text = "Heightmap Grid";
-            this.defaultHeightGridVisibleCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // defaultHeightmapVisibleCheckBox
-            // 
-            this.defaultHeightmapVisibleCheckBox.AutoSize = true;
-            this.defaultHeightmapVisibleCheckBox.Location = new System.Drawing.Point(17, 22);
-            this.defaultHeightmapVisibleCheckBox.Name = "defaultHeightmapVisibleCheckBox";
-            this.defaultHeightmapVisibleCheckBox.Size = new System.Drawing.Size(122, 17);
-            this.defaultHeightmapVisibleCheckBox.TabIndex = 0;
-            this.defaultHeightmapVisibleCheckBox.Text = "Heightmap Contours";
-            this.defaultHeightmapVisibleCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // newMapDefaultsGroupBox
-            // 
-            this.newMapDefaultsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.defaultGridSizeComboBox.Location = new System.Drawing.Point(104, 112);
+			this.defaultGridSizeComboBox.Name = "defaultGridSizeComboBox";
+			this.defaultGridSizeComboBox.Size = new System.Drawing.Size(90, 21);
+			this.defaultGridSizeComboBox.TabIndex = 6;
+			// 
+			// defaultGridSizeLabel
+			// 
+			this.defaultGridSizeLabel.AutoSize = true;
+			this.defaultGridSizeLabel.Location = new System.Drawing.Point(68, 115);
+			this.defaultGridSizeLabel.Name = "defaultGridSizeLabel";
+			this.defaultGridSizeLabel.Size = new System.Drawing.Size(30, 13);
+			this.defaultGridSizeLabel.TabIndex = 5;
+			this.defaultGridSizeLabel.Text = "Size:";
+			// 
+			// defaultOrdersVisibleCheckBox
+			// 
+			this.defaultOrdersVisibleCheckBox.AutoSize = true;
+			this.defaultOrdersVisibleCheckBox.Location = new System.Drawing.Point(17, 160);
+			this.defaultOrdersVisibleCheckBox.Name = "defaultOrdersVisibleCheckBox";
+			this.defaultOrdersVisibleCheckBox.Size = new System.Drawing.Size(57, 17);
+			this.defaultOrdersVisibleCheckBox.TabIndex = 8;
+			this.defaultOrdersVisibleCheckBox.Text = "Orders";
+			this.defaultOrdersVisibleCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// defaultFeaturesVisibleCheckBox
+			// 
+			this.defaultFeaturesVisibleCheckBox.AutoSize = true;
+			this.defaultFeaturesVisibleCheckBox.Checked = true;
+			this.defaultFeaturesVisibleCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.defaultFeaturesVisibleCheckBox.Location = new System.Drawing.Point(17, 137);
+			this.defaultFeaturesVisibleCheckBox.Name = "defaultFeaturesVisibleCheckBox";
+			this.defaultFeaturesVisibleCheckBox.Size = new System.Drawing.Size(67, 17);
+			this.defaultFeaturesVisibleCheckBox.TabIndex = 7;
+			this.defaultFeaturesVisibleCheckBox.Text = "Features";
+			this.defaultFeaturesVisibleCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// defaultGridVisibleCheckBox
+			// 
+			this.defaultGridVisibleCheckBox.AutoSize = true;
+			this.defaultGridVisibleCheckBox.Location = new System.Drawing.Point(17, 114);
+			this.defaultGridVisibleCheckBox.Name = "defaultGridVisibleCheckBox";
+			this.defaultGridVisibleCheckBox.Size = new System.Drawing.Size(45, 17);
+			this.defaultGridVisibleCheckBox.TabIndex = 4;
+			this.defaultGridVisibleCheckBox.Text = "Grid";
+			this.defaultGridVisibleCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// defaultVoidsVisibleCheckBox
+			// 
+			this.defaultVoidsVisibleCheckBox.AutoSize = true;
+			this.defaultVoidsVisibleCheckBox.Location = new System.Drawing.Point(17, 91);
+			this.defaultVoidsVisibleCheckBox.Name = "defaultVoidsVisibleCheckBox";
+			this.defaultVoidsVisibleCheckBox.Size = new System.Drawing.Size(52, 17);
+			this.defaultVoidsVisibleCheckBox.TabIndex = 3;
+			this.defaultVoidsVisibleCheckBox.Text = "Voids";
+			this.defaultVoidsVisibleCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// defaultMinimapVisibleCheckBox
+			// 
+			this.defaultMinimapVisibleCheckBox.AutoSize = true;
+			this.defaultMinimapVisibleCheckBox.Location = new System.Drawing.Point(17, 68);
+			this.defaultMinimapVisibleCheckBox.Name = "defaultMinimapVisibleCheckBox";
+			this.defaultMinimapVisibleCheckBox.Size = new System.Drawing.Size(65, 17);
+			this.defaultMinimapVisibleCheckBox.TabIndex = 2;
+			this.defaultMinimapVisibleCheckBox.Text = "Minimap";
+			this.defaultMinimapVisibleCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// defaultHeightGridVisibleCheckBox
+			// 
+			this.defaultHeightGridVisibleCheckBox.AutoSize = true;
+			this.defaultHeightGridVisibleCheckBox.Location = new System.Drawing.Point(17, 45);
+			this.defaultHeightGridVisibleCheckBox.Name = "defaultHeightGridVisibleCheckBox";
+			this.defaultHeightGridVisibleCheckBox.Size = new System.Drawing.Size(99, 17);
+			this.defaultHeightGridVisibleCheckBox.TabIndex = 1;
+			this.defaultHeightGridVisibleCheckBox.Text = "Heightmap Grid";
+			this.defaultHeightGridVisibleCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// defaultHeightmapVisibleCheckBox
+			// 
+			this.defaultHeightmapVisibleCheckBox.AutoSize = true;
+			this.defaultHeightmapVisibleCheckBox.Location = new System.Drawing.Point(17, 22);
+			this.defaultHeightmapVisibleCheckBox.Name = "defaultHeightmapVisibleCheckBox";
+			this.defaultHeightmapVisibleCheckBox.Size = new System.Drawing.Size(122, 17);
+			this.defaultHeightmapVisibleCheckBox.TabIndex = 0;
+			this.defaultHeightmapVisibleCheckBox.Text = "Heightmap Contours";
+			this.defaultHeightmapVisibleCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// newMapDefaultsGroupBox
+			// 
+			this.newMapDefaultsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapHeightNumeric);
-            this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapHeightLabel);
-            this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapWidthNumeric);
-            this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapWidthLabel);
-            this.newMapDefaultsGroupBox.Location = new System.Drawing.Point(12, 12);
-            this.newMapDefaultsGroupBox.Name = "newMapDefaultsGroupBox";
-            this.newMapDefaultsGroupBox.Size = new System.Drawing.Size(426, 66);
-            this.newMapDefaultsGroupBox.TabIndex = 0;
-            this.newMapDefaultsGroupBox.TabStop = false;
-            this.newMapDefaultsGroupBox.Text = "New map playable area (tiles)";
-            // 
-            // defaultNewMapHeightNumeric
-            // 
-            this.defaultNewMapHeightNumeric.Location = new System.Drawing.Point(291, 27);
-            this.defaultNewMapHeightNumeric.Maximum = new decimal(new int[] {
+			this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapHeightNumeric);
+			this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapHeightLabel);
+			this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapWidthNumeric);
+			this.newMapDefaultsGroupBox.Controls.Add(this.defaultNewMapWidthLabel);
+			this.newMapDefaultsGroupBox.Location = new System.Drawing.Point(12, 12);
+			this.newMapDefaultsGroupBox.Name = "newMapDefaultsGroupBox";
+			this.newMapDefaultsGroupBox.Size = new System.Drawing.Size(426, 66);
+			this.newMapDefaultsGroupBox.TabIndex = 0;
+			this.newMapDefaultsGroupBox.TabStop = false;
+			this.newMapDefaultsGroupBox.Text = "New map playable area (tiles)";
+			// 
+			// defaultNewMapHeightNumeric
+			// 
+			this.defaultNewMapHeightNumeric.Location = new System.Drawing.Point(291, 27);
+			this.defaultNewMapHeightNumeric.Maximum = new decimal(new int[] {
             2147483647,
             0,
             0,
             0});
-            this.defaultNewMapHeightNumeric.Minimum = new decimal(new int[] {
+			this.defaultNewMapHeightNumeric.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.defaultNewMapHeightNumeric.Name = "defaultNewMapHeightNumeric";
-            this.defaultNewMapHeightNumeric.Size = new System.Drawing.Size(85, 20);
-            this.defaultNewMapHeightNumeric.TabIndex = 3;
-            this.defaultNewMapHeightNumeric.Value = new decimal(new int[] {
+			this.defaultNewMapHeightNumeric.Name = "defaultNewMapHeightNumeric";
+			this.defaultNewMapHeightNumeric.Size = new System.Drawing.Size(85, 20);
+			this.defaultNewMapHeightNumeric.TabIndex = 3;
+			this.defaultNewMapHeightNumeric.Value = new decimal(new int[] {
             256,
             0,
             0,
             0});
-            // 
-            // defaultNewMapHeightLabel
-            // 
-            this.defaultNewMapHeightLabel.AutoSize = true;
-            this.defaultNewMapHeightLabel.Location = new System.Drawing.Point(238, 29);
-            this.defaultNewMapHeightLabel.Name = "defaultNewMapHeightLabel";
-            this.defaultNewMapHeightLabel.Size = new System.Drawing.Size(41, 13);
-            this.defaultNewMapHeightLabel.TabIndex = 2;
-            this.defaultNewMapHeightLabel.Text = "Height:";
-            // 
-            // defaultNewMapWidthNumeric
-            // 
-            this.defaultNewMapWidthNumeric.Location = new System.Drawing.Point(70, 27);
-            this.defaultNewMapWidthNumeric.Maximum = new decimal(new int[] {
+			// 
+			// defaultNewMapHeightLabel
+			// 
+			this.defaultNewMapHeightLabel.AutoSize = true;
+			this.defaultNewMapHeightLabel.Location = new System.Drawing.Point(238, 29);
+			this.defaultNewMapHeightLabel.Name = "defaultNewMapHeightLabel";
+			this.defaultNewMapHeightLabel.Size = new System.Drawing.Size(41, 13);
+			this.defaultNewMapHeightLabel.TabIndex = 2;
+			this.defaultNewMapHeightLabel.Text = "Height:";
+			// 
+			// defaultNewMapWidthNumeric
+			// 
+			this.defaultNewMapWidthNumeric.Location = new System.Drawing.Point(70, 27);
+			this.defaultNewMapWidthNumeric.Maximum = new decimal(new int[] {
             2147483647,
             0,
             0,
             0});
-            this.defaultNewMapWidthNumeric.Minimum = new decimal(new int[] {
+			this.defaultNewMapWidthNumeric.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.defaultNewMapWidthNumeric.Name = "defaultNewMapWidthNumeric";
-            this.defaultNewMapWidthNumeric.Size = new System.Drawing.Size(85, 20);
-            this.defaultNewMapWidthNumeric.TabIndex = 1;
-            this.defaultNewMapWidthNumeric.Value = new decimal(new int[] {
+			this.defaultNewMapWidthNumeric.Name = "defaultNewMapWidthNumeric";
+			this.defaultNewMapWidthNumeric.Size = new System.Drawing.Size(85, 20);
+			this.defaultNewMapWidthNumeric.TabIndex = 1;
+			this.defaultNewMapWidthNumeric.Value = new decimal(new int[] {
             256,
             0,
             0,
             0});
-            // 
-            // defaultNewMapWidthLabel
-            // 
-            this.defaultNewMapWidthLabel.AutoSize = true;
-            this.defaultNewMapWidthLabel.Location = new System.Drawing.Point(17, 29);
-            this.defaultNewMapWidthLabel.Name = "defaultNewMapWidthLabel";
-            this.defaultNewMapWidthLabel.Size = new System.Drawing.Size(38, 13);
-            this.defaultNewMapWidthLabel.TabIndex = 0;
-            this.defaultNewMapWidthLabel.Text = "Width:";
-            // 
-            // PreferencesForm
-            // 
-            this.AcceptButton = this.okButton;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(450, 534);
-            this.Controls.Add(this.preferencesTabControl);
-            this.Controls.Add(this.bottomPanel);
-            this.Name = "PreferencesForm";
-            this.ShowIcon = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Preferences";
-            this.Load += new System.EventHandler(this.PreferencesFormLoad);
-            this.sidePanel.ResumeLayout(false);
-            this.bottomPanel.ResumeLayout(false);
-            this.searchPathsPanel.ResumeLayout(false);
-            this.mainGroupBox.ResumeLayout(false);
-            this.scrollSpeedGroupBox.ResumeLayout(false);
-            this.scrollSpeedGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedYNumeric)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).EndInit();
-            this.missionGroupBox.ResumeLayout(false);
-            this.missionGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.inactiveSchemaOpacityNumeric)).EndInit();
-            this.missionUiGroupBox.ResumeLayout(false);
-            this.missionUiGroupBox.PerformLayout();
-            this.resourceNamesGroupBox.ResumeLayout(false);
-            this.resourceNamesGroupBox.PerformLayout();
-            this.resourceMarkersGroupBox.ResumeLayout(false);
-            this.resourceMarkersGroupBox.PerformLayout();
-            this.miscGroupBox.ResumeLayout(false);
-            this.miscGroupBox.PerformLayout();
-            this.preferencesTabControl.ResumeLayout(false);
-            this.miscTabPage.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.missionTabPage.ResumeLayout(false);
-            this.adjustmentsTabPage.ResumeLayout(false);
-            this.adjustmentsMiscGroupBox.ResumeLayout(false);
-            this.adjustmentsMiscGroupBox.PerformLayout();
-            this.wheelStepGroupBox.ResumeLayout(false);
-            this.wheelStepGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.seaLevelWheelStepNumeric)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.voidCursorSizeWheelStepNumeric)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.heightCursorSizeWheelStepNumeric)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.heightIntervalWheelStepNumeric)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.heightSelectedHeightWheelStepNumeric)).EndInit();
-            this.defaultsTabPage.ResumeLayout(false);
-            this.viewDefaultsGroupBox.ResumeLayout(false);
-            this.viewDefaultsGroupBox.PerformLayout();
-            this.newMapDefaultsGroupBox.ResumeLayout(false);
-            this.newMapDefaultsGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.defaultNewMapHeightNumeric)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.defaultNewMapWidthNumeric)).EndInit();
-            this.ResumeLayout(false);
+			// 
+			// defaultNewMapWidthLabel
+			// 
+			this.defaultNewMapWidthLabel.AutoSize = true;
+			this.defaultNewMapWidthLabel.Location = new System.Drawing.Point(17, 29);
+			this.defaultNewMapWidthLabel.Name = "defaultNewMapWidthLabel";
+			this.defaultNewMapWidthLabel.Size = new System.Drawing.Size(38, 13);
+			this.defaultNewMapWidthLabel.TabIndex = 0;
+			this.defaultNewMapWidthLabel.Text = "Width:";
+			// 
+			// paintingTabPage
+			// 
+			this.paintingTabPage.AutoScroll = true;
+			this.paintingTabPage.Controls.Add(this.paintingGroupBox);
+			this.paintingTabPage.Location = new System.Drawing.Point(4, 22);
+			this.paintingTabPage.Name = "paintingTabPage";
+			this.paintingTabPage.Padding = new System.Windows.Forms.Padding(3);
+			this.paintingTabPage.Size = new System.Drawing.Size(442, 478);
+			this.paintingTabPage.TabIndex = 4;
+			this.paintingTabPage.Text = "Painting";
+			this.paintingTabPage.UseVisualStyleBackColor = true;
+			// 
+			// paintingGroupBox
+			// 
+			this.paintingGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.paintingGroupBox.Controls.Add(this.paintingIntroLabel);
+			this.paintingGroupBox.Controls.Add(this.galaxyEditorLinkLabel);
+			this.paintingGroupBox.Controls.Add(this.brushTilesUrlLabel);
+			this.paintingGroupBox.Controls.Add(this.brushTilesUrlTextBox);
+			this.paintingGroupBox.Controls.Add(this.downloadBrushTilesButton);
+			this.paintingGroupBox.Controls.Add(this.brushTilesDownloadedLabel);
+			this.paintingGroupBox.Controls.Add(this.brushTilesHashLabel);
+			this.paintingGroupBox.Controls.Add(this.excludeBrushTilesCheckBox);
+			this.paintingGroupBox.Location = new System.Drawing.Point(13, 13);
+			this.paintingGroupBox.Name = "paintingGroupBox";
+			this.paintingGroupBox.Size = new System.Drawing.Size(410, 280);
+			this.paintingGroupBox.TabIndex = 0;
+			this.paintingGroupBox.TabStop = false;
+			this.paintingGroupBox.Text = "Brush tiles";
+			// 
+			// paintingIntroLabel
+			// 
+			this.paintingIntroLabel.AutoSize = true;
+			this.paintingIntroLabel.Location = new System.Drawing.Point(16, 24);
+			this.paintingIntroLabel.MaximumSize = new System.Drawing.Size(378, 0);
+			this.paintingIntroLabel.Name = "paintingIntroLabel";
+			this.paintingIntroLabel.Size = new System.Drawing.Size(367, 26);
+			this.paintingIntroLabel.TabIndex = 0;
+			this.paintingIntroLabel.Text = "Mappy can paint tiles. This relies on a curated set of tiles from MattA9K\'s TA Ga" +
+    "laxy Editor.";
+			// 
+			// galaxyEditorLinkLabel
+			// 
+			this.galaxyEditorLinkLabel.AutoSize = true;
+			this.galaxyEditorLinkLabel.Location = new System.Drawing.Point(16, 72);
+			this.galaxyEditorLinkLabel.Name = "galaxyEditorLinkLabel";
+			this.galaxyEditorLinkLabel.Size = new System.Drawing.Size(292, 13);
+			this.galaxyEditorLinkLabel.TabIndex = 1;
+			this.galaxyEditorLinkLabel.TabStop = true;
+			this.galaxyEditorLinkLabel.Text = "https://github.com/MattA9K/Total-Annihilation-Galaxy-Editor";
+			this.galaxyEditorLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.GalaxyEditorLinkClicked);
+			// 
+			// brushTilesUrlLabel
+			// 
+			this.brushTilesUrlLabel.AutoSize = true;
+			this.brushTilesUrlLabel.Location = new System.Drawing.Point(16, 100);
+			this.brushTilesUrlLabel.Name = "brushTilesUrlLabel";
+			this.brushTilesUrlLabel.Size = new System.Drawing.Size(32, 13);
+			this.brushTilesUrlLabel.TabIndex = 2;
+			this.brushTilesUrlLabel.Text = "URL:";
+			// 
+			// brushTilesUrlTextBox
+			// 
+			this.brushTilesUrlTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.brushTilesUrlTextBox.Location = new System.Drawing.Point(16, 118);
+			this.brushTilesUrlTextBox.Name = "brushTilesUrlTextBox";
+			this.brushTilesUrlTextBox.Size = new System.Drawing.Size(292, 20);
+			this.brushTilesUrlTextBox.TabIndex = 3;
+			// 
+			// downloadBrushTilesButton
+			// 
+			this.downloadBrushTilesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.downloadBrushTilesButton.Location = new System.Drawing.Point(314, 116);
+			this.downloadBrushTilesButton.Name = "downloadBrushTilesButton";
+			this.downloadBrushTilesButton.Size = new System.Drawing.Size(80, 23);
+			this.downloadBrushTilesButton.TabIndex = 4;
+			this.downloadBrushTilesButton.Text = "Download";
+			this.downloadBrushTilesButton.UseVisualStyleBackColor = true;
+			this.downloadBrushTilesButton.Click += new System.EventHandler(this.DownloadBrushTilesButtonClick);
+			// 
+			// brushTilesDownloadedLabel
+			// 
+			this.brushTilesDownloadedLabel.AutoSize = true;
+			this.brushTilesDownloadedLabel.Location = new System.Drawing.Point(16, 152);
+			this.brushTilesDownloadedLabel.Name = "brushTilesDownloadedLabel";
+			this.brushTilesDownloadedLabel.Size = new System.Drawing.Size(151, 13);
+			this.brushTilesDownloadedLabel.TabIndex = 5;
+			this.brushTilesDownloadedLabel.Text = "Downloaded: Not downloaded";
+			// 
+			// brushTilesHashLabel
+			// 
+			this.brushTilesHashLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.brushTilesHashLabel.Location = new System.Drawing.Point(16, 176);
+			this.brushTilesHashLabel.Name = "brushTilesHashLabel";
+			this.brushTilesHashLabel.Size = new System.Drawing.Size(388, 40);
+			this.brushTilesHashLabel.TabIndex = 6;
+			this.brushTilesHashLabel.Text = "SHA-256: -";
+			// 
+			// excludeBrushTilesCheckBox
+			// 
+			this.excludeBrushTilesCheckBox.AutoSize = true;
+			this.excludeBrushTilesCheckBox.Location = new System.Drawing.Point(16, 224);
+			this.excludeBrushTilesCheckBox.Name = "excludeBrushTilesCheckBox";
+			this.excludeBrushTilesCheckBox.Size = new System.Drawing.Size(141, 17);
+			this.excludeBrushTilesCheckBox.TabIndex = 7;
+			this.excludeBrushTilesCheckBox.Text = "Exclude from Section list";
+			this.excludeBrushTilesCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// PreferencesForm
+			// 
+			this.AcceptButton = this.okButton;
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.CancelButton = this.cancelButton;
+			this.ClientSize = new System.Drawing.Size(450, 557);
+			this.Controls.Add(this.preferencesTabControl);
+			this.Controls.Add(this.bottomPanel);
+			this.Name = "PreferencesForm";
+			this.ShowIcon = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.Text = "Preferences";
+			this.Load += new System.EventHandler(this.PreferencesFormLoad);
+			this.sidePanel.ResumeLayout(false);
+			this.bottomPanel.ResumeLayout(false);
+			this.searchPathsPanel.ResumeLayout(false);
+			this.mainGroupBox.ResumeLayout(false);
+			this.scrollSpeedGroupBox.ResumeLayout(false);
+			this.scrollSpeedGroupBox.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedYNumeric)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.dragScrollSpeedXNumeric)).EndInit();
+			this.missionGroupBox.ResumeLayout(false);
+			this.missionGroupBox.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.inactiveSchemaOpacityNumeric)).EndInit();
+			this.missionUiGroupBox.ResumeLayout(false);
+			this.missionUiGroupBox.PerformLayout();
+			this.resourceNamesGroupBox.ResumeLayout(false);
+			this.resourceNamesGroupBox.PerformLayout();
+			this.resourceMarkersGroupBox.ResumeLayout(false);
+			this.resourceMarkersGroupBox.PerformLayout();
+			this.miscGroupBox.ResumeLayout(false);
+			this.miscGroupBox.PerformLayout();
+			this.preferencesTabControl.ResumeLayout(false);
+			this.miscTabPage.ResumeLayout(false);
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
+			this.missionTabPage.ResumeLayout(false);
+			this.adjustmentsTabPage.ResumeLayout(false);
+			this.adjustmentsMiscGroupBox.ResumeLayout(false);
+			this.adjustmentsMiscGroupBox.PerformLayout();
+			this.wheelStepGroupBox.ResumeLayout(false);
+			this.wheelStepGroupBox.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.seaLevelWheelStepNumeric)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.voidCursorSizeWheelStepNumeric)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.heightCursorSizeWheelStepNumeric)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.heightIntervalWheelStepNumeric)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.heightSelectedHeightWheelStepNumeric)).EndInit();
+			this.defaultsTabPage.ResumeLayout(false);
+			this.viewDefaultsGroupBox.ResumeLayout(false);
+			this.viewDefaultsGroupBox.PerformLayout();
+			this.newMapDefaultsGroupBox.ResumeLayout(false);
+			this.newMapDefaultsGroupBox.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.defaultNewMapHeightNumeric)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.defaultNewMapWidthNumeric)).EndInit();
+			this.paintingTabPage.ResumeLayout(false);
+			this.paintingGroupBox.ResumeLayout(false);
+			this.paintingGroupBox.PerformLayout();
+			this.ResumeLayout(false);
 
         }
 
@@ -1440,5 +1567,15 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox updateRepositoryTextBox;
         private System.Windows.Forms.Label updateRepositoryLabel;
+        private System.Windows.Forms.TabPage paintingTabPage;
+        private System.Windows.Forms.GroupBox paintingGroupBox;
+        private System.Windows.Forms.Label paintingIntroLabel;
+        private System.Windows.Forms.LinkLabel galaxyEditorLinkLabel;
+        private System.Windows.Forms.Label brushTilesUrlLabel;
+        private System.Windows.Forms.TextBox brushTilesUrlTextBox;
+        private System.Windows.Forms.Button downloadBrushTilesButton;
+        private System.Windows.Forms.Label brushTilesDownloadedLabel;
+        private System.Windows.Forms.Label brushTilesHashLabel;
+        private System.Windows.Forms.CheckBox excludeBrushTilesCheckBox;
     }
 }

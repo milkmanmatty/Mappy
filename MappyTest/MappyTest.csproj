@@ -74,6 +74,13 @@
     <Compile Include="ResizeMapAnchorTest.cs" />
     <Compile Include="SchemaAttributesRoundTripTest.cs" />
     <Compile Include="SectionServiceTest.cs" />
+    <Compile Include="TerrainCatalogGateTest.cs" />
+    <Compile Include="TerrainCatalogTest.cs" />
+    <Compile Include="TerrainPieceNameTest.cs" />
+    <Compile Include="TerrainPathPlannerTest.cs" />
+    <Compile Include="TerrainPlannerTest.cs" />
+    <Compile Include="TerrainRenderGateTest.cs" />
+    <Compile Include="TerrainBrushOperationTest.cs" />
     <Compile Include="TreeItem.cs" />
   </ItemGroup>
   <ItemGroup>

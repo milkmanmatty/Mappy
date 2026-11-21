@@ -11,6 +11,7 @@ namespace Mappy.Models
     using Mappy.Data;
     using Mappy.Models.Enums;
     using Mappy.Services;
+    using Mappy.TerrainBrush;
     using Mappy.Util;
 
     public class MainFormViewModel : IMainFormViewModel
@@ -50,6 +51,12 @@ namespace Mappy.Models
             this.HeightEditSetValue = model.PropertyAsObservable(x => x.HeightEditSetValue, nameof(model.HeightEditSetValue));
             this.HeightEditCursorSize = model.PropertyAsObservable(x => x.HeightEditCursorSize, nameof(model.HeightEditCursorSize));
             this.VoidEditCursorSize = model.PropertyAsObservable(x => x.VoidEditCursorSize, nameof(model.VoidEditCursorSize));
+            this.TerrainWorldName = model.PropertyAsObservable(x => x.TerrainWorldName, nameof(model.TerrainWorldName));
+            this.TerrainBaseIndex = model.PropertyAsObservable(x => x.TerrainBaseIndex, nameof(model.TerrainBaseIndex));
+            this.TerrainBrushSize = model.PropertyAsObservable(x => x.TerrainBrushSize, nameof(model.TerrainBrushSize));
+            this.TerrainStatus = model.PropertyAsObservable(x => x.TerrainStatus, nameof(model.TerrainStatus));
+            this.TerrainTool = model.PropertyAsObservable(x => x.TerrainTool, nameof(model.TerrainTool));
+            this.TerrainUseSlopes = model.PropertyAsObservable(x => x.TerrainUseSlopes, nameof(model.TerrainUseSlopes));
             this.UnitPlacementPlayerMenuChoice = model.PropertyAsObservable(
                 x => x.UnitPlacementPlayerMenuChoice,
                 nameof(IReadOnlyApplicationModel.UnitPlacementPlayerMenuChoice));
@@ -217,6 +224,18 @@ namespace Mappy.Models
         public IObservable<int> HeightEditCursorSize { get; }
 
         public IObservable<int> VoidEditCursorSize { get; }
+
+        public IObservable<string> TerrainWorldName { get; }
+
+        public IObservable<int> TerrainBaseIndex { get; }
+
+        public IObservable<int> TerrainBrushSize { get; }
+
+        public IObservable<string> TerrainStatus { get; }
+
+        public IObservable<string> TerrainTool { get; }
+
+        public IObservable<bool> TerrainUseSlopes { get; }
 
         public IObservable<UnitPlacementPlayerMenuChoice> UnitPlacementPlayerMenuChoice { get; }
 
@@ -411,6 +430,54 @@ namespace Mappy.Models
         public void VoidEditCursorSizeChanged(int value)
         {
             this.dispatcher.SetVoidEditCursorSize(value);
+        }
+
+        public void TerrainWorldChanged(string worldName)
+        {
+            this.dispatcher.SetTerrainWorld(worldName);
+        }
+
+        public void TerrainBaseChanged(int baseIndex)
+        {
+            this.dispatcher.SetTerrainBase(baseIndex);
+        }
+
+        public void TerrainBrushSizeChanged(int tiles)
+        {
+            this.dispatcher.SetTerrainBrushSize(tiles);
+        }
+
+        public void TerrainToolChanged(string pathStyle)
+        {
+            this.dispatcher.SetTerrainTool(pathStyle);
+        }
+
+        public void TerrainUseSlopesChanged(bool useSlopes)
+        {
+            this.dispatcher.SetTerrainUseSlopes(useSlopes);
+        }
+
+        public TerrainCatalog LoadTerrainCatalog()
+        {
+            return this.dispatcher.LoadTerrainCatalog();
+        }
+
+        public Bitmap TerrainBaseThumbnail(string hpiFileName, string sctFileName)
+        {
+            try
+            {
+                var tile = this.dispatcher.LoadTerrainSection(hpiFileName, sctFileName);
+                if (tile == null || tile.TileGrid.Width <= 0 || tile.TileGrid.Height <= 0)
+                {
+                    return null;
+                }
+
+                return tile.TileGrid.Get(0, 0);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public void CopyMenuItemClick()

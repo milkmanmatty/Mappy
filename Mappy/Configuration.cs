@@ -9,6 +9,9 @@ namespace Mappy
     {
         public const string DefaultUpdateRepository = "milkmanmatty/Mappy";
 
+        public const string DefaultBrushTilesUrl =
+            "https://github.com/MattA9K/Total-Annihilation-Galaxy-Editor/releases/download/hpi-1.1.11/GE-Favorites-RandomMapGeneratorTiles.hpi";
+
         private const int DefaultDragAutoScrollSpeed = 16;
 
         private const int DefaultWheelStep = 1;
@@ -171,6 +174,14 @@ namespace Mappy
         public bool DoNotPromptToSaveUnsavedChanges { get; set; }
 
         public string UpdateRepository { get; set; }
+
+        public string BrushTilesUrl { get; set; }
+
+        public DateTime? BrushTilesDownloadedUtc { get; set; }
+
+        public string BrushTilesSha256 { get; set; }
+
+        public bool ExcludeBrushTilesFromSections { get; set; }
 
         public string SkippedUpdateTag { get; set; }
 
@@ -345,6 +356,12 @@ namespace Mappy
         {
             var value = this.UpdateRepository?.Trim();
             return string.IsNullOrEmpty(value) ? DefaultUpdateRepository : value;
+        }
+
+        public string GetBrushTilesUrlOrDefault()
+        {
+            var value = this.BrushTilesUrl?.Trim();
+            return string.IsNullOrEmpty(value) ? DefaultBrushTilesUrl : value;
         }
 
         public int GetInactiveSchemaOpacityPercentForDialog()
