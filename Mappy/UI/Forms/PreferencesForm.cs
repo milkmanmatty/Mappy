@@ -105,6 +105,7 @@ namespace Mappy.UI.Forms
             this.missionWaitTextColorCustomized = MappySettings.Settings.MissionWaitTextColorArgb.HasValue;
             this.missionWaitBackplateColor = MappySettings.Settings.GetMissionWaitBackplateColorOrDefault();
             this.missionWaitBackplateColorCustomized = MappySettings.Settings.MissionWaitBackplateColorArgb.HasValue;
+            this.buildingAngleTextBox.Text = MappySettings.Settings.BuildingAngle.ToString();
             this.inactiveSchemaOpacityNumeric.Value = MappySettings.Settings.GetInactiveSchemaOpacityPercentForDialog();
             this.onlySelectActiveSchemaCheckBox.Checked = MappySettings.Settings.OnlySelectActiveSchema;
             this.doNotPromptToSaveUnsavedChangesCheckBox.Checked = MappySettings.Settings.DoNotPromptToSaveUnsavedChanges;
@@ -402,6 +403,7 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.MissionWaitBackplateColorArgb = this.missionWaitBackplateColorCustomized
                 ? (int?)this.missionWaitBackplateColor.ToArgb()
                 : null;
+            MappySettings.Settings.BuildingAngle = this.ParseBuildingAngleTextBox();
             MappySettings.Settings.InactiveSchemaOpacityPercent = (int)this.inactiveSchemaOpacityNumeric.Value;
             MappySettings.Settings.OnlySelectActiveSchema = this.onlySelectActiveSchemaCheckBox.Checked;
             MappySettings.Settings.DoNotPromptToSaveUnsavedChanges = this.doNotPromptToSaveUnsavedChangesCheckBox.Checked;
@@ -453,6 +455,26 @@ namespace Mappy.UI.Forms
             }
 
             return 16;
+        }
+
+        private int ParseBuildingAngleTextBox()
+        {
+            if (!int.TryParse(this.buildingAngleTextBox.Text?.Trim(), out var angle))
+            {
+                return 0;
+            }
+
+            if (angle < 0)
+            {
+                return 0;
+            }
+
+            if (angle > 65535)
+            {
+                return 65535;
+            }
+
+            return angle;
         }
 
         private void GalaxyEditorLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

@@ -2,13 +2,20 @@ namespace Mappy.Data
 {
     public readonly struct UnitCatalogLoadRecord
     {
-        public UnitCatalogLoadRecord(string name, string side, string displayName = null, string objectName = null, string tedClass = null)
+        public UnitCatalogLoadRecord(
+            string name,
+            string side,
+            string displayName = null,
+            string objectName = null,
+            string tedClass = null,
+            int? bmCode = null)
         {
             this.Name = name ?? string.Empty;
             this.Side = UnitCatalogSide.Normalize(side);
             this.DisplayName = string.IsNullOrWhiteSpace(displayName) ? null : displayName.Trim();
             this.ObjectName = string.IsNullOrWhiteSpace(objectName) ? null : objectName.Trim();
             this.TedClass = NormalizeTedClass(tedClass);
+            this.BmCode = bmCode;
         }
 
         public string Name { get; }
@@ -20,6 +27,8 @@ namespace Mappy.Data
         public string ObjectName { get; }
 
         public string TedClass { get; }
+
+        public int? BmCode { get; }
 
         public static string NormalizeTedClass(string raw)
         {

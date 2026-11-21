@@ -26,6 +26,7 @@ namespace Mappy.IO
             string displayName = null;
             string objectName = null;
             string tedClass = null;
+            int? bmCode = null;
             if (file.Size > 0 && file.Size < 10_000_000)
             {
                 try
@@ -40,6 +41,7 @@ namespace Mappy.IO
                         displayName = FindUnitNameEntryFromTdf(root);
                         objectName = FindObjectNameFromTdf(root);
                         tedClass = FindTedClassFromTdf(root);
+                        bmCode = FindBmCodeFromTdf(root);
                     }
                 }
                 catch (Exception)
@@ -47,7 +49,7 @@ namespace Mappy.IO
                 }
             }
 
-            this.Records.Add(new UnitCatalogLoadRecord(name, side, displayName, objectName, tedClass));
+            this.Records.Add(new UnitCatalogLoadRecord(name, side, displayName, objectName, tedClass, bmCode));
         }
 
         protected override IEnumerable<HpiArchive.FileInfo> EnumerateFiles(HpiArchive r)
@@ -211,6 +213,30 @@ namespace Mappy.IO
             {
                 var t = FindTedClassFromTdf(child);
                 if (t != null)
+                {
+                    return t;
+                }
+            }
+
+            return null;
+        }
+
+        private static int? FindBmCodeFromTdf(TdfNode node)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+
+            if (node.Entries.TryGetValue("BMcode", out var raw) && int.TryParse(raw?.Trim(), out var bmCode))
+            {
+                return bmCode;
+            }
+
+            foreach (var child in node.Keys.Values)
+            {
+                var t = FindBmCodeFromTdf(child);
+                if (t.HasValue)
                 {
                     return t;
                 }

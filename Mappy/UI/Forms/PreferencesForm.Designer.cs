@@ -69,6 +69,9 @@ namespace Mappy.UI.Forms
 			this.missionAttackPathLabel = new System.Windows.Forms.Label();
 			this.missionMovePathCustomizeButton = new System.Windows.Forms.Button();
 			this.missionMovePathLabel = new System.Windows.Forms.Label();
+			this.missionDefaultsGroupBox = new System.Windows.Forms.GroupBox();
+			this.buildingAngleTextBox = new System.Windows.Forms.TextBox();
+			this.buildingAngleLabel = new System.Windows.Forms.Label();
 			this.resourceNamesGroupBox = new System.Windows.Forms.GroupBox();
 			this.splitTilesCheckBox = new System.Windows.Forms.CheckBox();
 			this.calculatedMetalDepositValueCheckBox = new System.Windows.Forms.CheckBox();
@@ -141,6 +144,7 @@ namespace Mappy.UI.Forms
 			this.missionGroupBox.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.inactiveSchemaOpacityNumeric)).BeginInit();
 			this.missionUiGroupBox.SuspendLayout();
+			this.missionDefaultsGroupBox.SuspendLayout();
 			this.resourceNamesGroupBox.SuspendLayout();
 			this.resourceMarkersGroupBox.SuspendLayout();
 			this.miscGroupBox.SuspendLayout();
@@ -630,6 +634,36 @@ namespace Mappy.UI.Forms
 			this.missionMovePathLabel.TabIndex = 0;
 			this.missionMovePathLabel.Text = "Move path colour:";
 			// 
+			// missionDefaultsGroupBox
+			// 
+			this.missionDefaultsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.missionDefaultsGroupBox.Controls.Add(this.buildingAngleTextBox);
+			this.missionDefaultsGroupBox.Controls.Add(this.buildingAngleLabel);
+			this.missionDefaultsGroupBox.Location = new System.Drawing.Point(12, 436);
+			this.missionDefaultsGroupBox.Name = "missionDefaultsGroupBox";
+			this.missionDefaultsGroupBox.Size = new System.Drawing.Size(426, 53);
+			this.missionDefaultsGroupBox.TabIndex = 2;
+			this.missionDefaultsGroupBox.TabStop = false;
+			this.missionDefaultsGroupBox.Text = "Defaults";
+			// 
+			// buildingAngleTextBox
+			// 
+			this.buildingAngleTextBox.Location = new System.Drawing.Point(233, 20);
+			this.buildingAngleTextBox.Name = "buildingAngleTextBox";
+			this.buildingAngleTextBox.Size = new System.Drawing.Size(85, 20);
+			this.buildingAngleTextBox.TabIndex = 1;
+			this.buildingAngleTextBox.Text = "0";
+			// 
+			// buildingAngleLabel
+			// 
+			this.buildingAngleLabel.AutoSize = true;
+			this.buildingAngleLabel.Location = new System.Drawing.Point(14, 23);
+			this.buildingAngleLabel.Name = "buildingAngleLabel";
+			this.buildingAngleLabel.Size = new System.Drawing.Size(78, 13);
+			this.buildingAngleLabel.TabIndex = 0;
+			this.buildingAngleLabel.Text = "Building Angle:";
+			// 
 			// resourceNamesGroupBox
 			// 
 			this.resourceNamesGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -825,6 +859,7 @@ namespace Mappy.UI.Forms
 			// missionTabPage
 			// 
 			this.missionTabPage.AutoScroll = true;
+			this.missionTabPage.Controls.Add(this.missionDefaultsGroupBox);
 			this.missionTabPage.Controls.Add(this.missionUiGroupBox);
 			this.missionTabPage.Controls.Add(this.missionGroupBox);
 			this.missionTabPage.Location = new System.Drawing.Point(4, 22);
@@ -1437,6 +1472,8 @@ namespace Mappy.UI.Forms
 			((System.ComponentModel.ISupportInitialize)(this.inactiveSchemaOpacityNumeric)).EndInit();
 			this.missionUiGroupBox.ResumeLayout(false);
 			this.missionUiGroupBox.PerformLayout();
+			this.missionDefaultsGroupBox.ResumeLayout(false);
+			this.missionDefaultsGroupBox.PerformLayout();
 			this.resourceNamesGroupBox.ResumeLayout(false);
 			this.resourceNamesGroupBox.PerformLayout();
 			this.resourceMarkersGroupBox.ResumeLayout(false);
@@ -1492,6 +1529,9 @@ namespace Mappy.UI.Forms
         private System.Windows.Forms.NumericUpDown dragScrollSpeedXNumeric;
         private System.Windows.Forms.GroupBox missionGroupBox;
         private System.Windows.Forms.GroupBox missionUiGroupBox;
+        private System.Windows.Forms.GroupBox missionDefaultsGroupBox;
+        private System.Windows.Forms.Label buildingAngleLabel;
+        private System.Windows.Forms.TextBox buildingAngleTextBox;
         private System.Windows.Forms.Label missionMovePathLabel;
         private System.Windows.Forms.Button missionMovePathCustomizeButton;
         private System.Windows.Forms.Label missionAttackPathLabel;
