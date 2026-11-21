@@ -84,6 +84,18 @@ namespace Mappy.Models
 
         IObservable<int> VoidEditCursorSize { get; }
 
+        IObservable<string> TerrainWorldName { get; }
+
+        IObservable<int> TerrainBaseIndex { get; }
+
+        IObservable<int> TerrainBrushSize { get; }
+
+        IObservable<string> TerrainStatus { get; }
+
+        IObservable<string> TerrainTool { get; }
+
+        IObservable<bool> TerrainUseSlopes { get; }
+
         IObservable<UnitPlacementPlayerMenuChoice> UnitPlacementPlayerMenuChoice { get; }
 
         IObservable<string> TitleText { get; }
@@ -169,6 +181,20 @@ namespace Mappy.Models
         void HeightEditCursorSizeChanged(int value);
 
         void VoidEditCursorSizeChanged(int value);
+
+        void TerrainWorldChanged(string worldName);
+
+        void TerrainBaseChanged(int baseIndex);
+
+        void TerrainBrushSizeChanged(int tiles);
+
+        void TerrainToolChanged(string pathStyle);
+
+        void TerrainUseSlopesChanged(bool useSlopes);
+
+        TerrainBrush.TerrainCatalog LoadTerrainCatalog();
+
+        Bitmap TerrainBaseThumbnail(string hpiFileName, string sctFileName);
 
         void CopyMenuItemClick();
 

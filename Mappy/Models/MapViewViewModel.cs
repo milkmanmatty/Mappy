@@ -16,6 +16,7 @@ namespace Mappy.Models
     using Mappy.IO;
     using Mappy.Models.Enums;
     using Mappy.Services;
+    using Mappy.TerrainBrush;
     using Mappy.UI.Controls;
     using Mappy.UI.Drawables;
     using Mappy.UI.Tags;
@@ -121,6 +122,14 @@ namespace Mappy.Models
 
         private DrawableItem voidCursorMapping;
 
+        private DrawableItem terrainCursorMapping;
+
+        private readonly List<DrawableItem> terrainPreviewItems = new List<DrawableItem>();
+
+        private Point? terrainPreviewOrigin;
+
+        private bool terrainPreviewRefused;
+
         private DrawableTile baseTile;
 
         private DrawableItem baseItem;
@@ -132,6 +141,8 @@ namespace Mappy.Models
         private bool heightEditMode;
 
         private bool voidEditMode;
+
+        private bool terrainEditMode;
 
         private bool markerEditMode;
 
@@ -152,6 +163,14 @@ namespace Mappy.Models
         private int heightEditCursorSize = 1;
 
         private int voidEditCursorSize = 1;
+
+        private int terrainBrushSize = 16;
+
+        private bool terrainPainting;
+
+        private bool terrainPathMode;
+
+        private Point? lastTerrainCell;
 
         private int activeHeightBrushDelta;
 
@@ -223,6 +242,26 @@ namespace Mappy.Models
             heightEditSetValue.Subscribe(x => this.heightEditSetValue = Util.Clamp(x, 0, 255));
             heightEditCurSize.Subscribe(this.OnHeightEditCursorSizeChanged);
             voidEditCurSize.Subscribe(this.OnVoidEditCursorSizeChanged);
+            model.PropertyAsObservable(x => x.TerrainBrushSize, nameof(model.TerrainBrushSize))
+                .Subscribe(size =>
+                    {
+                        this.terrainBrushSize = size;
+                        this.terrainPreviewOrigin = null;
+                        this.UpdateTerrainCursor(this.lastHoverPos);
+                    });
+            model.PropertyAsObservable(x => x.TerrainBaseIndex, nameof(model.TerrainBaseIndex))
+                .Subscribe(_ => this.terrainPreviewOrigin = null);
+            model.PropertyAsObservable(x => x.TerrainTool, nameof(model.TerrainTool))
+                .Subscribe(tool =>
+                    {
+                        this.terrainPathMode = !string.IsNullOrEmpty(tool);
+                        this.terrainPreviewOrigin = null;
+                        this.UpdateTerrainCursor(this.lastHoverPos);
+                    });
+            model.PropertyAsObservable(x => x.TerrainUseSlopes, nameof(model.TerrainUseSlopes))
+                .Subscribe(_ => this.terrainPreviewOrigin = null);
+            model.PropertyAsObservable(x => x.TerrainWorldName, nameof(model.TerrainWorldName))
+                .Subscribe(_ => this.terrainPreviewOrigin = null);
             mapFilepath.Subscribe(this.OnMapFilePathChanged);
 
             this.CanvasSize = mapWidth.CombineLatest(mapHeight, (w, h) => new Size(w * 32, h * 32));
@@ -436,6 +475,15 @@ namespace Mappy.Models
                 return;
             }
 
+            if (this.terrainEditMode)
+            {
+                this.terrainPainting = true;
+                this.lastTerrainCell = null;
+                this.ApplyTerrainBrushAt(location);
+                this.UpdateTerrainCursor(location);
+                return;
+            }
+
             if (this.markerEditMode)
             {
                 this.HandleMarkerMouseDown(location);
@@ -499,6 +547,12 @@ namespace Mappy.Models
                 return;
             }
 
+            if (this.terrainEditMode)
+            {
+                this.mouseDown = false;
+                return;
+            }
+
             if (this.markerEditMode)
             {
                 this.mouseDown = false;
@@ -527,6 +581,7 @@ namespace Mappy.Models
             this.lastHoverPos = location;
             this.UpdateHeightCursor(location);
             this.UpdateVoidCursor(location);
+            this.UpdateTerrainCursor(location);
 
             var hit = this.itemsLayer.Value.HitTest(location.X, location.Y);
             this.dispatcher.SetHoveredFeature(hit != null && hit.Tag is FeatureTag featureTag ? Maybe.Return(featureTag.FeatureId) : Maybe.None<Guid>());
@@ -547,6 +602,12 @@ namespace Mappy.Models
                 if (this.voidEditMode && this.activeVoidBrushValue.HasValue)
                 {
                     this.ApplyVoidBrushAt(location);
+                    return;
+                }
+
+                if (this.terrainEditMode && this.terrainPainting)
+                {
+                    this.ApplyTerrainBrushAt(location);
                     return;
                 }
 
@@ -599,6 +660,15 @@ namespace Mappy.Models
                 this.activeVoidBrushValue = null;
                 this.lastVoidBrushPoint = null;
                 this.dispatcher.FlushVoidBrush();
+                return;
+            }
+
+            if (this.terrainPainting)
+            {
+                this.terrainPainting = false;
+                this.lastTerrainCell = null;
+                this.dispatcher.FlushTerrainBrush();
+                this.UpdateTerrainCursor(this.lastHoverPos);
                 return;
             }
 
@@ -706,6 +776,25 @@ namespace Mappy.Models
                 return true;
             }
 
+            if (this.terrainEditMode)
+            {
+                var sizes = TerrainPlanner.BrushSizes;
+                var index = Array.IndexOf(sizes, this.terrainBrushSize);
+                if (index < 0)
+                {
+                    index = 0;
+                }
+
+                index = (index + notchDelta) % sizes.Length;
+                if (index < 0)
+                {
+                    index += sizes.Length;
+                }
+
+                this.dispatcher.SetTerrainBrushSize(sizes[index]);
+                return true;
+            }
+
             return false;
         }
 
@@ -725,6 +814,13 @@ namespace Mappy.Models
                 this.activeVoidBrushValue = null;
                 this.lastVoidBrushPoint = null;
                 this.dispatcher.FlushVoidBrush();
+            }
+
+            if (this.terrainPainting)
+            {
+                this.terrainPainting = false;
+                this.lastTerrainCell = null;
+                this.dispatcher.FlushTerrainBrush();
             }
 
             this.ClearHeightCursor();
@@ -1388,14 +1484,19 @@ namespace Mappy.Models
         {
             var heightEnabled = tab == GUITab.Height;
             var voidEnabled = tab == GUITab.Void;
+            var terrainEnabled = tab == GUITab.Terrain;
             var markerEnabled = tab == GUITab.Markers;
-            if (this.heightEditMode == heightEnabled && this.voidEditMode == voidEnabled && this.markerEditMode == markerEnabled)
+            if (this.heightEditMode == heightEnabled
+                && this.voidEditMode == voidEnabled
+                && this.terrainEditMode == terrainEnabled
+                && this.markerEditMode == markerEnabled)
             {
                 return;
             }
 
             this.heightEditMode = heightEnabled;
             this.voidEditMode = voidEnabled;
+            this.terrainEditMode = terrainEnabled;
             this.markerEditMode = markerEnabled;
             this.heightEditModeObservable.OnNext(heightEnabled);
             this.voidEditModeObservable.OnNext(voidEnabled);
@@ -1421,6 +1522,11 @@ namespace Mappy.Models
             this.lastVoidBrushPoint = null;
             this.ClearVoidCursor();
             this.dispatcher.FlushVoidBrush();
+
+            this.terrainPainting = false;
+            this.lastTerrainCell = null;
+            this.ClearTerrainCursor();
+            this.dispatcher.FlushTerrainBrush();
         }
 
         private void OnHeightEditCursorSizeChanged(int size)
@@ -1731,6 +1837,177 @@ namespace Mappy.Models
             this.ReplaceHeightCursor(polyItem);
         }
 
+        private void ApplyTerrainBrushAt(Point location)
+        {
+            if (!this.terrainPainting || this.mapModel == null || location.X < 0 || location.Y < 0)
+            {
+                return;
+            }
+
+            var origin = this.TerrainOrigin(location);
+            if (this.lastTerrainCell.HasValue && this.lastTerrainCell.Value == origin)
+            {
+                return;
+            }
+
+            var from = this.lastTerrainCell ?? origin;
+            var dx = origin.X - from.X;
+            var dy = origin.Y - from.Y;
+            var steps = Math.Max(Math.Abs(dx), Math.Abs(dy));
+            var previous = this.lastTerrainCell;
+            for (var step = steps == 0 ? 0 : 1; step <= steps; step++)
+            {
+                var point = steps == 0
+                    ? origin
+                    : new Point(
+                        from.X + (int)Math.Round(dx * step / (double)steps),
+                        from.Y + (int)Math.Round(dy * step / (double)steps));
+                if (previous.HasValue && previous.Value == point)
+                {
+                    continue;
+                }
+
+                previous = point;
+                this.dispatcher.PaintTerrain(point.X * TerrainPlanner.CellTiles, point.Y * TerrainPlanner.CellTiles);
+            }
+
+            this.lastTerrainCell = origin;
+            this.baseTile?.Invalidate();
+        }
+
+        private void UpdateTerrainCursor(Point location)
+        {
+            if (!this.terrainEditMode || this.mapModel == null || location.X < 0 || location.Y < 0)
+            {
+                this.ClearTerrainCursor();
+                return;
+            }
+
+            var cell = TerrainPlanner.CellTiles * MapTile.TileWidth;
+            var origin = this.TerrainOrigin(location);
+            int left;
+            int top;
+            int pixels;
+            if (this.terrainPathMode)
+            {
+                left = origin.X * cell;
+                top = origin.Y * cell;
+                pixels = cell;
+            }
+            else if (this.terrainBrushSize == TerrainPlanner.CornerBrush)
+            {
+                left = (origin.X - 1) * cell;
+                top = (origin.Y - 1) * cell;
+                pixels = cell * 2;
+            }
+            else
+            {
+                left = origin.X * cell;
+                top = origin.Y * cell;
+                pixels = Math.Max(TerrainPlanner.CellTiles, this.terrainBrushSize) * MapTile.TileWidth;
+            }
+
+            if (this.terrainPainting)
+            {
+                this.ClearTerrainPreview();
+                this.terrainPreviewRefused = false;
+            }
+            else if (this.terrainPreviewOrigin != origin)
+            {
+                this.UpdateTerrainPreview(origin);
+            }
+
+            var colour = this.terrainPreviewRefused ? Color.Red : Color.Yellow;
+            var cursor = DrawableBandbox.CreateSimple(
+                new Size(pixels, pixels),
+                Color.FromArgb(48, colour),
+                colour,
+                2);
+            var item = new DrawableItem(left, top, HeightCursorDepth, cursor);
+            item.Locked = true;
+            this.ReplaceTerrainCursor(item);
+        }
+
+        private Point TerrainOrigin(Point location)
+        {
+            var cell = TerrainPlanner.CellTiles * MapTile.TileWidth;
+            return this.terrainBrushSize == TerrainPlanner.CornerBrush && !this.terrainPathMode
+                ? new Point((location.X + (cell / 2)) / cell, (location.Y + (cell / 2)) / cell)
+                : new Point(location.X / cell, location.Y / cell);
+        }
+
+        private void UpdateTerrainPreview(Point origin)
+        {
+            this.ClearTerrainPreview();
+            this.terrainPreviewOrigin = origin;
+            var stroke = this.dispatcher.PreviewTerrain(
+                origin.X * TerrainPlanner.CellTiles,
+                origin.Y * TerrainPlanner.CellTiles);
+            this.terrainPreviewRefused = stroke != null && !stroke.Accepted;
+            if (stroke == null || !stroke.Accepted)
+            {
+                return;
+            }
+
+            foreach (var stamp in stroke.Stamps)
+            {
+                var width = Math.Min(stamp.Tiles.Width, this.mapModel.MapWidth - stamp.TileX);
+                var height = Math.Min(stamp.Tiles.Height, this.mapModel.MapHeight - stamp.TileY);
+                if (width <= 0 || height <= 0)
+                {
+                    continue;
+                }
+
+                var outline = DrawableBandbox.CreateSimple(
+                    new Size(width * MapTile.TileWidth, height * MapTile.TileHeight),
+                    Color.FromArgb(32, Color.Cyan),
+                    Color.Cyan,
+                    1);
+                var item = new DrawableItem(
+                    stamp.TileX * MapTile.TileWidth,
+                    stamp.TileY * MapTile.TileHeight,
+                    HeightCursorDepth,
+                    outline);
+                item.Locked = true;
+                this.terrainPreviewItems.Add(item);
+                this.itemsLayer.Value.Items.Add(item);
+            }
+        }
+
+        private void ClearTerrainPreview()
+        {
+            foreach (var item in this.terrainPreviewItems)
+            {
+                this.itemsLayer.Value.Items.Remove(item);
+            }
+
+            this.terrainPreviewItems.Clear();
+            this.terrainPreviewOrigin = null;
+        }
+
+        private void ReplaceTerrainCursor(DrawableItem item)
+        {
+            if (this.terrainCursorMapping != null)
+            {
+                this.itemsLayer.Value.Items.Remove(this.terrainCursorMapping);
+            }
+
+            this.terrainCursorMapping = item;
+            this.itemsLayer.Value.Items.Add(this.terrainCursorMapping);
+        }
+
+        private void ClearTerrainCursor()
+        {
+            if (this.terrainCursorMapping != null)
+            {
+                this.itemsLayer.Value.Items.Remove(this.terrainCursorMapping);
+                this.terrainCursorMapping = null;
+            }
+
+            this.ClearTerrainPreview();
+            this.terrainPreviewRefused = false;
+        }
+
         private void ApplyVoidBrushAt(Point location)
         {
             if (!this.activeVoidBrushValue.HasValue || this.mapModel == null)
@@ -1985,6 +2262,7 @@ namespace Mappy.Models
 
         private void BaseTileChanged(object sender, EventArgs e)
         {
+            this.terrainPreviewOrigin = null;
             this.baseTile.Invalidate();
             this.missionPaths.InvalidatePaths();
         }

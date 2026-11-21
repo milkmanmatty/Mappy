@@ -1,10 +1,15 @@
 namespace Mappy.UI.Forms
 {
     using System;
+    using System.ComponentModel;
+    using System.Diagnostics;
     using System.Drawing;
+    using System.IO;
     using System.Windows.Forms;
 
     using Mappy;
+    using Mappy.Services;
+    using Mappy.Views;
     using Ookii.Dialogs;
 
     public partial class PreferencesForm : Form
@@ -58,6 +63,8 @@ namespace Mappy.UI.Forms
             this.InitializeComponent();
         }
 
+        public bool BrushTilesChanged { get; private set; }
+
         private void PreferencesFormLoad(object sender, EventArgs e)
         {
             if (MappySettings.Settings.SearchPaths != null)
@@ -102,6 +109,9 @@ namespace Mappy.UI.Forms
             this.onlySelectActiveSchemaCheckBox.Checked = MappySettings.Settings.OnlySelectActiveSchema;
             this.doNotPromptToSaveUnsavedChangesCheckBox.Checked = MappySettings.Settings.DoNotPromptToSaveUnsavedChanges;
             this.updateRepositoryTextBox.Text = MappySettings.Settings.GetUpdateRepositoryOrDefault();
+            this.brushTilesUrlTextBox.Text = MappySettings.Settings.GetBrushTilesUrlOrDefault();
+            this.excludeBrushTilesCheckBox.Checked = MappySettings.Settings.ExcludeBrushTilesFromSections;
+            this.RefreshBrushTilesStatus();
             this.splitTilesCheckBox.Checked = MappySettings.Settings.SplitTiles;
 
             var settings = MappySettings.Settings;
@@ -396,6 +406,15 @@ namespace Mappy.UI.Forms
             MappySettings.Settings.OnlySelectActiveSchema = this.onlySelectActiveSchemaCheckBox.Checked;
             MappySettings.Settings.DoNotPromptToSaveUnsavedChanges = this.doNotPromptToSaveUnsavedChangesCheckBox.Checked;
             MappySettings.Settings.UpdateRepository = this.updateRepositoryTextBox.Text.Trim();
+            var brushTilesUrl = this.brushTilesUrlTextBox.Text.Trim();
+            if (!string.Equals(brushTilesUrl, MappySettings.Settings.BrushTilesUrl?.Trim(), StringComparison.Ordinal))
+            {
+                MappySettings.Settings.BrushTilesDownloadedUtc = null;
+                MappySettings.Settings.BrushTilesSha256 = null;
+            }
+
+            MappySettings.Settings.BrushTilesUrl = brushTilesUrl;
+            MappySettings.Settings.ExcludeBrushTilesFromSections = this.excludeBrushTilesCheckBox.Checked;
             MappySettings.Settings.SplitTiles = this.splitTilesCheckBox.Checked;
             MappySettings.Settings.HeightSelectedHeightWheelStep = (int)this.heightSelectedHeightWheelStepNumeric.Value;
             MappySettings.Settings.HeightIntervalWheelStep = (int)this.heightIntervalWheelStepNumeric.Value;
@@ -434,6 +453,138 @@ namespace Mappy.UI.Forms
             }
 
             return 16;
+        }
+
+        private void GalaxyEditorLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                Process.Start(BrushTiles.GalaxyEditorUrl);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, "Preferences", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void DownloadBrushTilesButtonClick(object sender, EventArgs e)
+        {
+            var url = this.brushTilesUrlTextBox.Text.Trim();
+            string destination;
+            string error;
+            if (!BrushTiles.TryGetDestinationPath(url, out destination, out error) || string.IsNullOrEmpty(destination))
+            {
+                MessageBox.Show(
+                    this,
+                    error ?? "Enter the URL of the brush tileset.",
+                    "Download Brush Tiles",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            var dlg = new ProgressForm();
+            dlg.Owner = this;
+            dlg.Title = "Download Brush Tiles";
+            dlg.MessageText = "Downloading brush tiles...";
+            dlg.ShowProgress = true;
+            dlg.Progress = 0;
+            dlg.CancelEnabled = true;
+
+            var worker = new BackgroundWorker();
+            worker.WorkerReportsProgress = true;
+            worker.WorkerSupportsCancellation = true;
+            worker.DoWork += (workSender, args) =>
+            {
+                var background = (BackgroundWorker)workSender;
+                try
+                {
+                    BrushTiles.Download(
+                        url,
+                        (percent, message) => background.ReportProgress(percent, message),
+                        () => background.CancellationPending);
+                }
+                catch (UpdateService.UpdateCancelledException)
+                {
+                    args.Cancel = true;
+                }
+            };
+
+            worker.ProgressChanged += (workSender, args) =>
+            {
+                dlg.Progress = args.ProgressPercentage;
+                if (args.UserState is string message && !string.IsNullOrEmpty(message))
+                {
+                    dlg.MessageText = message;
+                }
+            };
+
+            dlg.CancelPressed += (workSender, args) => worker.CancelAsync();
+            worker.RunWorkerCompleted += (workSender, args) =>
+            {
+                ((IProgressView)dlg).Close();
+                if (args.Cancelled)
+                {
+                    return;
+                }
+
+                if (args.Error != null)
+                {
+                    var check = args.Error as UpdateService.UpdateCheckException;
+                    var message = check != null ? check.Message : args.Error.Message;
+                    MessageBox.Show(this, message, "Download Brush Tiles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                this.BrushTilesChanged = true;
+                this.brushTilesUrlTextBox.Text = MappySettings.Settings.GetBrushTilesUrlOrDefault();
+                this.EnsureInstallDirectoryListed();
+                this.RefreshBrushTilesStatus();
+            };
+
+            worker.RunWorkerAsync();
+            dlg.Display();
+        }
+
+        private void EnsureInstallDirectoryListed()
+        {
+            var dir = BrushTiles.InstallDirectory;
+            foreach (ListViewItem item in this.searchPathsListView.Items)
+            {
+                if (string.Equals(item.Text.TrimEnd('\\', '/'), dir, StringComparison.OrdinalIgnoreCase))
+                {
+                    return;
+                }
+            }
+
+            this.searchPathsListView.Items.Add(dir);
+        }
+
+        private void RefreshBrushTilesStatus()
+        {
+            var settings = MappySettings.Settings;
+            if (settings.BrushTilesDownloadedUtc.HasValue)
+            {
+                var local = settings.BrushTilesDownloadedUtc.Value.ToLocalTime();
+                this.brushTilesDownloadedLabel.Text = "Downloaded: " + local.ToString("g");
+            }
+            else
+            {
+                this.brushTilesDownloadedLabel.Text = "Downloaded: Not downloaded";
+            }
+
+            string destination;
+            string error;
+            if (BrushTiles.TryGetDestinationPath(this.brushTilesUrlTextBox.Text, out destination, out error)
+                && settings.BrushTilesDownloadedUtc.HasValue
+                && !File.Exists(destination))
+            {
+                this.brushTilesDownloadedLabel.Text += " (file missing)";
+            }
+
+            this.brushTilesHashLabel.Text = string.IsNullOrEmpty(settings.BrushTilesSha256)
+                ? "SHA-256: -"
+                : "SHA-256: " + settings.BrushTilesSha256;
         }
     }
 }

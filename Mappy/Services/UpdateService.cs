@@ -133,7 +133,7 @@ namespace Mappy.Services
             try
             {
                 reportProgress?.Invoke(0, "Downloading update...");
-                DownloadFile(release.DownloadUrl, zipPath, release.Size, reportProgress, cancellationPending);
+                DownloadFile(release.DownloadUrl, zipPath, release.Size, reportProgress, cancellationPending, "Downloading update...");
                 if (cancellationPending != null && cancellationPending())
                 {
                     throw new UpdateCancelledException();
@@ -195,6 +195,16 @@ namespace Mappy.Services
             };
 
             Process.Start(startInfo);
+        }
+
+        public static void DownloadToFile(
+            string url,
+            string destinationPath,
+            Action<int, string> reportProgress,
+            Func<bool> cancellationPending)
+        {
+            EnsureTls();
+            DownloadFile(url, destinationPath, 0, reportProgress, cancellationPending, "Downloading brush tiles...");
         }
 
         public static void TryDeleteDirectory(string path)
@@ -303,7 +313,8 @@ namespace Mappy.Services
             string destinationPath,
             long expectedSize,
             Action<int, string> reportProgress,
-            Func<bool> cancellationPending)
+            Func<bool> cancellationPending,
+            string progressMessage)
         {
             var request = CreateRequest(url);
             using (var response = (HttpWebResponse)request.GetResponse())
@@ -331,7 +342,7 @@ namespace Mappy.Services
                     if (total > 0)
                     {
                         var percent = (int)Math.Min(100, (received * 100L) / total);
-                        reportProgress?.Invoke(percent, "Downloading update...");
+                        reportProgress?.Invoke(percent, progressMessage);
                     }
                 }
             }
@@ -401,6 +412,9 @@ namespace Mappy.Services
             builder.AppendLine(")");
             builder.AppendLine("ping -n 2 127.0.0.1 >nul");
             builder.AppendLine("set /a TRIES=0");
+            builder.AppendLine("rem Merge into DEST. Never delete the install folder: brush tilesets downloaded beside Mappy must stay.");
+            builder.AppendLine("rem Do not let a release package replace a brush tileset the user already downloaded.");
+            builder.AppendLine("if exist \"%SRC%\\GE-Favorites-RandomMapGeneratorTiles.hpi\" del /q \"%SRC%\\GE-Favorites-RandomMapGeneratorTiles.hpi\"");
             builder.AppendLine(":copy");
             builder.AppendLine("set /a TRIES+=1");
             builder.AppendLine("xcopy /E /Y /I \"%SRC%\\*\" \"%DEST%\" >nul");

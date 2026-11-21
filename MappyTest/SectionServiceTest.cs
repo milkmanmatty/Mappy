@@ -1,5 +1,6 @@
 namespace MappyTest
 {
+    using System.IO;
     using System.Linq;
 
     using Mappy;
@@ -167,6 +168,119 @@ namespace MappyTest
             finally
             {
                 MappySettings.Settings.SplitTiles = previous;
+            }
+        }
+
+        [TestMethod]
+        public void BrushFoldersAreNotListedAsWorlds()
+        {
+            var previous = MappySettings.Settings.SplitTiles;
+            try
+            {
+                foreach (var split in new[] { false, true })
+                {
+                    MappySettings.Settings.SplitTiles = split;
+                    var service = new SectionService();
+                    service.AddSections(new[]
+                    {
+                        new SectionInfo
+                        {
+                            World = "GreenWorld",
+                            Category = "Hills",
+                            HpiFileName = "brush.hpi",
+                            SctFileName = @"sections\GreenWorld\Hills\a.sct",
+                        },
+                        new SectionInfo
+                        {
+                            World = "BaseTiles",
+                            Category = "GreenWorld",
+                            HpiFileName = "brush.hpi",
+                            SctFileName = @"sections\BaseTiles\GreenWorld\b.sct",
+                        },
+                        new SectionInfo
+                        {
+                            World = "coasttiles",
+                            Category = "GreenWorld",
+                            HpiFileName = "brush.hpi",
+                            SctFileName = @"sections\coasttiles\GreenWorld\c.sct",
+                        },
+                        new SectionInfo
+                        {
+                            World = "Rivers",
+                            Category = "GreenLand",
+                            HpiFileName = "brush.hpi",
+                            SctFileName = @"sections\Rivers\GreenLand\d.sct",
+                        },
+                    });
+
+                    var expected = split
+                        ? new[] { "GreenWorld (brush.hpi)", "Rivers (brush.hpi)" }
+                        : new[] { "GreenWorld", "Rivers" };
+                    CollectionAssert.AreEquivalent(expected, service.EnumerateWorlds().ToList());
+                    Assert.AreEqual(4, service.EnumerateAll().Count());
+                }
+            }
+            finally
+            {
+                MappySettings.Settings.SplitTiles = previous;
+            }
+        }
+
+        [TestMethod]
+        public void ExcludedBrushArchiveIsHiddenFromTheSectionList()
+        {
+            var previousSplit = MappySettings.Settings.SplitTiles;
+            var previousExclude = MappySettings.Settings.ExcludeBrushTilesFromSections;
+            var previousUrl = MappySettings.Settings.BrushTilesUrl;
+            var brushPath = Path.Combine(BrushTiles.InstallDirectory, "brush.hpi");
+            try
+            {
+                MappySettings.Settings.BrushTilesUrl = "https://example.com/brush.hpi";
+                MappySettings.Settings.ExcludeBrushTilesFromSections = true;
+                foreach (var split in new[] { false, true })
+                {
+                    MappySettings.Settings.SplitTiles = split;
+                    var service = new SectionService();
+                    service.AddSections(new[]
+                    {
+                        new SectionInfo
+                        {
+                            World = "GreenWorld",
+                            Category = "Hills",
+                            HpiFileName = brushPath,
+                            SctFileName = @"sections\GreenWorld\Hills\a.sct",
+                        },
+                        new SectionInfo
+                        {
+                            World = "GreenWorld",
+                            Category = "Lakes",
+                            HpiFileName = @"C:\maps\green.hpi",
+                            SctFileName = @"sections\GreenWorld\Lakes\b.sct",
+                        },
+                        new SectionInfo
+                        {
+                            World = "Rivers",
+                            Category = "GreenLand",
+                            HpiFileName = brushPath,
+                            SctFileName = @"sections\Rivers\GreenLand\c.sct",
+                        },
+                    });
+
+                    var expectedWorlds = split
+                        ? new[] { "GreenWorld (green.hpi)" }
+                        : new[] { "GreenWorld" };
+                    CollectionAssert.AreEquivalent(expectedWorlds, service.EnumerateWorlds().ToList());
+                    CollectionAssert.AreEquivalent(
+                        new[] { "Lakes" },
+                        service.EnumerateCategories(expectedWorlds[0]).ToList());
+                    Assert.AreEqual(3, service.EnumerateAll().Count());
+                }
+            }
+            finally
+            {
+                MappySettings.Settings.SplitTiles = previousSplit;
+                MappySettings.Settings.ExcludeBrushTilesFromSections = previousExclude;
+                MappySettings.Settings.BrushTilesUrl = previousUrl;
             }
         }
 

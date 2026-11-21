@@ -451,6 +451,8 @@ namespace Mappy.Util
                     return GUITab.Height;
                 case "voidTab":
                     return GUITab.Void;
+                case "terrainTab":
+                    return GUITab.Terrain;
                 case "markersTab":
                     return GUITab.Markers;
                 case "exportsTab":

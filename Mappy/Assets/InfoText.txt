@@ -5,6 +5,10 @@ Ctrl + 4 - select Height tab
 Ctrl + 5 - select Void tab
 Ctrl + 6 - select Attributes tab
 Ctrl + 7 - select OTA / Units tab
+Ctrl + 8 - select Markers tab
+Ctrl + 9 - select Exports tab
+Ctrl + 0 - select Terrain tab
+[ and ] - Terrain brush size (Corner, 16, 32, 64, 128)
 
 Main Map
 Pan - hold space, left-click and drag to pan the map

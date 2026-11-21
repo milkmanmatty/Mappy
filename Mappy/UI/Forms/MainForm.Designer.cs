@@ -136,6 +136,15 @@ namespace Mappy.UI.Forms
             this.voidTab = new System.Windows.Forms.TabPage();
             this.voidCursorSizeNumericUpDown = new Mappy.UI.Controls.StepNumericUpDown();
             this.voidCursorSizeLabel = new System.Windows.Forms.Label();
+            this.terrainTab = new System.Windows.Forms.TabPage();
+            this.terrainWorldLabel = new System.Windows.Forms.Label();
+            this.terrainWorldComboBox = new System.Windows.Forms.ComboBox();
+            this.terrainSizeLabel = new System.Windows.Forms.Label();
+            this.terrainSizeComboBox = new System.Windows.Forms.ComboBox();
+            this.terrainUseSlopesCheckBox = new System.Windows.Forms.CheckBox();
+            this.terrainBaseList = new System.Windows.Forms.ListView();
+            this.terrainBaseColumn = new System.Windows.Forms.ColumnHeader();
+            this.terrainStatusLabel = new System.Windows.Forms.Label();
             this.markersTab = new System.Windows.Forms.TabPage();
             this.markerStraightRadioButton = new System.Windows.Forms.RadioButton();
             this.markerFreehandRadioButton = new System.Windows.Forms.RadioButton();
@@ -183,6 +192,7 @@ namespace Mappy.UI.Forms
             ((System.ComponentModel.ISupportInitialize)(this.intervalNumericUpDown)).BeginInit();
             this.voidTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.voidCursorSizeNumericUpDown)).BeginInit();
+            this.terrainTab.SuspendLayout();
             this.markersTab.SuspendLayout();
             this.exportsTab.SuspendLayout();
             this.exportsButtonsPanel.SuspendLayout();
@@ -934,6 +944,7 @@ namespace Mappy.UI.Forms
             this.sidebarTabs.Controls.Add(this.otaMissionTab);
             this.sidebarTabs.Controls.Add(this.markersTab);
             this.sidebarTabs.Controls.Add(this.exportsTab);
+            this.sidebarTabs.Controls.Add(this.terrainTab);
             this.sidebarTabs.Dock = System.Windows.Forms.DockStyle.Left;
             this.sidebarTabs.Location = new System.Drawing.Point(0, 24);
             this.sidebarTabs.Multiline = true;
@@ -1194,6 +1205,118 @@ namespace Mappy.UI.Forms
             this.voidCursorSizeLabel.Size = new System.Drawing.Size(58, 13);
             this.voidCursorSizeLabel.TabIndex = 0;
             this.voidCursorSizeLabel.Text = "Cursor size";
+            // 
+            // terrainTab
+            // 
+            this.terrainTab.Controls.Add(this.terrainStatusLabel);
+            this.terrainTab.Controls.Add(this.terrainBaseList);
+            this.terrainTab.Controls.Add(this.terrainUseSlopesCheckBox);
+            this.terrainTab.Controls.Add(this.terrainSizeComboBox);
+            this.terrainTab.Controls.Add(this.terrainSizeLabel);
+            this.terrainTab.Controls.Add(this.terrainWorldComboBox);
+            this.terrainTab.Controls.Add(this.terrainWorldLabel);
+            this.terrainTab.Location = new System.Drawing.Point(4, 40);
+            this.terrainTab.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.terrainTab.Name = "terrainTab";
+            this.terrainTab.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.terrainTab.Size = new System.Drawing.Size(207, 494);
+            this.terrainTab.TabIndex = 7;
+            this.terrainTab.Text = "Terrain";
+            this.terrainTab.UseVisualStyleBackColor = true;
+            // 
+            // terrainWorldLabel
+            // 
+            this.terrainWorldLabel.AutoSize = true;
+            this.terrainWorldLabel.Location = new System.Drawing.Point(4, 8);
+            this.terrainWorldLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.terrainWorldLabel.Name = "terrainWorldLabel";
+            this.terrainWorldLabel.Size = new System.Drawing.Size(38, 13);
+            this.terrainWorldLabel.TabIndex = 0;
+            this.terrainWorldLabel.Text = "World";
+            // 
+            // terrainWorldComboBox
+            // 
+            this.terrainWorldComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.terrainWorldComboBox.Location = new System.Drawing.Point(52, 4);
+            this.terrainWorldComboBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.terrainWorldComboBox.Name = "terrainWorldComboBox";
+            this.terrainWorldComboBox.Size = new System.Drawing.Size(148, 21);
+            this.terrainWorldComboBox.TabIndex = 1;
+            this.terrainWorldComboBox.SelectedIndexChanged += new System.EventHandler(this.TerrainWorldComboBoxSelectedIndexChanged);
+            // 
+            // terrainSizeLabel
+            // 
+            this.terrainSizeLabel.AutoSize = true;
+            this.terrainSizeLabel.Location = new System.Drawing.Point(4, 32);
+            this.terrainSizeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.terrainSizeLabel.Name = "terrainSizeLabel";
+            this.terrainSizeLabel.Size = new System.Drawing.Size(27, 13);
+            this.terrainSizeLabel.TabIndex = 2;
+            this.terrainSizeLabel.Text = "Size";
+            // 
+            // terrainSizeComboBox
+            // 
+            this.terrainSizeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.terrainSizeComboBox.Items.AddRange(new object[] {
+            "Corner",
+            "16",
+            "32",
+            "64",
+            "128"});
+            this.terrainSizeComboBox.Location = new System.Drawing.Point(52, 28);
+            this.terrainSizeComboBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.terrainSizeComboBox.Name = "terrainSizeComboBox";
+            this.terrainSizeComboBox.Size = new System.Drawing.Size(64, 21);
+            this.terrainSizeComboBox.TabIndex = 3;
+            this.terrainSizeComboBox.SelectedIndexChanged += new System.EventHandler(this.TerrainSizeComboBoxSelectedIndexChanged);
+            this.terrainSizeComboBox.SelectedIndex = 1;
+            // 
+            // terrainUseSlopesCheckBox
+            // 
+            this.terrainUseSlopesCheckBox.AutoSize = true;
+            this.terrainUseSlopesCheckBox.Location = new System.Drawing.Point(4, 54);
+            this.terrainUseSlopesCheckBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.terrainUseSlopesCheckBox.Name = "terrainUseSlopesCheckBox";
+            this.terrainUseSlopesCheckBox.Size = new System.Drawing.Size(84, 17);
+            this.terrainUseSlopesCheckBox.TabIndex = 4;
+            this.terrainUseSlopesCheckBox.Text = "Use slopes";
+            this.terrainUseSlopesCheckBox.UseVisualStyleBackColor = true;
+            this.terrainUseSlopesCheckBox.CheckedChanged += new System.EventHandler(this.TerrainUseSlopesCheckBoxCheckedChanged);
+            // 
+            // terrainBaseList
+            // 
+            this.terrainBaseList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.terrainBaseList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.terrainBaseColumn});
+            this.terrainBaseList.FullRowSelect = true;
+            this.terrainBaseList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.terrainBaseList.HideSelection = false;
+            this.terrainBaseList.Location = new System.Drawing.Point(4, 76);
+            this.terrainBaseList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.terrainBaseList.MultiSelect = false;
+            this.terrainBaseList.Name = "terrainBaseList";
+            this.terrainBaseList.Size = new System.Drawing.Size(196, 370);
+            this.terrainBaseList.TabIndex = 5;
+            this.terrainBaseList.UseCompatibleStateImageBehavior = false;
+            this.terrainBaseList.View = System.Windows.Forms.View.Details;
+            this.terrainBaseList.SelectedIndexChanged += new System.EventHandler(this.TerrainBaseListSelectedIndexChanged);
+            // 
+            // terrainBaseColumn
+            // 
+            this.terrainBaseColumn.Text = "Base";
+            this.terrainBaseColumn.Width = 170;
+            // 
+            // terrainStatusLabel
+            // 
+            this.terrainStatusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.terrainStatusLabel.Location = new System.Drawing.Point(4, 452);
+            this.terrainStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.terrainStatusLabel.Name = "terrainStatusLabel";
+            this.terrainStatusLabel.Size = new System.Drawing.Size(196, 36);
+            this.terrainStatusLabel.TabIndex = 6;
             // 
             // markersTab
             // 
@@ -1505,6 +1628,8 @@ namespace Mappy.UI.Forms
             this.voidTab.ResumeLayout(false);
             this.voidTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.voidCursorSizeNumericUpDown)).EndInit();
+            this.terrainTab.ResumeLayout(false);
+            this.terrainTab.PerformLayout();
             this.markersTab.ResumeLayout(false);
             this.exportsButtonsPanel.ResumeLayout(false);
             this.exportsButtonsPanel.PerformLayout();
@@ -1591,6 +1716,15 @@ namespace Mappy.UI.Forms
         private StepNumericUpDown intervalNumericUpDown;
         private System.Windows.Forms.Label intervalLabel;
         private System.Windows.Forms.TabPage voidTab;
+        private System.Windows.Forms.TabPage terrainTab;
+        private System.Windows.Forms.Label terrainWorldLabel;
+        private System.Windows.Forms.ComboBox terrainWorldComboBox;
+        private System.Windows.Forms.Label terrainSizeLabel;
+        private System.Windows.Forms.ComboBox terrainSizeComboBox;
+        private System.Windows.Forms.CheckBox terrainUseSlopesCheckBox;
+        private System.Windows.Forms.ListView terrainBaseList;
+        private System.Windows.Forms.ColumnHeader terrainBaseColumn;
+        private System.Windows.Forms.Label terrainStatusLabel;
         private System.Windows.Forms.TabPage markersTab;
         private System.Windows.Forms.RadioButton markerStraightRadioButton;
         private System.Windows.Forms.RadioButton markerFreehandRadioButton;

@@ -425,10 +425,12 @@ namespace Mappy.Services
             form.Show(this.owner);
         }
 
-        public bool CapturePreferences()
+        public bool CapturePreferences(out bool brushTilesChanged)
         {
             var f = new PreferencesForm();
-            return f.ShowDialog(this.owner) == DialogResult.OK;
+            var accepted = f.ShowDialog(this.owner) == DialogResult.OK;
+            brushTilesChanged = f.BrushTilesChanged;
+            return accepted;
         }
 
         public void ShowInfo()

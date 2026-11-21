@@ -45,6 +45,8 @@ namespace Mappy.Models
 
         private bool previousVoidBrushOpen;
 
+        private bool previousTerrainBrushOpen;
+
         private string openFilePath;
 
         private bool isFileReadOnly;
@@ -650,6 +652,95 @@ namespace Mappy.Models
             this.previousVoidBrushOpen = false;
         }
 
+        public void ApplyTerrainBrush(IReadOnlyList<TerrainBrushStamp> stamps)
+        {
+            this.ApplyTerrainBrush(stamps, null);
+        }
+
+        /// <summary>
+        /// Stamps the brush cells, removing features inside the given height-grid
+        /// rectangles, as part of the open stroke's undo step.
+        /// </summary>
+        public void ApplyTerrainBrush(IReadOnlyList<TerrainBrushStamp> stamps, IEnumerable<Rectangle> clearFeatures)
+        {
+            if (stamps == null || stamps.Count == 0)
+            {
+                return;
+            }
+
+            if (!this.previousTerrainBrushOpen)
+            {
+                this.ClearSelection();
+            }
+
+            var removed = new List<Guid>();
+            if (clearFeatures != null)
+            {
+                var seen = new HashSet<Guid>();
+                var heightGrid = this.model.Tile.HeightGrid;
+                foreach (var area in clearFeatures)
+                {
+                    var right = Math.Min(heightGrid.Width, area.Right);
+                    var bottom = Math.Min(heightGrid.Height, area.Bottom);
+                    for (var y = Math.Max(0, area.Top); y < bottom; y++)
+                    {
+                        for (var x = Math.Max(0, area.Left); x < right; x++)
+                        {
+                            var feature = this.model.GetFeatureInstanceAt(x, y);
+                            if (feature != null && seen.Add(feature.Id))
+                            {
+                                removed.Add(feature.Id);
+                            }
+                        }
+                    }
+                }
+            }
+
+            var operation = TerrainBrushOperation.Create(
+                this.model.Tile.TileGrid,
+                this.model.Tile.HeightGrid,
+                stamps,
+                this.model,
+                removed);
+            if (operation == null)
+            {
+                return;
+            }
+
+            this.ApplyTerrainBrushOperation(operation);
+        }
+
+        /// <summary>
+        /// Ends the open stroke and regenerates the minimap as part of its undo step.
+        /// Maps without a minimap are left without one.
+        /// </summary>
+        public void FlushTerrainBrush()
+        {
+            var stroke = this.previousTerrainBrushOpen && this.undoManager.CanUndo
+                ? this.undoManager.PeekUndo() as TerrainBrushOperation
+                : null;
+            this.previousTerrainBrushOpen = false;
+            if (stroke == null || this.model.Minimap == null)
+            {
+                return;
+            }
+
+            Bitmap minimap;
+            using (var adapter = new MapPixelImageAdapter(this.model.Tile.TileGrid))
+            {
+                if (adapter.Width <= 0 || adapter.Height <= 0)
+                {
+                    return;
+                }
+
+                minimap = Util.GenerateMinimap(adapter);
+            }
+
+            var refresh = new UpdateMinimapOperation(this.model, minimap);
+            refresh.Execute();
+            this.undoManager.Replace(stroke.Append(refresh));
+        }
+
         public void ResizeMap(int newWidth, int newHeight)
         {
             this.ResizeMap(newWidth, newHeight, 0, 0);
@@ -686,6 +777,7 @@ namespace Mappy.Models
             this.previousSeaLevelOpen = false;
             this.previousHeightBrushOpen = false;
             this.previousVoidBrushOpen = false;
+            this.previousTerrainBrushOpen = false;
         }
 
         public IEnumerable<FeatureInstance> EnumerateFeatureInstances()
@@ -1153,6 +1245,7 @@ namespace Mappy.Models
                 case GUITab.Starts:
                 case GUITab.Height:
                 case GUITab.Void:
+                case GUITab.Terrain:
                 case GUITab.Markers:
                 case GUITab.Attributes:
                 case GUITab.Exports:
@@ -1812,6 +1905,25 @@ namespace Mappy.Models
             this.previousVoidBrushOpen = true;
         }
 
+        private void ApplyTerrainBrushOperation(TerrainBrushOperation op)
+        {
+            var previousOp = this.undoManager.CanUndo && this.previousTerrainBrushOpen
+                ? this.undoManager.PeekUndo() as TerrainBrushOperation
+                : null;
+
+            if (previousOp == null)
+            {
+                this.undoManager.Execute(op);
+            }
+            else
+            {
+                op.Execute();
+                this.undoManager.Replace(previousOp.Combine(op));
+            }
+
+            this.previousTerrainBrushOpen = true;
+        }
+
         private void ReplaceModel(ISelectionModel newModel)
         {
             if (ReferenceEquals(this.model, newModel))
@@ -1829,6 +1941,7 @@ namespace Mappy.Models
             this.previousSeaLevelOpen = false;
             this.previousHeightBrushOpen = false;
             this.previousVoidBrushOpen = false;
+            this.previousTerrainBrushOpen = false;
 
             this.OnPropertyChanged(nameof(this.MapWidth));
             this.OnPropertyChanged(nameof(this.MapHeight));

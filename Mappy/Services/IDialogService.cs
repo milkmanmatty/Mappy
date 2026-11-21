@@ -45,7 +45,7 @@ namespace Mappy.Services
 
         string AskUserToSaveSectionArchive();
 
-        bool CapturePreferences();
+        bool CapturePreferences(out bool brushTilesChanged);
 
         Size AskUserNewMapSize();
 

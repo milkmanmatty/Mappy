@@ -9,6 +9,7 @@ namespace Mappy.UI.Forms
     using Mappy;
     using Mappy.Models;
     using Mappy.Models.Enums;
+    using Mappy.TerrainBrush;
     using Mappy.UI.Controls;
     using Mappy.Util;
 
@@ -24,6 +25,22 @@ namespace Mappy.UI.Forms
         private bool updatingZoomControls;
 
         private bool missionPathsVisible;
+
+        private bool terrainRefreshing;
+
+        private string terrainWorldName = string.Empty;
+
+        private int terrainBaseIndex;
+
+        private int terrainBrushSize = 16;
+
+        private string terrainTool = string.Empty;
+
+        private bool terrainUseSlopes;
+
+        private string terrainStatus = string.Empty;
+
+        private ImageList terrainBaseImages;
 
         public MainForm()
         {
@@ -266,6 +283,12 @@ namespace Mappy.UI.Forms
             model.HeightEditSetValue.Subscribe(x => this.selectedHeightNumericUpDown.Value = x);
             model.HeightEditCursorSize.Subscribe(x => this.cursorSizeNumericUpDown.Value = x);
             model.VoidEditCursorSize.Subscribe(x => this.voidCursorSizeNumericUpDown.Value = x);
+            model.TerrainWorldName.Subscribe(this.OnTerrainWorldName);
+            model.TerrainBaseIndex.Subscribe(this.OnTerrainBaseIndex);
+            model.TerrainBrushSize.Subscribe(this.OnTerrainBrushSize);
+            model.TerrainTool.Subscribe(this.OnTerrainTool);
+            model.TerrainUseSlopes.Subscribe(this.OnTerrainUseSlopes);
+            model.TerrainStatus.Subscribe(this.OnTerrainStatus);
 
             // title text bindings
             model.TitleText.Subscribe(x => this.Text = x);
@@ -520,6 +543,326 @@ namespace Mappy.UI.Forms
         private void VoidCursorSizeNumericUpDownValueChanged(object sender, EventArgs e)
         {
             this.model.VoidEditCursorSizeChanged((int)this.voidCursorSizeNumericUpDown.Value);
+        }
+
+        private void OnTerrainWorldName(string worldName)
+        {
+            this.terrainWorldName = worldName ?? string.Empty;
+        }
+
+        private void OnTerrainBaseIndex(int baseIndex)
+        {
+            this.terrainBaseIndex = baseIndex;
+            if (this.terrainRefreshing || !string.IsNullOrEmpty(this.terrainTool))
+            {
+                return;
+            }
+
+            var item = this.FindBaseItem(baseIndex);
+            if (item == null || item.Selected)
+            {
+                return;
+            }
+
+            this.terrainRefreshing = true;
+            item.Selected = true;
+            item.EnsureVisible();
+            this.terrainRefreshing = false;
+        }
+
+        private void OnTerrainTool(string pathStyle)
+        {
+            this.terrainTool = pathStyle ?? string.Empty;
+            if (this.terrainRefreshing)
+            {
+                return;
+            }
+
+            this.terrainRefreshing = true;
+            this.SelectListedTool();
+            this.UpdateTerrainBrushControls();
+            this.terrainRefreshing = false;
+        }
+
+        private void OnTerrainUseSlopes(bool useSlopes)
+        {
+            this.terrainUseSlopes = useSlopes;
+            if (this.terrainRefreshing || this.terrainUseSlopesCheckBox.Checked == useSlopes)
+            {
+                return;
+            }
+
+            this.terrainRefreshing = true;
+            this.terrainUseSlopesCheckBox.Checked = useSlopes;
+            this.terrainRefreshing = false;
+        }
+
+        private void OnTerrainBrushSize(int tiles)
+        {
+            this.terrainBrushSize = tiles;
+            if (this.terrainRefreshing)
+            {
+                return;
+            }
+
+            var index = Array.IndexOf(TerrainPlanner.BrushSizes, tiles);
+            if (index >= 0 && this.terrainSizeComboBox.SelectedIndex != index)
+            {
+                this.terrainRefreshing = true;
+                this.terrainSizeComboBox.SelectedIndex = index;
+                this.terrainRefreshing = false;
+            }
+        }
+
+        private void OnTerrainStatus(string status)
+        {
+            this.terrainStatus = status ?? string.Empty;
+            if (this.terrainWorldComboBox.Visible)
+            {
+                this.terrainStatusLabel.Text = this.terrainStatus;
+            }
+        }
+
+        private void TerrainWorldComboBoxSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.model == null || this.terrainRefreshing || this.terrainWorldComboBox.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            this.terrainRefreshing = true;
+            try
+            {
+                var name = (string)this.terrainWorldComboBox.SelectedItem;
+                this.model.TerrainWorldChanged(name);
+                this.FillTerrainBases(this.model.LoadTerrainCatalog().Find(name));
+            }
+            finally
+            {
+                this.terrainRefreshing = false;
+            }
+        }
+
+        private void TerrainSizeComboBoxSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.model == null || this.terrainRefreshing)
+            {
+                return;
+            }
+
+            var index = this.terrainSizeComboBox.SelectedIndex;
+            if (index >= 0 && index < TerrainPlanner.BrushSizes.Length)
+            {
+                this.model.TerrainBrushSizeChanged(TerrainPlanner.BrushSizes[index]);
+            }
+        }
+
+        private void TerrainBaseListSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.model == null || this.terrainRefreshing || this.terrainBaseList.SelectedIndices.Count == 0)
+            {
+                return;
+            }
+
+            var item = this.terrainBaseList.SelectedItems[0];
+            var style = item.Tag as string;
+            if (style != null)
+            {
+                this.model.TerrainToolChanged(style);
+            }
+            else if (item.Tag is int)
+            {
+                this.model.TerrainBaseChanged((int)item.Tag);
+            }
+
+            this.UpdateTerrainBrushControls();
+        }
+
+        private void TerrainUseSlopesCheckBoxCheckedChanged(object sender, EventArgs e)
+        {
+            if (this.model == null || this.terrainRefreshing)
+            {
+                return;
+            }
+
+            this.model.TerrainUseSlopesChanged(this.terrainUseSlopesCheckBox.Checked);
+        }
+
+        private void RefreshTerrainTab()
+        {
+            if (this.model == null)
+            {
+                return;
+            }
+
+            this.terrainRefreshing = true;
+            try
+            {
+                var catalog = this.model.LoadTerrainCatalog();
+                var hasWorlds = catalog.Worlds.Count > 0;
+                this.terrainWorldLabel.Visible = hasWorlds;
+                this.terrainWorldComboBox.Visible = hasWorlds;
+                this.terrainSizeLabel.Visible = hasWorlds;
+                this.terrainSizeComboBox.Visible = hasWorlds;
+                this.terrainUseSlopesCheckBox.Visible = hasWorlds;
+                this.terrainBaseList.Visible = hasWorlds;
+                if (!hasWorlds)
+                {
+                    this.terrainStatusLabel.Text = TerrainCatalog.MissingTilesetMessage;
+                    return;
+                }
+
+                this.terrainWorldComboBox.Items.Clear();
+                foreach (var world in catalog.Worlds)
+                {
+                    this.terrainWorldComboBox.Items.Add(world.Name);
+                }
+
+                var worldIndex = this.terrainWorldComboBox.FindStringExact(this.terrainWorldName);
+                if (worldIndex < 0)
+                {
+                    worldIndex = 0;
+                    this.model.TerrainWorldChanged((string)this.terrainWorldComboBox.Items[0]);
+                }
+
+                this.terrainWorldComboBox.SelectedIndex = worldIndex;
+                var sizeIndex = Array.IndexOf(TerrainPlanner.BrushSizes, this.terrainBrushSize);
+                this.terrainSizeComboBox.SelectedIndex = sizeIndex < 0 ? 1 : sizeIndex;
+                this.FillTerrainBases(catalog.Find((string)this.terrainWorldComboBox.SelectedItem));
+                this.terrainStatusLabel.Text = this.terrainStatus;
+            }
+            finally
+            {
+                this.terrainRefreshing = false;
+            }
+        }
+
+        private void FillTerrainBases(TerrainWorld world)
+        {
+            this.terrainBaseList.Items.Clear();
+            if (this.terrainBaseImages != null)
+            {
+                this.terrainBaseList.SmallImageList = null;
+                this.terrainBaseImages.Dispose();
+                this.terrainBaseImages = null;
+            }
+
+            if (world == null)
+            {
+                this.terrainUseSlopesCheckBox.Enabled = false;
+                this.UpdateTerrainBrushControls();
+                return;
+            }
+
+            this.terrainBaseImages = new ImageList
+            {
+                ImageSize = new Size(32, 32),
+                ColorDepth = ColorDepth.Depth32Bit,
+            };
+            for (var index = 0; index < world.Bases.Count; index++)
+            {
+                var basis = world.Bases[index];
+                var section = basis.Sections.Count > 0 ? basis.Sections[0] : null;
+                var item = new System.Windows.Forms.ListViewItem(basis.Name, this.AddTerrainImage(section));
+                item.Tag = index;
+                this.terrainBaseList.Items.Add(item);
+            }
+
+            foreach (var style in world.PathStyles)
+            {
+                var item = new System.Windows.Forms.ListViewItem(style.Name, this.AddTerrainImage(style.Thumbnail));
+                item.Tag = style.Name;
+                this.terrainBaseList.Items.Add(item);
+            }
+
+            this.terrainBaseList.SmallImageList = this.terrainBaseImages;
+            if (!string.IsNullOrEmpty(this.terrainTool) && world.FindPathStyle(this.terrainTool) == null)
+            {
+                this.model.TerrainToolChanged(string.Empty);
+            }
+
+            this.terrainUseSlopesCheckBox.Enabled = world.HasSlopes;
+            this.terrainUseSlopesCheckBox.Checked = this.terrainUseSlopes;
+            this.SelectListedTool();
+            this.UpdateTerrainBrushControls();
+        }
+
+        private int AddTerrainImage(TerrainSectionRef section)
+        {
+            Bitmap thumbnail = null;
+            if (section != null)
+            {
+                thumbnail = this.model.TerrainBaseThumbnail(section.HpiFileName, section.SctFileName);
+            }
+
+            var owned = false;
+            if (thumbnail == null)
+            {
+                thumbnail = new Bitmap(32, 32);
+                owned = true;
+            }
+
+            this.terrainBaseImages.Images.Add(thumbnail);
+            if (owned)
+            {
+                thumbnail.Dispose();
+            }
+
+            return this.terrainBaseImages.Images.Count - 1;
+        }
+
+        private void SelectListedTool()
+        {
+            System.Windows.Forms.ListViewItem match = null;
+            if (!string.IsNullOrEmpty(this.terrainTool))
+            {
+                foreach (System.Windows.Forms.ListViewItem item in this.terrainBaseList.Items)
+                {
+                    if (string.Equals(item.Tag as string, this.terrainTool, StringComparison.OrdinalIgnoreCase))
+                    {
+                        match = item;
+                        break;
+                    }
+                }
+            }
+
+            if (match == null)
+            {
+                match = this.FindBaseItem(this.terrainBaseIndex);
+            }
+
+            if (match != null && !match.Selected)
+            {
+                match.Selected = true;
+                match.EnsureVisible();
+            }
+        }
+
+        private System.Windows.Forms.ListViewItem FindBaseItem(int baseIndex)
+        {
+            System.Windows.Forms.ListViewItem last = null;
+            foreach (System.Windows.Forms.ListViewItem item in this.terrainBaseList.Items)
+            {
+                if (!(item.Tag is int))
+                {
+                    continue;
+                }
+
+                last = item;
+                if ((int)item.Tag == baseIndex)
+                {
+                    return item;
+                }
+            }
+
+            return last;
+        }
+
+        private void UpdateTerrainBrushControls()
+        {
+            var paintingBase = string.IsNullOrEmpty(this.terrainTool);
+            this.terrainSizeLabel.Enabled = paintingBase;
+            this.terrainSizeComboBox.Enabled = paintingBase;
         }
 
         private void CopyMenuItemClick(object sender, EventArgs e)
@@ -883,6 +1226,10 @@ namespace Mappy.UI.Forms
             }
 
             this.model.ChangeSelectedTabType(Util.MapTabNameToGUIType(this.sidebarTabs.SelectedTab.Name));
+            if (this.sidebarTabs.SelectedTab == this.terrainTab)
+            {
+                this.RefreshTerrainTab();
+            }
         }
 
         private void PaletteForm_KeyDown(object sender, KeyEventArgs e)
@@ -894,7 +1241,12 @@ namespace Mappy.UI.Forms
                 return;
             }
 
-            this.TryHandlePaletteTabShortcut(e);
+            if (this.TryHandlePaletteTabShortcut(e))
+            {
+                return;
+            }
+
+            this.TryHandleTerrainSizeShortcut(e);
         }
 
         private void ToggleOrdersMenuItemClick(object sender, EventArgs e)
@@ -912,6 +1264,11 @@ namespace Mappy.UI.Forms
             }
 
             if (this.TryHandlePaletteTabShortcut(e))
+            {
+                return;
+            }
+
+            if (this.TryHandleTerrainSizeShortcut(e))
             {
                 return;
             }
@@ -975,6 +1332,10 @@ namespace Mappy.UI.Forms
             {
                 target = this.exportsTab;
             }
+            else if (e.KeyCode == Keys.D0)
+            {
+                target = this.terrainTab;
+            }
 
             if (target == null)
             {
@@ -983,6 +1344,46 @@ namespace Mappy.UI.Forms
 
             this.sidebarTabs.SelectedTab = target;
             e.Handled = true;
+            e.SuppressKeyPress = true;
+            return true;
+        }
+
+        private bool TryHandleTerrainSizeShortcut(KeyEventArgs e)
+        {
+            if (e.Control || e.Alt || e.Shift || this.model == null || this.sidebarTabs.SelectedTab != this.terrainTab)
+            {
+                return false;
+            }
+
+            int direction;
+            if (e.KeyCode == Keys.OemOpenBrackets)
+            {
+                direction = -1;
+            }
+            else if (e.KeyCode == Keys.OemCloseBrackets)
+            {
+                direction = 1;
+            }
+            else
+            {
+                return false;
+            }
+
+            if (Form.ActiveForm != null && Form.ActiveForm.ActiveControl is TextBoxBase)
+            {
+                return false;
+            }
+
+            var index = Array.IndexOf(TerrainPlanner.BrushSizes, this.terrainBrushSize);
+            if (index < 0)
+            {
+                index = 1;
+            }
+
+            var next = Math.Max(0, Math.Min(TerrainPlanner.BrushSizes.Length - 1, index + direction));
+            this.model.TerrainBrushSizeChanged(TerrainPlanner.BrushSizes[next]);
+            e.Handled = true;
+            e.SuppressKeyPress = true;
             return true;
         }
     }

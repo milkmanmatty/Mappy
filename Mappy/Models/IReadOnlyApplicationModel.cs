@@ -40,6 +40,18 @@ namespace Mappy.Models
 
         int VoidEditCursorSize { get; }
 
+        string TerrainWorldName { get; }
+
+        int TerrainBaseIndex { get; }
+
+        int TerrainBrushSize { get; }
+
+        string TerrainStatus { get; }
+
+        string TerrainTool { get; }
+
+        bool TerrainUseSlopes { get; }
+
         UnitPlacementPlayerMenuChoice UnitPlacementPlayerMenuChoice { get; }
     }
 }
