@@ -1272,7 +1272,7 @@ namespace Mappy.Models
             return list;
         }
 
-        public void DragDropSchemaUnit(string unitName, int x, int y, int player)
+        public void DragDropSchemaUnit(string unitName, int x, int y, int player, int angle = 0)
         {
             var schema = this.model.ActiveSchemaIndex;
             var u = new SchemaUnit(Guid.NewGuid(), unitName)
@@ -1280,6 +1280,7 @@ namespace Mappy.Models
                 XPos = x,
                 ZPos = y,
                 Player = player,
+                Angle = angle,
             };
             var hx = x / 16;
             var hy = y / 16;

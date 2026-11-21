@@ -22,6 +22,9 @@ namespace Mappy.Services
         private readonly Dictionary<string, string> tedClassByName =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
+        private readonly Dictionary<string, int> bmCodeByName =
+            new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
         public event EventHandler NamesChanged;
 
         public event EventHandler UnitPickerLabelsChanged;
@@ -115,6 +118,12 @@ namespace Mappy.Services
                         this.tedClassByName[name] = tc;
                         changed = true;
                     }
+                }
+
+                if (r.BmCode.HasValue && !this.bmCodeByName.ContainsKey(name))
+                {
+                    this.bmCodeByName[name] = r.BmCode.Value;
+                    changed = true;
                 }
             }
 
@@ -213,6 +222,13 @@ namespace Mappy.Services
             return this.tedClassByName.TryGetValue(unitName, out var tedClass) && !string.IsNullOrWhiteSpace(tedClass)
                 ? tedClass
                 : string.Empty;
+        }
+
+        public bool IsBuilding(string unitName)
+        {
+            return !string.IsNullOrEmpty(unitName)
+                && this.bmCodeByName.TryGetValue(unitName, out var bmCode)
+                && bmCode == 0;
         }
 
         public IReadOnlyList<string> EnumerateDistinctTedClasses()

@@ -89,6 +89,8 @@ namespace Mappy
 
         public int? MissionWaitBackplateColorArgb { get; set; }
 
+        public int BuildingAngle { get; set; }
+
         public static Color DefaultUnitNameTextColor { get; } = Color.White;
 
         public static Color DefaultUnitNameBackplateColor { get; } = Color.FromArgb(180, 0, 0, 0);

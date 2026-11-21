@@ -1317,7 +1317,10 @@ namespace Mappy.Services
                 player = (int)this.model.UnitPlacementPlayerMenuChoice;
             }
 
-            this.model.Map.IfSome(m => m.DragDropSchemaUnit(unitName, x, y, player.Value));
+            var angle = this.unitCatalogService.IsBuilding(unitName)
+                ? MappySettings.Settings.BuildingAngle
+                : 0;
+            this.model.Map.IfSome(m => m.DragDropSchemaUnit(unitName, x, y, player.Value, angle));
         }
 
         public void SetUnitPlacementPlayerMenuChoice(UnitPlacementPlayerMenuChoice choice)

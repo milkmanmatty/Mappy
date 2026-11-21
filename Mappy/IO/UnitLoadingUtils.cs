@@ -44,7 +44,8 @@ namespace Mappy.IO
                     var display = MergeDisplayName(existing.DisplayName, r.DisplayName);
                     var objectName = MergeObjectName(existing.ObjectName, r.ObjectName);
                     var tedClass = MergeTedClass(existing.TedClass, r.TedClass);
-                    merged[name] = new UnitCatalogLoadRecord(name, side, display, objectName, tedClass);
+                    var bmCode = existing.BmCode ?? r.BmCode;
+                    merged[name] = new UnitCatalogLoadRecord(name, side, display, objectName, tedClass, bmCode);
                 }
             }
 
